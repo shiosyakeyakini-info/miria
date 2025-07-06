@@ -1,18 +1,16 @@
+import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/text_editing_controller_extension.dart";
 import "package:miria/model/input_completion_type.dart";
-import "package:miria/view/common/color_picker_dialog.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/view/common/date_time_picker.dart";
 import "package:miria/view/common/note_create/basic_keyboard.dart";
 import "package:miria/view/common/note_create/custom_keyboard_button.dart";
 import "package:miria/view/common/note_create/input_completation.dart";
 
 class MfmFnArg {
-  const MfmFnArg({
-    required this.name,
-    this.defaultValue,
-  });
+  const MfmFnArg({required this.name, this.defaultValue});
 
   final String name;
   final String? defaultValue;
@@ -51,10 +49,7 @@ const Map<String, List<MfmFnArg>> mfmFn = {
     MfmFnArg(name: "speed", defaultValue: "0.75s"),
     MfmFnArg(name: "delay", defaultValue: "0s"),
   ],
-  "flip": [
-    MfmFnArg(name: "v"),
-    MfmFnArg(name: "h"),
-  ],
+  "flip": [MfmFnArg(name: "v"), MfmFnArg(name: "h")],
   "x2": [],
   "x3": [],
   "x4": [],
@@ -66,12 +61,8 @@ const Map<String, List<MfmFnArg>> mfmFn = {
     MfmFnArg(name: "x", defaultValue: "0"),
     MfmFnArg(name: "y", defaultValue: "0"),
   ],
-  "fg": [
-    MfmFnArg(name: "color"),
-  ],
-  "bg": [
-    MfmFnArg(name: "color"),
-  ],
+  "fg": [MfmFnArg(name: "color")],
+  "bg": [MfmFnArg(name: "color")],
   "border": [
     MfmFnArg(name: "style", defaultValue: "solid"),
     MfmFnArg(name: "color"),
@@ -86,15 +77,9 @@ const Map<String, List<MfmFnArg>> mfmFn = {
     MfmFnArg(name: "fantasy"),
   ],
   "blur": [],
-  "rainbow": [
-    MfmFnArg(name: "speed", defaultValue: "1s"),
-  ],
-  "sparkle": [
-    MfmFnArg(name: "speed", defaultValue: "1.5s"),
-  ],
-  "rotate": [
-    MfmFnArg(name: "deg", defaultValue: "90"),
-  ],
+  "rainbow": [MfmFnArg(name: "speed", defaultValue: "1s")],
+  "sparkle": [MfmFnArg(name: "speed", defaultValue: "1.5s")],
+  "rotate": [MfmFnArg(name: "deg", defaultValue: "90")],
   "ruby": [],
   "unixtime": [],
 };
@@ -171,14 +156,19 @@ class MfmFnKeyboard extends ConsumerWidget {
         controller.insert(" $unixtime");
       }
     } else if (mfmFnName == "fg" || mfmFnName == "bg") {
-      final result = await showDialog<ValueNotifier<Color>>(
-        context: parentContext,
-        builder: (context) => const ColorPickerDialog(),
+      final result = await parentContext.pushRoute<Color>(
+        const ColorPickerRoute(),
       );
       if (result != null) {
-        controller.insert(
-          ".color=${result.value.red.toRadixString(16).padLeft(2, "0")}${result.value.green.toRadixString(16).padLeft(2, "0")}${result.value.blue.toRadixString(16).padLeft(2, "0")} ",
-        );
+        if (((result.a * 15.0).round() & 0xff).toRadixString(16) == "f") {
+          controller.insert(
+            ".color=${((result.r * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.g * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.b * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")} ",
+          );
+        } else {
+          controller.insert(
+            ".color=${((result.r * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.g * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.b * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.a * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")} ",
+          );
+        }
       } else {
         controller.insert(" ");
       }
@@ -200,8 +190,10 @@ class MfmFnKeyboard extends ConsumerWidget {
     if (firstPeriodIndex < 0) {
       controller.insert(".${arg.name}");
     } else {
-      final lastArg =
-          textBeforeSelection.substring(firstPeriodIndex + 1).split(",").last;
+      final lastArg = textBeforeSelection
+          .substring(firstPeriodIndex + 1)
+          .split(",")
+          .last;
       final lastArgName = lastArg.split("=").first;
       if (mfmFn[mfmFnName]?.any((arg) => arg.name == lastArgName) ?? false) {
         controller.insert(",${arg.name}");
@@ -214,14 +206,19 @@ class MfmFnKeyboard extends ConsumerWidget {
     }
     if ((mfmFnName == "fg" || mfmFnName == "bg" || mfmFnName == "border") &&
         arg.name == "color") {
-      final result = await showDialog<ValueNotifier<Color>>(
-        context: parentContext,
-        builder: (context) => const ColorPickerDialog(),
+      final result = await parentContext.pushRoute<Color>(
+        const ColorPickerRoute(),
       );
       if (result != null) {
-        controller.insert(
-          "=${result.value.red.toRadixString(16).padLeft(2, "0")}${result.value.green.toRadixString(16).padLeft(2, "0")}${result.value.blue.toRadixString(16).padLeft(2, "0")} ",
-        );
+        if (((result.a * 15.0).round() & 0xff).toRadixString(16) == "f") {
+          controller.insert(
+            "=${((result.r * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.g * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.b * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")} ",
+          );
+        } else {
+          controller.insert(
+            "=${((result.r * 15.0).round() & 0xff).toRadixString(16)}${((result.g * 15.0).round() & 0xff).toRadixString(16)}${((result.b * 15.0).round() & 0xff).toRadixString(16)}${((result.a * 15.0).round() & 0xff).toRadixString(16)} ",
+          );
+        }
       } else {
         controller.insert("=f00 ");
       }
@@ -263,10 +260,7 @@ class MfmFnKeyboard extends ConsumerWidget {
             .toList(),
       );
     } else {
-      return BasicKeyboard(
-        controller: controller,
-        focusNode: focusNode,
-      );
+      return BasicKeyboard(controller: controller, focusNode: focusNode);
     }
   }
 }

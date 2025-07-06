@@ -1,6 +1,7 @@
 import "dart:typed_data";
 
 import "package:auto_route/auto_route.dart";
+import "package:collection/collection.dart";
 import "package:flutter/material.dart" hide Page;
 import "package:miria/model/account.dart";
 import "package:miria/model/antenna_settings.dart";
@@ -8,6 +9,7 @@ import "package:miria/model/clip_settings.dart";
 import "package:miria/model/image_file.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/model/note_search_condition.dart";
+import "package:miria/model/server_preset.dart";
 import "package:miria/model/tab_setting.dart";
 import "package:miria/model/users_list_settings.dart";
 import "package:miria/providers.dart";
@@ -49,6 +51,7 @@ import "package:miria/view/notes_after_renote_page/notes_after_renote_page.dart"
 import "package:miria/view/notification_page/notification_page.dart";
 import "package:miria/view/photo_edit_page/license_confirm_dialog.dart";
 import "package:miria/view/photo_edit_page/photo_edit_page.dart";
+import "package:miria/view/profile_edit_page/profile_edit_page.dart";
 import "package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart";
 import "package:miria/view/search_page/search_page.dart";
 import "package:miria/view/server_detail_dialog.dart";
@@ -63,10 +66,14 @@ import "package:miria/view/settings_page/tab_settings_page/channel_select_dialog
 import "package:miria/view/settings_page/tab_settings_page/role_select_dialog.dart";
 import "package:miria/view/settings_page/tab_settings_page/tab_settings_list_page.dart";
 import "package:miria/view/settings_page/tab_settings_page/tab_settings_page.dart";
+import "package:miria/view/settings_page/tab_settings_page/timeline_preset_dialog.dart";
 import "package:miria/view/settings_page/tab_settings_page/user_list_select_dialog.dart";
+import "package:miria/view/several_account_settings_page/blocked_users_page/blocked_users_page.dart";
 import "package:miria/view/several_account_settings_page/cache_management_page/cache_management_page.dart";
 import "package:miria/view/several_account_settings_page/instance_mute_page/instance_mute_page.dart";
+import "package:miria/view/several_account_settings_page/muted_users_page/muted_users_page.dart";
 import "package:miria/view/several_account_settings_page/reaction_deck_page/reaction_deck_page.dart";
+import "package:miria/view/several_account_settings_page/reaction_mute_page/reaction_mute_page.dart";
 import "package:miria/view/several_account_settings_page/several_account_general_settings_page/several_account_general_settings_page.dart";
 import "package:miria/view/several_account_settings_page/several_account_settings_page.dart";
 import "package:miria/view/several_account_settings_page/word_mute_page/word_mute_page.dart";
@@ -91,9 +98,9 @@ import "package:misskey_dart/misskey_dart.dart";
 part "app_router.gr.dart";
 
 @AutoRouterConfig(replaceInRouteName: "Page|Dialog|Sheet,Route")
-class AppRouter extends _$AppRouter {
+class AppRouter extends RootStackRouter {
   @override
-  final List<AutoRoute> routes = [
+  List<AutoRoute> get routes => [
     AutoRoute(page: SplashRoute.page, initial: true),
     AutoRoute(page: TimeLineRoute.page),
     AutoRoute(page: NoteDetailRoute.page),
@@ -129,9 +136,13 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: AccountListRoute.page),
     AutoRoute(page: AppInfoRoute.page),
     AutoRoute(page: SeveralAccountSettingsRoute.page),
+    AutoRoute(page: ProfileEditRoute.page),
     AutoRoute(page: ReactionDeckRoute.page),
+    AutoRoute(page: ReactionMuteRoute.page),
     AutoRoute(page: WordMuteRoute.page),
     AutoRoute(page: InstanceMuteRoute.page),
+    AutoRoute(page: MutedUsersRoute.page),
+    AutoRoute(page: BlockedUsersRoute.page),
     AutoRoute(page: CacheManagementRoute.page),
     AutoRoute(page: SeveralAccountGeneralSettingsRoute.page),
     AutoRoute(page: SharingAccountSelectRoute.page),
@@ -151,9 +162,8 @@ class AppRouter extends _$AppRouter {
     AutoDialogRoute<Expire>(page: ExpireSelectRoute.page),
     AutoDialogRoute(page: UpdateMemoRoute.page),
     AutoDialogRoute<bool>(page: LicenseConfirmRoute.page),
-    AutoDialogRoute(page: ColorPickerRoute.page),
+    AutoDialogRoute<Color>(page: ColorPickerRoute.page),
     AutoDialogRoute(page: MisskeyServerListRoute.page),
-    AutoDialogRoute(page: ChannelDetailRoute.page),
     AutoDialogRoute(page: ServerDetailRoute.page),
     AutoDialogRoute(page: ReactionUserRoute.page),
     AutoDialogRoute<CommunityChannel>(page: ChannelSelectRoute.page),
@@ -168,6 +178,7 @@ class AppRouter extends _$AppRouter {
     AutoDialogRoute<AntennaSettings>(page: AntennaSettingsRoute.page),
     AutoDialogRoute<FolderResult>(page: FolderSelectRoute.page),
     AutoDialogRoute<List<DriveFile>>(page: DriveFileSelectRoute.page),
+    AutoDialogRoute<TimelinePreset>(page: TimelinePresetRoute.page),
 
     // モーダルシート
     AutoModalRouteSheet(page: UserControlRoute.page),
@@ -182,32 +193,30 @@ class AppRouter extends _$AppRouter {
 
 /// ダイアログ
 class AutoDialogRoute<ReturnT extends Object> extends CustomRoute {
-  AutoDialogRoute({
-    required super.page,
-  }) : super(
-          transitionsBuilder: TransitionsBuilders.fadeIn,
-          durationInMilliseconds: 200,
-          fullscreenDialog: false,
-          customRouteBuilder: (context, widget, page) => DialogRoute<ReturnT>(
-            context: context,
-            builder: (context) => widget,
-            settings: page,
-          ),
-        );
+  AutoDialogRoute({required super.page})
+    : super(
+        transitionsBuilder: TransitionsBuilders.fadeIn,
+        duration: const Duration(milliseconds: 200),
+        fullscreenDialog: false,
+        customRouteBuilder: <T>(context, child, page) => DialogRoute<T>(
+          context: context,
+          builder: (context) => child,
+          settings: page,
+        ),
+      );
 }
 
 /// モーダルボトムシート
 class AutoModalRouteSheet<ReturnT extends Object> extends CustomRoute {
-  AutoModalRouteSheet({
-    required super.page,
-  }) : super(
-          transitionsBuilder: TransitionsBuilders.slideBottom,
-          durationInMilliseconds: 200,
-          customRouteBuilder: (context, widget, page) =>
-              ModalBottomSheetRoute<ReturnT>(
-            builder: (context) => widget,
-            isScrollControlled: false,
-            settings: page,
-          ),
-        );
+  AutoModalRouteSheet({required super.page})
+    : super(
+        transitionsBuilder: TransitionsBuilders.slideBottom,
+        duration: const Duration(milliseconds: 200),
+        customRouteBuilder: <T>(context, child, page) =>
+            ModalBottomSheetRoute<T>(
+              builder: (context) => child,
+              isScrollControlled: false,
+              settings: page,
+            ),
+      );
 }

@@ -4,12 +4,12 @@ import "package:cached_network_image/cached_network_image.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/summaly_result.dart";
 import "package:miria/providers.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/link_navigator.dart";
 import "package:miria/view/common/misskey_notes/player_embed.dart";
 import "package:miria/view/common/misskey_notes/twitter_embed.dart";
@@ -18,8 +18,8 @@ import "package:webview_flutter/webview_flutter.dart";
 
 final _summalyProvider =
     AsyncNotifierProvider.family<_Summaly, SummalyResult, (String, String)>(
-  _Summaly.new,
-);
+      _Summaly.new,
+    );
 
 class _Summaly extends FamilyAsyncNotifier<SummalyResult, (String, String)> {
   @override
@@ -30,22 +30,19 @@ class _Summaly extends FamilyAsyncNotifier<SummalyResult, (String, String)> {
     // https://github.com/misskey-dev/misskey/blob/2023.9.3/packages/frontend/src/components/MkUrlPreview.vue#L141-L145
     final replacedUrl = url
         .replace(
-          host: url.host == "music.youtube.com" &&
+          host:
+              url.host == "music.youtube.com" &&
                   ["watch", "channel"].contains(url.pathSegments.firstOrNull)
               ? "www.youtube.com"
               : null,
         )
         .removeFragment();
     final response = await dio.getUri<Map<String, dynamic>>(
-      Uri.https(
-        host,
-        "url",
-        {
-          "url": replacedUrl.toString(),
-          // TODO: l10n
-          "lang": "ja-JP",
-        },
-      ),
+      Uri.https(host, "url", {
+        "url": replacedUrl.toString(),
+        // TODO: l10n
+        "lang": "ja-JP",
+      }),
     );
     return SummalyResult.fromJson(response.data!);
   }
@@ -67,11 +64,8 @@ class LinkPreview extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final summalyResult = ref.watch(_summalyProvider((account.host, link)));
     return summalyResult.maybeWhen(
-      data: (summalyResult) => LinkPreviewItem(
-        link: link,
-        host: host,
-        summalyResult: summalyResult,
-      ),
+      data: (summalyResult) =>
+          LinkPreviewItem(link: link, host: host, summalyResult: summalyResult),
       orElse: () => LinkPreviewTile(link: link, host: host),
     );
   }
@@ -98,8 +92,12 @@ class _LinkPreviewItemState extends State<LinkPreviewItem> {
 
   String? extractTweetId(String link) {
     final url = Uri.parse(link);
-    if (!["twitter.com", "mobile.twitter.com", "x.com", "mobile.x.com"]
-        .contains(url.host)) {
+    if (![
+      "twitter.com",
+      "mobile.twitter.com",
+      "x.com",
+      "mobile.x.com",
+    ].contains(url.host)) {
       return null;
     }
     final index = url.pathSegments.indexWhere(
@@ -184,16 +182,20 @@ class LinkPreviewTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
     final unscaledSize = (textTheme.titleSmall?.fontSize ?? 15) * 5;
-    final imageSize =
-        min(unscaledSize, MediaQuery.textScalerOf(context).scale(unscaledSize));
+    final imageSize = min(
+      unscaledSize,
+      MediaQuery.textScalerOf(context).scale(unscaledSize),
+    );
     final thumbnail = summalyResult.thumbnail;
     final icon = summalyResult.icon;
     return Padding(
       padding: const EdgeInsets.all(5),
       child: InkWell(
-        onTap: () async => await const LinkNavigator()
-            .onTapLink(context, ref, link, host)
-            .expectFailure(context),
+        onTap: () async => await ref
+            .read(dialogStateNotifierProvider.notifier)
+            .guard(() async {
+              await const LinkNavigator().onTapLink(context, ref, link, host);
+            }),
         onLongPress: () async {
           await Clipboard.setData(ClipboardData(text: link));
           if (!context.mounted) return;
@@ -206,9 +208,7 @@ class LinkPreviewTile extends ConsumerWidget {
         },
         child: DecoratedBox(
           decoration: BoxDecoration(
-            border: Border.all(
-              color: Theme.of(context).dividerColor,
-            ),
+            border: Border.all(color: Theme.of(context).dividerColor),
             borderRadius: BorderRadius.circular(5),
           ),
           child: ClipRRect(
@@ -225,6 +225,7 @@ class LinkPreviewTile extends ConsumerWidget {
                       height: imageSize,
                       width: imageSize,
                       fit: BoxFit.cover,
+                      cacheManager: ref.read(cacheManagerProvider),
                     ),
                   Expanded(
                     child: Padding(
@@ -254,6 +255,9 @@ class LinkPreviewTile extends ConsumerWidget {
                                     imageUrl: icon,
                                     height: textTheme.labelMedium?.fontSize,
                                     width: textTheme.labelMedium?.fontSize,
+                                    cacheManager: ref.read(
+                                      cacheManagerProvider,
+                                    ),
                                   ),
                                 ),
                               Expanded(

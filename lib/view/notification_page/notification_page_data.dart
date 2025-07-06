@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 sealed class NotificationData {
@@ -44,7 +44,8 @@ class _QuotedRenote implements MentionQuoteNotificationDataType {
 
 class _Reply implements MentionQuoteNotificationDataType {
   @override
-  String Function(BuildContext context) get name => (context) => "";
+  String Function(BuildContext context) get name =>
+      (context) => "";
 }
 
 class MentionQuoteNotificationData extends NotificationData {
@@ -64,8 +65,10 @@ class MentionQuoteNotificationData extends NotificationData {
 sealed class FollowNotificationDataType {
   String Function(BuildContext, String) get name;
   static final follow = _Follow();
-  factory FollowNotificationDataType.followRequestAccepted(String? message) =>
-      FollowRequestAccepted(message);
+  factory FollowNotificationDataType.followRequestAccepted(
+    String? message,
+    User? user,
+  ) => FollowRequestAccepted(message, user);
   static final receiveFollowRequest = _ReceiveFollowRequest();
 }
 
@@ -77,7 +80,8 @@ class _Follow implements FollowNotificationDataType {
 
 class FollowRequestAccepted implements FollowNotificationDataType {
   final String? message;
-  FollowRequestAccepted(this.message);
+  final User? user;
+  FollowRequestAccepted(this.message, this.user);
   @override
   String Function(BuildContext context, String userName) get name =>
       (context, userName) =>
@@ -161,11 +165,11 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               .whereType<RenoteReactionNotificationData>()
               .where((e) => element.note?.id == e.note?.id)
               .forEach((e) {
-            isSummarize = true;
-            if (element.user != null) {
-              e.reactionUsers.add((element.reaction!, element.user!));
-            }
-          });
+                isSummarize = true;
+                if (element.user != null) {
+                  e.reactionUsers.add((element.reaction!, element.user!));
+                }
+              });
 
           if (!isSummarize) {
             resultList.add(
@@ -185,9 +189,9 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               .whereType<RenoteReactionNotificationData>()
               .where((e) => element.note?.renote?.id == e.note?.id)
               .forEach((e) {
-            isSummarize = true;
-            e.renoteUsers.add(element.user);
-          });
+                isSummarize = true;
+                e.renoteUsers.add(element.user);
+              });
 
           if (!isSummarize) {
             resultList.add(
@@ -250,7 +254,9 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               user: element.user,
               createdAt: element.createdAt,
               type: FollowNotificationDataType.followRequestAccepted(
-                  element.message),
+                element.message,
+                element.user,
+              ),
               id: element.id,
             ),
           );
@@ -376,6 +382,22 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
           resultList.add(
             SimpleNotificationData(
               text: localize.unknownNotification,
+              createdAt: element.createdAt,
+              id: element.id,
+            ),
+          );
+        case NotificationType.createToken:
+          resultList.add(
+            SimpleNotificationData(
+              text: localize.createTokenNotification,
+              createdAt: element.createdAt,
+              id: element.id,
+            ),
+          );
+        case NotificationType.chatRoomInvitationReceived:
+          resultList.add(
+            SimpleNotificationData(
+              text: localize.chatRoomInvitationReceivedNotification,
               createdAt: element.createdAt,
               id: element.id,
             ),

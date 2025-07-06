@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,239 +10,175 @@ part of 'exported_setting.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-ExportedSetting _$ExportedSettingFromJson(Map<String, dynamic> json) {
-  return _ExportedSetting.fromJson(json);
-}
 
 /// @nodoc
 mixin _$ExportedSetting {
-  GeneralSettings get generalSettings => throw _privateConstructorUsedError;
-  List<AccountSettings> get accountSettings =>
-      throw _privateConstructorUsedError;
-  List<TabSetting> get tabSettings => throw _privateConstructorUsedError;
+
+ GeneralSettings get generalSettings; List<AccountSettings> get accountSettings; List<TabSetting> get tabSettings;
+/// Create a copy of ExportedSetting
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ExportedSettingCopyWith<ExportedSetting> get copyWith => _$ExportedSettingCopyWithImpl<ExportedSetting>(this as ExportedSetting, _$identity);
 
   /// Serializes this ExportedSetting to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  Map<String, dynamic> toJson();
 
-  /// Create a copy of ExportedSetting
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $ExportedSettingCopyWith<ExportedSetting> get copyWith =>
-      throw _privateConstructorUsedError;
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ExportedSetting&&(identical(other.generalSettings, generalSettings) || other.generalSettings == generalSettings)&&const DeepCollectionEquality().equals(other.accountSettings, accountSettings)&&const DeepCollectionEquality().equals(other.tabSettings, tabSettings));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,generalSettings,const DeepCollectionEquality().hash(accountSettings),const DeepCollectionEquality().hash(tabSettings));
+
+@override
+String toString() {
+  return 'ExportedSetting(generalSettings: $generalSettings, accountSettings: $accountSettings, tabSettings: $tabSettings)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $ExportedSettingCopyWith<$Res> {
-  factory $ExportedSettingCopyWith(
-          ExportedSetting value, $Res Function(ExportedSetting) then) =
-      _$ExportedSettingCopyWithImpl<$Res, ExportedSetting>;
-  @useResult
-  $Res call(
-      {GeneralSettings generalSettings,
-      List<AccountSettings> accountSettings,
-      List<TabSetting> tabSettings});
+abstract mixin class $ExportedSettingCopyWith<$Res>  {
+  factory $ExportedSettingCopyWith(ExportedSetting value, $Res Function(ExportedSetting) _then) = _$ExportedSettingCopyWithImpl;
+@useResult
+$Res call({
+ GeneralSettings generalSettings, List<AccountSettings> accountSettings, List<TabSetting> tabSettings
+});
 
-  $GeneralSettingsCopyWith<$Res> get generalSettings;
+
+$GeneralSettingsCopyWith<$Res> get generalSettings;
+
 }
-
 /// @nodoc
-class _$ExportedSettingCopyWithImpl<$Res, $Val extends ExportedSetting>
+class _$ExportedSettingCopyWithImpl<$Res>
     implements $ExportedSettingCopyWith<$Res> {
-  _$ExportedSettingCopyWithImpl(this._value, this._then);
+  _$ExportedSettingCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final ExportedSetting _self;
+  final $Res Function(ExportedSetting) _then;
 
-  /// Create a copy of ExportedSetting
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? generalSettings = null,
-    Object? accountSettings = null,
-    Object? tabSettings = null,
-  }) {
-    return _then(_value.copyWith(
-      generalSettings: null == generalSettings
-          ? _value.generalSettings
-          : generalSettings // ignore: cast_nullable_to_non_nullable
-              as GeneralSettings,
-      accountSettings: null == accountSettings
-          ? _value.accountSettings
-          : accountSettings // ignore: cast_nullable_to_non_nullable
-              as List<AccountSettings>,
-      tabSettings: null == tabSettings
-          ? _value.tabSettings
-          : tabSettings // ignore: cast_nullable_to_non_nullable
-              as List<TabSetting>,
-    ) as $Val);
-  }
-
-  /// Create a copy of ExportedSetting
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $GeneralSettingsCopyWith<$Res> get generalSettings {
-    return $GeneralSettingsCopyWith<$Res>(_value.generalSettings, (value) {
-      return _then(_value.copyWith(generalSettings: value) as $Val);
-    });
-  }
+/// Create a copy of ExportedSetting
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? generalSettings = null,Object? accountSettings = null,Object? tabSettings = null,}) {
+  return _then(_self.copyWith(
+generalSettings: null == generalSettings ? _self.generalSettings : generalSettings // ignore: cast_nullable_to_non_nullable
+as GeneralSettings,accountSettings: null == accountSettings ? _self.accountSettings : accountSettings // ignore: cast_nullable_to_non_nullable
+as List<AccountSettings>,tabSettings: null == tabSettings ? _self.tabSettings : tabSettings // ignore: cast_nullable_to_non_nullable
+as List<TabSetting>,
+  ));
+}
+/// Create a copy of ExportedSetting
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GeneralSettingsCopyWith<$Res> get generalSettings {
+  
+  return $GeneralSettingsCopyWith<$Res>(_self.generalSettings, (value) {
+    return _then(_self.copyWith(generalSettings: value));
+  });
+}
 }
 
-/// @nodoc
-abstract class _$$ExportedSettingImplCopyWith<$Res>
-    implements $ExportedSettingCopyWith<$Res> {
-  factory _$$ExportedSettingImplCopyWith(_$ExportedSettingImpl value,
-          $Res Function(_$ExportedSettingImpl) then) =
-      __$$ExportedSettingImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {GeneralSettings generalSettings,
-      List<AccountSettings> accountSettings,
-      List<TabSetting> tabSettings});
-
-  @override
-  $GeneralSettingsCopyWith<$Res> get generalSettings;
-}
-
-/// @nodoc
-class __$$ExportedSettingImplCopyWithImpl<$Res>
-    extends _$ExportedSettingCopyWithImpl<$Res, _$ExportedSettingImpl>
-    implements _$$ExportedSettingImplCopyWith<$Res> {
-  __$$ExportedSettingImplCopyWithImpl(
-      _$ExportedSettingImpl _value, $Res Function(_$ExportedSettingImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of ExportedSetting
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? generalSettings = null,
-    Object? accountSettings = null,
-    Object? tabSettings = null,
-  }) {
-    return _then(_$ExportedSettingImpl(
-      generalSettings: null == generalSettings
-          ? _value.generalSettings
-          : generalSettings // ignore: cast_nullable_to_non_nullable
-              as GeneralSettings,
-      accountSettings: null == accountSettings
-          ? _value._accountSettings
-          : accountSettings // ignore: cast_nullable_to_non_nullable
-              as List<AccountSettings>,
-      tabSettings: null == tabSettings
-          ? _value._tabSettings
-          : tabSettings // ignore: cast_nullable_to_non_nullable
-              as List<TabSetting>,
-    ));
-  }
-}
 
 /// @nodoc
 @JsonSerializable()
-class _$ExportedSettingImpl implements _ExportedSetting {
-  const _$ExportedSettingImpl(
-      {required this.generalSettings,
-      final List<AccountSettings> accountSettings = const [],
-      final List<TabSetting> tabSettings = const []})
-      : _accountSettings = accountSettings,
-        _tabSettings = tabSettings;
 
-  factory _$ExportedSettingImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ExportedSettingImplFromJson(json);
+class _ExportedSetting implements ExportedSetting {
+  const _ExportedSetting({required this.generalSettings, final  List<AccountSettings> accountSettings = const [], final  List<TabSetting> tabSettings = const []}): _accountSettings = accountSettings,_tabSettings = tabSettings;
+  factory _ExportedSetting.fromJson(Map<String, dynamic> json) => _$ExportedSettingFromJson(json);
 
-  @override
-  final GeneralSettings generalSettings;
-  final List<AccountSettings> _accountSettings;
-  @override
-  @JsonKey()
-  List<AccountSettings> get accountSettings {
-    if (_accountSettings is EqualUnmodifiableListView) return _accountSettings;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_accountSettings);
-  }
-
-  final List<TabSetting> _tabSettings;
-  @override
-  @JsonKey()
-  List<TabSetting> get tabSettings {
-    if (_tabSettings is EqualUnmodifiableListView) return _tabSettings;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_tabSettings);
-  }
-
-  @override
-  String toString() {
-    return 'ExportedSetting(generalSettings: $generalSettings, accountSettings: $accountSettings, tabSettings: $tabSettings)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ExportedSettingImpl &&
-            (identical(other.generalSettings, generalSettings) ||
-                other.generalSettings == generalSettings) &&
-            const DeepCollectionEquality()
-                .equals(other._accountSettings, _accountSettings) &&
-            const DeepCollectionEquality()
-                .equals(other._tabSettings, _tabSettings));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      generalSettings,
-      const DeepCollectionEquality().hash(_accountSettings),
-      const DeepCollectionEquality().hash(_tabSettings));
-
-  /// Create a copy of ExportedSetting
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ExportedSettingImplCopyWith<_$ExportedSettingImpl> get copyWith =>
-      __$$ExportedSettingImplCopyWithImpl<_$ExportedSettingImpl>(
-          this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ExportedSettingImplToJson(
-      this,
-    );
-  }
+@override final  GeneralSettings generalSettings;
+ final  List<AccountSettings> _accountSettings;
+@override@JsonKey() List<AccountSettings> get accountSettings {
+  if (_accountSettings is EqualUnmodifiableListView) return _accountSettings;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_accountSettings);
 }
 
-abstract class _ExportedSetting implements ExportedSetting {
-  const factory _ExportedSetting(
-      {required final GeneralSettings generalSettings,
-      final List<AccountSettings> accountSettings,
-      final List<TabSetting> tabSettings}) = _$ExportedSettingImpl;
-
-  factory _ExportedSetting.fromJson(Map<String, dynamic> json) =
-      _$ExportedSettingImpl.fromJson;
-
-  @override
-  GeneralSettings get generalSettings;
-  @override
-  List<AccountSettings> get accountSettings;
-  @override
-  List<TabSetting> get tabSettings;
-
-  /// Create a copy of ExportedSetting
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ExportedSettingImplCopyWith<_$ExportedSettingImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+ final  List<TabSetting> _tabSettings;
+@override@JsonKey() List<TabSetting> get tabSettings {
+  if (_tabSettings is EqualUnmodifiableListView) return _tabSettings;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_tabSettings);
 }
+
+
+/// Create a copy of ExportedSetting
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ExportedSettingCopyWith<_ExportedSetting> get copyWith => __$ExportedSettingCopyWithImpl<_ExportedSetting>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$ExportedSettingToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ExportedSetting&&(identical(other.generalSettings, generalSettings) || other.generalSettings == generalSettings)&&const DeepCollectionEquality().equals(other._accountSettings, _accountSettings)&&const DeepCollectionEquality().equals(other._tabSettings, _tabSettings));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,generalSettings,const DeepCollectionEquality().hash(_accountSettings),const DeepCollectionEquality().hash(_tabSettings));
+
+@override
+String toString() {
+  return 'ExportedSetting(generalSettings: $generalSettings, accountSettings: $accountSettings, tabSettings: $tabSettings)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ExportedSettingCopyWith<$Res> implements $ExportedSettingCopyWith<$Res> {
+  factory _$ExportedSettingCopyWith(_ExportedSetting value, $Res Function(_ExportedSetting) _then) = __$ExportedSettingCopyWithImpl;
+@override @useResult
+$Res call({
+ GeneralSettings generalSettings, List<AccountSettings> accountSettings, List<TabSetting> tabSettings
+});
+
+
+@override $GeneralSettingsCopyWith<$Res> get generalSettings;
+
+}
+/// @nodoc
+class __$ExportedSettingCopyWithImpl<$Res>
+    implements _$ExportedSettingCopyWith<$Res> {
+  __$ExportedSettingCopyWithImpl(this._self, this._then);
+
+  final _ExportedSetting _self;
+  final $Res Function(_ExportedSetting) _then;
+
+/// Create a copy of ExportedSetting
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? generalSettings = null,Object? accountSettings = null,Object? tabSettings = null,}) {
+  return _then(_ExportedSetting(
+generalSettings: null == generalSettings ? _self.generalSettings : generalSettings // ignore: cast_nullable_to_non_nullable
+as GeneralSettings,accountSettings: null == accountSettings ? _self._accountSettings : accountSettings // ignore: cast_nullable_to_non_nullable
+as List<AccountSettings>,tabSettings: null == tabSettings ? _self._tabSettings : tabSettings // ignore: cast_nullable_to_non_nullable
+as List<TabSetting>,
+  ));
+}
+
+/// Create a copy of ExportedSetting
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GeneralSettingsCopyWith<$Res> get generalSettings {
+  
+  return $GeneralSettingsCopyWith<$Res>(_self.generalSettings, (value) {
+    return _then(_self.copyWith(generalSettings: value));
+  });
+}
+}
+
+// dart format on

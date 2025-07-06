@@ -3,19 +3,14 @@ import "dart:io";
 
 import "package:auto_route/auto_route.dart";
 import "package:dio/dio.dart";
-import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
-import "package:miria/router/app_router.dart";
+import "package:flutter/cupertino.dart";
+import "package:miria/l10n/app_localizations.dart";
 
 class ErrorDetail extends StatelessWidget {
   final Object? error;
   final StackTrace? stackTrace;
 
-  const ErrorDetail({
-    required this.error,
-    required this.stackTrace,
-    super.key,
-  });
+  const ErrorDetail({required this.error, required this.stackTrace, super.key});
 
   @override
   Widget build(BuildContext context) {

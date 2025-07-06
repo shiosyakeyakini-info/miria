@@ -1,9 +1,9 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mfm_parser/mfm_parser.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/note_search_condition.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
@@ -16,16 +16,13 @@ class NoteSearch extends HookConsumerWidget {
   final NoteSearchCondition? initialCondition;
   final FocusNode? focusNode;
 
-  const NoteSearch({
-    super.key,
-    this.initialCondition,
-    this.focusNode,
-  });
+  const NoteSearch({super.key, this.initialCondition, this.focusNode});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final conditionController =
-        useTextEditingController(text: initialCondition?.query);
+    final conditionController = useTextEditingController(
+      text: initialCondition?.query,
+    );
     final searchQuery = useState("");
     final selectedUser = useState(initialCondition?.user);
     final selectedChannel = useState(initialCondition?.channel);
@@ -79,92 +76,41 @@ class NoteSearch extends HookConsumerWidget {
                         S.of(context).disabledInHashtag,
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
-                      Table(
-                        columnWidths: const {
-                          0: IntrinsicColumnWidth(),
-                          1: IntrinsicColumnWidth(),
+                      ListTile(
+                        title: selectedUserValue == null
+                            ? Text(S.of(context).user)
+                            : UserListItem(user: selectedUserValue),
+                        onTap: () async {
+                          final selected = await context.pushRoute<User?>(
+                            UserSelectRoute(
+                              accountContext: ref.read(accountContextProvider),
+                            ),
+                          );
+                          selectedUser.value = selected;
                         },
-                        defaultVerticalAlignment:
-                            TableCellVerticalAlignment.middle,
-                        children: [
-                          TableRow(
-                            children: [
-                              Text(S.of(context).user),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Expanded(
-                                    child: selectedUserValue == null
-                                        ? Container()
-                                        : UserListItem(user: selectedUserValue),
-                                  ),
-                                  IconButton(
-                                    onPressed: () async {
-                                      final selected =
-                                          await context.pushRoute<User?>(
-                                        UserSelectRoute(
-                                          accountContext:
-                                              ref.read(accountContextProvider),
-                                        ),
-                                      );
-                                      selectedUser.value = selected;
-                                    },
-                                    icon:
-                                        const Icon(Icons.keyboard_arrow_right),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              Text(S.of(context).channel),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Expanded(
-                                    child: selectedChannelValue == null
-                                        ? Container()
-                                        : Text(selectedChannelValue.name),
-                                  ),
-                                  IconButton(
-                                    onPressed: () async {
-                                      final selected = await context
-                                          .pushRoute<CommunityChannel>(
-                                        ChannelSelectRoute(
-                                          account: ref
-                                              .read(accountContextProvider)
-                                              .postAccount,
-                                        ),
-                                      );
-                                      selectedChannel.value = selected;
-                                    },
-                                    icon:
-                                        const Icon(Icons.keyboard_arrow_right),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              Text(S.of(context).onlyLocal),
-                              Row(
-                                children: [
-                                  Checkbox(
-                                    value: localOnly.value,
-                                    onChanged: (value) =>
-                                        localOnly.value = value ?? false,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
+                        trailing: const Icon(Icons.keyboard_arrow_right),
+                      ),
+                      ListTile(
+                        title: selectedChannelValue == null
+                            ? Text(S.of(context).channel)
+                            : Text(selectedChannelValue.name),
+                        onTap: () async {
+                          final selected = await context
+                              .pushRoute<CommunityChannel>(
+                                ChannelSelectRoute(
+                                  account: ref
+                                      .read(accountContextProvider)
+                                      .postAccount,
+                                ),
+                              );
+                          selectedChannel.value = selected;
+                        },
+                        trailing: const Icon(Icons.keyboard_arrow_right),
+                      ),
+                      CheckboxListTile(
+                        title: Text(S.of(context).onlyLocal),
+                        value: localOnly.value,
+                        onChanged: (value) => localOnly.value = value ?? false,
                       ),
                     ],
                   ),
@@ -215,13 +161,19 @@ class NoteSearchList extends ConsumerWidget {
       initializeFuture: () async {
         final Iterable<Note> notes;
         if (isHashtagOnly) {
-          notes = await ref.read(misskeyGetContextProvider).notes.searchByTag(
+          notes = await ref
+              .read(misskeyGetContextProvider)
+              .notes
+              .searchByTag(
                 NotesSearchByTagRequest(
                   tag: (parsedSearchValue[0] as MfmHashTag).hashTag,
                 ),
               );
         } else {
-          notes = await ref.read(misskeyGetContextProvider).notes.search(
+          notes = await ref
+              .read(misskeyGetContextProvider)
+              .notes
+              .search(
                 NotesSearchRequest(
                   query: query,
                   userId: userId,
@@ -237,14 +189,20 @@ class NoteSearchList extends ConsumerWidget {
       nextFuture: (lastItem, _) async {
         final Iterable<Note> notes;
         if (isHashtagOnly) {
-          notes = await ref.read(misskeyGetContextProvider).notes.searchByTag(
+          notes = await ref
+              .read(misskeyGetContextProvider)
+              .notes
+              .searchByTag(
                 NotesSearchByTagRequest(
                   tag: (parsedSearchValue[0] as MfmHashTag).hashTag,
                   untilId: lastItem.id,
                 ),
               );
         } else {
-          notes = await ref.read(misskeyGetContextProvider).notes.search(
+          notes = await ref
+              .read(misskeyGetContextProvider)
+              .notes
+              .search(
                 NotesSearchRequest(
                   query: query,
                   userId: userId,

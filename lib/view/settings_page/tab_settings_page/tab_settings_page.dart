@@ -1,13 +1,15 @@
 import "dart:async";
+import "dart:convert";
 
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/users_lists_show_response_extension.dart";
 import "package:miria/hooks/use_async.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
+import "package:miria/model/server_preset.dart";
 import "package:miria/model/tab_icon.dart";
 import "package:miria/model/tab_setting.dart";
 import "package:miria/model/tab_type.dart";
@@ -29,9 +31,9 @@ class TabSettingsPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final initialTabSetting = tabIndex != null
         ? ref
-            .read(tabSettingsRepositoryProvider)
-            .tabSettings
-            .toList()[tabIndex!]
+              .read(tabSettingsRepositoryProvider)
+              .tabSettings
+              .toList()[tabIndex!]
         : null;
 
     final selectedAccount = useState<Account?>(
@@ -54,7 +56,10 @@ class TabSettingsPage extends HookConsumerWidget {
     final selectedTabType = useState<TabType?>(
       initialTabSetting != null && isTabTypeAvailable(initialTabSetting.tabType)
           ? initialTabSetting.tabType
-          : TabType.localTimeline,
+          : (selectedAccount.value != null &&
+                    selectedAccount.value!.i.policies.ltlAvailable
+                ? TabType.localTimeline
+                : TabType.homeTimeline),
     );
 
     final selectedRole = useState<RolesListResponse?>(null);
@@ -62,23 +67,36 @@ class TabSettingsPage extends HookConsumerWidget {
     final selectedUserList = useState<UsersList?>(null);
     final selectedAntenna = useState<Antenna?>(null);
 
+    final customChannelController = useTextEditingController(
+      text: initialTabSetting?.customChannelName ?? "",
+    );
+    final customApiController = useTextEditingController(
+      text: initialTabSetting?.customApiPath ?? "",
+    );
+    final customParamsController = useTextEditingController(
+      text: initialTabSetting?.customParameters != null
+          ? jsonEncode(initialTabSetting!.customParameters)
+          : "{}",
+    );
+
     final nameController = useTextEditingController(
       text: initialTabSetting != null
           ? initialTabSetting.name ??
-              initialTabSetting.tabType.displayName(context)
+                initialTabSetting.tabType.displayName(context)
           : "",
     );
 
     final availableIncludeReply =
         selectedTabType.value == TabType.localTimeline ||
-            selectedTabType.value == TabType.hybridTimeline;
+        selectedTabType.value == TabType.hybridTimeline;
 
     final selectedIcon = useState<TabIcon?>(initialTabSetting?.icon);
     final renoteDisplay = useState(initialTabSetting?.renoteDisplay ?? true);
     final isSubscribe = useState(initialTabSetting?.isSubscribe ?? true);
     final isMediaOnly = useState(initialTabSetting?.isMediaOnly ?? false);
-    final isIncludeReply =
-        useState(initialTabSetting?.isIncludeReplies ?? false);
+    final isIncludeReply = useState(
+      initialTabSetting?.isIncludeReplies ?? false,
+    );
 
     final initialize = useAsync(() async {
       if (initialTabSetting == null) return;
@@ -101,12 +119,13 @@ class TabSettingsPage extends HookConsumerWidget {
             .show(ChannelsShowRequest(channelId: channelId));
       }
       if (listId != null) {
-        selectedUserList.value = (await ref
-                .read(misskeyProvider(selectedAccount.value!))
-                .users
-                .list
-                .show(UsersListsShowRequest(listId: listId)))
-            .toUsersList();
+        selectedUserList.value =
+            (await ref
+                    .read(misskeyProvider(selectedAccount.value!))
+                    .users
+                    .list
+                    .show(UsersListsShowRequest(listId: listId)))
+                .toUsersList();
       }
       if (antennaId != null) {
         selectedAntenna.value = await ref
@@ -126,7 +145,9 @@ class TabSettingsPage extends HookConsumerWidget {
           if (tabIndex != null)
             IconButton(
               onPressed: () async {
-                await ref.read(tabSettingsRepositoryProvider).save(
+                await ref
+                    .read(tabSettingsRepositoryProvider)
+                    .save(
                       ref
                           .read(tabSettingsRepositoryProvider)
                           .tabSettings
@@ -163,8 +184,8 @@ class TabSettingsPage extends HookConsumerWidget {
                   selectedAccount.value = value;
                   selectedTabType.value =
                       tabType != null && isTabTypeAvailable(tabType)
-                          ? tabType
-                          : null;
+                      ? tabType
+                      : null;
                   selectedAntenna.value = null;
                   selectedUserList.value = null;
                   selectedChannel.value = null;
@@ -195,24 +216,24 @@ class TabSettingsPage extends HookConsumerWidget {
                 Text(S.of(context).roleTimeline),
                 switch (initialize.value) {
                   AsyncData() => Row(
-                      children: [
-                        Expanded(child: Text(selectedRole.value?.name ?? "")),
-                        IconButton(
-                          onPressed: () async {
-                            final selected = selectedAccount.value;
-                            if (selected == null) return;
+                    children: [
+                      Expanded(child: Text(selectedRole.value?.name ?? "")),
+                      IconButton(
+                        onPressed: () async {
+                          final selected = selectedAccount.value;
+                          if (selected == null) return;
 
-                            selectedRole.value =
-                                await context.pushRoute<RolesListResponse>(
-                              RoleSelectRoute(account: selected),
-                            );
-                            nameController.text =
-                                selectedRole.value?.name ?? nameController.text;
-                          },
-                          icon: const Icon(Icons.navigate_next),
-                        ),
-                      ],
-                    ),
+                          selectedRole.value = await context
+                              .pushRoute<RolesListResponse>(
+                                RoleSelectRoute(account: selected),
+                              );
+                          nameController.text =
+                              selectedRole.value?.name ?? nameController.text;
+                        },
+                        icon: const Icon(Icons.navigate_next),
+                      ),
+                    ],
+                  ),
                   _ => const CircularProgressIndicator.adaptive(),
                 },
               ],
@@ -220,25 +241,24 @@ class TabSettingsPage extends HookConsumerWidget {
                 Text(S.of(context).channel),
                 switch (initialize.value) {
                   AsyncData() => Row(
-                      children: [
-                        Expanded(
-                          child: Text(selectedChannel.value?.name ?? ""),
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            final selected = selectedAccount.value;
-                            if (selected == null) return;
+                    children: [
+                      Expanded(child: Text(selectedChannel.value?.name ?? "")),
+                      IconButton(
+                        onPressed: () async {
+                          final selected = selectedAccount.value;
+                          if (selected == null) return;
 
-                            selectedChannel.value = await context.pushRoute(
-                              ChannelSelectRoute(account: selected),
-                            );
-                            nameController.text = selectedChannel.value?.name ??
-                                nameController.text;
-                          },
-                          icon: const Icon(Icons.navigate_next),
-                        ),
-                      ],
-                    ),
+                          selectedChannel.value = await context.pushRoute(
+                            ChannelSelectRoute(account: selected),
+                          );
+                          nameController.text =
+                              selectedChannel.value?.name ??
+                              nameController.text;
+                        },
+                        icon: const Icon(Icons.navigate_next),
+                      ),
+                    ],
+                  ),
                   _ => const CircularProgressIndicator.adaptive(),
                 },
               ],
@@ -246,26 +266,24 @@ class TabSettingsPage extends HookConsumerWidget {
                 Text(S.of(context).list),
                 switch (initialize.value) {
                   AsyncData() => Row(
-                      children: [
-                        Expanded(
-                          child: Text(selectedUserList.value?.name ?? ""),
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            final selected = selectedAccount.value;
-                            if (selected == null) return;
+                    children: [
+                      Expanded(child: Text(selectedUserList.value?.name ?? "")),
+                      IconButton(
+                        onPressed: () async {
+                          final selected = selectedAccount.value;
+                          if (selected == null) return;
 
-                            selectedUserList.value = await context.pushRoute(
-                              UserListSelectRoute(account: selected),
-                            );
-                            nameController.text =
-                                selectedUserList.value?.name ??
-                                    nameController.text;
-                          },
-                          icon: const Icon(Icons.navigate_next),
-                        ),
-                      ],
-                    ),
+                          selectedUserList.value = await context.pushRoute(
+                            UserListSelectRoute(account: selected),
+                          );
+                          nameController.text =
+                              selectedUserList.value?.name ??
+                              nameController.text;
+                        },
+                        icon: const Icon(Icons.navigate_next),
+                      ),
+                    ],
+                  ),
                   _ => const CircularProgressIndicator.adaptive(),
                 },
               ],
@@ -276,21 +294,58 @@ class TabSettingsPage extends HookConsumerWidget {
                     Expanded(child: Text(selectedAntenna.value?.name ?? "")),
                     switch (initialize.value) {
                       AsyncData() => IconButton(
-                          onPressed: () async {
-                            final selected = selectedAccount.value;
-                            if (selected == null) return;
+                        onPressed: () async {
+                          final selected = selectedAccount.value;
+                          if (selected == null) return;
 
-                            selectedAntenna.value = await context.pushRoute(
-                              AntennaSelectRoute(account: selected),
-                            );
-                            nameController.text = selectedAntenna.value?.name ??
-                                nameController.text;
-                          },
-                          icon: const Icon(Icons.navigate_next),
-                        ),
+                          selectedAntenna.value = await context.pushRoute(
+                            AntennaSelectRoute(account: selected),
+                          );
+                          nameController.text =
+                              selectedAntenna.value?.name ??
+                              nameController.text;
+                        },
+                        icon: const Icon(Icons.navigate_next),
+                      ),
                       _ => const CircularProgressIndicator.adaptive(),
                     },
                   ],
+                ),
+              ],
+              if (selectedTabType.value == TabType.customTimeline) ...[
+                Row(
+                  children: [
+                    Expanded(child: Text(S.of(context).customChannelName)),
+                    OutlinedButton.icon(
+                      icon: const Icon(Icons.list, size: 18),
+                      label: Text(S.of(context).template),
+                      onPressed: () async {
+                        final preset = await context.pushRoute<TimelinePreset>(
+                          TimelinePresetRoute(),
+                        );
+                        if (preset != null) {
+                          customChannelController.text =
+                              preset.websocketChannelName;
+                          customApiController.text = preset.endpoint;
+                          customParamsController.text = jsonEncode(
+                            preset.parameters,
+                          );
+                          nameController.text = preset.name;
+                        }
+                      },
+                    ),
+                  ],
+                ),
+                TextField(controller: customChannelController),
+                const Padding(padding: EdgeInsets.all(10)),
+                Text(S.of(context).customApiPath),
+                TextField(controller: customApiController),
+                const Padding(padding: EdgeInsets.all(10)),
+                Text(S.of(context).customTimelineParameters),
+                TextField(
+                  controller: customParamsController,
+                  minLines: 3,
+                  maxLines: null,
                 ),
               ],
               const Padding(padding: EdgeInsets.all(10)),
@@ -322,9 +377,8 @@ class TabSettingsPage extends HookConsumerWidget {
                       if (selectedAccount.value == null) return;
                       selectedIcon.value = await showDialog<TabIcon>(
                         context: context,
-                        builder: (context) => IconSelectDialog(
-                          account: selectedAccount.value!,
-                        ),
+                        builder: (context) =>
+                            IconSelectDialog(account: selectedAccount.value!),
                       );
                     },
                     icon: const Icon(Icons.navigate_next),
@@ -431,6 +485,30 @@ class TabSettingsPage extends HookConsumerWidget {
                       );
                       return;
                     }
+                    Map<String, dynamic>? customParams;
+                    if (tabType == TabType.customTimeline) {
+                      if (customApiController.text.isEmpty) {
+                        await SimpleMessageDialog.show(
+                          context,
+                          S.of(context).invalidInput,
+                        );
+                        return;
+                      }
+                      try {
+                        final decoded = jsonDecode(customParamsController.text);
+                        if (decoded is Map<String, dynamic>) {
+                          customParams = decoded;
+                        } else {
+                          throw Exception();
+                        }
+                      } catch (_) {
+                        await SimpleMessageDialog.show(
+                          context,
+                          S.of(context).invalidInput,
+                        );
+                        return;
+                      }
+                    }
 
                     final list = ref
                         .read(tabSettingsRepositoryProvider)
@@ -445,15 +523,23 @@ class TabSettingsPage extends HookConsumerWidget {
                       channelId: selectedChannel.value?.id,
                       listId: selectedUserList.value?.id,
                       antennaId: selectedAntenna.value?.id,
+                      customChannelName: customChannelController.text.isNotEmpty
+                          ? customChannelController.text
+                          : null,
+                      customApiPath: customApiController.text.isNotEmpty
+                          ? customApiController.text
+                          : null,
+                      customParameters: customParams,
                       renoteDisplay: renoteDisplay.value,
                       isSubscribe: isSubscribe.value,
                       isIncludeReplies: isIncludeReply.value,
                       isMediaOnly: isMediaOnly.value,
                     );
                     if (tabIndex == null) {
-                      await ref
-                          .read(tabSettingsRepositoryProvider)
-                          .save([...list, newTabSetting]);
+                      await ref.read(tabSettingsRepositoryProvider).save([
+                        ...list,
+                        newTabSetting,
+                      ]);
                     } else {
                       list[tabIndex!] = newTabSetting;
                       await ref.read(tabSettingsRepositoryProvider).save(list);

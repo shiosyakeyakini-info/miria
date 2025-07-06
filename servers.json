@@ -1,0 +1,64 @@
+{
+    "limitedApiServers": [
+        {
+            "host": "novelskey.tarbin.net"
+        },
+        {
+            "host": "otoskey.tarbin.net"
+        },
+        {
+            "host": "nijimiss.moe"
+        }
+    ], 
+    "particularTimelinePresets": [
+        {
+            "host": "mi.taichan.site",
+            "name": "ホームタイムライン（ローカルのみ）",
+            "endpoint": "api/notes/timeline",
+            "websocketChannelName": "localTimeline",
+            "parameters": "{\"onlyLocal\": true}"
+        },
+        {
+            "host": "mi.taichan.site",
+            "name": "ソーシャルタイムライン（ローカルのみ）",
+            "endpoint": "api/notes/hybrid-timeline",
+            "websocketChannelName": "hybridTimeline",
+            "parameters": "{\"onlyLocal\": true}"
+        },
+        {
+            "host": "misskey.flowers",
+            "name": "はなモード",
+            "endpoint": "api/notes/hanami-timeline",
+            "websocketChannelName": "hanamiTimeline",
+            "parameters": "{}"
+        },
+        {
+            "host": "misskey.niri.la",
+            "name": "ぶいみみリレー",
+            "endpoint": "api/notes/vmimi-relay-timeline",
+            "websocketChannelName": "vmimiRelayTimeline",
+            "parameters": "{}"
+        },
+        {
+            "host": "misskey.niri.la",
+            "name": "ぶいみみリレーソーシャル",
+            "endpoint": "api/notes/vmimi-relay-hybrid-timeline",
+            "websocketChannelName": "vmimiRelayHybridTimeline",
+            "parameters": "{}"
+        },
+        {
+            "host": "buicha.social",
+            "name": "ぶいみみリレー",
+            "endpoint": "api/notes/vmimi-relay-timeline",
+            "websocketChannelName": "vmimiRelayTimeline",
+            "parameters": "{}"
+        },
+        {
+            "host": "buicha.social",
+            "name": "ぶいみみリレーソーシャル",
+            "endpoint": "api/notes/vmimi-relay-hybrid-timeline",
+            "websocketChannelName": "vmimiRelayHybridTimeline",
+            "parameters": "{}"
+        }
+    ]
+}

@@ -1,96 +1,78 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/users_lists_show_response_extension.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/users_list_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/error_detail.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 import "package:miria/view/user_page/user_list_item.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-final _usersListNotifierProvider = AutoDisposeAsyncNotifierProviderFamily<
-    _UsersListNotifier, UsersList, (Misskey, String)>(_UsersListNotifier.new);
+part "users_list_detail_page.g.dart";
 
-class _UsersListNotifier
-    extends AutoDisposeFamilyAsyncNotifier<UsersList, (Misskey, String)> {
+@riverpod
+class _UsersListNotifier extends _$UsersListNotifier {
   @override
-  Future<UsersList> build((Misskey, String) arg) async {
-    final response = await _misskey.users.list.show(
-      UsersListsShowRequest(listId: _listId),
+  Future<UsersList> build(Misskey misskey, String listId) async {
+    final response = await misskey.users.list.show(
+      UsersListsShowRequest(listId: listId),
     );
     return response.toUsersList();
   }
 
-  Misskey get _misskey => arg.$1;
-
-  String get _listId => arg.$2;
-
-  Future<void> updateList(UsersListSettings settings) async {
-    await _misskey.users.list.update(
+  Future<void> updateList(
+    UsersListSettings settings,
+    Misskey misskey,
+    String listId,
+  ) async {
+    await misskey.users.list.update(
       UsersListsUpdateRequest(
-        listId: _listId,
+        listId: listId,
         name: settings.name,
         isPublic: settings.isPublic,
       ),
     );
-    final list = state.valueOrNull;
+    final list = state.value;
     if (list != null) {
       state = AsyncValue.data(
-        list.copyWith(
-          name: settings.name,
-          isPublic: settings.isPublic,
-        ),
+        list.copyWith(name: settings.name, isPublic: settings.isPublic),
       );
     }
   }
 }
 
-final _usersListUsersProvider = AutoDisposeAsyncNotifierProviderFamily<
-    _UsersListUsers, List<User>, (Misskey, String)>(
-  _UsersListUsers.new,
-);
-
-class _UsersListUsers
-    extends AutoDisposeFamilyAsyncNotifier<List<User>, (Misskey, String)> {
+@riverpod
+class _UsersListUsers extends _$UsersListUsers {
   @override
-  Future<List<User>> build((Misskey, String) arg) async {
-    final list = await ref.watch(_usersListNotifierProvider(arg).future);
-    final response = await _misskey.users.showByIds(
-      UsersShowByIdsRequest(
-        userIds: list.userIds,
-      ),
+  Future<List<User>> build(Misskey misskey, String listId) async {
+    final list = await ref.watch(
+      _usersListNotifierProvider(misskey, listId).future,
+    );
+    final response = await misskey.users.showByIds(
+      UsersShowByIdsRequest(userIds: list.userIds),
     );
     return response.toList();
   }
 
-  Misskey get _misskey => arg.$1;
-
-  String get _listId => arg.$2;
-
-  Future<void> push(User user) async {
-    await _misskey.users.list.push(
-      UsersListsPushRequest(
-        listId: _listId,
-        userId: user.id,
-      ),
+  Future<void> push(User user, Misskey misskey, String listId) async {
+    await misskey.users.list.push(
+      UsersListsPushRequest(listId: listId, userId: user.id),
     );
-    state = AsyncValue.data([...?state.valueOrNull, user]);
+    state = AsyncValue.data([...?state.value, user]);
   }
 
-  Future<void> pull(User user) async {
-    await _misskey.users.list.pull(
-      UsersListsPullRequest(
-        listId: _listId,
-        userId: user.id,
-      ),
+  Future<void> pull(User user, Misskey misskey, String listId) async {
+    await misskey.users.list.pull(
+      UsersListsPullRequest(listId: listId, userId: user.id),
     );
     state = AsyncValue.data(
-      state.valueOrNull?.where((e) => e.id != user.id).toList() ?? [],
+      state.value?.where((e) => e.id != user.id).toList() ?? [],
     );
   }
 }
@@ -113,9 +95,8 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final misskey = ref.watch(misskeyGetContextProvider);
-    final arg = (misskey, listId);
-    final list = ref.watch(_usersListNotifierProvider(arg));
-    final users = ref.watch(_usersListUsersProvider(arg));
+    final list = ref.watch(_usersListNotifierProvider(misskey, listId));
+    final users = ref.watch(_usersListUsersProvider(misskey, listId));
 
     return Scaffold(
       appBar: list.maybeWhen(
@@ -134,10 +115,15 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
                 if (!context.mounted) return;
                 if (settings == null) return;
 
-                await ref
-                    .read(_usersListNotifierProvider(arg).notifier)
-                    .updateList(settings)
-                    .expectFailure(context);
+                await ref.read(dialogStateNotifierProvider.notifier).guard(
+                  () async {
+                    await ref
+                        .read(
+                          _usersListNotifierProvider(misskey, listId).notifier,
+                        )
+                        .updateList(settings, misskey, listId);
+                  },
+                );
               },
             ),
           ],
@@ -153,26 +139,37 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
                 ListTile(
                   title: Text(S.of(context).members),
                   subtitle: Text(
-                    S.of(context).listCapacity(
+                    S
+                        .of(context)
+                        .listCapacity(
                           users.length,
                           accountContext
-                              .postAccount.i.policies.userEachUserListsLimit,
+                              .postAccount
+                              .i
+                              .policies
+                              .userEachUserListsLimit,
                         ),
                   ),
                   trailing: ElevatedButton(
                     child: Text(S.of(context).addUser),
                     onPressed: () async {
                       final user = await context.pushRoute<User>(
-                        UserSelectRoute(
-                          accountContext: accountContext,
-                        ),
+                        UserSelectRoute(accountContext: accountContext),
                       );
                       if (user == null) return;
                       if (!context.mounted) return;
                       await ref
-                          .read(_usersListUsersProvider(arg).notifier)
-                          .push(user)
-                          .expectFailure(context);
+                          .read(dialogStateNotifierProvider.notifier)
+                          .guard(() async {
+                            await ref
+                                .read(
+                                  _usersListUsersProvider(
+                                    misskey,
+                                    listId,
+                                  ).notifier,
+                                )
+                                .push(user, misskey, listId);
+                          });
                     },
                   ),
                 ),
@@ -184,9 +181,7 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
                       final user = users[index];
                       return Row(
                         children: [
-                          Expanded(
-                            child: UserListItem(user: user),
-                          ),
+                          Expanded(child: UserListItem(user: user)),
                           IconButton(
                             icon: const Icon(Icons.close),
                             onPressed: () async {
@@ -199,11 +194,17 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
                               if (!context.mounted) return;
                               if (result ?? false) {
                                 await ref
-                                    .read(
-                                      _usersListUsersProvider(arg).notifier,
-                                    )
-                                    .pull(user)
-                                    .expectFailure(context);
+                                    .read(dialogStateNotifierProvider.notifier)
+                                    .guard(() async {
+                                      await ref
+                                          .read(
+                                            _usersListUsersProvider(
+                                              misskey,
+                                              listId,
+                                            ).notifier,
+                                          )
+                                          .pull(user, misskey, listId);
+                                    });
                               }
                             },
                           ),
@@ -215,11 +216,11 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
               ],
             );
           },
-          error: (e, st) =>
-              Center(child: ErrorDetail(error: e, stackTrace: st)),
-          loading: () => const Center(
-            child: CircularProgressIndicator.adaptive(),
+          error: (e, st) => Center(
+            child: ErrorDetail(error: e, stackTrace: st),
           ),
+          loading: () =>
+              const Center(child: CircularProgressIndicator.adaptive()),
         ),
       ),
     );

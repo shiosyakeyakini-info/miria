@@ -6,22 +6,51 @@ part of 'antenna_select_dialog.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$antennasHash() => r'2f5f4fc30eb5ccde122a407b099fb35066746e53';
-
-/// See also [_antennas].
 @ProviderFor(_antennas)
-final _antennasProvider = AutoDisposeFutureProvider<List<Antenna>>.internal(
-  _antennas,
-  name: r'_antennasProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$antennasHash,
-  dependencies: <ProviderOrFamily>[misskeyGetContextProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    misskeyGetContextProvider,
-    ...?misskeyGetContextProvider.allTransitiveDependencies
-  },
-);
+const _antennasProvider = _AntennasProvider._();
 
-typedef _AntennasRef = AutoDisposeFutureProviderRef<List<Antenna>>;
+final class _AntennasProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Antenna>>,
+          List<Antenna>,
+          FutureOr<List<Antenna>>
+        >
+    with $FutureModifier<List<Antenna>>, $FutureProvider<List<Antenna>> {
+  const _AntennasProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'_antennasProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[misskeyGetContextProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          _AntennasProvider.$allTransitiveDependencies0,
+          _AntennasProvider.$allTransitiveDependencies1,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = misskeyGetContextProvider;
+  static const $allTransitiveDependencies1 =
+      MisskeyGetContextProvider.$allTransitiveDependencies0;
+
+  @override
+  String debugGetCreateSourceHash() => _$antennasHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<Antenna>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<Antenna>> create(Ref ref) {
+    return _antennas(ref);
+  }
+}
+
+String _$antennasHash() => r'789e8f8a722a66e9c9270594c9307d9257a14936';
+
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

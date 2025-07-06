@@ -9,6 +9,8 @@
     "trend": "トレンド",
     "clip": "クリップ",
     "edit": "編集",
+    "editProfile": "プロフィール編集",
+    "apply": "変更",
     "create": "作成",
     "delete": "削除",
     "search": "検索",
@@ -67,6 +69,7 @@
     "socialTimelineAbbr": "STL",
     "globalTimeline": "グローバルタイムライン",
     "roleTimeline": "ロールタイムライン",
+    "customTimeline": "サーバー独自タイムライン",
     "server": "サーバー",
     "miAuth": "MiAuth",
     "apiKey": "APIキー",
@@ -124,6 +127,7 @@
             }
         }
     },
+    "thisChannelIsArchived": "このチャンネルはアーカイブされています",
     "favorited": "お気に入り中",
     "willFavorite": "お気に入りに入れるで",
     "willFollow": "フォローするで",
@@ -377,6 +381,8 @@
     "appNotification": "なんかのアプリからの通知らしいわ",
     "someoneLogined": "自分のアカウントにログインがあったらしいで",
     "unknownNotification": "知らんタイプの通知やわ",
+    "createTokenNotification": "アクセストークンが作成されたで",
+    "chatRoomInvitationReceivedNotification": "チャットルームに招待されたで",
     "messageForFollower": "フォロワーへ 「{message}」",
     "@messageForFollower": {
         "placeholders": {
@@ -826,6 +832,11 @@
     "fontSize": "フォントサイズ",
     "systemFont": "システム標準",
 
+    "cache": "キャッシュ",
+    "cacheSize": "キャッシュサイズ",
+    "cacheSizeError": "取得に失敗しました",
+    "clearCache": "キャッシュをクリア",
+
     "selectFolder": "フォルダー選択",
     "settingsFileManagement": "設定ファイルの管理",
     "importAndExportSettingsDescription": "現在の設定から、アカウントのログイン情報を除くすべての設定を設定ファイルに出力して管理することができます。設定ファイルは、指定したアカウントの「ドライブ」内に保存されます。",
@@ -860,11 +871,35 @@
     "pleaseSelectList": "リストを選択してください。",
     "pleaseSelectAntenna": "アンテナを選択してください。",
     "pleaseSelectRole": "ロールを選択してください。",
+    "customChannelName": "チャンネル名",
+    "customApiPath": "POSTエンドポイントのパス",
+    "customTimelineParameters": "パラメータ (JSON)",
+    "customPresetSelect": "プリセットから選択",
 
     "reactionDeck": "リアクションデッキ",
     "wordMute": "ワードミュート",
     "hardWordMute": "ハードワードミュート",
     "instanceMute": "インスタンスミュート",
+    "mutedUsers": "ミュート済みユーザー",
+    "blockedUsers": "ブロック済みユーザー",
+    "confirmUnblockUser": "{userName}のブロックを解除してもええか？",
+    "@confirmUnblockUser": {
+        "placeholders": {
+            "userName": {
+                "type": "String"
+            }
+        }
+    },
+    "confirmUnmuteUser": "{userName}のミュートを解除してもええか？",
+    "@confirmUnmuteUser": {
+        "placeholders": {
+            "userName": {
+                "type": "String"
+            }
+        }
+    },
+    "unblock": "ブロック解除",
+    "unmute": "ミュート解除",
     "cacheSettings": "キャッシュ設定",
     "hideConditionalNotes": "指定した条件のノートをタイムラインから隠します。",
     "muteSettingDescription": "スペースで区切るとAND指定になり、改行で区切るとOR指定になります。\nキーワードをスラッシュで囲むと正規表現になります。",
@@ -876,10 +911,18 @@
     "serverCache": "サーバーの情報",
     "instanceMuteDescription1": "設定したサーバーのノートを隠します。",
     "instanceMuteDescription2": "ミュートしたサーバーのユーザーへの返信を含めて、設定したサーバーの全てのノートとリノートをミュートします。\n改行で区切って設定します。",
+    "reactionMute": "リアクションミュート",
+    "reactionMuteDescription": "改行区切りで :emoji: または :emoji@host: の形式で入力します。@host のみも受け付け、この場合該当ホストすべてを対象とします。",
     "bulkAddReactions": "一括追加",
     "bulkAddReactionsDescription1": "お使いのブラウザでリアクションデッキをコピーしたいアカウントにログインしてください",
     "bulkAddReactionsDescription2": "同じブラウザで以下のURLにアクセスして「値 (JSON)」の内容をすべて選択してコピーしてください",
+    "bulkAddReactionsDescription2ForEmojiPalette": "同じブラウザで以下のURLにアクセスして絵文字パレットをコピーしてください",
     "bulkAddReactionsDescription3": "コピーしたものを下のテキストボックスに貼り付けてください",
+    "bulkAddMutedReactions": "ミュート設定をインポート",
+    "bulkAddMutedReactionsDescription1": "お使いのブラウザでミュート設定をコピーしたいアカウントにログインしてください",
+    "bulkAddMutedReactionsDescription2": "同じブラウザで以下のURLにアクセスしてミュート設定の内容をコピーしてください",
+    "bulkAddMutedReactionsDescription3": "コピーしたものを下のテキストボックスに貼り付けてください",
+    "importMutedReactions": "ミュート設定をインポート",
     "pasteHere": "ここに貼り付け",
     "invalidInput": "入力が有効な値ではありません",
     "clear": "クリア",
@@ -990,6 +1033,13 @@
 
     "unsupportedFile": "対応してないファイルやわ",
     "unsupportedFileWithFilename": "{filename}は対応してないファイルやわ",
+    "@unsupportedFileWithFilename": {
+        "placeholders": {
+            "filename": {
+                "type": "String"
+            }
+        }
+    },
     "failedFileSave": "ファイルの保存に失敗したみたいや",
 
     "misskeyGames": "Misskey Games",
@@ -1011,7 +1061,22 @@
     "remoteServerWithoutLogin": "相手先のサーバー（ログインなし）",
     "nothingHere": "なんもないで",
 
+    "cacheRefreshNow": "いますぐキャッシュを更新",
+    "cacheManualUpdateCompleted": "情報の取得が完了したで",
+
     "deckMode": "デッキモード",
-    "enableDeckMode": "デッキモードにする"
+    "enableDeckMode": "デッキモードにする",
+
+    "template": "テンプレ",
+    "noteBackgroundColor": "ノート背景色",
+
+    "profileName": "名前",
+    "profileBio": "自己紹介",
+    "profileUpload": "アップロード",
+    "profileFromDrive": "ドライブから",
+    "profileFieldName": "名前",
+    "profileFieldValue": "内容",
+    "profileAddField": "追加",
+    "profileFollowedMessage": "フォローされたときのメッセージ"
 
 }

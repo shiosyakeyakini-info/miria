@@ -3,12 +3,14 @@ import "dart:async";
 import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/const.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/state_notifier/common/cache_size_notifier.dart";
 import "package:miria/view/themes/built_in_color_themes.dart";
 
 @RoutePage()
@@ -27,8 +29,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
     final enableDirectReaction = useState(settings.enableDirectReaction);
     final enableAnimatedMFM = useState(settings.enableAnimatedMFM);
     final enableLongTextElipsed = useState(settings.enableLongTextElipsed);
-    final enableFavoritedRenoteElipsed =
-        useState(settings.enableFavoritedRenoteElipsed);
+    final enableFavoritedRenoteElipsed = useState(
+      settings.enableFavoritedRenoteElipsed,
+    );
     final tabPosition = useState(settings.tabPosition);
     final textScaleFactor = useState(settings.textScaleFactor);
     final emojiType = useState(settings.emojiType);
@@ -39,6 +42,17 @@ class GeneralSettingsPage extends HookConsumerWidget {
     final fantasyFontName = useState(settings.fantasyFontName);
     final language = useState(settings.languages);
     final isDeckMode = useState(settings.isDeckMode);
+    final lightNoteBgPublic = useState(settings.lightNoteBackgroundPublic);
+    final lightNoteBgHome = useState(settings.lightNoteBackgroundHome);
+    final lightNoteBgFollowers = useState(
+      settings.lightNoteBackgroundFollowers,
+    );
+    final lightNoteBgDirect = useState(settings.lightNoteBackgroundDirect);
+    final darkNoteBgPublic = useState(settings.darkNoteBackgroundPublic);
+    final darkNoteBgHome = useState(settings.darkNoteBackgroundHome);
+    final darkNoteBgFollowers = useState(settings.darkNoteBackgroundFollowers);
+    final darkNoteBgDirect = useState(settings.darkNoteBackgroundDirect);
+    final cacheSize = ref.watch(cacheSizeNotifierProvider);
 
     useMemoized(() {
       if (lightModeTheme.value.isEmpty) {
@@ -52,8 +66,10 @@ class GeneralSettingsPage extends HookConsumerWidget {
             (element) =>
                 !element.isDarkTheme || element.id != darkModeTheme.value,
           )) {
-        darkModeTheme.value =
-            builtInColorThemes.where((element) => element.isDarkTheme).first.id;
+        darkModeTheme.value = builtInColorThemes
+            .where((element) => element.isDarkTheme)
+            .first
+            .id;
       }
     });
     final dependencies = [
@@ -77,36 +93,50 @@ class GeneralSettingsPage extends HookConsumerWidget {
       fantasyFontName.value,
       language.value,
       isDeckMode.value,
+      lightNoteBgPublic.value,
+      lightNoteBgHome.value,
+      lightNoteBgFollowers.value,
+      lightNoteBgDirect.value,
+      darkNoteBgPublic.value,
+      darkNoteBgHome.value,
+      darkNoteBgFollowers.value,
+      darkNoteBgDirect.value,
     ];
-    final save = useCallback(
-      () async {
-        await ref.read(generalSettingsRepositoryProvider).update(
-              GeneralSettings(
-                lightColorThemeId: lightModeTheme.value,
-                darkColorThemeId: darkModeTheme.value,
-                themeColorSystem: colorSystem.value,
-                nsfwInherit: nsfwInherit.value,
-                enableDirectReaction: enableDirectReaction.value,
-                automaticPush: automaticPush.value,
-                enableAnimatedMFM: enableAnimatedMFM.value,
-                enableFavoritedRenoteElipsed:
-                    enableFavoritedRenoteElipsed.value,
-                enableLongTextElipsed: enableLongTextElipsed.value,
-                tabPosition: tabPosition.value,
-                emojiType: emojiType.value,
-                textScaleFactor: textScaleFactor.value,
-                defaultFontName: defaultFontName.value,
-                serifFontName: serifFontName.value,
-                monospaceFontName: monospaceFontName.value,
-                cursiveFontName: cursiveFontName.value,
-                fantasyFontName: fantasyFontName.value,
-                languages: language.value,
-                isDeckMode: isDeckMode.value,
-              ),
-            );
-      },
-      dependencies,
-    );
+    final save = useCallback(() async {
+      await ref
+          .read(generalSettingsRepositoryProvider)
+          .update(
+            GeneralSettings(
+              lightColorThemeId: lightModeTheme.value,
+              darkColorThemeId: darkModeTheme.value,
+              themeColorSystem: colorSystem.value,
+              nsfwInherit: nsfwInherit.value,
+              enableDirectReaction: enableDirectReaction.value,
+              automaticPush: automaticPush.value,
+              enableAnimatedMFM: enableAnimatedMFM.value,
+              enableFavoritedRenoteElipsed: enableFavoritedRenoteElipsed.value,
+              enableLongTextElipsed: enableLongTextElipsed.value,
+              tabPosition: tabPosition.value,
+              emojiType: emojiType.value,
+              textScaleFactor: textScaleFactor.value,
+              defaultFontName: defaultFontName.value,
+              serifFontName: serifFontName.value,
+              monospaceFontName: monospaceFontName.value,
+              cursiveFontName: cursiveFontName.value,
+              fantasyFontName: fantasyFontName.value,
+              languages: language.value,
+              isDeckMode: isDeckMode.value,
+              lightNoteBackgroundPublic: lightNoteBgPublic.value,
+              lightNoteBackgroundHome: lightNoteBgHome.value,
+              lightNoteBackgroundFollowers: lightNoteBgFollowers.value,
+              lightNoteBackgroundDirect: lightNoteBgDirect.value,
+              darkNoteBackgroundPublic: darkNoteBgPublic.value,
+              darkNoteBackgroundHome: darkNoteBgHome.value,
+              darkNoteBackgroundFollowers: darkNoteBgFollowers.value,
+              darkNoteBackgroundDirect: darkNoteBgDirect.value,
+            ),
+          );
+    }, dependencies);
 
     useMemoized(() => unawaited(save()), dependencies);
 
@@ -216,7 +246,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                             DropdownMenuItem(
                               value: element,
                               child: Text(
-                                S.of(context).tabPositionDescription(
+                                S
+                                    .of(context)
+                                    .tabPositionDescription(
                                       element.displayName(context),
                                     ),
                               ),
@@ -246,8 +278,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                       Text(S.of(context).themeForLightMode),
                       DropdownButton<String>(
                         items: [
-                          for (final element in builtInColorThemes
-                              .where((element) => !element.isDarkTheme))
+                          for (final element in builtInColorThemes.where(
+                            (element) => !element.isDarkTheme,
+                          ))
                             DropdownMenuItem(
                               value: element.id,
                               child: Text(S.of(context).themeIsh(element.name)),
@@ -261,8 +294,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                       Text(S.of(context).themeForDarkMode),
                       DropdownButton<String>(
                         items: [
-                          for (final element in builtInColorThemes
-                              .where((element) => element.isDarkTheme))
+                          for (final element in builtInColorThemes.where(
+                            (element) => element.isDarkTheme,
+                          ))
                             DropdownMenuItem(
                               value: element.id,
                               child: Text(S.of(context).themeIsh(element.name)),
@@ -304,8 +338,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                       CheckboxListTile(
                         value: enableDirectReaction.value,
                         title: Text(S.of(context).emojiTapReaction),
-                        subtitle:
-                            Text(S.of(context).emojiTapReactionDescription),
+                        subtitle: Text(
+                          S.of(context).emojiTapReactionDescription,
+                        ),
                         onChanged: (value) =>
                             enableDirectReaction.value = value ?? false,
                       ),
@@ -323,6 +358,246 @@ class GeneralSettingsPage extends HookConsumerWidget {
                         isExpanded: true,
                         onChanged: (value) =>
                             emojiType.value = value ?? EmojiType.twemoji,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        S.of(context).noteBackgroundColor,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const Padding(padding: EdgeInsets.only(top: 10)),
+                      Text(S.of(context).lightMode),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).public)),
+                          IconButton(
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    lightNoteBgPublic.value ??
+                                    Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
+                            ),
+                            onPressed: () async {
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                lightNoteBgPublic.value = result;
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).homeOnly)),
+                          IconButton(
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    lightNoteBgHome.value ?? Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
+                            ),
+                            onPressed: () async {
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                lightNoteBgHome.value = result;
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).followersOnly)),
+                          IconButton(
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    lightNoteBgFollowers.value ??
+                                    Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
+                            ),
+                            onPressed: () async {
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                lightNoteBgFollowers.value = result;
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).direct)),
+                          IconButton(
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    lightNoteBgDirect.value ??
+                                    Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
+                            ),
+                            onPressed: () async {
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                lightNoteBgDirect.value = result;
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      const Padding(padding: EdgeInsets.only(top: 10)),
+                      Text(S.of(context).darkMode),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).public)),
+                          IconButton(
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    darkNoteBgPublic.value ??
+                                    Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
+                            ),
+                            onPressed: () async {
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                darkNoteBgPublic.value = result;
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).homeOnly)),
+                          IconButton(
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    darkNoteBgHome.value ?? Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
+                            ),
+                            onPressed: () async {
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                darkNoteBgHome.value = result;
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).followersOnly)),
+                          IconButton(
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    darkNoteBgFollowers.value ??
+                                    Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
+                            ),
+                            onPressed: () async {
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                darkNoteBgFollowers.value = result;
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).direct)),
+                          IconButton(
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    darkNoteBgDirect.value ??
+                                    Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
+                            ),
+                            onPressed: () async {
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                darkNoteBgDirect.value = result;
+                              }
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -352,11 +627,12 @@ class GeneralSettingsPage extends HookConsumerWidget {
                       ),
                       Center(
                         child: ElevatedButton(
-                          onPressed: (settings.textScaleFactor ==
+                          onPressed:
+                              (settings.textScaleFactor ==
                                   textScaleFactor.value)
                               ? null
                               : save,
-                          child: const Text("変更"),
+                          child: Text(S.of(context).apply),
                         ),
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
@@ -376,7 +652,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                               ),
                             ),
                         ],
-                        value: choosableFonts.firstWhereOrNull(
+                        value:
+                            choosableFonts.firstWhereOrNull(
                               (e) => e.actualName == defaultFontName.value,
                             ) ??
                             choosableFonts.first,
@@ -401,7 +678,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                               ),
                             ),
                         ],
-                        value: choosableFonts.firstWhereOrNull(
+                        value:
+                            choosableFonts.firstWhereOrNull(
                               (e) => e.actualName == serifFontName.value,
                             ) ??
                             choosableFonts.first,
@@ -426,7 +704,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                               ),
                             ),
                         ],
-                        value: choosableFonts.firstWhereOrNull(
+                        value:
+                            choosableFonts.firstWhereOrNull(
                               (e) => e.actualName == monospaceFontName.value,
                             ) ??
                             choosableFonts.first,
@@ -451,7 +730,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                               ),
                             ),
                         ],
-                        value: choosableFonts.firstWhereOrNull(
+                        value:
+                            choosableFonts.firstWhereOrNull(
                               (e) => e.actualName == cursiveFontName.value,
                             ) ??
                             choosableFonts.first,
@@ -476,7 +756,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                               ),
                             ),
                         ],
-                        value: choosableFonts.firstWhereOrNull(
+                        value:
+                            choosableFonts.firstWhereOrNull(
                               (e) => e.actualName == fantasyFontName.value,
                             ) ??
                             choosableFonts.first,
@@ -484,6 +765,53 @@ class GeneralSettingsPage extends HookConsumerWidget {
                         onChanged: (item) =>
                             fantasyFontName.value = item?.actualName ?? "",
                       ),
+                    ],
+                  ),
+                ),
+              ),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Table(
+                        defaultVerticalAlignment:
+                            TableCellVerticalAlignment.middle,
+                        columnWidths: const {
+                          0: IntrinsicColumnWidth(),
+                          1: FlexColumnWidth(),
+                        },
+                        children: [
+                          TableRow(
+                            children: [
+                              Text(S.of(context).cacheSize),
+                              Center(
+                                child: cacheSize.when(
+                                  loading: () =>
+                                      const CircularProgressIndicator(),
+                                  error: (_, __) =>
+                                      Text(S.of(context).cacheSizeError),
+                                  data: (cacheSize) {
+                                    return Text(cacheSize);
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      if (cacheSize.hasValue)
+                        Center(
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              await ref
+                                  .read(cacheSizeNotifierProvider.notifier)
+                                  .clear();
+                            },
+                            child: Text(S.of(context).clearCache),
+                          ),
+                        ),
                     ],
                   ),
                 ),

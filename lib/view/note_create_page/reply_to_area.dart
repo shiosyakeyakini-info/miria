@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 import "package:miria/view/common/avatar_icon.dart";
 import "package:miria/view/themes/app_theme.dart";
@@ -42,8 +42,8 @@ class ReplyToArea extends ConsumerWidget {
                 Text(
                   "@${replyTo.username}${replyTo.host == null ? "" : "@${replyTo.host}"}",
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppTheme.of(context).mentionStyle.color,
-                      ),
+                    color: AppTheme.of(context).mentionStyle.color,
+                  ),
                 ),
                 IconButton(
                   onPressed: () async => ref
@@ -78,8 +78,9 @@ class ReplyToArea extends ConsumerWidget {
             ),
             icon: Icon(
               Icons.add,
-              size: MediaQuery.textScalerOf(context)
-                  .scale(Theme.of(context).textTheme.bodySmall?.fontSize ?? 22),
+              size: MediaQuery.textScalerOf(
+                context,
+              ).scale(Theme.of(context).textTheme.bodySmall?.fontSize ?? 22),
             ),
           ),
         ],

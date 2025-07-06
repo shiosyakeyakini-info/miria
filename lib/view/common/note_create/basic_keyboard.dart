@@ -95,12 +95,27 @@ class BasicKeyboard extends StatelessWidget {
         CustomKeyboardButton(
           keyboard: "```\n",
           afterInsert: "\n```",
+          displayText: "```",
           controller: controller,
           focusNode: focusNode,
         ),
         CustomKeyboardButton(
           keyboard: "<plain>",
           afterInsert: "</plain>",
+          controller: controller,
+          focusNode: focusNode,
+        ),
+        CustomKeyboardButton(
+          keyboard: "[",
+          afterInsert: "]()",
+          displayText: "[]()",
+          controller: controller,
+          focusNode: focusNode,
+        ),
+        CustomKeyboardButton(
+          keyboard: "?[",
+          afterInsert: "]()",
+          displayText: "?[]()",
           controller: controller,
           focusNode: focusNode,
         ),

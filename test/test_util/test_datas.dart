@@ -15,8 +15,10 @@ class TestData {
     i: i1,
     meta: meta,
   );
-  static AccountContext accountContext =
-      AccountContext(getAccount: account, postAccount: account);
+  static AccountContext accountContext = AccountContext(
+    getAccount: account,
+    postAccount: account,
+  );
   // i
   static MeDetailed i1 = MeDetailed.fromJson(
     JSON5.parse(r"""
@@ -830,14 +832,14 @@ class TestData {
   );
 
   static Future<Uint8List> get binaryImage async => Uint8List.fromList(
-        (await rootBundle.load("assets/images/icon.png")).buffer.asUint8List(),
-      );
+    (await rootBundle.load("assets/images/icon.png")).buffer.asUint8List(),
+  );
 
   static Future<Response<Uint8List>> get binaryImageResponse async => Response(
-        requestOptions: RequestOptions(),
-        statusCode: 200,
-        data: await binaryImage,
-      );
+    requestOptions: RequestOptions(),
+    statusCode: 200,
+    data: await binaryImage,
+  );
 
   // ユーザー情報
   static UserLite user1 = UserLite.fromJson(
@@ -860,7 +862,7 @@ class TestData {
 
   static UserDetailedNotMeWithRelations detailedUser1 =
       UserDetailedNotMeWithRelations.fromJson(
-    JSON5.parse(r"""
+        JSON5.parse(r"""
 {
   id: '7z9zua5kyv',
   name: 'おいしいBot',
@@ -1028,11 +1030,11 @@ class TestData {
   isMuted: false,
   isRenoteMuted: false,
 }  """),
-  );
+      );
 
   static UserDetailedNotMeWithRelations detailedUser2 =
       UserDetailedNotMeWithRelations.fromJson(
-    JSON5.parse(r"""
+        JSON5.parse(r"""
 {
   id: '9gbzuv2cze',
   name: '藍ちゃんにおじさん構文でメンションを送るbot',
@@ -1140,14 +1142,14 @@ class TestData {
   isMuted: false,
   isRenoteMuted: false,
 }"""),
-  );
+      );
 
   static String detailedUser2ExpectedId = "9gbzuv2cze";
 
   // ユーザー情報
   static UserDetailedNotMeWithRelations usersShowResponse1 =
       UserDetailedNotMeWithRelations.fromJson(
-    JSON5.parse(r"""
+        JSON5.parse(r"""
 {
   id: '7rkr3b1c1c',
   name: '藍',
@@ -1257,11 +1259,11 @@ class TestData {
 }
 
   """),
-  );
+      );
 
   static UserDetailedNotMeWithRelations usersShowResponse2 =
       UserDetailedNotMeWithRelations.fromJson(
-    JSON5.parse(r"""
+        JSON5.parse(r"""
 {
   id: '7z9zua5kyv',
   name: 'おいしいBot',
@@ -1433,11 +1435,11 @@ class TestData {
 }
 
   """),
-  );
+      );
 
   static UserDetailedNotMeWithRelations usersShowResponse3AsRemoteUser =
       UserDetailedNotMeWithRelations.fromJson(
-    JSON5.parse(r'''
+        JSON5.parse(r'''
 {
   id: '9i08deo0vj',
   name: 'あけおめらんか～',
@@ -1516,11 +1518,11 @@ class TestData {
   isRenoteMuted: false,
 }
 '''),
-  );
+      );
 
   static UserDetailedNotMeWithRelations usersShowResponse3AsLocalUser =
       UserDetailedNotMeWithRelations.fromJson(
-    JSON5.parse('''
+        JSON5.parse('''
 {
   id: '9i07ia9bf0',
   name: 'あけおめらんか～',
@@ -1605,6 +1607,29 @@ class TestData {
 }
 
 '''),
+      );
+
+  // ユーザー情報 (followingVisibility テスト用)
+  static UserDetailedNotMeWithRelations userWithFollowingVisibilityPublic =
+      detailedUser1.copyWith(
+        followingVisibility: FFVisibility.public,
+        ffVisibility: FFVisibility
+            .private, // Different from followingVisibility to test precedence
+      );
+
+  static UserDetailedNotMeWithRelations userWithFollowingVisibilityPrivate =
+      detailedUser1.copyWith(
+        followingVisibility: FFVisibility.private,
+        ffVisibility: FFVisibility
+            .public, // Different from followingVisibility to test precedence
+        isFollowing: true, // User is following to test private visibility logic
+      );
+
+  static UserDetailedNotMeWithRelations
+  userWithFollowingVisibilityNull = detailedUser1.copyWith(
+    followingVisibility: null,
+    ffVisibility: FFVisibility
+        .public, // Should fall back to this when followingVisibility is null
   );
 
   // カスタム絵文字

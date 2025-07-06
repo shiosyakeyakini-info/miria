@@ -6,8 +6,8 @@ part of 'summaly_result.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$SummalyResultImpl _$$SummalyResultImplFromJson(Map<String, dynamic> json) =>
-    _$SummalyResultImpl(
+_SummalyResult _$SummalyResultFromJson(Map<String, dynamic> json) =>
+    _SummalyResult(
       player: Player.fromJson(json['player'] as Map<String, dynamic>),
       title: json['title'] as String?,
       icon: json['icon'] as String?,
@@ -18,7 +18,7 @@ _$SummalyResultImpl _$$SummalyResultImplFromJson(Map<String, dynamic> json) =>
       url: json['url'] as String?,
     );
 
-Map<String, dynamic> _$$SummalyResultImplToJson(_$SummalyResultImpl instance) =>
+Map<String, dynamic> _$SummalyResultToJson(_SummalyResult instance) =>
     <String, dynamic>{
       'player': instance.player.toJson(),
       'title': instance.title,
@@ -30,18 +30,16 @@ Map<String, dynamic> _$$SummalyResultImplToJson(_$SummalyResultImpl instance) =>
       'url': instance.url,
     };
 
-_$PlayerImpl _$$PlayerImplFromJson(Map<String, dynamic> json) => _$PlayerImpl(
-      url: json['url'] as String?,
-      width: (json['width'] as num?)?.toDouble(),
-      height: (json['height'] as num?)?.toDouble(),
-      allow:
-          (json['allow'] as List<dynamic>?)?.map((e) => e as String).toList(),
-    );
+_Player _$PlayerFromJson(Map<String, dynamic> json) => _Player(
+  url: json['url'] as String?,
+  width: (json['width'] as num?)?.toDouble(),
+  height: (json['height'] as num?)?.toDouble(),
+  allow: (json['allow'] as List<dynamic>?)?.map((e) => e as String).toList(),
+);
 
-Map<String, dynamic> _$$PlayerImplToJson(_$PlayerImpl instance) =>
-    <String, dynamic>{
-      'url': instance.url,
-      'width': instance.width,
-      'height': instance.height,
-      'allow': instance.allow,
-    };
+Map<String, dynamic> _$PlayerToJson(_Player instance) => <String, dynamic>{
+  'url': instance.url,
+  'width': instance.width,
+  'height': instance.height,
+  'allow': instance.allow,
+};

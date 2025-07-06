@@ -4,6 +4,7 @@ import "package:flutter/material.dart";
 import "package:flutter_highlighting/flutter_highlighting.dart";
 import "package:flutter_highlighting/themes/github-dark.dart";
 import "package:flutter_highlighting/themes/github.dart";
+import "package:flutter_twemoji/flutter_twemoji.dart";
 import "package:highlighting/languages/all.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mfm/mfm.dart";
@@ -18,7 +19,6 @@ import "package:miria/view/common/misskey_notes/link_navigator.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:misskey_dart/misskey_dart.dart";
-import "package:twemoji_v2/twemoji_v2.dart";
 import "package:url_launcher/url_launcher.dart";
 
 InlineSpan _unicodeEmojiBuilder(
@@ -43,9 +43,11 @@ InlineSpan _unicodeEmojiBuilder(
         onTap: MfmBlurScope.of(builderContext) ? null : () => onTap,
         child: Twemoji(
           emoji: emoji,
-          width: style?.fontSize ??
+          width:
+              style?.fontSize ??
               DefaultTextStyle.of(builderContext).style.fontSize,
-          height: style?.fontSize ??
+          height:
+              style?.fontSize ??
               DefaultTextStyle.of(builderContext).style.fontSize ??
               22,
         ),
@@ -98,14 +100,16 @@ class MfmText extends ConsumerWidget {
       mfmText: mfmText,
       mfmNode: mfmNode,
       emojiBuilder: (builderContext, emojiName, style) {
+        final account = ref.read(accountContextProvider).getAccount;
         final emojiData = MisskeyEmojiData.fromEmojiName(
           emojiName: ":$emojiName:",
-          repository: ref.read(
-            emojiRepositoryProvider(
-              ref.read(accountContextProvider).getAccount,
-            ),
-          ),
+          repository: ref.read(emojiRepositoryProvider(account)),
           emojiInfo: emoji,
+          host: host,
+          accountSettingsRepository: ref.read(
+            accountSettingsRepositoryProvider,
+          ),
+          account: account,
         );
         return DefaultTextStyle(
           style: style ?? DefaultTextStyle.of(builderContext).style,
@@ -130,10 +134,8 @@ class MfmText extends ConsumerWidget {
         ref,
         () => onEmojiTap?.call(UnicodeEmojiData(char: emoji)),
       ),
-      codeBlockBuilder: (context, code, lang) => CodeBlock(
-        code: code,
-        language: lang,
-      ),
+      codeBlockBuilder: (context, code, lang) =>
+          CodeBlock(code: code, language: lang),
       unixTimeBuilder: (context, unixtime, style) {
         return WidgetSpan(
           alignment: PlaceholderAlignment.middle,
@@ -164,12 +166,7 @@ class MfmText extends ConsumerWidget {
       linkStyle: AppTheme.of(context).linkStyle,
       hashtagStyle: AppTheme.of(context).hashtagStyle,
       mentionTap: (userName, host, acct) async =>
-          const LinkNavigator().onMentionTap(
-        context,
-        ref,
-        acct,
-        host,
-      ),
+          const LinkNavigator().onMentionTap(context, ref, acct, host),
       hashtagTap: (hashtag) async => await context.pushRoute(
         HashtagRoute(
           accountContext: ref.read(accountContextProvider),
@@ -182,7 +179,6 @@ class MfmText extends ConsumerWidget {
       suffixSpan: suffixSpan,
       prefixSpan: prefixSpan,
       isUseAnimation: isEnableAnimatedMFM,
-      defaultBorderColor: Theme.of(context).primaryColor,
       maxLines: maxLines,
     );
   }
@@ -192,11 +188,7 @@ class CodeBlock extends StatelessWidget {
   final String? language;
   final String code;
 
-  const CodeBlock({
-    required this.code,
-    super.key,
-    this.language,
-  });
+  const CodeBlock({required this.code, super.key, this.language});
 
   String resolveLanguage(String language) {
     if (language == "js") return "javascript";
@@ -217,8 +209,9 @@ class CodeBlock extends StatelessWidget {
         child: HighlightView(
           code,
           languageId: resolvedLanguage,
-          theme:
-              AppTheme.of(context).isDarkMode ? githubDarkTheme : githubTheme,
+          theme: AppTheme.of(context).isDarkMode
+              ? githubDarkTheme
+              : githubTheme,
           padding: const EdgeInsets.all(10),
           textStyle: AppTheme.of(context).monospaceStyle,
         ),
@@ -235,8 +228,9 @@ class EmojiInk extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isEnabled = ref.watch(
-      generalSettingsRepositoryProvider
-          .select((value) => value.settings.enableDirectReaction),
+      generalSettingsRepositoryProvider.select(
+        (value) => value.settings.enableDirectReaction,
+      ),
     );
     if (isEnabled) {
       return InkWell(child: child);
@@ -284,13 +278,8 @@ class SimpleMfmText extends ConsumerWidget {
           style: style,
         ),
       ),
-      unicodeEmojiBuilder: (context, emoji, style) => _unicodeEmojiBuilder(
-        context,
-        emoji,
-        style,
-        ref,
-        () => {},
-      ),
+      unicodeEmojiBuilder: (context, emoji, style) =>
+          _unicodeEmojiBuilder(context, emoji, style, ref, () => {}),
       style: style,
       suffixSpan: suffixSpan,
       prefixSpan: prefixSpan,
@@ -301,10 +290,7 @@ class SimpleMfmText extends ConsumerWidget {
 
 class UserInformation extends ConsumerWidget {
   final User user;
-  const UserInformation({
-    required this.user,
-    super.key,
-  });
+  const UserInformation({required this.user, super.key});
 
   String resolveIconUrl(Uri uri, WidgetRef ref) {
     final baseUrl = uri.toString();
@@ -319,10 +305,9 @@ class UserInformation extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SimpleMfmText(
       user.name ?? user.username,
-      style: Theme.of(context)
-          .textTheme
-          .bodyMedium
-          ?.copyWith(fontWeight: FontWeight.bold),
+      style: Theme.of(
+        context,
+      ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
       emojis: user.emojis,
       suffixSpan: [
         for (final badge in user.badgeRoles)

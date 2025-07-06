@@ -1,8 +1,8 @@
 import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/antenna_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
@@ -28,10 +28,12 @@ class AntennaNotesPage extends ConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final antenna = ref.watch(
+    final antenna =
+        ref.watch(
           antennasNotifierProvider.select(
-            (antennas) => antennas.valueOrNull
-                ?.firstWhereOrNull((e) => e.id == this.antenna.id),
+            (antennas) => antennas.value?.firstWhereOrNull(
+              (e) => e.id == this.antenna.id,
+            ),
           ),
         ) ??
         this.antenna;

@@ -19,8 +19,9 @@ extension TextEditingControllerExtension on TextEditingController {
     if (lastColonIndex < 0) {
       return null;
     }
-    if (RegExp(r":[a-zA-z_0-9]+?:$")
-        .hasMatch(text.substring(0, lastColonIndex + 1))) {
+    if (RegExp(
+      r":[a-zA-z_0-9]+?:$",
+    ).hasMatch(text.substring(0, lastColonIndex + 1))) {
       return null;
     } else {
       return textBeforeSelection.substring(lastColonIndex + 1);

@@ -5,9 +5,11 @@
 *.swp
 .DS_Store
 .atom/
+.build/
 .buildlog/
 .history
 .svn/
+.swiftpm/
 migrate_working_dir/
 /coverage/
 
@@ -53,5 +55,9 @@ app.*.map.json
 
 # Snap package related
 *.snap
+# Windows Installer related
+*.isl
+miria-installer*.exe
 # FVM Version Cache
 .fvm/
+coverage/*

@@ -1,9 +1,8 @@
 import "dart:async";
 
-import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/emoji_repository.dart";
@@ -30,8 +29,8 @@ class ReactionPickerContent extends ConsumerStatefulWidget {
 class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
   final categoryList = <String>[];
   EmojiRepository get emojiRepository => ref.read(
-        emojiRepositoryProvider(ref.read(accountContextProvider).getAccount),
-      );
+    emojiRepositoryProvider(ref.read(accountContextProvider).getAccount),
+  );
 
   @override
   void didChangeDependencies() {
@@ -44,7 +43,7 @@ class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
                 ?.map((e) => e.category)
                 .toSet()
                 .toList()
-                .whereNotNull() ??
+                .nonNulls ??
             [],
       );
   }
@@ -189,8 +188,8 @@ class EmojiSearchState extends ConsumerState<EmojiSearch> {
   final emojis = <MisskeyEmojiData>[];
 
   EmojiRepository get emojiRepository => ref.read(
-        emojiRepositoryProvider(ref.read(accountContextProvider).getAccount),
-      );
+    emojiRepositoryProvider(ref.read(accountContextProvider).getAccount),
+  );
 
   @override
   void didChangeDependencies() {

@@ -1,8 +1,10 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/view/channels_page/channel_detail_info.dart";
 import "package:miria/view/common/account_scope.dart";
 
@@ -26,11 +28,30 @@ class ChannelDescriptionDialog extends ConsumerWidget
     return AlertDialog(
       titlePadding: EdgeInsets.zero,
       title: Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.only(left: 10),
         decoration: BoxDecoration(color: Theme.of(context).primaryColorDark),
-        child: Text(
-          S.of(context).channelInformation,
-          style: const TextStyle(color: Colors.white),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                S.of(context).channelInformation,
+                style: const TextStyle(color: Colors.white),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const Padding(padding: EdgeInsets.only(right: 5)),
+            IconButton(
+              onPressed: () async {
+                await context.pushRoute(
+                  ChannelDetailRoute(
+                    accountContext: AccountContext.as(account),
+                    channelId: channelId,
+                  ),
+                );
+              },
+              icon: const Icon(Icons.keyboard_arrow_right),
+            ),
+          ],
         ),
       ),
       content: SizedBox(

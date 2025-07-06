@@ -25,10 +25,12 @@ class UserReactions extends ConsumerWidget {
         return response.toList();
       },
       nextFuture: (lastItem, _) async {
-        final response =
-            await ref.read(misskeyGetContextProvider).users.reactions(
-                  UsersReactionsRequest(userId: userId, untilId: lastItem.id),
-                );
+        final response = await ref
+            .read(misskeyGetContextProvider)
+            .users
+            .reactions(
+              UsersReactionsRequest(userId: userId, untilId: lastItem.id),
+            );
         ref.read(notesWithProvider).registerAll(response.map((e) => e.note));
 
         return response.toList();

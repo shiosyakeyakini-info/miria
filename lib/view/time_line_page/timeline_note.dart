@@ -1,12 +1,15 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:hooks_riverpod/legacy.dart";
 import "package:miria/view/themes/app_theme.dart";
 
-final timelineNoteProvider =
-    ChangeNotifierProvider.autoDispose((ref) => TextEditingController());
+final timelineNoteProvider = ChangeNotifierProvider.autoDispose(
+  (ref) => TextEditingController(),
+);
 
-final timelineFocusNode =
-    ChangeNotifierProvider.autoDispose((ref) => FocusNode());
+final timelineFocusNode = ChangeNotifierProvider.autoDispose(
+  (ref) => FocusNode(),
+);
 
 class TimelineNoteField extends ConsumerWidget {
   const TimelineNoteField({super.key});
@@ -22,7 +25,6 @@ class TimelineNoteField extends ConsumerWidget {
         maxLines: null,
         controller: ref.watch(timelineNoteProvider),
         decoration: noteStyle,
-        // onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
       ),
     );
   }
