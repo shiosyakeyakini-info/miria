@@ -8,18 +8,15 @@ import "package:flutter_hooks/flutter_hooks.dart";
 import "package:flutter_localizations/flutter_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:media_kit/media_kit.dart";
+import "package:miria/const.dart";
 import "package:miria/l10n/app_localizations.dart";
-import "package:miria/model/desktop_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/dialog/dialog_scope.dart";
 import "package:miria/view/common/error_dialog_listener.dart";
 import "package:miria/view/common/sharing_intent_listener.dart";
 import "package:miria/view/themes/app_theme_scope.dart";
-import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:stack_trace/stack_trace.dart" as stack_trace;
 import "package:window_manager/window_manager.dart";
-
-part "main.g.dart";
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,9 +32,6 @@ Future<void> main() async {
 
   runApp(const ProviderScope(child: Miria()));
 }
-
-bool get isDesktop =>
-    Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
 class Miria extends HookConsumerWidget with WidgetsBindingObserver {
   const Miria({super.key});
@@ -149,64 +143,4 @@ class AppScrollBehavior extends MaterialScrollBehavior {
     PointerDeviceKind.mouse,
     PointerDeviceKind.trackpad,
   };
-}
-
-@riverpod
-MiriaWindowListener miriaWindowListener(Ref ref) => MiriaWindowListener(ref);
-
-class MiriaWindowListener with WindowListener {
-  final Ref ref;
-  Size? size;
-  Offset? position;
-
-  MiriaWindowListener(this.ref);
-
-  @override
-  Future<void> onWindowMoved() async {
-    size = await windowManager.getSize();
-    position = await windowManager.getPosition();
-  }
-
-  @override
-  Future<void> onWindowResized() async {
-    size = await windowManager.getSize();
-    position = await windowManager.getPosition();
-  }
-
-  @override
-  Future<void> onWindowClose() async {
-    if (!isDesktop) return;
-
-    final isPreventClose = await windowManager.isPreventClose();
-    if (!isPreventClose) return;
-
-    // Linuxの場合のみ終了時にウィンドウ位置を取得する
-    if (Platform.isLinux) {
-      size = await windowManager.getSize();
-      position = await windowManager.getPosition();
-    }
-
-    try {
-      if (size != null && position != null) {
-        final settings = ref.read(desktopSettingsRepositoryProvider).settings;
-        await ref
-            .read(desktopSettingsRepositoryProvider)
-            .update(
-              settings.copyWith(
-                window: DesktopWindowSettings(
-                  w: size!.width,
-                  h: size!.height,
-                  x: position!.dx,
-                  y: position!.dy,
-                ),
-              ),
-            );
-      }
-    } catch (e) {
-      if (kDebugMode) print(e);
-    } finally {
-      await windowManager.setPreventClose(false);
-      await windowManager.close();
-    }
-  }
 }

@@ -648,6 +648,54 @@ final class CacheManagerProvider
 
 String _$cacheManagerHash() => r'35e531d61d807b28b881aeee098bfd076a99e068';
 
+@ProviderFor(miriaWindowListener)
+const miriaWindowListenerProvider = MiriaWindowListenerProvider._();
+
+final class MiriaWindowListenerProvider
+    extends
+        $FunctionalProvider<
+          MiriaWindowListener,
+          MiriaWindowListener,
+          MiriaWindowListener
+        >
+    with $Provider<MiriaWindowListener> {
+  const MiriaWindowListenerProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'miriaWindowListenerProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$miriaWindowListenerHash();
+
+  @$internal
+  @override
+  $ProviderElement<MiriaWindowListener> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  MiriaWindowListener create(Ref ref) {
+    return miriaWindowListener(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(MiriaWindowListener value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<MiriaWindowListener>(value),
+    );
+  }
+}
+
+String _$miriaWindowListenerHash() =>
+    r'5f1551bf4377d43a7a4ff48f82703eed5c0218bc';
+
 @ProviderFor(accountContext)
 const accountContextProvider = AccountContextProvider._();
 
