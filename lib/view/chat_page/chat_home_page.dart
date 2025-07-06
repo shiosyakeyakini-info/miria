@@ -2,7 +2,6 @@ import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:mfm/mfm.dart";
 import "package:miria/hooks/use_async.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
@@ -17,7 +16,7 @@ import "package:miria/view/themes/app_theme.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
-part 'chat_home_page.g.dart';
+part "chat_home_page.g.dart";
 
 @RoutePage()
 class ChatHomePage extends ConsumerWidget implements AutoRouteWrapper {
@@ -97,7 +96,11 @@ class ChatHome extends ConsumerWidget {
           itemBuilder: (context, index) => GestureDetector(
             onTap: () async {
               final room = value[index].toRoom;
-              final toUser = value[index].toUser;
+              final targetUser =
+                  value[index].toUser?.id ==
+                      ref.read(accountContextProvider).getAccount.i.id
+                  ? value[index].fromUser
+                  : value[index].toUser;
               if (room != null) {
                 await context.router.push(
                   RoomChatRoute(
@@ -105,10 +108,10 @@ class ChatHome extends ConsumerWidget {
                     accountContext: ref.read(accountContextProvider),
                   ),
                 );
-              } else if (toUser != null) {
+              } else if (targetUser != null) {
                 await context.router.push(
                   UserChatRoute(
-                    user: toUser,
+                    user: targetUser,
                     accountContext: ref.read(accountContextProvider),
                   ),
                 );

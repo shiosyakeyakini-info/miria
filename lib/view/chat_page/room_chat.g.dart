@@ -51,7 +51,7 @@ final class RoomChatProvider
   }
 }
 
-String _$roomChatHash() => r'3a603e4b12b40b19a4f149aa976510000be74b1f';
+String _$roomChatHash() => r'dde5c90e1067bb6fc7efcc9214b0014170966d70';
 
 final class RoomChatFamily extends $Family
     with

@@ -1,25 +1,20 @@
 import "dart:async";
 
 import "package:auto_route/auto_route.dart";
-import "package:bubble/bubble.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:hooks_riverpod/legacy.dart";
-import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/hooks/use_async.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/socket_timeline_repository.dart";
-import "package:miria/view/chat_page/chat_home_page.dart";
+import "package:miria/view/chat_page/chat_message_item.dart";
 import "package:miria/view/chat_page/room_info.dart";
 import "package:miria/view/common/account_scope.dart";
-import "package:miria/view/common/avatar_icon.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/error_detail.dart";
-import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:miria/view/common/note_create/input_completation.dart";
-import "package:miria/view/themes/app_theme.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:uuid/uuid.dart";
@@ -42,6 +37,40 @@ class RoomChat extends _$RoomChat {
   void addChat(ChatMessage message) {
     if (state is! AsyncData) return;
     state = AsyncData([message, ...state.value ?? []]);
+  }
+
+  void addMessageReaction(String messageId, String reaction, UserLite? user) {
+    if (state is! AsyncData) return;
+    final messages = List<ChatMessage>.from(state.value ?? []);
+    final messageIndex = messages.indexWhere((m) => m.id == messageId);
+    if (messageIndex == -1) return;
+
+    final message = messages[messageIndex];
+    final reactions = List<ChatMessageReaction>.from(message.reactions);
+    reactions.add(ChatMessageReaction(reaction: reaction, user: user));
+
+    messages[messageIndex] = message.copyWith(reactions: reactions);
+    state = AsyncData(messages);
+  }
+
+  void deleteMessageReaction(
+    String messageId,
+    String reaction,
+    UserLite? user,
+  ) {
+    if (state is! AsyncData) return;
+    final messages = List<ChatMessage>.from(state.value ?? []);
+    final messageIndex = messages.indexWhere((m) => m.id == messageId);
+    if (messageIndex == -1) return;
+
+    final message = messages[messageIndex];
+    final reactions = List<ChatMessageReaction>.from(message.reactions);
+    reactions.removeWhere(
+      (r) => r.reaction == reaction && r.user?.id == user?.id,
+    );
+
+    messages[messageIndex] = message.copyWith(reactions: reactions);
+    state = AsyncData(messages);
   }
 }
 
@@ -92,9 +121,33 @@ class ChatTimeline extends HookConsumerWidget {
             )
             .listen((response) {
               final body = response.body;
-              if (body is! ChatMessageChannelEvent) return;
-              final innerBody = body.body;
-              ref.read(roomChatProvider(roomId).notifier).addChat(innerBody);
+              switch (body) {
+                case ChatMessageChannelEvent():
+                  ref
+                      .read(roomChatProvider(roomId).notifier)
+                      .addChat(body.body);
+
+                case ChatReactChannelEvent():
+                  final reactData = body.body;
+                  ref
+                      .read(roomChatProvider(roomId).notifier)
+                      .addMessageReaction(
+                        reactData.messageId,
+                        reactData.reaction,
+                        reactData.user,
+                      );
+                case ChatUnreactChannelEvent():
+                  final reactData = body.body;
+                  ref
+                      .read(roomChatProvider(roomId).notifier)
+                      .deleteMessageReaction(
+                        reactData.messageId,
+                        reactData.reaction,
+                        reactData.user,
+                      );
+                default:
+                  break;
+              }
             });
       }());
 
@@ -121,58 +174,19 @@ class ChatTimeline extends HookConsumerWidget {
               reverse: true,
               itemBuilder: (context, index) {
                 final message = value[index];
+                final isMyMessage =
+                    message.fromUserId ==
+                    ref.read(accountContextProvider).getAccount.i.id;
 
-                if (message.fromUserId ==
-                    ref.read(accountContextProvider).getAccount.i.id) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8.0, bottom: 16.0),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Column(
-                        children: [
-                          Bubble(
-                            nip: BubbleNip.rightBottom,
-                            color: AppTheme.of(context).colorTheme.primary,
-                            child: MfmText(mfmText: message.text ?? ""),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            message.createdAt.differenceNow(context),
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }
+                final messageUser =
+                    message.toUser ??
+                    message.fromUser ??
+                    ref.read(accountContextProvider).getAccount.i;
 
-                return Row(
-                  children: [
-                    AvatarIcon(
-                      user:
-                          message.toUser ??
-                          message.fromUser ??
-                          ref.read(accountContextProvider).getAccount.i,
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Bubble(
-                            color: AppTheme.of(context).colorTheme.background,
-                            nip: BubbleNip.leftTop,
-                            child: MfmText(mfmText: message.text ?? ""),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            message.createdAt.differenceNow(context),
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                return ChatMessageItem(
+                  message: message,
+                  user: isMyMessage ? null : messageUser,
+                  isMyMessage: isMyMessage,
                 );
               },
             ),
@@ -244,7 +258,7 @@ class RoomChatTextField extends HookConsumerWidget {
                 ),
               ),
             ),
-            IconButton(onPressed: chat.execute, icon: const Icon(Icons.edit)),
+            IconButton(onPressed: chat.execute, icon: const Icon(Icons.send)),
           ],
         ),
       ],

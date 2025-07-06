@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/providers.dart";
-import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/avatar_icon.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:misskey_dart/misskey_dart.dart";
@@ -14,14 +13,16 @@ class ChatContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final room = message.toRoom;
+
+    final targetUser =
+        (message.toUser?.id == ref.read(accountContextProvider).getAccount.i.id
+            ? message.fromUser
+            : message.toUser) ??
+        ref.read(accountContextProvider).getAccount.i;
+
     return Row(
       children: [
-        AvatarIcon(
-          user:
-              message.toUser ??
-              message.fromUser ??
-              ref.read(accountContextProvider).getAccount.i,
-        ),
+        AvatarIcon(user: targetUser),
         const SizedBox(width: 10),
         Expanded(
           child: Column(
@@ -34,20 +35,7 @@ class ChatContent extends ConsumerWidget {
                   else
                     Expanded(
                       child: SimpleMfmText(
-                        message.toUser?.name ??
-                            message.toUser?.username ??
-                            message.fromUser?.name ??
-                            message.fromUser?.username ??
-                            ref
-                                .read(accountContextProvider)
-                                .getAccount
-                                .i
-                                .name ??
-                            ref
-                                .read(accountContextProvider)
-                                .getAccount
-                                .i
-                                .username,
+                        targetUser.name ?? targetUser.username,
                       ),
                     ),
                   Text(message.createdAt.differenceNow(context)),
