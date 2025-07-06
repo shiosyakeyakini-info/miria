@@ -963,6 +963,7 @@
     "lookupFailed": "查找失败",
     "lookupExamples": "输入示例:",
     "unknownObject": "未知对象",
+    "noteBackgroundColor": "笔记背景颜色",
     "appNotification": "来自应用的通知",
     "someoneLogined": "有人登录了您的账户",
     "unknownNotification": "未知类型的通知",

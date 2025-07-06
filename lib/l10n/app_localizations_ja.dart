@@ -1960,6 +1960,9 @@ class SJa extends S {
   String get template => 'テンプレ';
 
   @override
+  String get noteBackgroundColor => 'ノート背景色';
+
+  @override
   String get profileName => '名前';
 
   @override
@@ -2349,6 +2352,9 @@ class SJaOj extends SJa {
 
   @override
   String get cacheManualUpdateCompleted => '情報の取得が完了しましたわ';
+
+  @override
+  String get noteBackgroundColor => 'ノート背景色';
 
   @override
   String get profileName => 'お名前';

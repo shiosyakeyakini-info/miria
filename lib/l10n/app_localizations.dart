@@ -3396,6 +3396,12 @@ abstract class S {
   /// **'テンプレ'**
   String get template;
 
+  /// No description provided for @noteBackgroundColor.
+  ///
+  /// In ja, this message translates to:
+  /// **'ノート背景色'**
+  String get noteBackgroundColor;
+
   /// No description provided for @profileName.
   ///
   /// In ja, this message translates to:

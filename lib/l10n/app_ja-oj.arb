@@ -154,6 +154,7 @@
     "profileFieldName": "名前",
     "profileFieldValue": "内容",
     "profileAddField": "追加",
-    "profileFollowedMessage": "フォローされたときのメッセージ"
+    "profileFollowedMessage": "フォローされたときのメッセージ",
 
+    "noteBackgroundColor": "ノート背景色"
 }

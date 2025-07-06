@@ -1952,6 +1952,9 @@ class SZh extends S {
   String get template => '模板';
 
   @override
+  String get noteBackgroundColor => '笔记背景颜色';
+
+  @override
   String get profileName => '名称';
 
   @override
@@ -2621,6 +2624,21 @@ class SZhCn extends SZh {
   String roleAssignedNotification(String role) {
     return '您已被分配至角色「$role」';
   }
+
+  @override
+  String get appNotification => '来自应用的通知';
+
+  @override
+  String get someoneLogined => '有人登录了您的账户';
+
+  @override
+  String get unknownNotification => '未知类型的通知';
+
+  @override
+  String get createTokenNotification => '访问令牌已创建';
+
+  @override
+  String get chatRoomInvitationReceivedNotification => '收到聊天室邀请';
 
   @override
   String get notificationAll => '所有人';
@@ -3806,6 +3824,9 @@ class SZhCn extends SZh {
 
   @override
   String get template => '模板';
+
+  @override
+  String get noteBackgroundColor => '笔记背景颜色';
 
   @override
   String get profileName => '名称';

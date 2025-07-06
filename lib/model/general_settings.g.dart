@@ -43,6 +43,46 @@ _GeneralSettings _$GeneralSettingsFromJson(Map<String, dynamic> json) =>
           $enumDecodeNullable(_$LanguagesEnumMap, json['languages']) ??
           Languages.jaJP,
       isDeckMode: json['isDeckMode'] as bool? ?? false,
+      lightNoteBackgroundPublic: json['lightNoteBackgroundPublic'] == null
+          ? null
+          : const ColorConverter().fromJson(
+              (json['lightNoteBackgroundPublic'] as num?)?.toInt(),
+            ),
+      lightNoteBackgroundHome: json['lightNoteBackgroundHome'] == null
+          ? null
+          : const ColorConverter().fromJson(
+              (json['lightNoteBackgroundHome'] as num?)?.toInt(),
+            ),
+      lightNoteBackgroundFollowers: json['lightNoteBackgroundFollowers'] == null
+          ? null
+          : const ColorConverter().fromJson(
+              (json['lightNoteBackgroundFollowers'] as num?)?.toInt(),
+            ),
+      lightNoteBackgroundDirect: json['lightNoteBackgroundDirect'] == null
+          ? null
+          : const ColorConverter().fromJson(
+              (json['lightNoteBackgroundDirect'] as num?)?.toInt(),
+            ),
+      darkNoteBackgroundPublic: json['darkNoteBackgroundPublic'] == null
+          ? null
+          : const ColorConverter().fromJson(
+              (json['darkNoteBackgroundPublic'] as num?)?.toInt(),
+            ),
+      darkNoteBackgroundHome: json['darkNoteBackgroundHome'] == null
+          ? null
+          : const ColorConverter().fromJson(
+              (json['darkNoteBackgroundHome'] as num?)?.toInt(),
+            ),
+      darkNoteBackgroundFollowers: json['darkNoteBackgroundFollowers'] == null
+          ? null
+          : const ColorConverter().fromJson(
+              (json['darkNoteBackgroundFollowers'] as num?)?.toInt(),
+            ),
+      darkNoteBackgroundDirect: json['darkNoteBackgroundDirect'] == null
+          ? null
+          : const ColorConverter().fromJson(
+              (json['darkNoteBackgroundDirect'] as num?)?.toInt(),
+            ),
     );
 
 Map<String, dynamic> _$GeneralSettingsToJson(_GeneralSettings instance) =>
@@ -66,6 +106,30 @@ Map<String, dynamic> _$GeneralSettingsToJson(_GeneralSettings instance) =>
       'fantasyFontName': instance.fantasyFontName,
       'languages': _$LanguagesEnumMap[instance.languages]!,
       'isDeckMode': instance.isDeckMode,
+      'lightNoteBackgroundPublic': const ColorConverter().toJson(
+        instance.lightNoteBackgroundPublic,
+      ),
+      'lightNoteBackgroundHome': const ColorConverter().toJson(
+        instance.lightNoteBackgroundHome,
+      ),
+      'lightNoteBackgroundFollowers': const ColorConverter().toJson(
+        instance.lightNoteBackgroundFollowers,
+      ),
+      'lightNoteBackgroundDirect': const ColorConverter().toJson(
+        instance.lightNoteBackgroundDirect,
+      ),
+      'darkNoteBackgroundPublic': const ColorConverter().toJson(
+        instance.darkNoteBackgroundPublic,
+      ),
+      'darkNoteBackgroundHome': const ColorConverter().toJson(
+        instance.darkNoteBackgroundHome,
+      ),
+      'darkNoteBackgroundFollowers': const ColorConverter().toJson(
+        instance.darkNoteBackgroundFollowers,
+      ),
+      'darkNoteBackgroundDirect': const ColorConverter().toJson(
+        instance.darkNoteBackgroundDirect,
+      ),
     };
 
 const _$ThemeColorSystemEnumMap = {
