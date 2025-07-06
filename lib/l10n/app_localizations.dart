@@ -159,6 +159,18 @@ abstract class S {
   /// **'編集'**
   String get edit;
 
+  /// No description provided for @editProfile.
+  ///
+  /// In ja, this message translates to:
+  /// **'プロフィール編集'**
+  String get editProfile;
+
+  /// No description provided for @apply.
+  ///
+  /// In ja, this message translates to:
+  /// **'反映する'**
+  String get apply;
+
   /// No description provided for @create.
   ///
   /// In ja, this message translates to:
@@ -1253,6 +1265,18 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'知らんタイプの通知やわ'**
   String get unknownNotification;
+
+  /// No description provided for @createTokenNotification.
+  ///
+  /// In ja, this message translates to:
+  /// **'アクセストークンが作成されたで'**
+  String get createTokenNotification;
+
+  /// No description provided for @chatRoomInvitationReceivedNotification.
+  ///
+  /// In ja, this message translates to:
+  /// **'チャットルームに招待されたで'**
+  String get chatRoomInvitationReceivedNotification;
 
   /// No description provided for @messageForFollower.
   ///
@@ -2448,12 +2472,6 @@ abstract class S {
   /// **'ロール選択'**
   String get selectRole;
 
-  /// No description provided for @apply.
-  ///
-  /// In ja, this message translates to:
-  /// **'反映する'**
-  String get apply;
-
   /// No description provided for @account.
   ///
   /// In ja, this message translates to:
@@ -3377,6 +3395,60 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'テンプレ'**
   String get template;
+
+  /// No description provided for @noteBackgroundColor.
+  ///
+  /// In ja, this message translates to:
+  /// **'ノート背景色'**
+  String get noteBackgroundColor;
+
+  /// No description provided for @profileName.
+  ///
+  /// In ja, this message translates to:
+  /// **'名前'**
+  String get profileName;
+
+  /// No description provided for @profileBio.
+  ///
+  /// In ja, this message translates to:
+  /// **'自己紹介'**
+  String get profileBio;
+
+  /// No description provided for @profileUpload.
+  ///
+  /// In ja, this message translates to:
+  /// **'アップロード'**
+  String get profileUpload;
+
+  /// No description provided for @profileFromDrive.
+  ///
+  /// In ja, this message translates to:
+  /// **'ドライブから'**
+  String get profileFromDrive;
+
+  /// No description provided for @profileFieldName.
+  ///
+  /// In ja, this message translates to:
+  /// **'名前'**
+  String get profileFieldName;
+
+  /// No description provided for @profileFieldValue.
+  ///
+  /// In ja, this message translates to:
+  /// **'内容'**
+  String get profileFieldValue;
+
+  /// No description provided for @profileAddField.
+  ///
+  /// In ja, this message translates to:
+  /// **'追加'**
+  String get profileAddField;
+
+  /// No description provided for @profileFollowedMessage.
+  ///
+  /// In ja, this message translates to:
+  /// **'フォローされたときのメッセージ'**
+  String get profileFollowedMessage;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

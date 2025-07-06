@@ -9,6 +9,7 @@ import "package:miria/const.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/common/cache_size_notifier.dart";
 import "package:miria/view/themes/built_in_color_themes.dart";
 
@@ -41,6 +42,16 @@ class GeneralSettingsPage extends HookConsumerWidget {
     final fantasyFontName = useState(settings.fantasyFontName);
     final language = useState(settings.languages);
     final isDeckMode = useState(settings.isDeckMode);
+    final lightNoteBgPublic = useState(settings.lightNoteBackgroundPublic);
+    final lightNoteBgHome = useState(settings.lightNoteBackgroundHome);
+    final lightNoteBgFollowers = useState(
+      settings.lightNoteBackgroundFollowers,
+    );
+    final lightNoteBgDirect = useState(settings.lightNoteBackgroundDirect);
+    final darkNoteBgPublic = useState(settings.darkNoteBackgroundPublic);
+    final darkNoteBgHome = useState(settings.darkNoteBackgroundHome);
+    final darkNoteBgFollowers = useState(settings.darkNoteBackgroundFollowers);
+    final darkNoteBgDirect = useState(settings.darkNoteBackgroundDirect);
     final cacheSize = ref.watch(cacheSizeNotifierProvider);
 
     useMemoized(() {
@@ -82,6 +93,14 @@ class GeneralSettingsPage extends HookConsumerWidget {
       fantasyFontName.value,
       language.value,
       isDeckMode.value,
+      lightNoteBgPublic.value,
+      lightNoteBgHome.value,
+      lightNoteBgFollowers.value,
+      lightNoteBgDirect.value,
+      darkNoteBgPublic.value,
+      darkNoteBgHome.value,
+      darkNoteBgFollowers.value,
+      darkNoteBgDirect.value,
     ];
     final save = useCallback(() async {
       await ref
@@ -107,6 +126,14 @@ class GeneralSettingsPage extends HookConsumerWidget {
               fantasyFontName: fantasyFontName.value,
               languages: language.value,
               isDeckMode: isDeckMode.value,
+              lightNoteBackgroundPublic: lightNoteBgPublic.value,
+              lightNoteBackgroundHome: lightNoteBgHome.value,
+              lightNoteBackgroundFollowers: lightNoteBgFollowers.value,
+              lightNoteBackgroundDirect: lightNoteBgDirect.value,
+              darkNoteBackgroundPublic: darkNoteBgPublic.value,
+              darkNoteBackgroundHome: darkNoteBgHome.value,
+              darkNoteBackgroundFollowers: darkNoteBgFollowers.value,
+              darkNoteBackgroundDirect: darkNoteBgDirect.value,
             ),
           );
     }, dependencies);
@@ -340,6 +367,246 @@ class GeneralSettingsPage extends HookConsumerWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(15),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        S.of(context).noteBackgroundColor,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const Padding(padding: EdgeInsets.only(top: 10)),
+                      Text(S.of(context).lightMode),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).public)),
+                          IconButton(
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    lightNoteBgPublic.value ??
+                                    Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
+                            ),
+                            onPressed: () async {
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                lightNoteBgPublic.value = result;
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).homeOnly)),
+                          IconButton(
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    lightNoteBgHome.value ?? Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
+                            ),
+                            onPressed: () async {
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                lightNoteBgHome.value = result;
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).followersOnly)),
+                          IconButton(
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    lightNoteBgFollowers.value ??
+                                    Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
+                            ),
+                            onPressed: () async {
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                lightNoteBgFollowers.value = result;
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).direct)),
+                          IconButton(
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    lightNoteBgDirect.value ??
+                                    Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
+                            ),
+                            onPressed: () async {
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                lightNoteBgDirect.value = result;
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      const Padding(padding: EdgeInsets.only(top: 10)),
+                      Text(S.of(context).darkMode),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).public)),
+                          IconButton(
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    darkNoteBgPublic.value ??
+                                    Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
+                            ),
+                            onPressed: () async {
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                darkNoteBgPublic.value = result;
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).homeOnly)),
+                          IconButton(
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    darkNoteBgHome.value ?? Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
+                            ),
+                            onPressed: () async {
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                darkNoteBgHome.value = result;
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).followersOnly)),
+                          IconButton(
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    darkNoteBgFollowers.value ??
+                                    Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
+                            ),
+                            onPressed: () async {
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                darkNoteBgFollowers.value = result;
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).direct)),
+                          IconButton(
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    darkNoteBgDirect.value ??
+                                    Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
+                            ),
+                            onPressed: () async {
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                darkNoteBgDirect.value = result;
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -365,7 +632,7 @@ class GeneralSettingsPage extends HookConsumerWidget {
                                   textScaleFactor.value)
                               ? null
                               : save,
-                          child: const Text("変更"),
+                          child: Text(S.of(context).apply),
                         ),
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),

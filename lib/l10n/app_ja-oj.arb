@@ -8,6 +8,8 @@
     "noneAction": "なにもいたしませんわ",
     "pleaseInput": "お入れなさって",
     "pleaseSelect": "お選びになさって",
+    "editProfile": "プロフィール編集",
+    "apply": "変更いたしますわ",
 
     "serverRules": "サーバーの定め",
     "antennaSourceUserHintText": "ユーザーネームを改行で区切って指定いたしますわ",
@@ -73,6 +75,8 @@
     "appNotification": "なにかしらのアプリからの通知のようでして",
     "someoneLogined": "ログインされたようですわ",
     "unknownNotification": "存じ上げない種類の通知ですの",
+    "createTokenNotification": "アクセストークンが作成されましたの",
+    "chatRoomInvitationReceivedNotification": "チャットルームにお招きいただきましたの",
 
     "cancelEmojiChoosing": "やめておきますわ",
     "doneEmojiChoosing": "使いますわ",
@@ -141,6 +145,16 @@
                 "type": "String"
             }
         }
-    }
+    },
 
+    "profileName": "お名前",
+    "profileBio": "自己紹介",
+    "profileUpload": "アップロード",
+    "profileFromDrive": "ドライブから",
+    "profileFieldName": "名前",
+    "profileFieldValue": "内容",
+    "profileAddField": "追加",
+    "profileFollowedMessage": "フォローされたときのメッセージ",
+
+    "noteBackgroundColor": "ノート背景色"
 }

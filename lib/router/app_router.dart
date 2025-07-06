@@ -48,6 +48,7 @@ import "package:miria/view/notes_after_renote_page/notes_after_renote_page.dart"
 import "package:miria/view/notification_page/notification_page.dart";
 import "package:miria/view/photo_edit_page/license_confirm_dialog.dart";
 import "package:miria/view/photo_edit_page/photo_edit_page.dart";
+import "package:miria/view/profile_edit_page/profile_edit_page.dart";
 import "package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart";
 import "package:miria/view/search_page/search_page.dart";
 import "package:miria/view/server_detail_dialog.dart";
@@ -132,6 +133,7 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: AccountListRoute.page),
     AutoRoute(page: AppInfoRoute.page),
     AutoRoute(page: SeveralAccountSettingsRoute.page),
+    AutoRoute(page: ProfileEditRoute.page),
     AutoRoute(page: ReactionDeckRoute.page),
     AutoRoute(page: ReactionMuteRoute.page),
     AutoRoute(page: WordMuteRoute.page),
@@ -154,7 +156,7 @@ class AppRouter extends RootStackRouter {
     AutoDialogRoute<Expire>(page: ExpireSelectRoute.page),
     AutoDialogRoute(page: UpdateMemoRoute.page),
     AutoDialogRoute<bool>(page: LicenseConfirmRoute.page),
-    AutoDialogRoute(page: ColorPickerRoute.page),
+    AutoDialogRoute<Color>(page: ColorPickerRoute.page),
     AutoDialogRoute(page: MisskeyServerListRoute.page),
     AutoDialogRoute(page: ServerDetailRoute.page),
     AutoDialogRoute(page: ReactionUserRoute.page),

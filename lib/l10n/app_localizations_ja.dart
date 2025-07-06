@@ -39,6 +39,12 @@ class SJa extends S {
   String get edit => '編集';
 
   @override
+  String get editProfile => 'プロフィール編集';
+
+  @override
+  String get apply => '反映する';
+
+  @override
   String get create => '作成';
 
   @override
@@ -663,6 +669,12 @@ class SJa extends S {
 
   @override
   String get unknownNotification => '知らんタイプの通知やわ';
+
+  @override
+  String get createTokenNotification => 'アクセストークンが作成されたで';
+
+  @override
+  String get chatRoomInvitationReceivedNotification => 'チャットルームに招待されたで';
 
   @override
   String messageForFollower(String message) {
@@ -1455,9 +1467,6 @@ class SJa extends S {
   String get selectRole => 'ロール選択';
 
   @override
-  String get apply => '反映する';
-
-  @override
   String get account => 'アカウント';
 
   @override
@@ -1949,11 +1958,44 @@ class SJa extends S {
 
   @override
   String get template => 'テンプレ';
+
+  @override
+  String get noteBackgroundColor => 'ノート背景色';
+
+  @override
+  String get profileName => '名前';
+
+  @override
+  String get profileBio => '自己紹介';
+
+  @override
+  String get profileUpload => 'アップロード';
+
+  @override
+  String get profileFromDrive => 'ドライブから';
+
+  @override
+  String get profileFieldName => '名前';
+
+  @override
+  String get profileFieldValue => '内容';
+
+  @override
+  String get profileAddField => '追加';
+
+  @override
+  String get profileFollowedMessage => 'フォローされたときのメッセージ';
 }
 
 /// The translations for Japanese (`ja_OJ`).
 class SJaOj extends SJa {
   SJaOj() : super('ja_OJ');
+
+  @override
+  String get editProfile => 'プロフィール編集';
+
+  @override
+  String get apply => '変更いたしますわ';
 
   @override
   String get done => 'よろしくてよ';
@@ -2173,6 +2215,12 @@ class SJaOj extends SJa {
   String get unknownNotification => '存じ上げない種類の通知ですの';
 
   @override
+  String get createTokenNotification => 'アクセストークンが作成されましたの';
+
+  @override
+  String get chatRoomInvitationReceivedNotification => 'チャットルームにお招きいただきましたの';
+
+  @override
   String get cancelEmojiChoosing => 'やめておきますわ';
 
   @override
@@ -2304,4 +2352,31 @@ class SJaOj extends SJa {
 
   @override
   String get cacheManualUpdateCompleted => '情報の取得が完了しましたわ';
+
+  @override
+  String get noteBackgroundColor => 'ノート背景色';
+
+  @override
+  String get profileName => 'お名前';
+
+  @override
+  String get profileBio => '自己紹介';
+
+  @override
+  String get profileUpload => 'アップロード';
+
+  @override
+  String get profileFromDrive => 'ドライブから';
+
+  @override
+  String get profileFieldName => '名前';
+
+  @override
+  String get profileFieldValue => '内容';
+
+  @override
+  String get profileAddField => '追加';
+
+  @override
+  String get profileFollowedMessage => 'フォローされたときのメッセージ';
 }

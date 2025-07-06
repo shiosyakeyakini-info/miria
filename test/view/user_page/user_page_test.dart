@@ -787,6 +787,86 @@ void main() {
         );
       });
     });
+
+    group("フォロー数表示", () {
+      testWidgets("followingVisibilityがpublicの場合、フォロー数が表示されること", (
+        tester,
+      ) async {
+        final mockMisskey = MockMisskey();
+        final mockUser = MockMisskeyUsers();
+        when(mockMisskey.users).thenReturn(mockUser);
+        when(
+          mockUser.show(any),
+        ).thenAnswer((_) async => TestData.userWithFollowingVisibilityPublic);
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: UserRoute(
+                userId: TestData.userWithFollowingVisibilityPublic.id,
+                accountContext: TestData.accountContext,
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        // Wait for the UI to scroll to the following count section
+        await tester.dragUntilVisible(
+          find.text("フォロー"),
+          find.byType(CustomScrollView),
+          const Offset(0, -50),
+        );
+
+        // The following count should be visible because followingVisibility is public
+        expect(find.text("フォロー"), findsOneWidget);
+        expect(
+          find.text("3,699"),
+          findsOneWidget,
+        ); // The actual following count from test data (formatted)
+      });
+
+      testWidgets("followingVisibilityがprivateの場合、フォロー数が表示されないこと", (
+        tester,
+      ) async {
+        final mockMisskey = MockMisskey();
+        final mockUser = MockMisskeyUsers();
+        when(mockMisskey.users).thenReturn(mockUser);
+        when(
+          mockUser.show(any),
+        ).thenAnswer((_) async => TestData.userWithFollowingVisibilityPrivate);
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: UserRoute(
+                userId: TestData.userWithFollowingVisibilityPrivate.id,
+                accountContext: TestData.accountContext,
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        // Wait for the UI to scroll to the following count section
+        await tester.dragUntilVisible(
+          find.text("フォロワー"),
+          find.byType(CustomScrollView),
+          const Offset(0, -50),
+        );
+
+        // The following count should not be visible because followingVisibility is private
+        // and user is following but that doesn't matter for private visibility
+        expect(find.text("フォロー"), findsNothing);
+      });
+    });
+
     group("Play", () {
       testWidgets("PlayのタブでPlayが表示されること", (tester) async {
         //TODO

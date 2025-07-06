@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:miria/l10n/app_localizations.dart";
+import "package:miria/model/converters/color_converter.dart";
 
 part "general_settings.freezed.dart";
 part "general_settings.g.dart";
@@ -137,6 +138,18 @@ abstract class GeneralSettings with _$GeneralSettings {
 
     /// デッキモード
     @Default(false) bool isDeckMode,
+
+    /// ライトモードでの公開範囲ごとのノート背景色
+    @ColorConverter() @Default(null) Color? lightNoteBackgroundPublic,
+    @ColorConverter() @Default(null) Color? lightNoteBackgroundHome,
+    @ColorConverter() @Default(null) Color? lightNoteBackgroundFollowers,
+    @ColorConverter() @Default(null) Color? lightNoteBackgroundDirect,
+
+    /// ダークモードでの公開範囲ごとのノート背景色
+    @ColorConverter() @Default(null) Color? darkNoteBackgroundPublic,
+    @ColorConverter() @Default(null) Color? darkNoteBackgroundHome,
+    @ColorConverter() @Default(null) Color? darkNoteBackgroundFollowers,
+    @ColorConverter() @Default(null) Color? darkNoteBackgroundDirect,
   }) = _GeneralSettings;
 
   factory GeneralSettings.fromJson(Map<String, dynamic> json) =>

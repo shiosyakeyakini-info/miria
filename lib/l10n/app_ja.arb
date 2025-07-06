@@ -9,6 +9,8 @@
     "trend": "トレンド",
     "clip": "クリップ",
     "edit": "編集",
+    "editProfile": "プロフィール編集",
+    "apply": "変更",
     "create": "作成",
     "delete": "削除",
     "search": "検索",
@@ -379,6 +381,8 @@
     "appNotification": "なんかのアプリからの通知らしいわ",
     "someoneLogined": "自分のアカウントにログインがあったらしいで",
     "unknownNotification": "知らんタイプの通知やわ",
+    "createTokenNotification": "アクセストークンが作成されたで",
+    "chatRoomInvitationReceivedNotification": "チャットルームに招待されたで",
     "messageForFollower": "フォロワーへ 「{message}」",
     "@messageForFollower": {
         "placeholders": {
@@ -1063,6 +1067,16 @@
     "deckMode": "デッキモード",
     "enableDeckMode": "デッキモードにする",
 
-    "template": "テンプレ"
+    "template": "テンプレ",
+    "noteBackgroundColor": "ノート背景色",
+
+    "profileName": "名前",
+    "profileBio": "自己紹介",
+    "profileUpload": "アップロード",
+    "profileFromDrive": "ドライブから",
+    "profileFieldName": "名前",
+    "profileFieldValue": "内容",
+    "profileAddField": "追加",
+    "profileFollowedMessage": "フォローされたときのメッセージ"
 
 }

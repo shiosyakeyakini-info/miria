@@ -29,7 +29,16 @@ extension UserDetailedExtension on UserDetailed {
 
     final user = this;
 
-    return switch (ffVisibility) {
+    // Check if user has followingVisibility property
+    final visibility = switch (user) {
+      UserDetailedNotMeWithRelations(:final followingVisibility) =>
+        followingVisibility ?? user.ffVisibility,
+      UserDetailedNotMe(:final followingVisibility) =>
+        followingVisibility ?? user.ffVisibility,
+      _ => ffVisibility,
+    };
+
+    return switch (visibility) {
       FFVisibility.public => true,
       FFVisibility.followers =>
         user is UserDetailedNotMeWithRelations && user.isFollowing,

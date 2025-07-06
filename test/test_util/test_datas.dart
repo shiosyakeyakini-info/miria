@@ -1609,6 +1609,29 @@ class TestData {
 '''),
       );
 
+  // ユーザー情報 (followingVisibility テスト用)
+  static UserDetailedNotMeWithRelations userWithFollowingVisibilityPublic =
+      detailedUser1.copyWith(
+        followingVisibility: FFVisibility.public,
+        ffVisibility: FFVisibility
+            .private, // Different from followingVisibility to test precedence
+      );
+
+  static UserDetailedNotMeWithRelations userWithFollowingVisibilityPrivate =
+      detailedUser1.copyWith(
+        followingVisibility: FFVisibility.private,
+        ffVisibility: FFVisibility
+            .public, // Different from followingVisibility to test precedence
+        isFollowing: true, // User is following to test private visibility logic
+      );
+
+  static UserDetailedNotMeWithRelations
+  userWithFollowingVisibilityNull = detailedUser1.copyWith(
+    followingVisibility: null,
+    ffVisibility: FFVisibility
+        .public, // Should fall back to this when followingVisibility is null
+  );
+
   // カスタム絵文字
   static UnicodeEmojiData unicodeEmoji1 = const UnicodeEmojiData(char: "♥");
   static CustomEmojiData customEmoji1 = CustomEmojiData(
