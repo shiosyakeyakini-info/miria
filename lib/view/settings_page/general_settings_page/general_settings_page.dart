@@ -379,7 +379,7 @@ class GeneralSettingsPage extends HookConsumerWidget {
                           // ヘッダー
                           TableRow(
                             children: [
-                              Spacer(),
+                              SizedBox.shrink(),
                               Text(S.of(context).lightMode),
                               Text(S.of(context).darkMode),
                             ],
