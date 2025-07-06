@@ -511,7 +511,11 @@ class NotificationItem extends ConsumerWidget {
           width: double.infinity,
           child: Padding(
             padding: const EdgeInsets.only(
-                top: 10, bottom: 10, right: 10, left: 10.0),
+              top: 10,
+              bottom: 10,
+              right: 10,
+              left: 10.0,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -526,7 +530,7 @@ class NotificationItem extends ConsumerWidget {
                     ),
                   ),
                   child: Text("みにいく"),
-                )
+                ),
               ],
             ),
           ),

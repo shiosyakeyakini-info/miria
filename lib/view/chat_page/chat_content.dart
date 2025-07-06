@@ -9,10 +9,7 @@ import "package:misskey_dart/misskey_dart.dart";
 
 class ChatContent extends ConsumerWidget {
   final ChatMessage message;
-  const ChatContent({
-    required this.message,
-    super.key,
-  });
+  const ChatContent({required this.message, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,7 +17,8 @@ class ChatContent extends ConsumerWidget {
     return Row(
       children: [
         AvatarIcon(
-          user: message.toUser ??
+          user:
+              message.toUser ??
               message.fromUser ??
               ref.read(accountContextProvider).getAccount.i,
         ),

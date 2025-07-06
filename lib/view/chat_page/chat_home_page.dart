@@ -46,27 +46,23 @@ class ChatHomePage extends ConsumerWidget implements AutoRouteWrapper {
               Tab(child: Text("ホーム")),
               Tab(child: Text("招待")),
               Tab(child: Text("入ってるルーム")),
-              Tab(child: Text("自分で作ったやつ"))
+              Tab(child: Text("自分で作ったやつ")),
             ],
           ),
         ),
         body: const TabBarView(
-          children: [
-            ChatHome(),
-            InvitedChat(),
-            JoiningChat(),
-            OwnedChat(),
-          ],
+          children: [ChatHome(), InvitedChat(), JoiningChat(), OwnedChat()],
         ),
-        floatingActionButton:
-            ref.read(accountContextProvider).isSame ? null : null,
+        floatingActionButton: ref.read(accountContextProvider).isSame
+            ? null
+            : null,
       ),
     );
   }
 }
 
 @Riverpod(dependencies: [misskeyPostContext])
-Future<List<ChatMessage>> history(HistoryRef ref) async {
+Future<List<ChatMessage>> history(Ref ref) async {
   final (a, b) = await (
     ref
         .read(misskeyPostContextProvider)
@@ -75,7 +71,7 @@ Future<List<ChatMessage>> history(HistoryRef ref) async {
     ref
         .read(misskeyPostContextProvider)
         .chat
-        .history(const ChatHistoryRequest(limit: 30, room: true))
+        .history(const ChatHistoryRequest(limit: 30, room: true)),
   ).wait;
 
   return [...a, ...b]..sort((a, b) => b.createdAt.compareTo(a.createdAt));
@@ -90,36 +86,38 @@ class ChatHome extends ConsumerWidget {
 
     return switch (history) {
       AsyncLoading() => const Center(child: CircularProgressIndicator()),
-      AsyncError(:final error, :final stackTrace) =>
-        ErrorDetail(error: error, stackTrace: stackTrace),
+      AsyncError(:final error, :final stackTrace) => ErrorDetail(
+        error: error,
+        stackTrace: stackTrace,
+      ),
       AsyncData(:final value) => Padding(
-          padding: const EdgeInsets.only(right: 4.0),
-          child: ListView.builder(
-            itemCount: value.length,
-            itemBuilder: (context, index) => GestureDetector(
-              onTap: () async {
-                final room = value[index].toRoom;
-                final toUser = value[index].toUser;
-                if (room != null) {
-                  await context.router.push(
-                    RoomChatRoute(
-                      room: room,
-                      accountContext: ref.read(accountContextProvider),
-                    ),
-                  );
-                } else if (toUser != null) {
-                  await context.router.push(
-                    UserChatRoute(
-                      user: toUser,
-                      accountContext: ref.read(accountContextProvider),
-                    ),
-                  );
-                }
-              },
-              child: ChatContent(message: value[index]),
-            ),
+        padding: const EdgeInsets.only(right: 4.0),
+        child: ListView.builder(
+          itemCount: value.length,
+          itemBuilder: (context, index) => GestureDetector(
+            onTap: () async {
+              final room = value[index].toRoom;
+              final toUser = value[index].toUser;
+              if (room != null) {
+                await context.router.push(
+                  RoomChatRoute(
+                    room: room,
+                    accountContext: ref.read(accountContextProvider),
+                  ),
+                );
+              } else if (toUser != null) {
+                await context.router.push(
+                  UserChatRoute(
+                    user: toUser,
+                    accountContext: ref.read(accountContextProvider),
+                  ),
+                );
+              }
+            },
+            child: ChatContent(message: value[index]),
           ),
         ),
+      ),
     };
   }
 }
@@ -139,7 +137,7 @@ class InvitedChat extends HookConsumerWidget {
               .chat
               .rooms
               .invitations
-              .inbox(const ChatRoomsInvitationsInboxRequest())
+              .inbox(const ChatRoomsInvitationsInboxRequest()),
         ],
         nextFuture: (item, index) async => [
           ...await ref
@@ -147,7 +145,7 @@ class InvitedChat extends HookConsumerWidget {
               .chat
               .rooms
               .invitations
-              .inbox(ChatRoomsInvitationsInboxRequest(untilId: item.id))
+              .inbox(ChatRoomsInvitationsInboxRequest(untilId: item.id)),
         ],
         itemBuilder: (context, item) => item.room != null
             ? InvitedChatItem(item.room!, valueNotifier)
@@ -167,9 +165,11 @@ class InvitedChatItem extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final join = useAsync(() async {
       await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-        await ref.read(misskeyPostContextProvider).chat.rooms.join(
-              ChatRoomsJoinRequest(roomId: room.id),
-            );
+        await ref
+            .read(misskeyPostContextProvider)
+            .chat
+            .rooms
+            .join(ChatRoomsJoinRequest(roomId: room.id));
         valueNotifier.value = DateTime.now();
         if (!context.mounted) return;
         await context.pushRoute(
@@ -187,14 +187,12 @@ class InvitedChatItem extends HookConsumerWidget {
             .chat
             .rooms
             .invitations
-            .ignore(
-              ChatRoomsInvitationsIgnoreRequest(roomId: room.id),
-            );
+            .ignore(ChatRoomsInvitationsIgnoreRequest(roomId: room.id));
         if (!context.mounted) return;
         valueNotifier.value = DateTime.now();
-        await ref.read(dialogStateNotifierProvider.notifier).showSimpleDialog(
-              message: (context) => "無視したで",
-            );
+        await ref
+            .read(dialogStateNotifierProvider.notifier)
+            .showSimpleDialog(message: (context) => "無視したで");
       });
     });
 
@@ -230,9 +228,9 @@ class InvitedChatItem extends HookConsumerWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                      padding:
-                          const EdgeInsets.only(left: 10, top: 3, bottom: 3),
-                      child: Text(room.name)),
+                    padding: const EdgeInsets.only(left: 10, top: 3, bottom: 3),
+                    child: Text(room.name),
+                  ),
                 ),
               ),
               Padding(
@@ -271,7 +269,7 @@ class InvitedChatItem extends HookConsumerWidget {
                         onPressed: ignore.executeOrNull,
                         child: Text("無視"),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -292,14 +290,18 @@ class JoiningChat extends ConsumerWidget {
       padding: const EdgeInsets.all(8.0),
       child: PushableListView(
         initializeFuture: () async => [
-          ...await ref.read(misskeyGetContextProvider).chat.rooms.joining(
-                const ChatRoomsJoiningRequest(),
-              )
+          ...await ref
+              .read(misskeyGetContextProvider)
+              .chat
+              .rooms
+              .joining(const ChatRoomsJoiningRequest()),
         ],
         nextFuture: (item, _) async => [
-          ...await ref.read(misskeyGetContextProvider).chat.rooms.joining(
-                ChatRoomsJoiningRequest(sinceId: item.id),
-              ),
+          ...await ref
+              .read(misskeyGetContextProvider)
+              .chat
+              .rooms
+              .joining(ChatRoomsJoiningRequest(sinceId: item.id)),
         ],
         itemBuilder: (context, item) => RoomInfo(room: item.room!),
       ),
@@ -309,10 +311,7 @@ class JoiningChat extends ConsumerWidget {
 
 class RoomInfo extends ConsumerWidget {
   final ChatRoom room;
-  const RoomInfo({
-    required this.room,
-    super.key,
-  });
+  const RoomInfo({required this.room, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -329,10 +328,7 @@ class RoomInfo extends ConsumerWidget {
         padding: const EdgeInsets.only(right: 4.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(room.name),
-            Text(room.description),
-          ],
+          children: [Text(room.name), Text(room.description)],
         ),
       ),
     );
@@ -348,16 +344,20 @@ class OwnedChat extends ConsumerWidget {
       padding: const EdgeInsets.all(8.0),
       child: PushableListView(
         initializeFuture: () async => [
-          ...await ref.read(misskeyGetContextProvider).chat.rooms.owned(
-                const ChatRoomsOwnedRequest(),
-              ),
+          ...await ref
+              .read(misskeyGetContextProvider)
+              .chat
+              .rooms
+              .owned(const ChatRoomsOwnedRequest()),
         ],
         nextFuture: (item, _) async => [
-          ...await ref.read(misskeyGetContextProvider).chat.rooms.owned(
-                ChatRoomsOwnedRequest(sinceId: item.id),
-              ),
+          ...await ref
+              .read(misskeyGetContextProvider)
+              .chat
+              .rooms
+              .owned(ChatRoomsOwnedRequest(sinceId: item.id)),
         ],
-        itemBuilder: (context, item) => RoomInfo(room: item.room!),
+        itemBuilder: (context, item) => RoomInfo(room: item),
       ),
     );
   }

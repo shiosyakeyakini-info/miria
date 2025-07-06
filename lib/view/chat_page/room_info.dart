@@ -16,16 +16,14 @@ import "package:misskey_dart/misskey_dart.dart";
 
 class ChatRoomInfo extends HookConsumerWidget {
   final ChatRoom room;
-  const ChatRoomInfo({
-    required this.room,
-    super.key,
-  });
+  const ChatRoomInfo({required this.room, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final nameEditingController = useTextEditingController(text: room.name);
-    final descriptionEditingController =
-        useTextEditingController(text: room.description);
+    final descriptionEditingController = useTextEditingController(
+      text: room.description,
+    );
     final isOwned = useMemoized(
       () => room.ownerId == ref.read(accountContextProvider).postAccount.i.id,
       [room],
@@ -34,7 +32,11 @@ class ChatRoomInfo extends HookConsumerWidget {
 
     final update = useAsync(() async {
       await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-        await ref.read(misskeyGetContextProvider).chat.rooms.update(
+        await ref
+            .read(misskeyGetContextProvider)
+            .chat
+            .rooms
+            .update(
               ChatRoomsUpdateRequest(
                 roomId: room.id,
                 name: nameEditingController.text,
@@ -49,10 +51,7 @@ class ChatRoomInfo extends HookConsumerWidget {
     final addUsers = useAsync(() async {
       final accountContext = ref.read(accountContextProvider);
       final result = await context.pushRoute<User>(
-        UserSelectRoute(
-          accountContext: accountContext,
-          isLocalOnly: true,
-        ),
+        UserSelectRoute(accountContext: accountContext, isLocalOnly: true),
       );
       if (result == null) return;
       await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
@@ -76,13 +75,17 @@ class ChatRoomInfo extends HookConsumerWidget {
     final mute = useAsync(() async {
       await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
         if (isMuted.value) {
-          await ref.read(misskeyGetContextProvider).chat.rooms.mute(
-                ChatRoomsMuteRequest(roomId: room.id, mute: false),
-              );
+          await ref
+              .read(misskeyGetContextProvider)
+              .chat
+              .rooms
+              .mute(ChatRoomsMuteRequest(roomId: room.id, mute: false));
         } else {
-          await ref.read(misskeyGetContextProvider).chat.rooms.mute(
-                ChatRoomsMuteRequest(roomId: room.id, mute: true),
-              );
+          await ref
+              .read(misskeyGetContextProvider)
+              .chat
+              .rooms
+              .mute(ChatRoomsMuteRequest(roomId: room.id, mute: true));
         }
         isMuted.value = !isMuted.value;
       });
@@ -127,9 +130,7 @@ class ChatRoomInfo extends HookConsumerWidget {
               ExpansionTile(
                 initiallyExpanded: true,
                 title: Text("チャット立てた人"),
-                children: [
-                  UserListItem(user: room.owner),
-                ],
+                children: [UserListItem(user: room.owner)],
               ),
               ExpansionTile(
                 initiallyExpanded: true,
@@ -149,7 +150,7 @@ class ChatRoomInfo extends HookConsumerWidget {
                           .read(misskeyGetContextProvider)
                           .chat
                           .rooms
-                          .members(ChatRoomsMembersRequest(roomId: room.id))
+                          .members(ChatRoomsMembersRequest(roomId: room.id)),
                     ],
                     nextFuture: (item, _) async => [
                       ...await ref
@@ -161,7 +162,7 @@ class ChatRoomInfo extends HookConsumerWidget {
                               roomId: room.id,
                               untilId: item.id,
                             ),
-                          )
+                          ),
                     ],
                     itemBuilder: (context, item) =>
                         UserListItem(user: item.user!),
@@ -183,8 +184,11 @@ class ChatRoomInfo extends HookConsumerWidget {
                             .chat
                             .rooms
                             .invitations
-                            .outbox(ChatRoomsInvitationsOutboxRequest(
-                                roomId: room.id))
+                            .outbox(
+                              ChatRoomsInvitationsOutboxRequest(
+                                roomId: room.id,
+                              ),
+                            ),
                       ],
                       nextFuture: (item, _) async => [
                         ...await ref
@@ -197,7 +201,7 @@ class ChatRoomInfo extends HookConsumerWidget {
                                 roomId: room.id,
                                 untilId: item.id,
                               ),
-                            )
+                            ),
                       ],
                       itemBuilder: (context, item) =>
                           UserListItem(user: item.user!),
@@ -223,9 +227,7 @@ class ChatRoomInfo extends HookConsumerWidget {
                             .read(misskeyGetContextProvider)
                             .chat
                             .rooms
-                            .leave(
-                              ChatRoomsLeaveRequest(roomId: room.id),
-                            );
+                            .leave(ChatRoomsLeaveRequest(roomId: room.id));
                         await ref
                             .read(dialogStateNotifierProvider.notifier)
                             .showSimpleDialog(

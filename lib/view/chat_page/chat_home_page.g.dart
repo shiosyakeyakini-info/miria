@@ -6,22 +6,53 @@ part of 'chat_home_page.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$historyHash() => r'34cb5d8b89849e3b3b9d054cd152ab8cb1d5b7a2';
-
-/// See also [history].
 @ProviderFor(history)
-final historyProvider = AutoDisposeFutureProvider<List<ChatMessage>>.internal(
-  history,
-  name: r'historyProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$historyHash,
-  dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    misskeyPostContextProvider,
-    ...?misskeyPostContextProvider.allTransitiveDependencies
-  },
-);
+const historyProvider = HistoryProvider._();
 
-typedef HistoryRef = AutoDisposeFutureProviderRef<List<ChatMessage>>;
+final class HistoryProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<ChatMessage>>,
+          List<ChatMessage>,
+          FutureOr<List<ChatMessage>>
+        >
+    with
+        $FutureModifier<List<ChatMessage>>,
+        $FutureProvider<List<ChatMessage>> {
+  const HistoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'historyProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          HistoryProvider.$allTransitiveDependencies0,
+          HistoryProvider.$allTransitiveDependencies1,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static const $allTransitiveDependencies1 =
+      MisskeyPostContextProvider.$allTransitiveDependencies0;
+
+  @override
+  String debugGetCreateSourceHash() => _$historyHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<ChatMessage>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<ChatMessage>> create(Ref ref) {
+    return history(ref);
+  }
+}
+
+String _$historyHash() => r'cb9e7c0825ef6f68d2b46eea4a992376349bf480';
+
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

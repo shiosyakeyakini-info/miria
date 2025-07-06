@@ -6,6 +6,7 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:hooks_riverpod/legacy.dart";
 import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/hooks/use_async.dart";
 import "package:miria/providers.dart";
@@ -28,9 +29,11 @@ class UserChat extends _$UserChat {
   @override
   Future<List<ChatMessage>> build(String userId) async {
     return [
-      ...await ref.read(misskeyGetContextProvider).chat.messages.userTimeline(
-            ChatMessagesUserTimelineRequest(userId: userId),
-          ),
+      ...await ref
+          .read(misskeyGetContextProvider)
+          .chat
+          .messages
+          .userTimeline(ChatMessagesUserTimelineRequest(userId: userId)),
     ];
   }
 
@@ -61,169 +64,159 @@ class UserChatPage extends ConsumerWidget implements AutoRouteWrapper {
       appBar: AppBar(
         title: SimpleMfmText("${user.name ?? user.username}とのチャット"),
       ),
-      body: Center(
-        child: UserChatTimeline(user: user),
-      ),
+      body: Center(child: UserChatTimeline(user: user)),
     );
   }
 }
 
 class UserChatTimeline extends HookConsumerWidget {
   final User user;
-  const UserChatTimeline({
-    required this.user,
-    super.key,
-  });
+  const UserChatTimeline({required this.user, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userChat = ref.watch(userChatProvider(user.id));
     final streamingId = useMemoized(() => const Uuid().v4());
 
-    useEffect(
-      () {
-        final misskey = ref.read(misskeyGetContextProvider);
-        StreamSubscription<StreamingResponse>? chatStream;
-        StreamingController? streaming;
-        unawaited(() async {
-          streaming = await ref.read(misskeyStreamingProvider(misskey).future);
-          chatStream = streaming!
-              .chatUserStream(
-            id: streamingId,
-            parameter: ChatUserParameter(otherId: user.id),
-          )
-              .listen((response) {
-            final body = response.body;
-            if (body is! ChatMessageChannelEvent) return;
-            final innerBody = body.body;
-            ref.read(userChatProvider(user.id).notifier).addChat(innerBody);
-          });
-        }());
+    useEffect(() {
+      final misskey = ref.read(misskeyGetContextProvider);
+      StreamSubscription<StreamingResponse>? chatStream;
+      StreamingController? streaming;
+      unawaited(() async {
+        streaming = await ref.read(misskeyStreamingProvider(misskey).future);
+        chatStream = streaming!
+            .chatUserStream(
+              id: streamingId,
+              parameter: ChatUserParameter(otherId: user.id),
+            )
+            .listen((response) {
+              final body = response.body;
+              if (body is! ChatMessageChannelEvent) return;
+              final innerBody = body.body;
+              ref.read(userChatProvider(user.id).notifier).addChat(innerBody);
+            });
+      }());
 
-        return () {
-          unawaited(() async {
-            await (
-              streaming?.removeChannel(streamingId) ?? Future.value(),
-              chatStream?.cancel() ?? Future.value(),
-            ).wait;
-          }());
-        };
-      },
-      const [],
-    );
+      return () {
+        unawaited(() async {
+          await (
+            streaming?.removeChannel(streamingId) ?? Future.value(),
+            chatStream?.cancel() ?? Future.value(),
+          ).wait;
+        }());
+      };
+    }, const []);
     return switch (userChat) {
       AsyncLoading() => const Center(child: CircularProgressIndicator()),
-      AsyncError(:final error, :final stackTrace) =>
-        ErrorDetail(error: error, stackTrace: stackTrace),
+      AsyncError(:final error, :final stackTrace) => ErrorDetail(
+        error: error,
+        stackTrace: stackTrace,
+      ),
       AsyncData(:final value) => Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: value.length,
-                reverse: true,
-                itemBuilder: (context, index) {
-                  final message = value[index];
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: value.length,
+              reverse: true,
+              itemBuilder: (context, index) {
+                final message = value[index];
 
-                  if (message.fromUserId ==
-                      ref.read(accountContextProvider).getAccount.i.id) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 8.0, bottom: 16.0),
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: Column(
-                          children: [
-                            Bubble(
-                              nip: BubbleNip.rightBottom,
-                              color: AppTheme.of(context).colorTheme.primary,
-                              child: MfmText(mfmText: message.text ?? ""),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              message.createdAt.differenceNow(context),
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                          ],
-                        ),
+                if (message.fromUserId ==
+                    ref.read(accountContextProvider).getAccount.i.id) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8.0, bottom: 16.0),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Column(
+                        children: [
+                          Bubble(
+                            nip: BubbleNip.rightBottom,
+                            color: AppTheme.of(context).colorTheme.primary,
+                            child: MfmText(mfmText: message.text ?? ""),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            message.createdAt.differenceNow(context),
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
                       ),
-                    );
-                  }
-
-                  return Row(
-                    children: [
-                      AvatarIcon(user: user),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Bubble(
-                              color: AppTheme.of(context).colorTheme.background,
-                              nip: BubbleNip.leftTop,
-                              child: MfmText(mfmText: message.text ?? ""),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              message.createdAt.differenceNow(context),
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                    ),
                   );
-                },
-              ),
+                }
+
+                return Row(
+                  children: [
+                    AvatarIcon(user: user),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Bubble(
+                            color: AppTheme.of(context).colorTheme.background,
+                            nip: BubbleNip.leftTop,
+                            child: MfmText(mfmText: message.text ?? ""),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            message.createdAt.differenceNow(context),
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
-            UserChatTextField(userId: user.id),
-          ],
-        ),
+          ),
+          UserChatTextField(userId: user.id),
+        ],
+      ),
     };
   }
 }
 
+final userChatFocusNodeProvider = ChangeNotifierProvider.autoDispose((ref) {
+  final focusNode = FocusNode();
+  ref.onDispose(focusNode.dispose);
+  return focusNode;
+});
+
 class UserChatTextField extends HookConsumerWidget {
   final String userId;
-  const UserChatTextField({
-    required this.userId,
-    super.key,
-  });
+  const UserChatTextField({required this.userId, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textEditingController = useTextEditingController();
     final focusNode = useFocusNode();
 
-    final chat = useAsync(
-      () async {
-        final text = textEditingController.text;
-        textEditingController.clear();
-        await ref.read(dialogStateNotifierProvider.notifier).guard(
-          () async {
-            try {
-              await ref
-                  .read(misskeyPostContextProvider)
-                  .chat
-                  .messages
-                  .createToUser(
-                    ChatMessagesCreateToUserRequest(
-                      toUserId: userId,
-                      text: text,
-                    ),
-                  );
-            } catch (e) {
-              textEditingController.text = text;
-              rethrow;
-            }
-          },
-        );
-      },
-    );
+    final chat = useAsync(() async {
+      final text = textEditingController.text;
+      textEditingController.clear();
+      await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+        try {
+          await ref
+              .read(misskeyPostContextProvider)
+              .chat
+              .messages
+              .createToUser(
+                ChatMessagesCreateToUserRequest(toUserId: userId, text: text),
+              );
+        } catch (e) {
+          textEditingController.text = text;
+          rethrow;
+        }
+      });
+    });
 
     return Column(
       children: [
         InputComplement(
           controller: textEditingController,
-          focusNode: focusNode,
+          focusNode: userChatFocusNodeProvider,
         ),
         Row(
           children: [
@@ -245,10 +238,7 @@ class UserChatTextField extends HookConsumerWidget {
                 ),
               ),
             ),
-            IconButton(
-              onPressed: chat.execute,
-              icon: const Icon(Icons.edit),
-            ),
+            IconButton(onPressed: chat.execute, icon: const Icon(Icons.edit)),
           ],
         ),
       ],

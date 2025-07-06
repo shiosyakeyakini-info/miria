@@ -886,19 +886,30 @@ class ChatHomeRoute extends PageRouteInfo<ChatHomeRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          ChatHomeRoute.name,
-          args: ChatHomeRouteArgs(
-            accountContext: accountContext,
-            initialTab: initialTab,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         ChatHomeRoute.name,
+         args: ChatHomeRouteArgs(
+           accountContext: accountContext,
+           initialTab: initialTab,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'ChatHomeRoute';
 
-  static const PageInfo<ChatHomeRouteArgs> page =
-      PageInfo<ChatHomeRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ChatHomeRouteArgs>();
+      return WrappedRoute(
+        child: ChatHomePage(
+          accountContext: args.accountContext,
+          initialTab: args.initialTab,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class ChatHomeRouteArgs {
@@ -918,6 +929,19 @@ class ChatHomeRouteArgs {
   String toString() {
     return 'ChatHomeRouteArgs{accountContext: $accountContext, initialTab: $initialTab, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ChatHomeRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        initialTab == other.initialTab &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode =>
+      accountContext.hashCode ^ initialTab.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2933,19 +2957,30 @@ class RoomChatRoute extends PageRouteInfo<RoomChatRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          RoomChatRoute.name,
-          args: RoomChatRouteArgs(
-            room: room,
-            accountContext: accountContext,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         RoomChatRoute.name,
+         args: RoomChatRouteArgs(
+           room: room,
+           accountContext: accountContext,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'RoomChatRoute';
 
-  static const PageInfo<RoomChatRouteArgs> page =
-      PageInfo<RoomChatRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<RoomChatRouteArgs>();
+      return WrappedRoute(
+        child: RoomChatPage(
+          room: args.room,
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class RoomChatRouteArgs {
@@ -2965,6 +3000,18 @@ class RoomChatRouteArgs {
   String toString() {
     return 'RoomChatRouteArgs{room: $room, accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! RoomChatRouteArgs) return false;
+    return room == other.room &&
+        accountContext == other.accountContext &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => room.hashCode ^ accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -3526,19 +3573,30 @@ class UserChatRoute extends PageRouteInfo<UserChatRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          UserChatRoute.name,
-          args: UserChatRouteArgs(
-            user: user,
-            accountContext: accountContext,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         UserChatRoute.name,
+         args: UserChatRouteArgs(
+           user: user,
+           accountContext: accountContext,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'UserChatRoute';
 
-  static const PageInfo<UserChatRouteArgs> page =
-      PageInfo<UserChatRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<UserChatRouteArgs>();
+      return WrappedRoute(
+        child: UserChatPage(
+          user: args.user,
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class UserChatRouteArgs {
@@ -3558,6 +3616,18 @@ class UserChatRouteArgs {
   String toString() {
     return 'UserChatRouteArgs{user: $user, accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UserChatRouteArgs) return false;
+    return user == other.user &&
+        accountContext == other.accountContext &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => user.hashCode ^ accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -3891,7 +3961,11 @@ class UserSelectRoute extends PageRouteInfo<UserSelectRouteArgs> {
     List<PageRouteInfo>? children,
   }) : super(
          UserSelectRoute.name,
-         args: UserSelectRouteArgs(accountContext: accountContext, key: key),
+         args: UserSelectRouteArgs(
+           accountContext: accountContext,
+           isLocalOnly: isLocalOnly,
+           key: key,
+         ),
          initialChildren: children,
        );
 
@@ -3904,6 +3978,7 @@ class UserSelectRoute extends PageRouteInfo<UserSelectRouteArgs> {
       return WrappedRoute(
         child: UserSelectDialog(
           accountContext: args.accountContext,
+          isLocalOnly: args.isLocalOnly,
           key: args.key,
         ),
       );
@@ -3912,7 +3987,11 @@ class UserSelectRoute extends PageRouteInfo<UserSelectRouteArgs> {
 }
 
 class UserSelectRouteArgs {
-  const UserSelectRouteArgs({required this.accountContext, this.key});
+  const UserSelectRouteArgs({
+    required this.accountContext,
+    this.isLocalOnly = false,
+    this.key,
+  });
 
   final AccountContext accountContext;
 
@@ -3929,11 +4008,14 @@ class UserSelectRouteArgs {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! UserSelectRouteArgs) return false;
-    return accountContext == other.accountContext && key == other.key;
+    return accountContext == other.accountContext &&
+        isLocalOnly == other.isLocalOnly &&
+        key == other.key;
   }
 
   @override
-  int get hashCode => accountContext.hashCode ^ key.hashCode;
+  int get hashCode =>
+      accountContext.hashCode ^ isLocalOnly.hashCode ^ key.hashCode;
 }
 
 /// generated route for

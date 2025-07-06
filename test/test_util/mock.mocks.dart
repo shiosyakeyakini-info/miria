@@ -3803,7 +3803,7 @@ class MockMisskeyUsers extends _i1.Mock implements _i5.MisskeyUsers {
 /// A class which mocks [Dio].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockDio extends _i1.Mock implements _i10.Dio {
+class MockDio extends _i1.Mock implements _i9.Dio {
   @override
   _i9.BaseOptions get options =>
       (super.noSuchMethod(
@@ -3868,7 +3868,7 @@ class MockDio extends _i1.Mock implements _i10.Dio {
   );
 
   @override
-  set httpClientAdapter(_i10.HttpClientAdapter? _httpClientAdapter) =>
+  set httpClientAdapter(_i9.HttpClientAdapter? _httpClientAdapter) =>
       super.noSuchMethod(
         Invocation.setter(#httpClientAdapter, _httpClientAdapter),
         returnValueForMissingStub: null,
@@ -3891,8 +3891,8 @@ class MockDio extends _i1.Mock implements _i10.Dio {
     String? path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
-    _i10.Options? options,
-    _i10.CancelToken? cancelToken,
+    _i9.Options? options,
+    _i9.CancelToken? cancelToken,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -3942,8 +3942,8 @@ class MockDio extends _i1.Mock implements _i10.Dio {
   _i17.Future<_i9.Response<T>> headUri<T>(
     Uri? uri, {
     Object? data,
-    _i10.Options? options,
-    _i10.CancelToken? cancelToken,
+    _i9.Options? options,
+    _i9.CancelToken? cancelToken,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -3979,9 +3979,9 @@ class MockDio extends _i1.Mock implements _i10.Dio {
     String? path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
-    _i10.Options? options,
-    _i10.CancelToken? cancelToken,
-    _i10.ProgressCallback? onReceiveProgress,
+    _i9.Options? options,
+    _i9.CancelToken? cancelToken,
+    _i9.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -4034,9 +4034,9 @@ class MockDio extends _i1.Mock implements _i10.Dio {
   _i17.Future<_i9.Response<T>> getUri<T>(
     Uri? uri, {
     Object? data,
-    _i10.Options? options,
-    _i10.CancelToken? cancelToken,
-    _i10.ProgressCallback? onReceiveProgress,
+    _i9.Options? options,
+    _i9.CancelToken? cancelToken,
+    _i9.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -4087,10 +4087,10 @@ class MockDio extends _i1.Mock implements _i10.Dio {
     String? path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
-    _i10.Options? options,
-    _i10.CancelToken? cancelToken,
-    _i10.ProgressCallback? onSendProgress,
-    _i10.ProgressCallback? onReceiveProgress,
+    _i9.Options? options,
+    _i9.CancelToken? cancelToken,
+    _i9.ProgressCallback? onSendProgress,
+    _i9.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -4146,10 +4146,10 @@ class MockDio extends _i1.Mock implements _i10.Dio {
   _i17.Future<_i9.Response<T>> postUri<T>(
     Uri? uri, {
     Object? data,
-    _i10.Options? options,
-    _i10.CancelToken? cancelToken,
-    _i10.ProgressCallback? onSendProgress,
-    _i10.ProgressCallback? onReceiveProgress,
+    _i9.Options? options,
+    _i9.CancelToken? cancelToken,
+    _i9.ProgressCallback? onSendProgress,
+    _i9.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -4203,10 +4203,10 @@ class MockDio extends _i1.Mock implements _i10.Dio {
     String? path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
-    _i10.Options? options,
-    _i10.CancelToken? cancelToken,
-    _i10.ProgressCallback? onSendProgress,
-    _i10.ProgressCallback? onReceiveProgress,
+    _i9.Options? options,
+    _i9.CancelToken? cancelToken,
+    _i9.ProgressCallback? onSendProgress,
+    _i9.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -4262,10 +4262,10 @@ class MockDio extends _i1.Mock implements _i10.Dio {
   _i17.Future<_i9.Response<T>> putUri<T>(
     Uri? uri, {
     Object? data,
-    _i10.Options? options,
-    _i10.CancelToken? cancelToken,
-    _i10.ProgressCallback? onSendProgress,
-    _i10.ProgressCallback? onReceiveProgress,
+    _i9.Options? options,
+    _i9.CancelToken? cancelToken,
+    _i9.ProgressCallback? onSendProgress,
+    _i9.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -4319,10 +4319,10 @@ class MockDio extends _i1.Mock implements _i10.Dio {
     String? path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
-    _i10.Options? options,
-    _i10.CancelToken? cancelToken,
-    _i10.ProgressCallback? onSendProgress,
-    _i10.ProgressCallback? onReceiveProgress,
+    _i9.Options? options,
+    _i9.CancelToken? cancelToken,
+    _i9.ProgressCallback? onSendProgress,
+    _i9.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -4378,10 +4378,10 @@ class MockDio extends _i1.Mock implements _i10.Dio {
   _i17.Future<_i9.Response<T>> patchUri<T>(
     Uri? uri, {
     Object? data,
-    _i10.Options? options,
-    _i10.CancelToken? cancelToken,
-    _i10.ProgressCallback? onSendProgress,
-    _i10.ProgressCallback? onReceiveProgress,
+    _i9.Options? options,
+    _i9.CancelToken? cancelToken,
+    _i9.ProgressCallback? onSendProgress,
+    _i9.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -4435,8 +4435,8 @@ class MockDio extends _i1.Mock implements _i10.Dio {
     String? path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
-    _i10.Options? options,
-    _i10.CancelToken? cancelToken,
+    _i9.Options? options,
+    _i9.CancelToken? cancelToken,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -4486,8 +4486,8 @@ class MockDio extends _i1.Mock implements _i10.Dio {
   _i17.Future<_i9.Response<T>> deleteUri<T>(
     Uri? uri, {
     Object? data,
-    _i10.Options? options,
-    _i10.CancelToken? cancelToken,
+    _i9.Options? options,
+    _i9.CancelToken? cancelToken,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -4522,14 +4522,14 @@ class MockDio extends _i1.Mock implements _i10.Dio {
   _i17.Future<_i9.Response<dynamic>> download(
     String? urlPath,
     dynamic savePath, {
-    _i10.ProgressCallback? onReceiveProgress,
+    _i9.ProgressCallback? onReceiveProgress,
     Map<String, dynamic>? queryParameters,
-    _i10.CancelToken? cancelToken,
+    _i9.CancelToken? cancelToken,
     bool? deleteOnError = true,
     _i9.FileAccessMode? fileAccessMode = _i9.FileAccessMode.write,
     String? lengthHeader = 'content-length',
     Object? data,
-    _i10.Options? options,
+    _i9.Options? options,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -4591,13 +4591,13 @@ class MockDio extends _i1.Mock implements _i10.Dio {
   _i17.Future<_i9.Response<dynamic>> downloadUri(
     Uri? uri,
     dynamic savePath, {
-    _i10.ProgressCallback? onReceiveProgress,
-    _i10.CancelToken? cancelToken,
+    _i9.ProgressCallback? onReceiveProgress,
+    _i9.CancelToken? cancelToken,
     bool? deleteOnError = true,
     _i9.FileAccessMode? fileAccessMode = _i9.FileAccessMode.write,
     String? lengthHeader = 'content-length',
     Object? data,
-    _i10.Options? options,
+    _i9.Options? options,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -4657,10 +4657,10 @@ class MockDio extends _i1.Mock implements _i10.Dio {
     String? url, {
     Object? data,
     Map<String, dynamic>? queryParameters,
-    _i10.CancelToken? cancelToken,
-    _i10.Options? options,
-    _i10.ProgressCallback? onSendProgress,
-    _i10.ProgressCallback? onReceiveProgress,
+    _i9.CancelToken? cancelToken,
+    _i9.Options? options,
+    _i9.ProgressCallback? onSendProgress,
+    _i9.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -4716,10 +4716,10 @@ class MockDio extends _i1.Mock implements _i10.Dio {
   _i17.Future<_i9.Response<T>> requestUri<T>(
     Uri? uri, {
     Object? data,
-    _i10.CancelToken? cancelToken,
-    _i10.Options? options,
-    _i10.ProgressCallback? onSendProgress,
-    _i10.ProgressCallback? onReceiveProgress,
+    _i9.CancelToken? cancelToken,
+    _i9.Options? options,
+    _i9.ProgressCallback? onSendProgress,
+    _i9.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -4826,7 +4826,7 @@ class MockDio extends _i1.Mock implements _i10.Dio {
 /// A class which mocks [HttpClient].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockHttpClient extends _i1.Mock implements _i11.HttpClient {
+class MockHttpClient extends _i1.Mock implements _i10.HttpClient {
   @override
   Duration get idleTimeout =>
       (super.noSuchMethod(

@@ -28,7 +28,7 @@ class InputComplement extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final inputCompletionType = ref.watch(inputCompletionTypeProvider);
-    final focusNode = this.focusNode;
+    final focusNode = ref.watch(this.focusNode);
 
     useEffect(() {
       InputCompletionType updateType() =>

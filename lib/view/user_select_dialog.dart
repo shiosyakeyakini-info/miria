@@ -137,7 +137,7 @@ class UsersSelectContentList extends ConsumerWidget {
           return [
             ...response
                 .map((e) => e.user)
-                .where((e) => origin != Origin.local || e.host == null)
+                .where((e) => origin != Origin.local || e.host == null),
           ];
         }
 
