@@ -54,7 +54,7 @@ class RenoteMutedUsersPage extends HookConsumerWidget implements AutoRouteWrappe
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   trailing: IconButton(
-                    icon: const Icon(Icons.loop_outlined),
+                    icon: const Icon(Icons.repeat_rounded),
                     tooltip: S.of(context).deleteRenoteMute,
                     onPressed: unmute.executeOrNull,
                   ),

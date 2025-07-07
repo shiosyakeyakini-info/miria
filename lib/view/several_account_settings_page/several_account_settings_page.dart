@@ -85,7 +85,7 @@ class SeveralAccountSettingsPage extends StatelessWidget {
               RenoteMutedUsersRoute(account: account),
             ),
             title: Text(S.of(context).renoteMutedUsers),
-            leading: const Icon(Icons.loop_outlined),
+            leading: const Icon(Icons.repeat_rounded),
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
