@@ -96,22 +96,19 @@ class MfmText extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Parse MFM nodes if mfmText is provided but mfmNode is not
-    List<MfmNode>? parsedNodes = mfmNode;
-    if (parsedNodes == null && mfmText != null) {
-      try {
-        parsedNodes = const MfmParser().parse(mfmText!);
-      } catch (e) {
-        // If parsing fails, use the original text
-      }
+    // Check for border functions in MFM text using regex
+    if (mfmText != null && mfmText!.contains(r'$[border')) {
+      return _buildWithBorderProcessing(context, ref);
     }
 
-    // Check for border functions in the parsed nodes
-    final borderInfo = _extractBorderInfo(parsedNodes);
-    
-    Widget mfmWidget = Mfm(
-      mfmText: borderInfo.processedText ?? mfmText,
-      mfmNode: borderInfo.processedNodes ?? mfmNode,
+    // Standard MFM rendering without border processing
+    return _buildStandardMfm(context, ref);
+  }
+
+  Widget _buildStandardMfm(BuildContext context, WidgetRef ref) {
+    return Mfm(
+      mfmText: mfmText,
+      mfmNode: mfmNode,
       emojiBuilder: (builderContext, emojiName, style) {
         final account = ref.read(accountContextProvider).getAccount;
         final emojiData = MisskeyEmojiData.fromEmojiName(
@@ -194,50 +191,63 @@ class MfmText extends ConsumerWidget {
       isUseAnimation: isEnableAnimatedMFM,
       maxLines: maxLines,
     );
-
-    // Apply border decoration if found
-    if (borderInfo.borderArgs != null) {
-      return _MfmBorderWrapper(
-        child: mfmWidget,
-        borderArgs: borderInfo.borderArgs!,
-      );
-    }
-
-    return mfmWidget;
   }
 
-  _BorderInfo _extractBorderInfo(List<MfmNode>? nodes) {
-    if (nodes == null) return _BorderInfo();
+  Widget _buildWithBorderProcessing(BuildContext context, WidgetRef ref) {
+    // Parse border function using regex
+    // Pattern for: $[border.args content] or $[border content]
+    final borderPattern = RegExp(r'\$\[border(?:\.([^\]]*?))?\s+(.*?)\]', dotAll: true);
+    final match = borderPattern.firstMatch(mfmText!);
+    
+    if (match == null) {
+      return _buildStandardMfm(context, ref);
+    }
 
-    // Look for border function nodes
-    for (final node in nodes) {
-      if (node is MfmFn && node.name == 'border') {
-        final args = <String, String?>{};
-        
-        // Extract border arguments
-        for (final entry in node.args.entries) {
-          args[entry.key] = entry.value;
-        }
-        
-        // Remove the border function from the nodes and return inner content
-        final processedNodes = node.children;
-        
-        return _BorderInfo(
-          borderArgs: args,
-          processedNodes: processedNodes,
-        );
-      }
+    // Extract border arguments and content
+    final argsString = match.group(1) ?? '';
+    final borderContent = match.group(2) ?? '';
+    final borderArgs = _parseBorderArgs(argsString);
+
+    // Build MFM widget with the content inside the border
+    final contentWidget = MfmText(
+      mfmText: borderContent,
+      host: host,
+      style: style,
+      emoji: emoji,
+      isNyaize: isNyaize,
+      onEmojiTap: onEmojiTap,
+      isEnableAnimatedMFM: isEnableAnimatedMFM,
+      maxLines: maxLines,
+    );
+
+    // Apply border wrapper
+    return _MfmBorderWrapper(
+      borderArgs: borderArgs,
+      child: contentWidget,
+    );
+  }
+
+  Map<String, String> _parseBorderArgs(String args) {
+    final result = <String, String>{};
+    if (args.isEmpty) return result;
+    
+    final parts = args.split(',');
+    for (final part in parts) {
+      final trimmedPart = part.trim();
+      if (trimmedPart.isEmpty) continue;
       
-      // Recursively check children
-      if (node.children != null) {
-        final childInfo = _extractBorderInfo(node.children);
-        if (childInfo.borderArgs != null) {
-          return childInfo;
+      if (trimmedPart.contains('=')) {
+        final keyValue = trimmedPart.split('=');
+        if (keyValue.length == 2) {
+          result[keyValue[0].trim()] = keyValue[1].trim();
         }
+      } else {
+        // For arguments without values like "noclip"
+        result[trimmedPart] = '';
       }
     }
     
-    return _BorderInfo();
+    return result;
   }
 }
 
@@ -245,21 +255,9 @@ class MfmText extends ConsumerWidget {
   }
 }
 
-class _BorderInfo {
-  final Map<String, String?>? borderArgs;
-  final List<MfmNode>? processedNodes;
-  final String? processedText;
-
-  _BorderInfo({
-    this.borderArgs,
-    this.processedNodes,
-    this.processedText,
-  });
-}
-
-class _MfmBorderWrapper extends StatelessWidget {
+class CodeBlock extends StatelessWidget {
   final Widget child;
-  final Map<String, String?> borderArgs;
+  final Map<String, String> borderArgs;
 
   const _MfmBorderWrapper({
     required this.child,
