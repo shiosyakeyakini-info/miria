@@ -81,6 +81,14 @@ class SeveralAccountSettingsPage extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
+            onTap: () async => await context.pushRoute(
+              RenoteMutedUsersRoute(account: account),
+            ),
+            title: Text(S.of(context).renoteMutedUsers),
+            leading: const Icon(Icons.loop_outlined),
+            trailing: const Icon(Icons.chevron_right),
+          ),
+          ListTile(
             onTap: () async =>
                 await context.pushRoute(BlockedUsersRoute(account: account)),
             title: Text(S.of(context).blockedUsers),

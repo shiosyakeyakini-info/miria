@@ -1537,6 +1537,9 @@ class SZh extends S {
   String get mutedUsers => '已屏蔽的用户';
 
   @override
+  String get renoteMutedUsers => '屏蔽转帖的用户';
+
+  @override
   String get blockedUsers => '已拉黑的用户';
 
   @override
@@ -1547,6 +1550,11 @@ class SZh extends S {
   @override
   String confirmUnmuteUser(String userName) {
     return '$userNameのミュートを解除してもええか？';
+  }
+
+  @override
+  String confirmUnmuteRenoteUser(String userName) {
+    return '解除对$userName的转帖屏蔽？';
   }
 
   @override
@@ -3479,6 +3487,9 @@ class SZhCn extends SZh {
 
   @override
   String get mutedUsers => '已屏蔽的用户';
+
+  @override
+  String get renoteMutedUsers => '屏蔽转帖的用户';
 
   @override
   String get blockedUsers => '已拉黑的用户';

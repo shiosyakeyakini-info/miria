@@ -2622,6 +2622,12 @@ abstract class S {
   /// **'ミュート済みユーザー'**
   String get mutedUsers;
 
+  /// No description provided for @renoteMutedUsers.
+  ///
+  /// In ja, this message translates to:
+  /// **'リノートミュート済みユーザー'**
+  String get renoteMutedUsers;
+
   /// No description provided for @blockedUsers.
   ///
   /// In ja, this message translates to:
@@ -2639,6 +2645,12 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'{userName}のミュートを解除してもええか？'**
   String confirmUnmuteUser(String userName);
+
+  /// No description provided for @confirmUnmuteRenoteUser.
+  ///
+  /// In ja, this message translates to:
+  /// **'{userName}のリノートミュートを解除してもええか？'**
+  String confirmUnmuteRenoteUser(String userName);
 
   /// No description provided for @unblock.
   ///

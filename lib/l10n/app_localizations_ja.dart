@@ -1543,6 +1543,9 @@ class SJa extends S {
   String get mutedUsers => 'ミュート済みユーザー';
 
   @override
+  String get renoteMutedUsers => 'リノートミュート済みユーザー';
+
+  @override
   String get blockedUsers => 'ブロック済みユーザー';
 
   @override
@@ -1553,6 +1556,11 @@ class SJa extends S {
   @override
   String confirmUnmuteUser(String userName) {
     return '$userNameのミュートを解除してもええか？';
+  }
+
+  @override
+  String confirmUnmuteRenoteUser(String userName) {
+    return '$userNameのリノートミュートを解除してもええか？';
   }
 
   @override
