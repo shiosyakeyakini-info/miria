@@ -96,9 +96,22 @@ class MfmText extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Mfm(
-      mfmText: mfmText,
-      mfmNode: mfmNode,
+    // Parse MFM nodes if mfmText is provided but mfmNode is not
+    List<MfmNode>? parsedNodes = mfmNode;
+    if (parsedNodes == null && mfmText != null) {
+      try {
+        parsedNodes = const MfmParser().parse(mfmText!);
+      } catch (e) {
+        // If parsing fails, use the original text
+      }
+    }
+
+    // Check for border functions in the parsed nodes
+    final borderInfo = _extractBorderInfo(parsedNodes);
+    
+    Widget mfmWidget = Mfm(
+      mfmText: borderInfo.processedText ?? mfmText,
+      mfmNode: borderInfo.processedNodes ?? mfmNode,
       emojiBuilder: (builderContext, emojiName, style) {
         final account = ref.read(accountContextProvider).getAccount;
         final emojiData = MisskeyEmojiData.fromEmojiName(
@@ -180,6 +193,113 @@ class MfmText extends ConsumerWidget {
       prefixSpan: prefixSpan,
       isUseAnimation: isEnableAnimatedMFM,
       maxLines: maxLines,
+    );
+
+    // Apply border decoration if found
+    if (borderInfo.borderArgs != null) {
+      return _MfmBorderWrapper(
+        child: mfmWidget,
+        borderArgs: borderInfo.borderArgs!,
+      );
+    }
+
+    return mfmWidget;
+  }
+
+  _BorderInfo _extractBorderInfo(List<MfmNode>? nodes) {
+    if (nodes == null) return _BorderInfo();
+
+    // Look for border function nodes
+    for (final node in nodes) {
+      if (node is MfmFn && node.name == 'border') {
+        final args = <String, String?>{};
+        
+        // Extract border arguments
+        for (final entry in node.args.entries) {
+          args[entry.key] = entry.value;
+        }
+        
+        // Remove the border function from the nodes and return inner content
+        final processedNodes = node.children;
+        
+        return _BorderInfo(
+          borderArgs: args,
+          processedNodes: processedNodes,
+        );
+      }
+      
+      // Recursively check children
+      if (node.children != null) {
+        final childInfo = _extractBorderInfo(node.children);
+        if (childInfo.borderArgs != null) {
+          return childInfo;
+        }
+      }
+    }
+    
+    return _BorderInfo();
+  }
+}
+
+    return _BorderInfo();
+  }
+}
+
+class _BorderInfo {
+  final Map<String, String?>? borderArgs;
+  final List<MfmNode>? processedNodes;
+  final String? processedText;
+
+  _BorderInfo({
+    this.borderArgs,
+    this.processedNodes,
+    this.processedText,
+  });
+}
+
+class _MfmBorderWrapper extends StatelessWidget {
+  final Widget child;
+  final Map<String, String?> borderArgs;
+
+  const _MfmBorderWrapper({
+    required this.child,
+    required this.borderArgs,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // Parse color
+    Color borderColor = Theme.of(context).dividerColor;
+    final colorStr = borderArgs['color'];
+    if (colorStr != null && colorStr.isNotEmpty) {
+      try {
+        if (colorStr.startsWith('#')) {
+          final hexColor = colorStr.substring(1);
+          if (hexColor.length == 6) {
+            borderColor = Color(int.parse('FF$hexColor', radix: 16));
+          } else if (hexColor.length == 8) {
+            borderColor = Color(int.parse(hexColor, radix: 16));
+          }
+        }
+      } catch (e) {
+        // Keep default color if parsing fails
+      }
+    }
+
+    final double width = double.tryParse(borderArgs['width'] ?? '1') ?? 1.0;
+    final double radius = double.tryParse(borderArgs['radius'] ?? '0') ?? 0.0;
+    final bool noclip = borderArgs.containsKey('noclip');
+
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: borderColor,
+          width: width,
+        ),
+        borderRadius: radius > 0 ? BorderRadius.circular(radius) : null,
+      ),
+      clipBehavior: noclip ? Clip.none : Clip.antiAlias,
+      child: child,
     );
   }
 }

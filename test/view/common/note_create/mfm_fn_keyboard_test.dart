@@ -223,4 +223,48 @@ void main() {
       orderedEquals(const [MfmFnArg(name: "speed", defaultValue: "1.5s")]),
     );
   });
+
+  test("border関数の引数が正しく定義されている", () {
+    final container = ProviderContainer(
+      overrides: [
+        inputCompletionTypeProvider.overrideWith((ref) => const MfmFn("border")),
+      ],
+    );
+    addTearDown(container.dispose);
+    final names = container.read(filteredMfmFnNamesProvider);
+    expect(names, orderedEquals(["border"]));
+    final args = container.read(filteredMfmFnArgsProvider);
+    expect(
+      args,
+      orderedEquals(const [
+        MfmFnArg(name: "style", defaultValue: "solid"),
+        MfmFnArg(name: "color"),
+        MfmFnArg(name: "width", defaultValue: "1"),
+        MfmFnArg(name: "radius", defaultValue: "1"),
+        MfmFnArg(name: "noclip"),
+      ]),
+    );
+  });
+
+  test("border関数のピリオド後に全ての引数を返す", () {
+    final container = ProviderContainer(
+      overrides: [
+        inputCompletionTypeProvider.overrideWith((ref) => const MfmFn("border.")),
+      ],
+    );
+    addTearDown(container.dispose);
+    final names = container.read(filteredMfmFnNamesProvider);
+    expect(names, isEmpty);
+    final args = container.read(filteredMfmFnArgsProvider);
+    expect(
+      args,
+      orderedEquals(const [
+        MfmFnArg(name: "style", defaultValue: "solid"),
+        MfmFnArg(name: "color"),
+        MfmFnArg(name: "width", defaultValue: "1"),
+        MfmFnArg(name: "radius", defaultValue: "1"),
+        MfmFnArg(name: "noclip"),
+      ]),
+    );
+  });
 }
