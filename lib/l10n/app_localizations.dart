@@ -2376,6 +2376,12 @@ abstract class S {
   /// **'キャッシュをクリア'**
   String get clearCache;
 
+  /// No description provided for @getCacheSize.
+  ///
+  /// In ja, this message translates to:
+  /// **'サイズを取得'**
+  String get getCacheSize;
+
   /// No description provided for @selectFolder.
   ///
   /// In ja, this message translates to:
