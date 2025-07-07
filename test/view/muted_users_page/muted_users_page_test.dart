@@ -39,6 +39,10 @@ void main() {
           ),
         ]),
       );
+      // ページネーション用のモック
+      when(mute.list(any)).thenAnswer(
+        (_) => Future<Iterable<Muting>>.value([]),
+      );
 
       await tester.pumpWidget(
         ProviderScope(

@@ -17,6 +17,14 @@ class MutedUsersNotifier extends _$MutedUsersNotifier {
     return response.toList();
   }
 
+  Future<List<Muting>> loadMore({String? untilId}) async {
+    final response = await ref
+        .read(misskeyPostContextProvider)
+        .mute
+        .list(MuteListRequest(untilId: untilId));
+    return response.toList();
+  }
+
   Future<void> delete(String userId) async {
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
       // ユーザー名を取得
