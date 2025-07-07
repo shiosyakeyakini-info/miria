@@ -209,21 +209,98 @@ class MfmText extends ConsumerWidget {
     final borderArgs = _parseBorderArgs(argsString);
 
     // Build MFM widget with the content inside the border
-    final contentWidget = MfmText(
-      mfmText: borderContent,
-      host: host,
-      style: style,
-      emoji: emoji,
-      isNyaize: isNyaize,
-      onEmojiTap: onEmojiTap,
-      isEnableAnimatedMFM: isEnableAnimatedMFM,
-      maxLines: maxLines,
-    );
+    // Use _buildStandardMfm with the extracted content to avoid recursion
+    final contentWidget = _buildStandardMfmWithText(context, ref, borderContent);
 
     // Apply border wrapper
     return _MfmBorderWrapper(
       borderArgs: borderArgs,
       child: contentWidget,
+    );
+  }
+
+  Widget _buildStandardMfmWithText(BuildContext context, WidgetRef ref, String text) {
+    return Mfm(
+      mfmText: text,
+      emojiBuilder: (builderContext, emojiName, style) {
+        final account = ref.read(accountContextProvider).getAccount;
+        final emojiData = MisskeyEmojiData.fromEmojiName(
+          emojiName: ":$emojiName:",
+          repository: ref.read(emojiRepositoryProvider(account)),
+          emojiInfo: emoji,
+          host: host,
+          accountSettingsRepository: ref.read(
+            accountSettingsRepositoryProvider,
+          ),
+          account: account,
+        );
+        return DefaultTextStyle(
+          style: style ?? DefaultTextStyle.of(builderContext).style,
+          child: GestureDetector(
+            onTap: MfmBlurScope.of(builderContext)
+                ? null
+                : () => onEmojiTap?.call(emojiData),
+            child: EmojiInk(
+              child: CustomEmoji(
+                emojiData: emojiData,
+                fontSizeRatio: 2,
+                style: style,
+              ),
+            ),
+          ),
+        );
+      },
+      unicodeEmojiBuilder: (context, emoji, style) => _unicodeEmojiBuilder(
+        context,
+        emoji,
+        style,
+        ref,
+        () => onEmojiTap?.call(UnicodeEmojiData(char: emoji)),
+      ),
+      codeBlockBuilder: (context, code, lang) =>
+          CodeBlock(code: code, language: lang),
+      unixTimeBuilder: (context, unixtime, style) {
+        return WidgetSpan(
+          alignment: PlaceholderAlignment.middle,
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Theme.of(context).dividerColor),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: const EdgeInsets.only(left: 5, right: 5),
+            margin: const EdgeInsets.only(left: 5, right: 5),
+            child: Text.rich(
+              textScaler: TextScaler.noScaling,
+              TextSpan(
+                style: style,
+                text:
+                    "${unixtime?.formatUntilSeconds(context) ?? "？？？"} (${unixtime?.differenceNowDetail(context) ?? "？？？"})",
+              ),
+            ),
+          ),
+        );
+      },
+      serifStyle: AppTheme.of(context).serifStyle,
+      monospaceStyle: AppTheme.of(context).monospaceStyle,
+      cursiveStyle: AppTheme.of(context).cursiveStyle,
+      fantasyStyle: AppTheme.of(context).fantasyStyle,
+      linkTap: (src) async =>
+          const LinkNavigator().onTapLink(context, ref, src, host),
+      linkStyle: AppTheme.of(context).linkStyle,
+      hashtagStyle: AppTheme.of(context).hashtagStyle,
+      mentionTap: (userName, host, acct) async =>
+          const LinkNavigator().onMentionTap(context, ref, acct, host),
+      hashtagTap: (hashtag) async => await context.pushRoute(
+        HashtagRoute(
+          accountContext: ref.read(accountContextProvider),
+          hashtag: hashtag,
+        ),
+      ),
+      searchTap: onSearch,
+      style: style,
+      isNyaize: isNyaize,
+      isUseAnimation: isEnableAnimatedMFM,
+      maxLines: maxLines,
     );
   }
 

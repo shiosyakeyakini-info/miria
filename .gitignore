@@ -61,3 +61,6 @@ miria-installer*.exe
 # FVM Version Cache
 .fvm/
 coverage/*
+
+# Test examples (not to be committed)
+test_examples/
