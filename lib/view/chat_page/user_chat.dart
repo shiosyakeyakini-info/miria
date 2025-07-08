@@ -7,14 +7,18 @@ import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:hooks_riverpod/legacy.dart";
 import "package:miria/hooks/use_async.dart";
+import "package:miria/model/image_file.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/socket_timeline_repository.dart";
+import "package:miria/state_notifier/chat_input_state_notifier.dart";
+import "package:miria/view/chat_page/chat_file_preview.dart";
 import "package:miria/view/chat_page/chat_message_item.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/error_detail.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:miria/view/common/note_create/input_completation.dart";
+import "package:miria/view/note_create_page/file_settings_dialog.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:uuid/uuid.dart";
@@ -207,10 +211,17 @@ class UserChatTextField extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final textEditingController = useTextEditingController();
     final focusNode = useFocusNode();
+    final chatInputState = ref.watch(chatInputStateNotifierProvider);
 
     final chat = useAsync(() async {
       final text = textEditingController.text;
       textEditingController.clear();
+
+      // ファイルをアップロードしてfileIdを取得
+      final fileId = await ref
+          .read(chatInputStateNotifierProvider.notifier)
+          .uploadAndGetFileId();
+
       await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
         try {
           await ref
@@ -218,7 +229,11 @@ class UserChatTextField extends HookConsumerWidget {
               .chat
               .messages
               .createToUser(
-                ChatMessagesCreateToUserRequest(toUserId: userId, text: text),
+                ChatMessagesCreateToUserRequest(
+                  toUserId: userId,
+                  text: text.isEmpty ? null : text,
+                  fileId: fileId,
+                ),
               );
         } catch (e) {
           textEditingController.text = text;
@@ -233,8 +248,67 @@ class UserChatTextField extends HookConsumerWidget {
           controller: textEditingController,
           focusNode: userChatFocusNodeProvider,
         ),
+        if (chatInputState.files.isNotEmpty)
+          SizedBox(
+            height: 100,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: chatInputState.files.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: ChatFilePreview(
+                    file: chatInputState.files[index],
+                    onFileDeleted: () => ref
+                        .read(chatInputStateNotifierProvider.notifier)
+                        .removeFile(index),
+                    onFileSettingChanged: (file) async {
+                      final editedFile =
+                          await showDialog<FileSettingsDialogResult?>(
+                            context: context,
+                            builder: (context) =>
+                                FileSettingsDialog(file: file),
+                          );
+                      if (editedFile != null) {
+                        // NSFWやキャプションの変更を反映
+                        final updatedFile = switch (file) {
+                          ImageFile() => ImageFile(
+                            data: file.data,
+                            fileName: file.fileName,
+                            isNsfw: editedFile.isNsfw,
+                            caption: editedFile.caption,
+                          ),
+                          UnknownFile() => UnknownFile(
+                            data: file.data,
+                            fileName: file.fileName,
+                            isNsfw: editedFile.isNsfw,
+                            caption: editedFile.caption,
+                          ),
+                          _ => file,
+                        };
+                        ref
+                            .read(chatInputStateNotifierProvider.notifier)
+                            .removeFile(index);
+                        await ref
+                            .read(chatInputStateNotifierProvider.notifier)
+                            .addFile(updatedFile);
+                      }
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
         Row(
           children: [
+            IconButton(
+              onPressed: () async {
+                await ref
+                    .read(chatInputStateNotifierProvider.notifier)
+                    .chooseFile();
+              },
+              icon: const Icon(Icons.attach_file),
+            ),
             Expanded(
               child: Focus(
                 onKeyEvent: (node, event) {

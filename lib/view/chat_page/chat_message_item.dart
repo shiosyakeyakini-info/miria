@@ -12,6 +12,7 @@ import "package:miria/view/chat_page/chat_reaction_widget.dart";
 import "package:miria/view/common/avatar_icon.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
+import "package:miria/view/common/misskey_notes/misskey_file_view.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
@@ -40,7 +41,19 @@ class ChatMessageItem extends ConsumerWidget {
               Bubble(
                 nip: BubbleNip.rightBottom,
                 color: AppTheme.of(context).colorTheme.primary,
-                child: MfmText(mfmText: message.text ?? ""),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (message.text != null && message.text!.isNotEmpty)
+                      MfmText(mfmText: message.text),
+                    if (message.file != null) ...[
+                      if (message.text != null && message.text!.isNotEmpty)
+                        const SizedBox(height: 8),
+                      MisskeyFileView(files: [message.file!], height: 200),
+                    ],
+                  ],
+                ),
               ),
               const SizedBox(height: 5),
               Text(
@@ -68,7 +81,19 @@ class ChatMessageItem extends ConsumerWidget {
                 child: Bubble(
                   color: AppTheme.of(context).colorTheme.background,
                   nip: BubbleNip.leftTop,
-                  child: MfmText(mfmText: message.text ?? ""),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (message.text != null && message.text!.isNotEmpty)
+                        MfmText(mfmText: message.text),
+                      if (message.file != null) ...[
+                        if (message.text != null && message.text!.isNotEmpty)
+                          const SizedBox(height: 8),
+                        MisskeyFileView(files: [message.file!], height: 200),
+                      ],
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 5),
