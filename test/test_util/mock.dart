@@ -9,6 +9,7 @@ import "package:miria/repository/emoji_repository.dart";
 import "package:miria/repository/general_settings_repository.dart";
 import "package:miria/repository/note_repository.dart";
 import "package:miria/repository/tab_settings_repository.dart";
+import "package:miria/router/app_router.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:mockito/annotations.dart";
 import "package:mockito/mockito.dart";
@@ -67,3 +68,5 @@ class FakeFilePickerPlatform extends Mock
 class $MockUrlLauncherPlatform extends Mock
     with MockPlatformInterfaceMixin
     implements UrlLauncherPlatform {}
+
+class MockAppRouter extends Mock implements AppRouter {}
