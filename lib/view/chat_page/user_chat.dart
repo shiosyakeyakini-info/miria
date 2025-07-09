@@ -10,6 +10,7 @@ import "package:miria/hooks/use_async.dart";
 import "package:miria/model/image_file.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/socket_timeline_repository.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/chat_input_state_notifier.dart";
 import "package:miria/view/chat_page/chat_file_preview.dart";
 import "package:miria/view/chat_page/chat_message_item.dart";
@@ -79,7 +80,7 @@ class UserChat extends _$UserChat {
 }
 
 @RoutePage()
-class UserChatPage extends ConsumerWidget implements AutoRouteWrapper {
+class UserChatPage extends HookConsumerWidget implements AutoRouteWrapper {
   final User user;
   final AccountContext accountContext;
 
@@ -95,9 +96,43 @@ class UserChatPage extends ConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isSearching = useState(false);
+    final searchController = useTextEditingController();
+
     return Scaffold(
       appBar: AppBar(
-        title: SimpleMfmText("${user.name ?? user.username}とのチャット"),
+        title: isSearching.value
+            ? TextField(
+                controller: searchController,
+                decoration: const InputDecoration(
+                  hintText: "メッセージを検索...",
+                  border: InputBorder.none,
+                ),
+                onSubmitted: (query) {
+                  if (query.trim().isNotEmpty) {
+                    context.pushRoute(
+                      ChatSearchRoute(
+                        account: accountContext.getAccount,
+                        chatId: user.id,
+                        isChannel: false,
+                        query: query.trim(),
+                      ),
+                    );
+                  }
+                },
+              )
+            : SimpleMfmText("${user.name ?? user.username}とのチャット"),
+        actions: [
+          IconButton(
+            icon: Icon(isSearching.value ? Icons.close : Icons.search),
+            onPressed: () {
+              isSearching.value = !isSearching.value;
+              if (!isSearching.value) {
+                searchController.clear();
+              }
+            },
+          ),
+        ],
       ),
       body: Center(child: UserChatTimeline(user: user)),
     );
@@ -197,10 +232,8 @@ class UserChatTimeline extends HookConsumerWidget {
   }
 }
 
-final userChatFocusNodeProvider = ChangeNotifierProvider.autoDispose((ref) {
-  final focusNode = FocusNode();
-  ref.onDispose(focusNode.dispose);
-  return focusNode;
+final userChatFocusNodeProvider = ChangeNotifierProvider<FocusNode>((ref) {
+  return FocusNode();
 });
 
 class UserChatTextField extends HookConsumerWidget {
@@ -210,7 +243,7 @@ class UserChatTextField extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textEditingController = useTextEditingController();
-    final focusNode = useFocusNode();
+    final focusNode = ref.watch(userChatFocusNodeProvider);
     final chatInputState = ref.watch(chatInputStateNotifierProvider);
 
     final chat = useAsync(() async {

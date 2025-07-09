@@ -1,5 +1,6 @@
 import "dart:io";
 
+import "package:auto_route/auto_route.dart";
 import "package:dio/dio.dart";
 import "package:file_picker/file_picker.dart";
 import "package:flutter_cache_manager/flutter_cache_manager.dart";
@@ -69,4 +70,14 @@ class $MockUrlLauncherPlatform extends Mock
     with MockPlatformInterfaceMixin
     implements UrlLauncherPlatform {}
 
-class MockAppRouter extends Mock implements AppRouter {}
+class MockAppRouter extends Mock implements AppRouter {
+  @override
+  Future<T?> push<T extends Object?>(
+    PageRouteInfo<Object?> route, {
+    void Function(NavigationFailure)? onFailure,
+  }) => super.noSuchMethod(
+    Invocation.method(#push, [route], {#onFailure: onFailure}),
+    returnValue: Future<T?>.value(),
+    returnValueForMissingStub: Future<T?>.value(),
+  );
+}

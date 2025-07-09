@@ -1019,6 +1019,91 @@ class ChatMessageMenuRouteArgs {
 }
 
 /// generated route for
+/// [ChatSearchPage]
+class ChatSearchRoute extends PageRouteInfo<ChatSearchRouteArgs> {
+  ChatSearchRoute({
+    required Account account,
+    required String chatId,
+    required bool isChannel,
+    required String query,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ChatSearchRoute.name,
+         args: ChatSearchRouteArgs(
+           account: account,
+           chatId: chatId,
+           isChannel: isChannel,
+           query: query,
+           key: key,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'ChatSearchRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ChatSearchRouteArgs>();
+      return WrappedRoute(
+        child: ChatSearchPage(
+          account: args.account,
+          chatId: args.chatId,
+          isChannel: args.isChannel,
+          query: args.query,
+          key: args.key,
+        ),
+      );
+    },
+  );
+}
+
+class ChatSearchRouteArgs {
+  const ChatSearchRouteArgs({
+    required this.account,
+    required this.chatId,
+    required this.isChannel,
+    required this.query,
+    this.key,
+  });
+
+  final Account account;
+
+  final String chatId;
+
+  final bool isChannel;
+
+  final String query;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ChatSearchRouteArgs{account: $account, chatId: $chatId, isChannel: $isChannel, query: $query, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ChatSearchRouteArgs) return false;
+    return account == other.account &&
+        chatId == other.chatId &&
+        isChannel == other.isChannel &&
+        query == other.query &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode =>
+      account.hashCode ^
+      chatId.hashCode ^
+      isChannel.hashCode ^
+      query.hashCode ^
+      key.hashCode;
+}
+
+/// generated route for
 /// [ClipDetailPage]
 class ClipDetailRoute extends PageRouteInfo<ClipDetailRouteArgs> {
   ClipDetailRoute({

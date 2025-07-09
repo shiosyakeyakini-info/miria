@@ -9,6 +9,7 @@ import "package:hooks_riverpod/legacy.dart";
 import "package:miria/hooks/use_async.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/socket_timeline_repository.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/view/chat_page/chat_message_item.dart";
 import "package:miria/view/chat_page/room_info.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -75,7 +76,7 @@ class RoomChat extends _$RoomChat {
 }
 
 @RoutePage()
-class RoomChatPage extends ConsumerWidget implements AutoRouteWrapper {
+class RoomChatPage extends HookConsumerWidget implements AutoRouteWrapper {
   final ChatRoom room;
   final AccountContext accountContext;
 
@@ -91,8 +92,44 @@ class RoomChatPage extends ConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isSearching = useState(false);
+    final searchController = useTextEditingController();
+
     return Scaffold(
-      appBar: AppBar(title: Text(room.name)),
+      appBar: AppBar(
+        title: isSearching.value
+            ? TextField(
+                controller: searchController,
+                decoration: const InputDecoration(
+                  hintText: "メッセージを検索...",
+                  border: InputBorder.none,
+                ),
+                onSubmitted: (query) {
+                  if (query.trim().isNotEmpty) {
+                    context.pushRoute(
+                      ChatSearchRoute(
+                        account: accountContext.getAccount,
+                        chatId: room.id,
+                        isChannel: true,
+                        query: query.trim(),
+                      ),
+                    );
+                  }
+                },
+              )
+            : Text(room.name),
+        actions: [
+          IconButton(
+            icon: Icon(isSearching.value ? Icons.close : Icons.search),
+            onPressed: () {
+              isSearching.value = !isSearching.value;
+              if (!isSearching.value) {
+                searchController.clear();
+              }
+            },
+          ),
+        ],
+      ),
       body: Center(child: ChatTimeline(roomId: room.id)),
       endDrawer: ChatRoomInfo(room: room),
     );
@@ -198,10 +235,8 @@ class ChatTimeline extends HookConsumerWidget {
   }
 }
 
-final roomChatFocusNodeProvider = ChangeNotifierProvider.autoDispose((ref) {
-  final focusNode = FocusNode();
-  ref.onDispose(focusNode.dispose);
-  return focusNode;
+final roomChatFocusNodeProvider = ChangeNotifierProvider<FocusNode>((ref) {
+  return FocusNode();
 });
 
 class RoomChatTextField extends HookConsumerWidget {
@@ -211,7 +246,7 @@ class RoomChatTextField extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textEditingController = useTextEditingController();
-    final focusNode = useFocusNode();
+    final focusNode = ref.watch(roomChatFocusNodeProvider);
 
     final chat = useAsync(() async {
       final text = textEditingController.text;
