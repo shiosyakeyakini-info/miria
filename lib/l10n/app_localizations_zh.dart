@@ -1402,13 +1402,16 @@ class SZh extends S {
   String get cache => '快取';
 
   @override
-  String get cacheSize => 'キャッシュサイズ';
+  String get cacheSize => '快取大小';
 
   @override
-  String get cacheSizeError => '取得に失敗しました';
+  String get cacheSizeError => '取得失敗';
 
   @override
   String get clearCache => '清除快取';
+
+  @override
+  String get getCacheSize => '取得大小';
 
   @override
   String get selectFolder => '选择文件夹';
@@ -3363,7 +3366,16 @@ class SZhCn extends SZh {
   String get cache => '快取';
 
   @override
+  String get cacheSize => '快取大小';
+
+  @override
+  String get cacheSizeError => '取得失敗';
+
+  @override
   String get clearCache => '清除快取';
+
+  @override
+  String get getCacheSize => '取得大小';
 
   @override
   String get selectFolder => '选择文件夹';

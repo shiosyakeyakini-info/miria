@@ -788,6 +788,19 @@ class GeneralSettingsPage extends HookConsumerWidget {
                                   error: (_, __) =>
                                       Text(S.of(context).cacheSizeError),
                                   data: (cacheSize) {
+                                    if (cacheSize.isEmpty) {
+                                      return ElevatedButton(
+                                        onPressed: () async {
+                                          await ref
+                                              .read(
+                                                cacheSizeNotifierProvider
+                                                    .notifier,
+                                              )
+                                              .updateCacheSize();
+                                        },
+                                        child: Text(S.of(context).getCacheSize),
+                                      );
+                                    }
                                     return Text(cacheSize);
                                   },
                                 ),
@@ -796,7 +809,7 @@ class GeneralSettingsPage extends HookConsumerWidget {
                           ),
                         ],
                       ),
-                      if (cacheSize.hasValue)
+                      if (cacheSize.hasValue && cacheSize.value!.isNotEmpty)
                         Center(
                           child: ElevatedButton(
                             onPressed: () async {
