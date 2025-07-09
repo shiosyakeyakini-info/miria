@@ -11,7 +11,12 @@ part "cache_size_notifier.g.dart";
 class CacheSizeNotifier extends _$CacheSizeNotifier {
   @override
   Future<String> build() async {
-    return await getCacheSizeWithUnit();
+    return "";
+  }
+
+  Future<void> updateCacheSize() async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async => await getCacheSizeWithUnit());
   }
 
   Future<void> clear() async {
@@ -24,9 +29,7 @@ class CacheSizeNotifier extends _$CacheSizeNotifier {
     }
     // CacheManagerのDBもクリアする
     await ref.read(cacheManagerProvider).emptyCache();
-    final size = await getCacheSizeWithUnit();
-
-    state = AsyncValue.data(size);
+    state = await AsyncValue.guard(() async => await getCacheSizeWithUnit());
   }
 
   /// 単位付きのキャッシュサイズを取得する

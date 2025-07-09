@@ -836,6 +836,7 @@
     "cacheSize": "キャッシュサイズ",
     "cacheSizeError": "取得に失敗しました",
     "clearCache": "キャッシュをクリア",
+    "getCacheSize": "サイズを取得",
 
     "selectFolder": "フォルダー選択",
     "settingsFileManagement": "設定ファイルの管理",

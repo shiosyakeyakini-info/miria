@@ -1416,6 +1416,9 @@ class SJa extends S {
   String get clearCache => 'キャッシュをクリア';
 
   @override
+  String get getCacheSize => 'サイズを取得';
+
+  @override
   String get selectFolder => 'フォルダー選択';
 
   @override
