@@ -156,9 +156,7 @@ class MfmFnKeyboard extends ConsumerWidget {
         controller.insert(" $unixtime");
       }
     } else if (mfmFnName == "fg" || mfmFnName == "bg") {
-      final result = await parentContext.pushRoute<Color>(
-        const ColorPickerRoute(),
-      );
+      final result = await parentContext.pushRoute<Color>(ColorPickerRoute());
       if (result != null) {
         if (((result.a * 15.0).round() & 0xf).toRadixString(16) == "f") {
           controller.insert(
@@ -206,9 +204,7 @@ class MfmFnKeyboard extends ConsumerWidget {
     }
     if ((mfmFnName == "fg" || mfmFnName == "bg" || mfmFnName == "border") &&
         arg.name == "color") {
-      final result = await parentContext.pushRoute<Color>(
-        const ColorPickerRoute(),
-      );
+      final result = await parentContext.pushRoute<Color>(ColorPickerRoute());
       if (result != null) {
         if (((result.a * 15.0).round() & 0xf).toRadixString(16) == "f") {
           controller.insert(
