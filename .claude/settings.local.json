@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:pub.dev)",
+      "Bash(fvm flutter pub:*)",
+      "Bash(dart:*)",
+      "Bash(fvm flutter packages:*)",
+      "Bash(fvm flutter analyze:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:riverpod.dev)"
+    ],
+    "deny": []
+  }
+}

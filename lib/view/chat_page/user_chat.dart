@@ -4,6 +4,8 @@ import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
+import "package:freezed_annotation/freezed_annotation.dart";
+import "package:hooks_riverpod/experimental/mutation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:hooks_riverpod/legacy.dart";
 import "package:miria/hooks/use_async.dart";
@@ -24,29 +26,83 @@ import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:uuid/uuid.dart";
 
+part "user_chat.freezed.dart";
 part "user_chat.g.dart";
+
+@freezed
+sealed class UserChatState with _$UserChatState {
+  const factory UserChatState({
+    required List<ChatMessage> messages,
+    @Default(true) bool hasMoreMessages,
+  }) = _UserChatState;
+}
+
+// UserChatの過去メッセージ取得用Mutation
+final loadUserChatPreviousMessagesMutation = Mutation<void>();
 
 @Riverpod(keepAlive: true, dependencies: [misskeyGetContext])
 class UserChat extends _$UserChat {
   @override
-  Future<List<ChatMessage>> build(String userId) async {
-    return [
-      ...await ref
-          .read(misskeyGetContextProvider)
-          .chat
-          .messages
-          .userTimeline(ChatMessagesUserTimelineRequest(userId: userId)),
-    ];
+  Future<UserChatState> build(String userId) async {
+    final messages = await ref
+        .read(misskeyGetContextProvider)
+        .chat
+        .messages
+        .userTimeline(ChatMessagesUserTimelineRequest(userId: userId));
+
+    return UserChatState(messages: [...messages], hasMoreMessages: true);
   }
 
   void addChat(ChatMessage message) {
     if (state is! AsyncData) return;
-    state = AsyncData([message, ...state.value ?? []]);
+    final currentState = state.value!;
+    state = AsyncData(
+      currentState.copyWith(messages: [message, ...currentState.messages]),
+    );
+  }
+
+  void addPreviousMessages(List<ChatMessage> previousMessages) {
+    if (state is! AsyncData) return;
+    final currentState = state.value!;
+
+    if (previousMessages.isEmpty) {
+      // 空配列が返された場合、これ以上メッセージがないことを示す
+      state = AsyncData(currentState.copyWith(hasMoreMessages: false));
+    } else {
+      state = AsyncData(
+        currentState.copyWith(
+          messages: [...currentState.messages, ...previousMessages],
+        ),
+      );
+    }
+  }
+
+  Future<List<ChatMessage>> fetchPreviousMessages() async {
+    if (state is! AsyncData) return [];
+    final currentState = state.value!;
+
+    // これ以上メッセージがない場合は早期リターン
+    if (!currentState.hasMoreMessages) return [];
+    if (currentState.messages.isEmpty) return [];
+
+    final oldestMessage = currentState.messages.last;
+    final messages = await ref
+        .read(misskeyGetContextProvider)
+        .chat
+        .messages
+        .userTimeline(
+          ChatMessagesUserTimelineRequest(
+            userId: userId,
+            untilId: oldestMessage.id,
+          ),
+        );
+    return messages.toList();
   }
 
   void addMessageReaction(String messageId, String reaction, UserLite? user) {
     if (state is! AsyncData) return;
-    final messages = List<ChatMessage>.from(state.value ?? []);
+    final currentState = state.value!;
+    final messages = List<ChatMessage>.from(currentState.messages);
     final messageIndex = messages.indexWhere((m) => m.id == messageId);
     if (messageIndex == -1) return;
 
@@ -55,7 +111,7 @@ class UserChat extends _$UserChat {
     reactions.add(ChatMessageReaction(reaction: reaction, user: user));
 
     messages[messageIndex] = message.copyWith(reactions: reactions);
-    state = AsyncData(messages);
+    state = AsyncData(currentState.copyWith(messages: messages));
   }
 
   void deleteMessageReaction(
@@ -64,7 +120,8 @@ class UserChat extends _$UserChat {
     UserLite? user,
   ) {
     if (state is! AsyncData) return;
-    final messages = List<ChatMessage>.from(state.value ?? []);
+    final currentState = state.value!;
+    final messages = List<ChatMessage>.from(currentState.messages);
     final messageIndex = messages.indexWhere((m) => m.id == messageId);
     if (messageIndex == -1) return;
 
@@ -75,7 +132,7 @@ class UserChat extends _$UserChat {
     );
 
     messages[messageIndex] = message.copyWith(reactions: reactions);
-    state = AsyncData(messages);
+    state = AsyncData(currentState.copyWith(messages: messages));
   }
 }
 
@@ -147,6 +204,10 @@ class UserChatTimeline extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userChat = ref.watch(userChatProvider(user.id));
     final streamingId = useMemoized(() => const Uuid().v4());
+    final scrollController = useScrollController();
+    final loadPreviousMutation = ref.watch(
+      loadUserChatPreviousMessagesMutation,
+    );
 
     useEffect(() {
       final misskey = ref.read(misskeyGetContextProvider);
@@ -199,6 +260,21 @@ class UserChatTimeline extends HookConsumerWidget {
         }());
       };
     }, const []);
+
+    void loadMoreMessages() {
+      if (loadPreviousMutation is MutationPending) return;
+
+      // hasMoreMessagesがfalseの場合は処理しない
+      final currentState = userChat.value;
+      if (currentState != null && !currentState.hasMoreMessages) return;
+
+      loadUserChatPreviousMessagesMutation.run(ref, (ref) async {
+        final userChatNotifier = ref.get(userChatProvider(user.id).notifier);
+        final previousMessages = await userChatNotifier.fetchPreviousMessages();
+        userChatNotifier.addPreviousMessages(previousMessages);
+      });
+    }
+
     return switch (userChat) {
       AsyncLoading() => const Center(child: CircularProgressIndicator()),
       AsyncError(:final error, :final stackTrace) => ErrorDetail(
@@ -208,21 +284,61 @@ class UserChatTimeline extends HookConsumerWidget {
       AsyncData(:final value) => Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              itemCount: value.length,
-              reverse: true,
-              itemBuilder: (context, index) {
-                final message = value[index];
-                final isMyMessage =
-                    message.fromUserId ==
-                    ref.read(accountContextProvider).getAccount.i.id;
-
-                return ChatMessageItem(
-                  message: message,
-                  user: isMyMessage ? null : user,
-                  isMyMessage: isMyMessage,
-                );
+            child: NotificationListener<ScrollNotification>(
+              onNotification: (scrollInfo) {
+                if (scrollInfo is ScrollEndNotification &&
+                    scrollController.position.pixels >=
+                        scrollController.position.maxScrollExtent - 200) {
+                  // 上端から200px以内に到達したら過去のメッセージを読み込み
+                  loadMoreMessages();
+                }
+                return false;
               },
+              child: ListView.builder(
+                controller: scrollController,
+                itemCount:
+                    value.messages.length +
+                    (loadPreviousMutation is MutationPending ? 1 : 0),
+                reverse: true,
+                itemBuilder: (context, index) {
+                  // ローディングインジケーターを最上部（逆順なので最後）に表示
+                  if (index == value.messages.length) {
+                    return switch (loadPreviousMutation) {
+                      MutationPending() => const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+                      MutationError() => Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Center(
+                          child: Column(
+                            children: [
+                              const Icon(Icons.error, color: Colors.red),
+                              const SizedBox(height: 8),
+                              ElevatedButton(
+                                onPressed: loadMoreMessages,
+                                child: const Text("再試行"),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      _ => const SizedBox.shrink(),
+                    };
+                  }
+
+                  final message = value.messages[index];
+                  final isMyMessage =
+                      message.fromUserId ==
+                      ref.read(accountContextProvider).getAccount.i.id;
+
+                  return ChatMessageItem(
+                    message: message,
+                    user: isMyMessage ? null : user,
+                    isMyMessage: isMyMessage,
+                  );
+                },
+              ),
             ),
           ),
           UserChatTextField(userId: user.id),

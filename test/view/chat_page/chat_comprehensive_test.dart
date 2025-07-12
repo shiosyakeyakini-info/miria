@@ -231,6 +231,9 @@ void main() {
         expect(find.byIcon(Icons.attach_file), findsOneWidget);
         expect(find.byIcon(Icons.send), findsOneWidget);
         expect(find.byType(TextField), findsOneWidget);
+        
+        // Timer cleanup for InputComplement useEffect
+        await tester.pumpAndSettle();
       });
 
       testWidgets("画像ファイルを追加するとプレビューが表示される", (tester) async {
@@ -263,9 +266,15 @@ void main() {
           ),
         );
 
+        // Timer cleanup for InputComplement useEffect
+        await tester.pumpAndSettle();
+
         expect(find.byType(ChatFilePreview), findsOneWidget);
         expect(find.byType(Image), findsOneWidget);
         expect(find.byIcon(Icons.close), findsOneWidget);
+
+        // Final cleanup
+        await tester.pumpAndSettle();
       });
 
       testWidgets("NSFWファイルにはNSFWラベルが表示される", (tester) async {

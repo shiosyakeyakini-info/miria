@@ -14,7 +14,6 @@ import "package:misskey_dart/misskey_dart.dart" show DriveFile;
 import "package:mockito/mockito.dart";
 import "package:path/path.dart" as p;
 
-import "../test_util/mock.dart";
 import "../test_util/mock.mocks.dart";
 import "../test_util/test_datas.dart";
 

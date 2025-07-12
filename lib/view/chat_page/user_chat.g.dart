@@ -10,7 +10,7 @@ part of 'user_chat.dart';
 const userChatProvider = UserChatFamily._();
 
 final class UserChatProvider
-    extends $AsyncNotifierProvider<UserChat, List<ChatMessage>> {
+    extends $AsyncNotifierProvider<UserChat, UserChatState> {
   const UserChatProvider._({
     required UserChatFamily super.from,
     required String super.argument,
@@ -51,15 +51,15 @@ final class UserChatProvider
   }
 }
 
-String _$userChatHash() => r'9f3e1ae0d0df40f5b84cbb125a77ffbeacc07b09';
+String _$userChatHash() => r'37c78c1f11dc89e9f4c13c91b2109e1f3d0065f5';
 
 final class UserChatFamily extends $Family
     with
         $ClassFamilyOverride<
           UserChat,
-          AsyncValue<List<ChatMessage>>,
-          List<ChatMessage>,
-          FutureOr<List<ChatMessage>>,
+          AsyncValue<UserChatState>,
+          UserChatState,
+          FutureOr<UserChatState>,
           String
         > {
   const UserChatFamily._()
@@ -81,22 +81,21 @@ final class UserChatFamily extends $Family
   String toString() => r'userChatProvider';
 }
 
-abstract class _$UserChat extends $AsyncNotifier<List<ChatMessage>> {
+abstract class _$UserChat extends $AsyncNotifier<UserChatState> {
   late final _$args = ref.$arg as String;
   String get userId => _$args;
 
-  FutureOr<List<ChatMessage>> build(String userId);
+  FutureOr<UserChatState> build(String userId);
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build(_$args);
-    final ref =
-        this.ref as $Ref<AsyncValue<List<ChatMessage>>, List<ChatMessage>>;
+    final ref = this.ref as $Ref<AsyncValue<UserChatState>, UserChatState>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<List<ChatMessage>>, List<ChatMessage>>,
-              AsyncValue<List<ChatMessage>>,
+              AnyNotifier<AsyncValue<UserChatState>, UserChatState>,
+              AsyncValue<UserChatState>,
               Object?,
               Object?
             >;

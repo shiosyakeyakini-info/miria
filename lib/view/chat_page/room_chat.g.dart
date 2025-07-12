@@ -10,7 +10,7 @@ part of 'room_chat.dart';
 const roomChatProvider = RoomChatFamily._();
 
 final class RoomChatProvider
-    extends $AsyncNotifierProvider<RoomChat, List<ChatMessage>> {
+    extends $AsyncNotifierProvider<RoomChat, RoomChatState> {
   const RoomChatProvider._({
     required RoomChatFamily super.from,
     required String super.argument,
@@ -51,15 +51,15 @@ final class RoomChatProvider
   }
 }
 
-String _$roomChatHash() => r'dde5c90e1067bb6fc7efcc9214b0014170966d70';
+String _$roomChatHash() => r'9463f85ca8de0cd15ebd09c39bd36e50052fb47b';
 
 final class RoomChatFamily extends $Family
     with
         $ClassFamilyOverride<
           RoomChat,
-          AsyncValue<List<ChatMessage>>,
-          List<ChatMessage>,
-          FutureOr<List<ChatMessage>>,
+          AsyncValue<RoomChatState>,
+          RoomChatState,
+          FutureOr<RoomChatState>,
           String
         > {
   const RoomChatFamily._()
@@ -81,22 +81,21 @@ final class RoomChatFamily extends $Family
   String toString() => r'roomChatProvider';
 }
 
-abstract class _$RoomChat extends $AsyncNotifier<List<ChatMessage>> {
+abstract class _$RoomChat extends $AsyncNotifier<RoomChatState> {
   late final _$args = ref.$arg as String;
   String get roomId => _$args;
 
-  FutureOr<List<ChatMessage>> build(String roomId);
+  FutureOr<RoomChatState> build(String roomId);
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build(_$args);
-    final ref =
-        this.ref as $Ref<AsyncValue<List<ChatMessage>>, List<ChatMessage>>;
+    final ref = this.ref as $Ref<AsyncValue<RoomChatState>, RoomChatState>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<List<ChatMessage>>, List<ChatMessage>>,
-              AsyncValue<List<ChatMessage>>,
+              AnyNotifier<AsyncValue<RoomChatState>, RoomChatState>,
+              AsyncValue<RoomChatState>,
               Object?,
               Object?
             >;
