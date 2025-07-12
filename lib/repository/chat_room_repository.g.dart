@@ -1,0 +1,71 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'chat_room_repository.dart';
+
+// **************************************************************************
+// RiverpodGenerator
+// **************************************************************************
+
+@ProviderFor(ChatRoomRepository)
+const chatRoomRepositoryProvider = ChatRoomRepositoryProvider._();
+
+final class ChatRoomRepositoryProvider
+    extends $NotifierProvider<ChatRoomRepository, void> {
+  const ChatRoomRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'chatRoomRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          ChatRoomRepositoryProvider.$allTransitiveDependencies0,
+          ChatRoomRepositoryProvider.$allTransitiveDependencies1,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static const $allTransitiveDependencies1 =
+      MisskeyPostContextProvider.$allTransitiveDependencies0;
+
+  @override
+  String debugGetCreateSourceHash() => _$chatRoomRepositoryHash();
+
+  @$internal
+  @override
+  ChatRoomRepository create() => ChatRoomRepository();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(void value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<void>(value),
+    );
+  }
+}
+
+String _$chatRoomRepositoryHash() =>
+    r'ebfc9b19e84123bae5b94d56672d4f2f8a3020c0';
+
+abstract class _$ChatRoomRepository extends $Notifier<void> {
+  void build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    build();
+    final ref = this.ref as $Ref<void, void>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<void, void>,
+              void,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, null);
+  }
+}
+
+// ignore_for_file: type=lint
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -1019,6 +1019,61 @@ class ChatMessageMenuRouteArgs {
 }
 
 /// generated route for
+/// [ChatRoomCreatePage]
+class ChatRoomCreateRoute extends PageRouteInfo<ChatRoomCreateRouteArgs> {
+  ChatRoomCreateRoute({
+    required AccountContext accountContext,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ChatRoomCreateRoute.name,
+         args: ChatRoomCreateRouteArgs(
+           accountContext: accountContext,
+           key: key,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'ChatRoomCreateRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ChatRoomCreateRouteArgs>();
+      return WrappedRoute(
+        child: ChatRoomCreatePage(
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
+}
+
+class ChatRoomCreateRouteArgs {
+  const ChatRoomCreateRouteArgs({required this.accountContext, this.key});
+
+  final AccountContext accountContext;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ChatRoomCreateRouteArgs{accountContext: $accountContext, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ChatRoomCreateRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [ChatSearchPage]
 class ChatSearchRoute extends PageRouteInfo<ChatSearchRouteArgs> {
   ChatSearchRoute({

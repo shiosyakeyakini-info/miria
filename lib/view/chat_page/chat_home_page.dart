@@ -54,7 +54,17 @@ class ChatHomePage extends ConsumerWidget implements AutoRouteWrapper {
         ),
         floatingActionButton: ref.read(accountContextProvider).isSame
             ? null
-            : null,
+            : FloatingActionButton(
+                onPressed: () async {
+                  await context.router.push(
+                    ChatRoomCreateRoute(
+                      accountContext: ref.read(accountContextProvider),
+                    ),
+                  );
+                },
+                child: const Icon(Icons.add),
+                tooltip: "新しいルームを作成",
+              ),
       ),
     );
   }
