@@ -128,11 +128,7 @@ jobs:
             docker exec debian bash -c '
                 rm -rf "${PKG_DIR}"
                 mkdir -p \
-                    "${PKG_DIR}/DEBIAN" \
                     "${PKG_DIR}/opt/miria" \
-                    "${PKG_DIR}/usr/share/applications" \
-                    "${PKG_DIR}/usr/share/pixmaps" \
-                    "${PKG_DIR}/usr/share/licenses/miria" \
                     "${PKG_DIR}/usr/bin"
                 
                 case "${ARCH}" in
@@ -140,14 +136,14 @@ jobs:
                   "arm64" ) cp -rp ./build/linux/arm64/release/bundle/* "${PKG_DIR}/opt/miria/" ;;
                 esac
 
-                cp ./snap/gui/miria.desktop "${PKG_DIR}/usr/share/applications/miria.desktop"
-                cp ./assets/images/icon.png "${PKG_DIR}/usr/share/pixmaps/miria.png"
-                cp ./LICENSE "${PKG_DIR}/usr/share/licenses/miria/LICENSE"
+                install -Dm 644 ./snap/gui/miria.desktop "${PKG_DIR}/usr/share/applications/miria.desktop"
+                install -Dm 644 ./assets/images/icon.png "${PKG_DIR}/usr/share/pixmaps/miria.png"
+                install -Dm 644 ./LICENSE "${PKG_DIR}/usr/share/licenses/miria/LICENSE"
                 ln -s /opt/miria/miria "${PKG_DIR}/usr/bin/miria"
                 sed -i -E "s|^Version=.*|Version=1.5|g" "${PKG_DIR}/usr/share/applications/miria.desktop"
                 sed -i -E "s|^Icon=.*|Icon=miria|g" "${PKG_DIR}/usr/share/applications/miria.desktop"
 
-                cp ./linux/debian/control "${PKG_DIR}/DEBIAN/control"
+                install -Dm 644 ./linux/debian/control "${PKG_DIR}/DEBIAN/control"
                 sed -i -E "s|^Version: .*|Version: ${VERSION}|g" "${PKG_DIR}/DEBIAN/control"
                 sed -i -E "s|^Architecture: .*|Architecture: ${ARCH}|g" "${PKG_DIR}/DEBIAN/control"
             '
