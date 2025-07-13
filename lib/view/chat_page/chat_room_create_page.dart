@@ -11,13 +11,11 @@ import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
-class ChatRoomCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
+class ChatRoomCreatePage extends HookConsumerWidget
+    implements AutoRouteWrapper {
   final AccountContext accountContext;
 
-  const ChatRoomCreatePage({
-    required this.accountContext,
-    super.key,
-  });
+  const ChatRoomCreatePage({required this.accountContext, super.key});
 
   @override
   Widget wrappedRoute(BuildContext context) =>
@@ -46,10 +44,7 @@ class ChatRoomCreatePage extends HookConsumerWidget implements AutoRouteWrapper 
 
         // ルーム作成成功後、作成したルームのチャット画面に遷移
         context.router.replaceAll([
-          RoomChatRoute(
-            room: room,
-            accountContext: accountContext,
-          ),
+          RoomChatRoute(room: room, accountContext: accountContext),
         ]);
       });
     });
@@ -85,9 +80,6 @@ class ChatRoomCreatePage extends HookConsumerWidget implements AutoRouteWrapper 
                   if (value == null || value.trim().isEmpty) {
                     return "ルーム名は必須です";
                   }
-                  if (value.trim().length > 100) {
-                    return "ルーム名は100文字以内で入力してください";
-                  }
                   return null;
                 },
                 enabled: createRoom.value is! AsyncLoading,
@@ -103,9 +95,7 @@ class ChatRoomCreatePage extends HookConsumerWidget implements AutoRouteWrapper 
                 maxLines: 3,
                 maxLength: 500,
                 validator: (value) {
-                  if (value != null && value.trim().length > 500) {
-                    return "ルーム説明は500文字以内で入力してください";
-                  }
+                  // 説明は任意なので空白チェックなし
                   return null;
                 },
                 enabled: createRoom.value is! AsyncLoading,

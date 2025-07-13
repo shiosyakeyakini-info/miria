@@ -231,7 +231,7 @@ void main() {
         expect(find.byIcon(Icons.attach_file), findsOneWidget);
         expect(find.byIcon(Icons.send), findsOneWidget);
         expect(find.byType(TextField), findsOneWidget);
-        
+
         // Timer cleanup for InputComplement useEffect
         await tester.pumpAndSettle();
       });

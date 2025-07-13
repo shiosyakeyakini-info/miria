@@ -33,8 +33,8 @@ class ChatRoomRepository extends _$ChatRoomRepository {
         .create(
           ChatRoomsCreateRequest(
             name: name.trim(),
-            description: description?.trim().isEmpty == true 
-                ? null 
+            description: description?.trim().isEmpty == true
+                ? null
                 : description?.trim(),
           ),
         );
@@ -56,8 +56,8 @@ class ChatRoomRepository extends _$ChatRoomRepository {
           ChatRoomsUpdateRequest(
             roomId: roomId,
             name: name?.trim(),
-            description: description?.trim().isEmpty == true 
-                ? null 
+            description: description?.trim().isEmpty == true
+                ? null
                 : description?.trim(),
           ),
         );
@@ -101,10 +101,7 @@ class ChatRoomRepository extends _$ChatRoomRepository {
         .rooms
         .invitations
         .create(
-          ChatRoomsInvitationsCreateRequest(
-            roomId: roomId,
-            userId: userId,
-          ),
+          ChatRoomsInvitationsCreateRequest(roomId: roomId, userId: userId),
         );
   }
 }

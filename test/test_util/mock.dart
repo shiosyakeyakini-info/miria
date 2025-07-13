@@ -6,12 +6,14 @@ import "package:file_picker/file_picker.dart";
 import "package:flutter_cache_manager/flutter_cache_manager.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/repository/account_settings_repository.dart";
+import "package:miria/repository/chat_room_repository.dart";
 import "package:miria/repository/emoji_repository.dart";
 import "package:miria/repository/general_settings_repository.dart";
 import "package:miria/repository/note_repository.dart";
 import "package:miria/repository/tab_settings_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:misskey_dart/src/misskey_chat.dart";
 import "package:mockito/annotations.dart";
 import "package:mockito/mockito.dart";
 import "package:plugin_platform_interface/plugin_platform_interface.dart";
@@ -21,6 +23,7 @@ import "package:url_launcher_platform_interface/url_launcher_platform_interface.
   // レポジトリ
   MockSpec<TabSettingsRepository>(),
   MockSpec<AccountSettingsRepository>(),
+  MockSpec<ChatRoomRepository>(),
   MockSpec<EmojiRepository>(),
   MockSpec<GeneralSettingsRepository>(),
   MockSpec<AccountRepository>(),
@@ -47,6 +50,12 @@ import "package:url_launcher_platform_interface/url_launcher_platform_interface.
   MockSpec<MisskeyRenoteMute>(),
   MockSpec<MisskeyRoles>(),
   MockSpec<MisskeyUsers>(),
+
+  // チャット関連
+  MockSpec<MisskeyChat>(),
+  MockSpec<MisskeyChatMessages>(),
+  MockSpec<MisskeyChatRooms>(),
+  MockSpec<MisskeyChatRoomsInvitations>(),
 
   // プラグインとか
   MockSpec<Dio>(),

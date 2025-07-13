@@ -47,7 +47,7 @@ void main() {
       );
 
       expect(find.text("テストメッセージ"), findsOneWidget);
-      
+
       // Timer cleanup
       await tester.pumpAndSettle();
     });
@@ -83,7 +83,7 @@ void main() {
 
       expect(find.text("画像メッセージ"), findsOneWidget);
       expect(find.byType(MisskeyFileView), findsOneWidget);
-      
+
       // Timer cleanup for MisskeyImage useMemoized
       await tester.pumpAndSettle();
     });
@@ -119,7 +119,7 @@ void main() {
 
       expect(find.byType(MisskeyFileView), findsOneWidget);
       expect(find.text("テストメッセージ"), findsNothing);
-      
+
       // Timer cleanup for MisskeyImage useMemoized
       await tester.pumpAndSettle();
     });
@@ -157,7 +157,7 @@ void main() {
       // 右寄せ（Align with Alignment.topRight）であることを確認
       final align = tester.widget<Align>(find.byType(Align));
       expect(align.alignment, Alignment.topRight);
-      
+
       // Timer cleanup
       await tester.pumpAndSettle();
     });
@@ -194,7 +194,7 @@ void main() {
 
       // Row（左寄せレイアウト）であることを確認 - 複数のRowがあるため、存在することのみ確認
       expect(find.byType(Row), findsWidgets);
-      
+
       // Timer cleanup
       await tester.pumpAndSettle();
     });
@@ -230,7 +230,7 @@ void main() {
 
       // 空文字の場合はテキストを表示しない
       expect(find.byType(MisskeyFileView), findsOneWidget);
-      
+
       // Timer cleanup for MisskeyImage useMemoized
       await tester.pumpAndSettle();
     });
