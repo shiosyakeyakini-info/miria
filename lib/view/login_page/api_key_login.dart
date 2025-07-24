@@ -51,7 +51,9 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
     } catch (e) {
       rethrow;
     } finally {
-      IndicatorView.hideIndicator(context);
+      if (mounted) {
+        IndicatorView.hideIndicator(context);
+      }
     }
   }
 
@@ -119,31 +121,9 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: ElevatedButton(
-                      onPressed: () async {
-                        IndicatorView.showIndicator(context);
-                        await ref
-                            .read(dialogStateNotifierProvider.notifier)
-                            .guard(() async {
-                              await ref
-                                  .read(accountRepositoryProvider.notifier)
-                                  .loginAsToken(
-                                    normalizeServer(serverController.text),
-                                    apiKeyController.text,
-                                  );
-
-                              if (!context.mounted) return;
-                              await context.pushRoute(
-                                TimeLineRoute(
-                                  initialTabSetting: ref
-                                      .read(tabSettingsRepositoryProvider)
-                                      .tabSettings
-                                      .first,
-                                ),
-                              );
-                            });
-                        if (!context.mounted) return;
-                        IndicatorView.hideIndicator(context);
-                      },
+                      onPressed: () async => ref
+                          .read(dialogStateNotifierProvider.notifier)
+                          .guard(() => login()),
                       child: Text(S.of(context).login),
                     ),
                   ),

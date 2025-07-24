@@ -36,18 +36,16 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
           .read(accountRepositoryProvider.notifier)
           .validateMiAuth(normalizeServer(serverController.text));
       if (!mounted) return;
-      await context.pushRoute(
-        TimeLineRoute(
-          initialTabSetting: ref
-              .read(tabSettingsRepositoryProvider)
-              .tabSettings
-              .first,
-        ),
+      await context.router.pushAndPopUntil(
+        const SplashRoute(),
+        predicate: (_) => false,
       );
     } catch (e) {
       rethrow;
     } finally {
-      IndicatorView.hideIndicator(context);
+      if (mounted) {
+        IndicatorView.hideIndicator(context);
+      }
     }
   }
 
