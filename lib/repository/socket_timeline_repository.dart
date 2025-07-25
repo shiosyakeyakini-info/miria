@@ -38,6 +38,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   Map<String, dynamic> get parameters;
   String? timelineId;
   String? mainId;
+  List<String> subscribedIds = [];
   Ref ref;
   StreamSubscription<StreamingResponse>? timelineSubscription;
   StreamSubscription<StreamingResponse>? mainSubscription;
@@ -131,16 +132,14 @@ abstract class SocketTimelineRepository extends TimelineRepository {
 
   @override
   Future<void> disconnect() async {
-    final id = timelineId;
-    if (id != null) {
-      await streamingController?.removeChannel(id);
-      await timelineSubscription?.cancel();
+    if (streamingController != null) {
+      for (var i = subscribedIds.length - 1; i >= 0; i--) {
+        await streamingController!.removeChannel(subscribedIds[i]);
+        subscribedIds.removeAt(i);
+      }
     }
-    final id2 = mainId;
-    if (id2 != null) {
-      await streamingController?.removeChannel(id2);
-      await mainSubscription?.cancel();
-    }
+    await timelineSubscription?.cancel();
+    await mainSubscription?.cancel();
   }
 
   @override
@@ -194,13 +193,11 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   void dispose() {
     super.dispose();
     unawaited(() async {
-      final id = timelineId;
-      if (id != null) {
-        await streamingController?.removeChannel(id);
-      }
-      final id2 = mainId;
-      if (id2 != null) {
-        await streamingController?.removeChannel(id2);
+      if (streamingController != null) {
+        for (var i = subscribedIds.length - 1; i >= 0; i--) {
+          await streamingController!.removeChannel(subscribedIds[i]);
+          subscribedIds.removeAt(i);
+        }
       }
     }());
   }
@@ -265,10 +262,19 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   }
 
   Future<void> _listenStreaming() async {
+    // 特定条件下でuseEffect内でdisconnectが呼ばれないことがある。謎
+    if (subscribedIds.isNotEmpty) {
+      await disconnect();
+    }
+
     final generatedId = const Uuid().v4();
     timelineId = generatedId;
     final generatedId2 = const Uuid().v4();
     mainId = generatedId2;
+
+    subscribedIds
+      ..add(generatedId)
+      ..add(generatedId2);
 
     timelineSubscription = streamingController
         ?.addChannel(channel, parameters, generatedId)
@@ -323,6 +329,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
           case DeletedChannelEvent():
           case PollVotedChannelEvent():
           case UpdatedChannelEvent():
+            break;
           case NewChatMessageEvent():
             // TODO: Handle this case.
             throw UnimplementedError();
@@ -394,6 +401,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
           case ReadAntennaChannelEvent():
           case ReceiveFollowRequestChannelEvent():
           case FallbackChannelEvent():
+            break;
           case NewChatMessageEvent():
             // TODO: Handle this case.
             throw UnimplementedError();
