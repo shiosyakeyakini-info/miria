@@ -700,8 +700,8 @@ class MisskeyNote extends HookConsumerWidget {
                                   host: displayNote.user.host,
                                 ),
                               ),
-                            if (displayNote.renoteId != null &&
-                                (recursive < 2 && !isForceUnvisibleRenote))
+                            if (displayNote.renote case final renote?
+                                when recursive < 2 && !isForceUnvisibleRenote)
                               Container(
                                 padding: const EdgeInsets.all(5),
                                 child: DottedBorder(
@@ -721,7 +721,7 @@ class MisskeyNote extends HookConsumerWidget {
                                     padding: const EdgeInsets.all(5),
                                   ),
                                   child: MisskeyNote(
-                                    note: displayNote.renote!,
+                                    note: renote,
                                     isDisplayBorder: false,
                                     recursive: recursive + 1,
                                   ),
