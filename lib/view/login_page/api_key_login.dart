@@ -40,13 +40,9 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
           );
 
       if (!mounted) return;
-      await context.pushRoute(
-        TimeLineRoute(
-          initialTabSetting: ref
-              .read(tabSettingsRepositoryProvider)
-              .tabSettings
-              .first,
-        ),
+      await context.router.pushAndPopUntil(
+        const SplashRoute(),
+        predicate: (_) => false,
       );
     } catch (e) {
       rethrow;
