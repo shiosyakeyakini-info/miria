@@ -277,7 +277,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.more_horiz));
+      await tester.tap(find.byIcon(Icons.more_horiz).at(0));
       await tester.pumpAndSettle();
 
       await tester.ensureVisible(find.text("削除", skipOffstage: false));
@@ -311,7 +311,9 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.more_horiz));
+      await tester.ensureVisible(find.byIcon(Icons.more_horiz).at(0));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.more_horiz).at(0));
       await tester.pumpAndSettle();
 
       await tester.ensureVisible(find.text("削除", skipOffstage: false));
@@ -355,7 +357,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.more_horiz));
+      await tester.tap(find.byIcon(Icons.more_horiz).at(0));
       await tester.pumpAndSettle();
 
       await tester.ensureVisible(find.text("削除", skipOffstage: false));
@@ -430,7 +432,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.more_horiz));
+      await tester.tap(find.byIcon(Icons.more_horiz).at(0));
       await tester.pumpAndSettle();
 
       expect(find.text("リノートを解除する", skipOffstage: false), findsNothing);
@@ -460,7 +462,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.more_horiz));
+      await tester.tap(find.byIcon(Icons.more_horiz).at(0));
       await tester.pumpAndSettle();
 
       expect(find.text("リノートを解除する", skipOffstage: false), findsNothing);
@@ -500,7 +502,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.more_horiz));
+      await tester.tap(find.byIcon(Icons.more_horiz).at(0));
       await tester.pumpAndSettle();
 
       expect(find.text("リノートを解除する", skipOffstage: false), findsNothing);
@@ -530,7 +532,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.more_horiz));
+      await tester.tap(find.byIcon(Icons.more_horiz).at(0));
       await tester.pumpAndSettle();
 
       expect(find.text("リノートを解除する", skipOffstage: false), findsNothing);
