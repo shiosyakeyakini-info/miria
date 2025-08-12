@@ -8,7 +8,6 @@ import "package:miria/repository/chat_room_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
-import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
 class ChatRoomCreatePage extends HookConsumerWidget
@@ -43,9 +42,10 @@ class ChatRoomCreatePage extends HookConsumerWidget
         if (!context.mounted) return;
 
         // ルーム作成成功後、作成したルームのチャット画面に遷移
-        context.router.replaceAll([
+        // 作成ページをルームチャットに置き換えて、戻るボタンでチャットホームに戻れるようにする
+        await context.router.replace(
           RoomChatRoute(room: room, accountContext: accountContext),
-        ]);
+        );
       });
     });
 

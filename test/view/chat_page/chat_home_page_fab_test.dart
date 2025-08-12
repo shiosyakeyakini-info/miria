@@ -45,17 +45,17 @@ void main() {
     // Create different account contexts for testing
     final normalAccountContext = AccountContext(
       getAccount: TestData.account,
+      postAccount: TestData.account, // Same account = can post
+    );
+
+    final readOnlyAccountContext = AccountContext(
+      getAccount: TestData.account,
       postAccount: Account(
         host: "example.miria.shiosyakeyakini.info",
         userId: "different-user",
         i: TestData.i1,
         meta: TestData.meta,
-      ),
-    );
-
-    final readOnlyAccountContext = AccountContext(
-      getAccount: TestData.account,
-      postAccount: TestData.account, // Same account = read-only
+      ), // Different account = read-only
     );
 
     group("FAB表示テスト", () {
@@ -78,13 +78,15 @@ void main() {
 
         // FABが表示されることを確認
         expect(find.byType(FloatingActionButton), findsOneWidget);
-        expect(find.byIcon(Icons.add), findsOneWidget);
+
+        // デフォルトタブ（ホーム）では person_add アイコンが表示される
+        expect(find.byIcon(Icons.person_add), findsOneWidget);
 
         // ツールチップが設定されていることを確認
         final fab = tester.widget<FloatingActionButton>(
           find.byType(FloatingActionButton),
         );
-        expect(fab.tooltip, "新しいルームを作成");
+        expect(fab.tooltip, "新しいチャットを開始");
       });
 
       testWidgets("読み取り専用アカウントでFABが非表示になる", (tester) async {
@@ -107,11 +109,52 @@ void main() {
         // FABが表示されないことを確認
         expect(find.byType(FloatingActionButton), findsNothing);
         expect(find.byIcon(Icons.add), findsNothing);
+        expect(find.byIcon(Icons.person_add), findsNothing);
+      });
+
+      testWidgets("他のタブでは新しいルーム作成のFABが表示される", (tester) async {
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
+              misskeyGetContextProvider.overrideWithValue(mockMisskey),
+              misskeyPostContextProvider.overrideWithValue(mockMisskey),
+              accountContextProvider.overrideWithValue(normalAccountContext),
+            ],
+            child: DefaultRootNoRouterWidget(
+              child: ChatHomePage(
+                accountContext: normalAccountContext,
+                initialTab: 1, // 招待タブ
+              ),
+            ),
+          ),
+        );
+
+        await tester.pumpAndSettle();
+
+        // FABが表示されることを確認
+        expect(find.byType(FloatingActionButton), findsOneWidget);
+
+        // 他のタブでは add アイコンが表示される
+        expect(find.byIcon(Icons.add), findsOneWidget);
+
+        // ツールチップが設定されていることを確認
+        final fab = tester.widget<FloatingActionButton>(
+          find.byType(FloatingActionButton),
+        );
+        expect(fab.tooltip, "新しいルームを作成");
       });
     });
 
     group("FAB機能テスト", () {
-      testWidgets("FABタップでエラーが発生しない", (tester) async {
+      testWidgets("ホームタブでFABタップでユーザー選択ダイアログが開く", (tester) async {
+        // モックの準備
+        final mockUsers = MockMisskeyUsers();
+        when(mockMisskey.users).thenReturn(mockUsers);
+        when(
+          mockUsers.getFrequentlyRepliedUsers(any),
+        ).thenAnswer((_) async => []);
+
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
@@ -136,8 +179,9 @@ void main() {
         await tester.tap(find.byType(FloatingActionButton));
         await tester.pumpAndSettle();
 
-        // タップ処理が実行されることを確認（エラーが発生しない）
-        expect(tester.takeException(), isNull);
+        // ユーザー選択ダイアログが表示されることを確認
+        expect(find.byType(AlertDialog), findsOneWidget);
+        expect(find.byType(TextField), findsOneWidget); // 検索フィールド
       });
 
       testWidgets("FABが正しい位置に配置される", (tester) async {
@@ -159,7 +203,7 @@ void main() {
 
         // ScaffoldのfloatingActionButtonとして配置されていることを確認
         final scaffold = tester.widget<Scaffold>(find.byType(Scaffold));
-        expect(scaffold.floatingActionButton, isA<FloatingActionButton>());
+        expect(scaffold.floatingActionButton, isA<AnimatedBuilder>());
       });
     });
 
@@ -244,6 +288,44 @@ void main() {
         // AppBarのbottomプロパティとしてTabBarが設定されていることを確認
         final appBar = tester.widget<AppBar>(find.byType(AppBar));
         expect(appBar.bottom, isA<TabBar>());
+      });
+
+      testWidgets("タブ切り替え時にFABが適切に変更される", (tester) async {
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
+              misskeyGetContextProvider.overrideWithValue(mockMisskey),
+              misskeyPostContextProvider.overrideWithValue(mockMisskey),
+              accountContextProvider.overrideWithValue(normalAccountContext),
+            ],
+            child: DefaultRootNoRouterWidget(
+              child: ChatHomePage(accountContext: normalAccountContext),
+            ),
+          ),
+        );
+
+        await tester.pumpAndSettle();
+
+        // 初期状態（ホームタブ）でperson_addアイコンを確認
+        expect(find.byIcon(Icons.person_add), findsOneWidget);
+        expect(find.byIcon(Icons.add), findsNothing);
+
+        // 招待タブに切り替え
+        await tester.tap(find.text("招待"));
+        await tester.pumpAndSettle();
+
+        // addアイコンに変わっていることを確認
+        expect(find.byIcon(Icons.add), findsOneWidget);
+        expect(find.byIcon(Icons.person_add), findsNothing);
+
+        // ホームタブに戻る
+        await tester.tap(find.text("ホーム"));
+        await tester.pumpAndSettle();
+
+        // person_addアイコンに戻っていることを確認
+        expect(find.byIcon(Icons.person_add), findsOneWidget);
+        expect(find.byIcon(Icons.add), findsNothing);
       });
     });
 

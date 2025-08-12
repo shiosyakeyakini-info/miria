@@ -55,7 +55,7 @@ class ChatHomePage extends ConsumerWidget implements AutoRouteWrapper {
             body: const TabBarView(
               children: [ChatHome(), InvitedChat(), JoiningChat(), OwnedChat()],
             ),
-            floatingActionButton: ref.read(accountContextProvider).isSame
+            floatingActionButton: !ref.read(accountContextProvider).isSame
                 ? null
                 : AnimatedBuilder(
                     animation: tabController,
