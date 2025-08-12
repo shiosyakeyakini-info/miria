@@ -5,7 +5,7 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "chat_search_repository.g.dart";
 
-@riverpod
+@Riverpod(dependencies: [misskeyGetContext])
 class ChatSearchRepository extends _$ChatSearchRepository {
   @override
   Map<String, List<ChatMessage>> build() => {};

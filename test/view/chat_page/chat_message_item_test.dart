@@ -155,7 +155,16 @@ void main() {
       expect(find.text("自分のメッセージ"), findsOneWidget);
 
       // 右寄せ（Align with Alignment.topRight）であることを確認
-      final align = tester.widget<Align>(find.byType(Align));
+      // ChatMessageItemの直接の子要素であるAlignを特定するため、descendantを使用
+      final chatMessageItem = find.byType(ChatMessageItem);
+      final alignInChatMessage = find.descendant(
+        of: chatMessageItem,
+        matching: find.byType(Align),
+      );
+      expect(alignInChatMessage, findsWidgets);
+      
+      // 最初のAlignウィジェット（ChatMessageItemの直接の子）を取得
+      final align = tester.widget<Align>(alignInChatMessage.first);
       expect(align.alignment, Alignment.topRight);
 
       // Timer cleanup
