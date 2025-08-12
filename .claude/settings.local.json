@@ -7,8 +7,18 @@
       "Bash(fvm flutter packages:*)",
       "Bash(fvm flutter analyze:*)",
       "WebFetch(domain:github.com)",
-      "WebFetch(domain:riverpod.dev)"
+      "WebFetch(domain:riverpod.dev)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "Bash(gh issue view:*)",
+      "Bash(fvm flutter:*)",
+      "Bash(fvm dart analyze:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
-  }
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "context7"
+  ]
 }

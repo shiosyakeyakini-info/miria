@@ -14,7 +14,6 @@ import 'package:file_picker/file_picker.dart' as _i33;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart' as _i11;
 import 'package:flutter_cache_manager/src/cache_store.dart' as _i12;
 import 'package:flutter_cache_manager/src/web/web_helper.dart' as _i13;
-import 'package:hooks_riverpod/hooks_riverpod.dart' as _i22;
 import 'package:miria/model/account.dart' as _i6;
 import 'package:miria/model/account_settings.dart' as _i2;
 import 'package:miria/model/acct.dart' as _i20;
@@ -35,6 +34,7 @@ import 'package:misskey_dart/src/misskey_chat.dart' as _i8;
 import 'package:misskey_dart/src/services/api_service.dart' as _i7;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i23;
+import 'package:riverpod_annotation/riverpod_annotation.dart' as _i22;
 import 'package:state_notifier/state_notifier.dart' as _i24;
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart'
     as _i34;
