@@ -118,11 +118,49 @@ class ChatRoomInfo extends HookConsumerWidget {
                     Expanded(child: Text("ミュート")),
                   ],
                 ),
-              if (isOwned)
+              if (isOwned) ...[
                 ElevatedButton(
                   onPressed: update.executeOrNull,
                   child: Text("更新"),
                 ),
+                const SizedBox(height: 10),
+                OutlinedButton(
+                  onPressed: () async {
+                    final isConfirm = await ref
+                        .read(dialogStateNotifierProvider.notifier)
+                        .showDialog(
+                          message: (context) => "このルームを削除してもええ？\n削除すると元に戻せへんで。",
+                          actions: (context) => ["削除する", "キャンセル"],
+                        );
+                    if (isConfirm == 1) return;
+                    await ref.read(dialogStateNotifierProvider.notifier).guard(
+                      () async {
+                        await ref
+                            .read(misskeyGetContextProvider)
+                            .chat
+                            .rooms
+                            .delete(ChatRoomsDeleteRequest(roomId: room.id));
+                        await ref
+                            .read(dialogStateNotifierProvider.notifier)
+                            .showSimpleDialog(
+                              message: (context) => "ルームを削除したで",
+                            );
+                        if (!context.mounted) return;
+                        // ルーム削除後は現在のルームチャット画面を削除して前の画面に戻る
+                        // まずDrawerを閉じてからナビゲーションを実行
+                        Navigator.of(context).pop(); // Drawerを閉じる
+                        await Future.delayed(const Duration(milliseconds: 100)); // 少し待つ
+                        if (!context.mounted) return;
+                        context.router.maybePop(); // ルームチャット画面を削除
+                      },
+                    );
+                  },
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Theme.of(context).colorScheme.error,
+                  ),
+                  child: Text("ルームを削除"),
+                ),
+              ],
               ExpansionTile(
                 initiallyExpanded: true,
                 title: Text("チャット立てた人"),
@@ -230,7 +268,11 @@ class ChatRoomInfo extends HookConsumerWidget {
                               message: (context) => "チャットから退出したで",
                             );
                         if (!context.mounted) return;
-                        await context.maybePop();
+                        // ルーム退出後は現在のルームチャット画面を削除して前の画面に戻る
+                        Navigator.of(context).pop(); // Drawerを閉じる
+                        await Future.delayed(const Duration(milliseconds: 100)); // 少し待つ
+                        if (!context.mounted) return;
+                        context.router.maybePop(); // ルームチャット画面を削除
                       },
                     );
                   },

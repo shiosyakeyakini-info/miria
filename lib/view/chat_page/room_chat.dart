@@ -211,6 +211,15 @@ class RoomChatPage extends HookConsumerWidget implements AutoRouteWrapper {
               }
             },
           ),
+          Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.info_outline),
+              tooltip: "ルーム情報",
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
+            ),
+          ),
         ],
       ),
       body: Center(child: ChatTimeline(roomId: room.id)),
