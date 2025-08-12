@@ -65,25 +65,22 @@ class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
             .clips
             .addNote(ClipsAddNoteRequest(clipId: clip.id, noteId: noteId));
         ref.read(_notesClipsNotifierProvider(noteId).notifier).addClip(clip);
-      } on DioException catch (e) {
-        if (e.response != null) {
-          // すでにクリップに追加されている場合、削除するかどうかを確認する
-          if (((e.response?.data as Map?)?["error"] as Map?)?["code"] ==
-              "ALREADY_CLIPPED") {
-            final confirm = await ref
-                .read(dialogStateNotifierProvider.notifier)
-                .showDialog(
-                  message: (context) => S.of(context).alreadyAddedClip,
-                  actions: (context) => [
-                    S.of(context).deleteClip,
-                    S.of(context).noneAction,
-                  ],
-                );
-            if (confirm == 0) {
-              await removeFromClip(clip);
-            }
-            return;
+      } on MisskeyException catch (e) {
+        // すでにクリップに追加されている場合、削除するかどうかを確認する
+        if (e.code == "ALREADY_CLIPPED") {
+          final confirm = await ref
+              .read(dialogStateNotifierProvider.notifier)
+              .showDialog(
+                message: (context) => S.of(context).alreadyAddedClip,
+                actions: (context) => [
+                  S.of(context).deleteClip,
+                  S.of(context).noneAction,
+                ],
+              );
+          if (confirm == 0) {
+            await removeFromClip(clip);
           }
+          return;
         }
         rethrow;
       }
