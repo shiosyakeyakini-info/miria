@@ -160,6 +160,13 @@ class UserChat extends _$UserChat {
     messages[messageIndex] = message.copyWith(reactions: reactions);
     state = AsyncData(currentState.copyWith(messages: messages));
   }
+
+  void deleteMessage(String messageId) {
+    if (state is! AsyncData) return;
+    final currentState = state.value!;
+    final messages = currentState.messages.where((m) => m.id != messageId).toList();
+    state = AsyncData(currentState.copyWith(messages: messages));
+  }
 }
 
 @RoutePage()
@@ -374,6 +381,7 @@ class UserChatTimeline extends HookConsumerWidget {
                     message: message,
                     user: isMyMessage ? null : user,
                     isMyMessage: isMyMessage,
+                    userId: user.id,
                   );
                 },
               ),

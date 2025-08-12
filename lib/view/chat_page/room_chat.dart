@@ -156,6 +156,13 @@ class RoomChat extends _$RoomChat {
     messages[messageIndex] = message.copyWith(reactions: reactions);
     state = AsyncData(currentState.copyWith(messages: messages));
   }
+
+  void deleteMessage(String messageId) {
+    if (state is! AsyncData) return;
+    final currentState = state.value!;
+    final messages = currentState.messages.where((m) => m.id != messageId).toList();
+    state = AsyncData(currentState.copyWith(messages: messages));
+  }
 }
 
 @RoutePage()
@@ -386,6 +393,7 @@ class ChatTimeline extends HookConsumerWidget {
                     message: message,
                     user: isMyMessage ? null : messageUser,
                     isMyMessage: isMyMessage,
+                    roomId: roomId,
                   );
                 },
               ),

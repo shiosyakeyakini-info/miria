@@ -9,6 +9,8 @@ import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/chat_page/chat_message_menu_sheet.dart";
 import "package:miria/view/chat_page/chat_reaction_widget.dart";
+import "package:miria/view/chat_page/room_chat.dart";
+import "package:miria/view/chat_page/user_chat.dart";
 import "package:miria/view/common/avatar_icon.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
@@ -20,11 +22,15 @@ class ChatMessageItem extends ConsumerWidget {
   final ChatMessage message;
   final User? user;
   final bool isMyMessage;
+  final String? roomId; // ルームチャットの場合のルームID
+  final String? userId; // ユーザーチャットの場合のユーザーID
 
   const ChatMessageItem({
     required this.message,
     required this.user,
     required this.isMyMessage,
+    this.roomId,
+    this.userId,
     super.key,
   });
 
@@ -38,27 +44,46 @@ class ChatMessageItem extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Bubble(
-                nip: BubbleNip.rightBottom,
-                color: AppTheme.of(context).colorTheme.primary,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (message.text != null && message.text!.isNotEmpty)
-                      MfmText(mfmText: message.text),
-                    if (message.file != null) ...[
+              GestureDetector(
+                onLongPress: () => _showMessageMenu(context, ref),
+                child: Bubble(
+                  nip: BubbleNip.rightBottom,
+                  color: AppTheme.of(context).colorTheme.primary,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       if (message.text != null && message.text!.isNotEmpty)
-                        const SizedBox(height: 8),
-                      MisskeyFileView(files: [message.file!], height: 200),
+                        MfmText(mfmText: message.text),
+                      if (message.file != null) ...[
+                        if (message.text != null && message.text!.isNotEmpty)
+                          const SizedBox(height: 8),
+                        MisskeyFileView(files: [message.file!], height: 200),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
               const SizedBox(height: 5),
-              Text(
-                message.createdAt.differenceNow(context),
-                style: Theme.of(context).textTheme.bodySmall,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    onPressed: () => _showMessageMenu(context, ref),
+                    icon: Icon(
+                      Icons.more_horiz,
+                      size: 16,
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    message.createdAt.differenceNow(context),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
               ),
               if (message.reactions.isNotEmpty)
                 _buildReactionsList(context, ref),
@@ -142,13 +167,14 @@ class ChatMessageItem extends ConsumerWidget {
   }
 
   Future<void> _showMessageMenu(BuildContext context, WidgetRef ref) async {
-    if (user == null) return;
+    // 自分のメッセージの場合はpostAccountのユーザー情報を使用
+    final displayUser = user ?? ref.read(accountContextProvider).postAccount.i;
 
     final action = await context.pushRoute<ChatMessageMenuAction>(
       ChatMessageMenuRoute(
         account: ref.read(accountContextProvider).postAccount,
         message: message,
-        user: user!,
+        user: displayUser,
       ),
     );
 
@@ -187,11 +213,47 @@ class ChatMessageItem extends ConsumerWidget {
           ).showSnackBar(const SnackBar(content: Text("コピーしました")));
         }
 
+      case ChatMessageMenuAction.delete:
+        final isConfirm = await ref
+            .read(dialogStateNotifierProvider.notifier)
+            .showDialog(
+              message: (context) => "このメッセージを削除してもええ？\n削除すると元に戻せへんで。",
+              actions: (context) => ["削除する", "キャンセル"],
+            );
+        if (isConfirm == 1) return;
+
+        await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+          await ref
+              .read(misskeyPostContextProvider)
+              .chat
+              .messages
+              .delete(ChatMessagesDeleteRequest(messageId: message.id));
+          
+          // 状態更新：削除されたメッセージをUIから削除
+          if (roomId != null) {
+            ref.read(roomChatProvider(roomId!).notifier).deleteMessage(message.id);
+          } else if (userId != null) {
+            ref.read(userChatProvider(userId!).notifier).deleteMessage(message.id);
+          }
+          
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("メッセージを削除したで")),
+          );
+        });
+
+      case ChatMessageMenuAction.detail:
+        await context.pushRoute(
+          ChatMessageDetailRoute(
+            account: ref.read(accountContextProvider).postAccount,
+            messageId: message.id,
+          ),
+        );
+
       case ChatMessageMenuAction.report:
         await context.pushRoute(
           AbuseRoute(
             account: ref.read(accountContextProvider).postAccount,
-            targetUser: user!,
+            targetUser: displayUser,
             defaultText: "チャットメッセージ: ${message.text}",
           ),
         );

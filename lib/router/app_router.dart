@@ -22,6 +22,7 @@ import "package:miria/view/channel_description_dialog.dart";
 import "package:miria/view/channels_page/channel_detail_page.dart";
 import "package:miria/view/channels_page/channels_page.dart";
 import "package:miria/view/chat_page/chat_home_page.dart";
+import "package:miria/view/chat_page/chat_message_detail_page.dart";
 import "package:miria/view/chat_page/chat_message_menu_sheet.dart";
 import "package:miria/view/chat_page/chat_room_create_page.dart";
 import "package:miria/view/chat_page/chat_search_page.dart";
@@ -157,6 +158,7 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: RoomChatRoute.page),
     AutoRoute(page: UserChatRoute.page),
     AutoRoute(page: ChatSearchRoute.page),
+    AutoRoute(page: ChatMessageDetailRoute.page),
 
     AutoRoute(path: "/share-extension", page: ShareExtensionRoute.page),
 

@@ -945,6 +945,72 @@ class ChatHomeRouteArgs {
 }
 
 /// generated route for
+/// [ChatMessageDetailPage]
+class ChatMessageDetailRoute extends PageRouteInfo<ChatMessageDetailRouteArgs> {
+  ChatMessageDetailRoute({
+    required Account account,
+    required String messageId,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ChatMessageDetailRoute.name,
+         args: ChatMessageDetailRouteArgs(
+           account: account,
+           messageId: messageId,
+           key: key,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'ChatMessageDetailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ChatMessageDetailRouteArgs>();
+      return WrappedRoute(
+        child: ChatMessageDetailPage(
+          account: args.account,
+          messageId: args.messageId,
+          key: args.key,
+        ),
+      );
+    },
+  );
+}
+
+class ChatMessageDetailRouteArgs {
+  const ChatMessageDetailRouteArgs({
+    required this.account,
+    required this.messageId,
+    this.key,
+  });
+
+  final Account account;
+
+  final String messageId;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ChatMessageDetailRouteArgs{account: $account, messageId: $messageId, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ChatMessageDetailRouteArgs) return false;
+    return account == other.account &&
+        messageId == other.messageId &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ messageId.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [ChatMessageMenuSheet]
 class ChatMessageMenuRoute extends PageRouteInfo<ChatMessageMenuRouteArgs> {
   ChatMessageMenuRoute({
