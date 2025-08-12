@@ -51,7 +51,7 @@ final class UserChatProvider
   }
 }
 
-String _$userChatHash() => r'37c78c1f11dc89e9f4c13c91b2109e1f3d0065f5';
+String _$userChatHash() => r'29d2c33e884e435eb4a0d3c5167a8c899b56c5cd';
 
 final class UserChatFamily extends $Family
     with

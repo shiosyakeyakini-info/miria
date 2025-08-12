@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RoomChatState {
 
- List<ChatMessage> get messages; bool get hasMoreMessages;
+ List<ChatMessage> get messages; bool get hasMoreMessages; List<PendingChatMessage> get pendingMessages;
 /// Create a copy of RoomChatState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $RoomChatStateCopyWith<RoomChatState> get copyWith => _$RoomChatStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RoomChatState&&const DeepCollectionEquality().equals(other.messages, messages)&&(identical(other.hasMoreMessages, hasMoreMessages) || other.hasMoreMessages == hasMoreMessages));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RoomChatState&&const DeepCollectionEquality().equals(other.messages, messages)&&(identical(other.hasMoreMessages, hasMoreMessages) || other.hasMoreMessages == hasMoreMessages)&&const DeepCollectionEquality().equals(other.pendingMessages, pendingMessages));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(messages),hasMoreMessages);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(messages),hasMoreMessages,const DeepCollectionEquality().hash(pendingMessages));
 
 @override
 String toString() {
-  return 'RoomChatState(messages: $messages, hasMoreMessages: $hasMoreMessages)';
+  return 'RoomChatState(messages: $messages, hasMoreMessages: $hasMoreMessages, pendingMessages: $pendingMessages)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $RoomChatStateCopyWith<$Res>  {
   factory $RoomChatStateCopyWith(RoomChatState value, $Res Function(RoomChatState) _then) = _$RoomChatStateCopyWithImpl;
 @useResult
 $Res call({
- List<ChatMessage> messages, bool hasMoreMessages
+ List<ChatMessage> messages, bool hasMoreMessages, List<PendingChatMessage> pendingMessages
 });
 
 
@@ -63,11 +63,12 @@ class _$RoomChatStateCopyWithImpl<$Res>
 
 /// Create a copy of RoomChatState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? messages = null,Object? hasMoreMessages = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? messages = null,Object? hasMoreMessages = null,Object? pendingMessages = null,}) {
   return _then(_self.copyWith(
 messages: null == messages ? _self.messages : messages // ignore: cast_nullable_to_non_nullable
 as List<ChatMessage>,hasMoreMessages: null == hasMoreMessages ? _self.hasMoreMessages : hasMoreMessages // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,pendingMessages: null == pendingMessages ? _self.pendingMessages : pendingMessages // ignore: cast_nullable_to_non_nullable
+as List<PendingChatMessage>,
   ));
 }
 
@@ -78,7 +79,7 @@ as bool,
 
 
 class _RoomChatState implements RoomChatState {
-  const _RoomChatState({required final  List<ChatMessage> messages, this.hasMoreMessages = true}): _messages = messages;
+  const _RoomChatState({required final  List<ChatMessage> messages, this.hasMoreMessages = true, final  List<PendingChatMessage> pendingMessages = const []}): _messages = messages,_pendingMessages = pendingMessages;
   
 
  final  List<ChatMessage> _messages;
@@ -89,6 +90,13 @@ class _RoomChatState implements RoomChatState {
 }
 
 @override@JsonKey() final  bool hasMoreMessages;
+ final  List<PendingChatMessage> _pendingMessages;
+@override@JsonKey() List<PendingChatMessage> get pendingMessages {
+  if (_pendingMessages is EqualUnmodifiableListView) return _pendingMessages;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_pendingMessages);
+}
+
 
 /// Create a copy of RoomChatState
 /// with the given fields replaced by the non-null parameter values.
@@ -100,16 +108,16 @@ _$RoomChatStateCopyWith<_RoomChatState> get copyWith => __$RoomChatStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RoomChatState&&const DeepCollectionEquality().equals(other._messages, _messages)&&(identical(other.hasMoreMessages, hasMoreMessages) || other.hasMoreMessages == hasMoreMessages));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RoomChatState&&const DeepCollectionEquality().equals(other._messages, _messages)&&(identical(other.hasMoreMessages, hasMoreMessages) || other.hasMoreMessages == hasMoreMessages)&&const DeepCollectionEquality().equals(other._pendingMessages, _pendingMessages));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_messages),hasMoreMessages);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_messages),hasMoreMessages,const DeepCollectionEquality().hash(_pendingMessages));
 
 @override
 String toString() {
-  return 'RoomChatState(messages: $messages, hasMoreMessages: $hasMoreMessages)';
+  return 'RoomChatState(messages: $messages, hasMoreMessages: $hasMoreMessages, pendingMessages: $pendingMessages)';
 }
 
 
@@ -120,7 +128,7 @@ abstract mixin class _$RoomChatStateCopyWith<$Res> implements $RoomChatStateCopy
   factory _$RoomChatStateCopyWith(_RoomChatState value, $Res Function(_RoomChatState) _then) = __$RoomChatStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<ChatMessage> messages, bool hasMoreMessages
+ List<ChatMessage> messages, bool hasMoreMessages, List<PendingChatMessage> pendingMessages
 });
 
 
@@ -137,11 +145,12 @@ class __$RoomChatStateCopyWithImpl<$Res>
 
 /// Create a copy of RoomChatState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? messages = null,Object? hasMoreMessages = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? messages = null,Object? hasMoreMessages = null,Object? pendingMessages = null,}) {
   return _then(_RoomChatState(
 messages: null == messages ? _self._messages : messages // ignore: cast_nullable_to_non_nullable
 as List<ChatMessage>,hasMoreMessages: null == hasMoreMessages ? _self.hasMoreMessages : hasMoreMessages // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,pendingMessages: null == pendingMessages ? _self._pendingMessages : pendingMessages // ignore: cast_nullable_to_non_nullable
+as List<PendingChatMessage>,
   ));
 }
 

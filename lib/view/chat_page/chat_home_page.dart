@@ -38,33 +38,75 @@ class ChatHomePage extends ConsumerWidget implements AutoRouteWrapper {
     return DefaultTabController(
       length: 4,
       initialIndex: initialTab,
-      child: Scaffold(
-        appBar: AppBar(
-          bottom: const TabBar(
-            tabs: [
-              Tab(child: Text("ホーム")),
-              Tab(child: Text("招待")),
-              Tab(child: Text("入ってるルーム")),
-              Tab(child: Text("自分で作ったやつ")),
-            ],
-          ),
-        ),
-        body: const TabBarView(
-          children: [ChatHome(), InvitedChat(), JoiningChat(), OwnedChat()],
-        ),
-        floatingActionButton: ref.read(accountContextProvider).isSame
-            ? null
-            : FloatingActionButton(
-                onPressed: () async {
-                  await context.router.push(
-                    ChatRoomCreateRoute(
-                      accountContext: ref.read(accountContextProvider),
-                    ),
-                  );
-                },
-                child: const Icon(Icons.add),
-                tooltip: "新しいルームを作成",
+      child: Builder(
+        builder: (context) {
+          final tabController = DefaultTabController.of(context);
+          return Scaffold(
+            appBar: AppBar(
+              bottom: const TabBar(
+                tabs: [
+                  Tab(child: Text("ホーム")),
+                  Tab(child: Text("招待")),
+                  Tab(child: Text("入ってるルーム")),
+                  Tab(child: Text("自分で作ったやつ")),
+                ],
               ),
+            ),
+            body: const TabBarView(
+              children: [ChatHome(), InvitedChat(), JoiningChat(), OwnedChat()],
+            ),
+            floatingActionButton: ref.read(accountContextProvider).isSame
+                ? null
+                : AnimatedBuilder(
+                    animation: tabController,
+                    builder: (context, child) {
+                      final currentTab = tabController.index;
+                      // ホームタブ（0）では対ユーザーチャット、その他ではルーム作成
+                      if (currentTab == 0) {
+                        return FloatingActionButton(
+                          onPressed: () async {
+                            final selectedUser = await context.router
+                                .push<User>(
+                                  UserSelectRoute(
+                                    accountContext: ref.read(
+                                      accountContextProvider,
+                                    ),
+                                  ),
+                                );
+                            if (selectedUser != null) {
+                              if (!context.mounted) return;
+                              await context.router.push(
+                                UserChatRoute(
+                                  user: selectedUser,
+                                  accountContext: ref.read(
+                                    accountContextProvider,
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          tooltip: "新しいチャットを開始",
+                          child: const Icon(Icons.person_add),
+                        );
+                      } else {
+                        return FloatingActionButton(
+                          onPressed: () async {
+                            await context.router.push(
+                              ChatRoomCreateRoute(
+                                accountContext: ref.read(
+                                  accountContextProvider,
+                                ),
+                              ),
+                            );
+                          },
+                          tooltip: "新しいルームを作成",
+                          child: const Icon(Icons.add),
+                        );
+                      }
+                    },
+                  ),
+          );
+        },
       ),
     );
   }

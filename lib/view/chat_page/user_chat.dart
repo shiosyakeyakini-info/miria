@@ -8,7 +8,6 @@ import "package:freezed_annotation/freezed_annotation.dart";
 import "package:hooks_riverpod/experimental/mutation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:hooks_riverpod/legacy.dart";
-import "package:miria/hooks/use_async.dart";
 import "package:miria/model/image_file.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/socket_timeline_repository.dart";
@@ -16,8 +15,8 @@ import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/chat_input_state_notifier.dart";
 import "package:miria/view/chat_page/chat_file_preview.dart";
 import "package:miria/view/chat_page/chat_message_item.dart";
+import "package:miria/view/chat_page/pending_chat_message_item.dart";
 import "package:miria/view/common/account_scope.dart";
-import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/error_detail.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:miria/view/common/note_create/input_completation.dart";
@@ -34,11 +33,16 @@ sealed class UserChatState with _$UserChatState {
   const factory UserChatState({
     required List<ChatMessage> messages,
     @Default(true) bool hasMoreMessages,
+    @Default([]) List<PendingChatMessage> pendingMessages,
   }) = _UserChatState;
 }
 
+
 // UserChatの過去メッセージ取得用Mutation
 final loadUserChatPreviousMessagesMutation = Mutation<void>();
+
+// UserChatのメッセージ送信用Mutation
+final sendUserChatMessageMutation = Mutation<void>();
 
 @Riverpod(keepAlive: true, dependencies: [misskeyGetContext])
 class UserChat extends _$UserChat {
@@ -97,6 +101,28 @@ class UserChat extends _$UserChat {
           ),
         );
     return messages.toList();
+  }
+
+  void addPendingMessage(PendingChatMessage pendingMessage) {
+    if (state is! AsyncData) return;
+    final currentState = state.value!;
+    state = AsyncData(
+      currentState.copyWith(
+        pendingMessages: [pendingMessage, ...currentState.pendingMessages],
+      ),
+    );
+  }
+
+  void removePendingMessage(String tempId) {
+    if (state is! AsyncData) return;
+    final currentState = state.value!;
+    state = AsyncData(
+      currentState.copyWith(
+        pendingMessages: currentState.pendingMessages
+            .where((msg) => msg.tempId != tempId)
+            .toList(),
+      ),
+    );
   }
 
   void addMessageReaction(String messageId, String reaction, UserLite? user) {
@@ -298,11 +324,12 @@ class UserChatTimeline extends HookConsumerWidget {
                 controller: scrollController,
                 itemCount:
                     value.messages.length +
+                    value.pendingMessages.length +
                     (loadPreviousMutation is MutationPending ? 1 : 0),
                 reverse: true,
                 itemBuilder: (context, index) {
                   // ローディングインジケーターを最上部（逆順なので最後）に表示
-                  if (index == value.messages.length) {
+                  if (index == value.messages.length + value.pendingMessages.length) {
                     return switch (loadPreviousMutation) {
                       MutationPending() => const Padding(
                         padding: EdgeInsets.all(16.0),
@@ -327,7 +354,18 @@ class UserChatTimeline extends HookConsumerWidget {
                     };
                   }
 
-                  final message = value.messages[index];
+                  // 送信中メッセージを表示
+                  if (index < value.pendingMessages.length) {
+                    final pendingMessage = value.pendingMessages[index];
+                    return PendingChatMessageItem(
+                      pendingMessage: pendingMessage,
+                      isMyMessage: true,
+                    );
+                  }
+
+                  // 通常のメッセージを表示
+                  final messageIndex = index - value.pendingMessages.length;
+                  final message = value.messages[messageIndex];
                   final isMyMessage =
                       message.fromUserId ==
                       ref.read(accountContextProvider).getAccount.i.id;
@@ -361,20 +399,35 @@ class UserChatTextField extends HookConsumerWidget {
     final textEditingController = useTextEditingController();
     final focusNode = ref.watch(userChatFocusNodeProvider);
     final chatInputState = ref.watch(chatInputStateNotifierProvider);
+    final sendMessageMutation = ref.watch(sendUserChatMessageMutation);
 
-    final chat = useAsync(() async {
-      final text = textEditingController.text;
+    void sendMessage() {
+      final text = textEditingController.text.trim();
+      if (text.isEmpty && chatInputState.files.isEmpty) return;
+
+      final tempId = const Uuid().v4();
+      final pendingMessage = PendingChatMessage(
+        tempId: tempId,
+        text: text,
+        createdAt: DateTime.now(),
+      );
+
+      // 送信中メッセージをUIに追加
+      ref.read(userChatProvider(userId).notifier).addPendingMessage(pendingMessage);
+      
+      // テキストフィールドをクリア
       textEditingController.clear();
 
-      // ファイルをアップロードしてfileIdを取得
-      final fileId = await ref
-          .read(chatInputStateNotifierProvider.notifier)
-          .uploadAndGetFileId();
-
-      await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      // 実際の送信処理
+      sendUserChatMessageMutation.run(ref, (ref) async {
         try {
+          // ファイルをアップロードしてfileIdを取得
+          final fileId = await ref
+              .get(chatInputStateNotifierProvider.notifier)
+              .uploadAndGetFileId();
+
           await ref
-              .read(misskeyPostContextProvider)
+              .get(misskeyPostContextProvider)
               .chat
               .messages
               .createToUser(
@@ -384,12 +437,17 @@ class UserChatTextField extends HookConsumerWidget {
                   fileId: fileId,
                 ),
               );
+
+          // 送信成功時、送信中メッセージを削除
+          ref.get(userChatProvider(userId).notifier).removePendingMessage(tempId);
         } catch (e) {
+          // 送信失敗時、テキストを復元し送信中メッセージを削除
           textEditingController.text = text;
+          ref.get(userChatProvider(userId).notifier).removePendingMessage(tempId);
           rethrow;
         }
       });
-    });
+    }
 
     return Column(
       children: [
@@ -464,7 +522,7 @@ class UserChatTextField extends HookConsumerWidget {
                   if (event is KeyDownEvent) {
                     if (event.logicalKey == LogicalKeyboardKey.enter &&
                         HardwareKeyboard.instance.isControlPressed) {
-                      unawaited(chat.execute());
+                      sendMessage();
                       return KeyEventResult.handled;
                     }
                   }
@@ -476,7 +534,10 @@ class UserChatTextField extends HookConsumerWidget {
                 ),
               ),
             ),
-            IconButton(onPressed: chat.execute, icon: const Icon(Icons.send)),
+            IconButton(
+              onPressed: sendMessageMutation is MutationPending ? null : sendMessage,
+              icon: const Icon(Icons.send),
+            ),
           ],
         ),
       ],

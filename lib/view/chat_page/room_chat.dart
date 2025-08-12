@@ -8,14 +8,13 @@ import "package:freezed_annotation/freezed_annotation.dart";
 import "package:hooks_riverpod/experimental/mutation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:hooks_riverpod/legacy.dart";
-import "package:miria/hooks/use_async.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/socket_timeline_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/chat_page/chat_message_item.dart";
+import "package:miria/view/chat_page/pending_chat_message_item.dart";
 import "package:miria/view/chat_page/room_info.dart";
 import "package:miria/view/common/account_scope.dart";
-import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/error_detail.dart";
 import "package:miria/view/common/note_create/input_completation.dart";
 import "package:misskey_dart/misskey_dart.dart";
@@ -30,11 +29,16 @@ sealed class RoomChatState with _$RoomChatState {
   const factory RoomChatState({
     required List<ChatMessage> messages,
     @Default(true) bool hasMoreMessages,
+    @Default([]) List<PendingChatMessage> pendingMessages,
   }) = _RoomChatState;
 }
 
+
 // RoomChatの過去メッセージ取得用Mutation
 final loadRoomChatPreviousMessagesMutation = Mutation<void>();
+
+// RoomChatのメッセージ送信用Mutation
+final sendRoomChatMessageMutation = Mutation<void>();
 
 @Riverpod(keepAlive: true, dependencies: [misskeyGetContext])
 class RoomChat extends _$RoomChat {
@@ -93,6 +97,28 @@ class RoomChat extends _$RoomChat {
           ),
         );
     return messages.toList();
+  }
+
+  void addPendingMessage(PendingChatMessage pendingMessage) {
+    if (state is! AsyncData) return;
+    final currentState = state.value!;
+    state = AsyncData(
+      currentState.copyWith(
+        pendingMessages: [pendingMessage, ...currentState.pendingMessages],
+      ),
+    );
+  }
+
+  void removePendingMessage(String tempId) {
+    if (state is! AsyncData) return;
+    final currentState = state.value!;
+    state = AsyncData(
+      currentState.copyWith(
+        pendingMessages: currentState.pendingMessages
+            .where((msg) => msg.tempId != tempId)
+            .toList(),
+      ),
+    );
   }
 
   void addMessageReaction(String messageId, String reaction, UserLite? user) {
@@ -296,11 +322,12 @@ class ChatTimeline extends HookConsumerWidget {
                 controller: scrollController,
                 itemCount:
                     value.messages.length +
+                    value.pendingMessages.length +
                     (loadPreviousMutation is MutationPending ? 1 : 0),
                 reverse: true,
                 itemBuilder: (context, index) {
                   // ローディングインジケーターを最上部（逆順なので最後）に表示
-                  if (index == value.messages.length) {
+                  if (index == value.messages.length + value.pendingMessages.length) {
                     return switch (loadPreviousMutation) {
                       MutationPending() => const Padding(
                         padding: EdgeInsets.all(16.0),
@@ -325,7 +352,18 @@ class ChatTimeline extends HookConsumerWidget {
                     };
                   }
 
-                  final message = value.messages[index];
+                  // 送信中メッセージを表示
+                  if (index < value.pendingMessages.length) {
+                    final pendingMessage = value.pendingMessages[index];
+                    return PendingChatMessageItem(
+                      pendingMessage: pendingMessage,
+                      isMyMessage: true,
+                    );
+                  }
+
+                  // 通常のメッセージを表示
+                  final messageIndex = index - value.pendingMessages.length;
+                  final message = value.messages[messageIndex];
                   final isMyMessage =
                       message.fromUserId ==
                       ref.read(accountContextProvider).getAccount.i.id;
@@ -363,25 +401,46 @@ class RoomChatTextField extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final textEditingController = useTextEditingController();
     final focusNode = ref.watch(roomChatFocusNodeProvider);
+    final sendMessageMutation = ref.watch(sendRoomChatMessageMutation);
 
-    final chat = useAsync(() async {
-      final text = textEditingController.text;
+    void sendMessage() {
+      final text = textEditingController.text.trim();
+      if (text.isEmpty) return;
+
+      final tempId = const Uuid().v4();
+      final pendingMessage = PendingChatMessage(
+        tempId: tempId,
+        text: text,
+        createdAt: DateTime.now(),
+      );
+
+      // 送信中メッセージをUIに追加
+      ref.read(roomChatProvider(roomId).notifier).addPendingMessage(pendingMessage);
+      
+      // テキストフィールドをクリア
       textEditingController.clear();
-      await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+
+      // 実際の送信処理
+      sendRoomChatMessageMutation.run(ref, (ref) async {
         try {
           await ref
-              .read(misskeyPostContextProvider)
+              .get(misskeyPostContextProvider)
               .chat
               .messages
               .createToRoom(
                 ChatMessagesCreateToRoomRequest(toRoomId: roomId, text: text),
               );
+
+          // 送信成功時、送信中メッセージを削除
+          ref.get(roomChatProvider(roomId).notifier).removePendingMessage(tempId);
         } catch (e) {
+          // 送信失敗時、テキストを復元し送信中メッセージを削除
           textEditingController.text = text;
+          ref.get(roomChatProvider(roomId).notifier).removePendingMessage(tempId);
           rethrow;
         }
       });
-    });
+    }
 
     return Column(
       children: [
@@ -397,7 +456,7 @@ class RoomChatTextField extends HookConsumerWidget {
                   if (event is KeyDownEvent) {
                     if (event.logicalKey == LogicalKeyboardKey.enter &&
                         HardwareKeyboard.instance.isControlPressed) {
-                      unawaited(chat.execute());
+                      sendMessage();
                       return KeyEventResult.handled;
                     }
                   }
@@ -409,7 +468,10 @@ class RoomChatTextField extends HookConsumerWidget {
                 ),
               ),
             ),
-            IconButton(onPressed: chat.execute, icon: const Icon(Icons.send)),
+            IconButton(
+              onPressed: sendMessageMutation is MutationPending ? null : sendMessage,
+              icon: const Icon(Icons.send),
+            ),
           ],
         ),
       ],
