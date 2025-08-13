@@ -33,7 +33,6 @@ sealed class RoomChatState with _$RoomChatState {
   }) = _RoomChatState;
 }
 
-
 // RoomChatの過去メッセージ取得用Mutation
 final loadRoomChatPreviousMessagesMutation = Mutation<void>();
 
@@ -160,7 +159,9 @@ class RoomChat extends _$RoomChat {
   void deleteMessage(String messageId) {
     if (state is! AsyncData) return;
     final currentState = state.value!;
-    final messages = currentState.messages.where((m) => m.id != messageId).toList();
+    final messages = currentState.messages
+        .where((m) => m.id != messageId)
+        .toList();
     state = AsyncData(currentState.copyWith(messages: messages));
   }
 }
@@ -343,7 +344,8 @@ class ChatTimeline extends HookConsumerWidget {
                 reverse: true,
                 itemBuilder: (context, index) {
                   // ローディングインジケーターを最上部（逆順なので最後）に表示
-                  if (index == value.messages.length + value.pendingMessages.length) {
+                  if (index ==
+                      value.messages.length + value.pendingMessages.length) {
                     return switch (loadPreviousMutation) {
                       MutationPending() => const Padding(
                         padding: EdgeInsets.all(16.0),
@@ -432,8 +434,10 @@ class RoomChatTextField extends HookConsumerWidget {
       );
 
       // 送信中メッセージをUIに追加
-      ref.read(roomChatProvider(roomId).notifier).addPendingMessage(pendingMessage);
-      
+      ref
+          .read(roomChatProvider(roomId).notifier)
+          .addPendingMessage(pendingMessage);
+
       // テキストフィールドをクリア
       textEditingController.clear();
 
@@ -449,11 +453,15 @@ class RoomChatTextField extends HookConsumerWidget {
               );
 
           // 送信成功時、送信中メッセージを削除
-          ref.get(roomChatProvider(roomId).notifier).removePendingMessage(tempId);
+          ref
+              .get(roomChatProvider(roomId).notifier)
+              .removePendingMessage(tempId);
         } catch (e) {
           // 送信失敗時、テキストを復元し送信中メッセージを削除
           textEditingController.text = text;
-          ref.get(roomChatProvider(roomId).notifier).removePendingMessage(tempId);
+          ref
+              .get(roomChatProvider(roomId).notifier)
+              .removePendingMessage(tempId);
           rethrow;
         }
       });
@@ -486,7 +494,9 @@ class RoomChatTextField extends HookConsumerWidget {
               ),
             ),
             IconButton(
-              onPressed: sendMessageMutation is MutationPending ? null : sendMessage,
+              onPressed: sendMessageMutation is MutationPending
+                  ? null
+                  : sendMessage,
               icon: const Icon(Icons.send),
             ),
           ],

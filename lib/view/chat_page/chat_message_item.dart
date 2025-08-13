@@ -228,17 +228,21 @@ class ChatMessageItem extends ConsumerWidget {
               .chat
               .messages
               .delete(ChatMessagesDeleteRequest(messageId: message.id));
-          
+
           // 状態更新：削除されたメッセージをUIから削除
           if (roomId != null) {
-            ref.read(roomChatProvider(roomId!).notifier).deleteMessage(message.id);
+            ref
+                .read(roomChatProvider(roomId!).notifier)
+                .deleteMessage(message.id);
           } else if (userId != null) {
-            ref.read(userChatProvider(userId!).notifier).deleteMessage(message.id);
+            ref
+                .read(userChatProvider(userId!).notifier)
+                .deleteMessage(message.id);
           }
-          
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("メッセージを削除したで")),
-          );
+
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text("メッセージを削除したで")));
         });
 
       case ChatMessageMenuAction.detail:

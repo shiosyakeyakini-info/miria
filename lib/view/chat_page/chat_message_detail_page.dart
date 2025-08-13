@@ -45,15 +45,13 @@ class ChatMessageDetailPage extends HookConsumerWidget
     }, const []);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("メッセージ詳細"),
-      ),
+      appBar: AppBar(title: const Text("メッセージ詳細")),
       body: switch (loadMessage.value) {
         AsyncLoading() => const Center(child: CircularProgressIndicator()),
         AsyncError(:final error, :final stackTrace) => ErrorDetail(
-            error: error,
-            stackTrace: stackTrace,
-          ),
+          error: error,
+          stackTrace: stackTrace,
+        ),
         AsyncData(:final value) => _buildMessageDetail(context, ref, value),
         null => const Center(child: CircularProgressIndicator()),
       },
@@ -69,8 +67,9 @@ class ChatMessageDetailPage extends HookConsumerWidget
     final isMyMessage = message.fromUserId == accountContext.postAccount.i.id;
 
     // メッセージの送信者情報を取得
-    final messageUser = message.toUser ?? 
-        message.fromUser ?? 
+    final messageUser =
+        message.toUser ??
+        message.fromUser ??
         (isMyMessage ? accountContext.postAccount.i : null);
 
     return Padding(
@@ -141,10 +140,7 @@ class ChatMessageDetailPage extends HookConsumerWidget
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "詳細情報",
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
+                  Text("詳細情報", style: Theme.of(context).textTheme.titleSmall),
                   const SizedBox(height: 8),
                   _buildDetailRow("メッセージID", message.id),
                   const SizedBox(height: 8),
@@ -153,10 +149,7 @@ class ChatMessageDetailPage extends HookConsumerWidget
                     "${message.createdAt.toLocal().toString().substring(0, 19)} (${message.createdAt.differenceNow(context)})",
                   ),
                   const SizedBox(height: 8),
-                  _buildDetailRow(
-                    "送信者ID",
-                    message.fromUserId,
-                  ),
+                  _buildDetailRow("送信者ID", message.fromUserId),
                   if (message.toUser != null) ...[
                     const SizedBox(height: 8),
                     _buildDetailRow("相手ユーザーID", message.toUser!.id),
@@ -228,9 +221,7 @@ class ChatMessageDetailPage extends HookConsumerWidget
             style: const TextStyle(fontWeight: FontWeight.w500),
           ),
         ),
-        Expanded(
-          child: SelectableText(value),
-        ),
+        Expanded(child: SelectableText(value)),
       ],
     );
   }

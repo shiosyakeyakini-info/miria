@@ -56,9 +56,7 @@ class ChatMessageMenuSheet extends ConsumerWidget implements AutoRouteWrapper {
             ),
             title: Text(
               "メッセージを削除",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.error,
-              ),
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
             onTap: () => context.maybePop(ChatMessageMenuAction.delete),
           ),

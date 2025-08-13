@@ -3,10 +3,8 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
-import "package:miria/view/chat_page/chat_message_item.dart";
-import "package:miria/view/chat_page/chat_message_menu_sheet.dart";
-import "package:mockito/mockito.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:mockito/mockito.dart";
 
 import "../../test_util/default_root_widget.dart";
 import "../../test_util/mock.mocks.dart";
@@ -169,7 +167,7 @@ void main() {
 
         // 削除メニューが表示されていることを確認
         expect(find.text("メッセージを削除"), findsOneWidget);
-        
+
         // 削除メニューをタップ
         await tester.tap(find.text("メッセージを削除"));
         await tester.pumpAndSettle();
@@ -201,7 +199,7 @@ void main() {
 
         // 詳細メニューが表示されていることを確認
         expect(find.text("メッセージ詳細"), findsOneWidget);
-        
+
         // 詳細メニューをタップ
         await tester.tap(find.text("メッセージ詳細"));
         await tester.pumpAndSettle();
@@ -328,7 +326,7 @@ void main() {
         // メッセージ詳細画面が表示されることを確認
         expect(find.byType(Scaffold), findsOneWidget);
         expect(find.text("メッセージ詳細"), findsOneWidget);
-        
+
         // 詳細画面の主要コンポーネントが表示されることを確認
         expect(find.byType(Card), findsWidgets); // 情報カード
         expect(find.text("詳細情報"), findsOneWidget);

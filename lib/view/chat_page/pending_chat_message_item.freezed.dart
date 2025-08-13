@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PendingChatMessage {
 
- String get tempId; String get text; String? get fileId; DateTime get createdAt;
+ String get tempId; String get text; DateTime get createdAt; String? get fileId;
 /// Create a copy of PendingChatMessage
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $PendingChatMessageCopyWith<PendingChatMessage> get copyWith => _$PendingChatMes
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PendingChatMessage&&(identical(other.tempId, tempId) || other.tempId == tempId)&&(identical(other.text, text) || other.text == text)&&(identical(other.fileId, fileId) || other.fileId == fileId)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PendingChatMessage&&(identical(other.tempId, tempId) || other.tempId == tempId)&&(identical(other.text, text) || other.text == text)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.fileId, fileId) || other.fileId == fileId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,tempId,text,fileId,createdAt);
+int get hashCode => Object.hash(runtimeType,tempId,text,createdAt,fileId);
 
 @override
 String toString() {
-  return 'PendingChatMessage(tempId: $tempId, text: $text, fileId: $fileId, createdAt: $createdAt)';
+  return 'PendingChatMessage(tempId: $tempId, text: $text, createdAt: $createdAt, fileId: $fileId)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $PendingChatMessageCopyWith<$Res>  {
   factory $PendingChatMessageCopyWith(PendingChatMessage value, $Res Function(PendingChatMessage) _then) = _$PendingChatMessageCopyWithImpl;
 @useResult
 $Res call({
- String tempId, String text, String? fileId, DateTime createdAt
+ String tempId, String text, DateTime createdAt, String? fileId
 });
 
 
@@ -63,13 +63,13 @@ class _$PendingChatMessageCopyWithImpl<$Res>
 
 /// Create a copy of PendingChatMessage
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? tempId = null,Object? text = null,Object? fileId = freezed,Object? createdAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? tempId = null,Object? text = null,Object? createdAt = null,Object? fileId = freezed,}) {
   return _then(_self.copyWith(
 tempId: null == tempId ? _self.tempId : tempId // ignore: cast_nullable_to_non_nullable
 as String,text: null == text ? _self.text : text // ignore: cast_nullable_to_non_nullable
-as String,fileId: freezed == fileId ? _self.fileId : fileId // ignore: cast_nullable_to_non_nullable
-as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime,fileId: freezed == fileId ? _self.fileId : fileId // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -80,13 +80,13 @@ as DateTime,
 
 
 class _PendingChatMessage implements PendingChatMessage {
-  const _PendingChatMessage({required this.tempId, required this.text, this.fileId, required this.createdAt});
+  const _PendingChatMessage({required this.tempId, required this.text, required this.createdAt, this.fileId});
   
 
 @override final  String tempId;
 @override final  String text;
-@override final  String? fileId;
 @override final  DateTime createdAt;
+@override final  String? fileId;
 
 /// Create a copy of PendingChatMessage
 /// with the given fields replaced by the non-null parameter values.
@@ -98,16 +98,16 @@ _$PendingChatMessageCopyWith<_PendingChatMessage> get copyWith => __$PendingChat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PendingChatMessage&&(identical(other.tempId, tempId) || other.tempId == tempId)&&(identical(other.text, text) || other.text == text)&&(identical(other.fileId, fileId) || other.fileId == fileId)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PendingChatMessage&&(identical(other.tempId, tempId) || other.tempId == tempId)&&(identical(other.text, text) || other.text == text)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.fileId, fileId) || other.fileId == fileId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,tempId,text,fileId,createdAt);
+int get hashCode => Object.hash(runtimeType,tempId,text,createdAt,fileId);
 
 @override
 String toString() {
-  return 'PendingChatMessage(tempId: $tempId, text: $text, fileId: $fileId, createdAt: $createdAt)';
+  return 'PendingChatMessage(tempId: $tempId, text: $text, createdAt: $createdAt, fileId: $fileId)';
 }
 
 
@@ -118,7 +118,7 @@ abstract mixin class _$PendingChatMessageCopyWith<$Res> implements $PendingChatM
   factory _$PendingChatMessageCopyWith(_PendingChatMessage value, $Res Function(_PendingChatMessage) _then) = __$PendingChatMessageCopyWithImpl;
 @override @useResult
 $Res call({
- String tempId, String text, String? fileId, DateTime createdAt
+ String tempId, String text, DateTime createdAt, String? fileId
 });
 
 
@@ -135,13 +135,13 @@ class __$PendingChatMessageCopyWithImpl<$Res>
 
 /// Create a copy of PendingChatMessage
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tempId = null,Object? text = null,Object? fileId = freezed,Object? createdAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? tempId = null,Object? text = null,Object? createdAt = null,Object? fileId = freezed,}) {
   return _then(_PendingChatMessage(
 tempId: null == tempId ? _self.tempId : tempId // ignore: cast_nullable_to_non_nullable
 as String,text: null == text ? _self.text : text // ignore: cast_nullable_to_non_nullable
-as String,fileId: freezed == fileId ? _self.fileId : fileId // ignore: cast_nullable_to_non_nullable
-as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime,fileId: freezed == fileId ? _self.fileId : fileId // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

@@ -37,7 +37,6 @@ sealed class UserChatState with _$UserChatState {
   }) = _UserChatState;
 }
 
-
 // UserChatの過去メッセージ取得用Mutation
 final loadUserChatPreviousMessagesMutation = Mutation<void>();
 
@@ -164,7 +163,9 @@ class UserChat extends _$UserChat {
   void deleteMessage(String messageId) {
     if (state is! AsyncData) return;
     final currentState = state.value!;
-    final messages = currentState.messages.where((m) => m.id != messageId).toList();
+    final messages = currentState.messages
+        .where((m) => m.id != messageId)
+        .toList();
     state = AsyncData(currentState.copyWith(messages: messages));
   }
 }
@@ -336,7 +337,8 @@ class UserChatTimeline extends HookConsumerWidget {
                 reverse: true,
                 itemBuilder: (context, index) {
                   // ローディングインジケーターを最上部（逆順なので最後）に表示
-                  if (index == value.messages.length + value.pendingMessages.length) {
+                  if (index ==
+                      value.messages.length + value.pendingMessages.length) {
                     return switch (loadPreviousMutation) {
                       MutationPending() => const Padding(
                         padding: EdgeInsets.all(16.0),
@@ -421,8 +423,10 @@ class UserChatTextField extends HookConsumerWidget {
       );
 
       // 送信中メッセージをUIに追加
-      ref.read(userChatProvider(userId).notifier).addPendingMessage(pendingMessage);
-      
+      ref
+          .read(userChatProvider(userId).notifier)
+          .addPendingMessage(pendingMessage);
+
       // テキストフィールドをクリア
       textEditingController.clear();
 
@@ -447,11 +451,15 @@ class UserChatTextField extends HookConsumerWidget {
               );
 
           // 送信成功時、送信中メッセージを削除
-          ref.get(userChatProvider(userId).notifier).removePendingMessage(tempId);
+          ref
+              .get(userChatProvider(userId).notifier)
+              .removePendingMessage(tempId);
         } catch (e) {
           // 送信失敗時、テキストを復元し送信中メッセージを削除
           textEditingController.text = text;
-          ref.get(userChatProvider(userId).notifier).removePendingMessage(tempId);
+          ref
+              .get(userChatProvider(userId).notifier)
+              .removePendingMessage(tempId);
           rethrow;
         }
       });
@@ -543,7 +551,9 @@ class UserChatTextField extends HookConsumerWidget {
               ),
             ),
             IconButton(
-              onPressed: sendMessageMutation is MutationPending ? null : sendMessage,
+              onPressed: sendMessageMutation is MutationPending
+                  ? null
+                  : sendMessage,
               icon: const Icon(Icons.send),
             ),
           ],

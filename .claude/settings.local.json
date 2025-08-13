@@ -13,7 +13,11 @@
       "Bash(gh issue view:*)",
       "Bash(fvm flutter:*)",
       "Bash(fvm dart analyze:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "WebFetch(domain:misskey-hub.net)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(rm:*)"
     ],
     "deny": []
   },

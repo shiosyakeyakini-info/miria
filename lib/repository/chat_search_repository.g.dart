@@ -22,9 +22,16 @@ final class ChatSearchRepositoryProvider
         retry: null,
         name: r'chatSearchRepositoryProvider',
         isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: const <ProviderOrFamily>[misskeyGetContextProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          ChatSearchRepositoryProvider.$allTransitiveDependencies0,
+          ChatSearchRepositoryProvider.$allTransitiveDependencies1,
+        ],
       );
+
+  static const $allTransitiveDependencies0 = misskeyGetContextProvider;
+  static const $allTransitiveDependencies1 =
+      MisskeyGetContextProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$chatSearchRepositoryHash();
@@ -45,7 +52,7 @@ final class ChatSearchRepositoryProvider
 }
 
 String _$chatSearchRepositoryHash() =>
-    r'58504836111bce81b8f63ccb2db5af1deaef4de0';
+    r'ce3f85ddb45c0e0b376a61f54c85b77d3429dc2d';
 
 abstract class _$ChatSearchRepository
     extends $Notifier<Map<String, List<ChatMessage>>> {

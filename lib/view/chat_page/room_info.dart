@@ -149,7 +149,9 @@ class ChatRoomInfo extends HookConsumerWidget {
                         // ルーム削除後は現在のルームチャット画面を削除して前の画面に戻る
                         // まずDrawerを閉じてからナビゲーションを実行
                         Navigator.of(context).pop(); // Drawerを閉じる
-                        await Future.delayed(const Duration(milliseconds: 100)); // 少し待つ
+                        await Future.delayed(
+                          const Duration(milliseconds: 100),
+                        ); // 少し待つ
                         if (!context.mounted) return;
                         context.router.maybePop(); // ルームチャット画面を削除
                       },
@@ -270,7 +272,9 @@ class ChatRoomInfo extends HookConsumerWidget {
                         if (!context.mounted) return;
                         // ルーム退出後は現在のルームチャット画面を削除して前の画面に戻る
                         Navigator.of(context).pop(); // Drawerを閉じる
-                        await Future.delayed(const Duration(milliseconds: 100)); // 少し待つ
+                        await Future.delayed(
+                          const Duration(milliseconds: 100),
+                        ); // 少し待つ
                         if (!context.mounted) return;
                         context.router.maybePop(); // ルームチャット画面を削除
                       },

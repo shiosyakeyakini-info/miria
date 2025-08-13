@@ -8,8 +8,7 @@ sealed class PendingChatMessage with _$PendingChatMessage {
   const factory PendingChatMessage({
     required String tempId,
     required String text,
-    String? fileId,
-    required DateTime createdAt,
+    required DateTime createdAt, String? fileId,
   }) = _PendingChatMessage;
 }
 
@@ -28,8 +27,9 @@ class PendingChatMessageItem extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       child: Row(
-        mainAxisAlignment:
-            isMyMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment: isMyMessage
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
         children: [
           Container(
             constraints: BoxConstraints(
@@ -38,7 +38,9 @@ class PendingChatMessageItem extends StatelessWidget {
             decoration: BoxDecoration(
               color: isMyMessage
                   ? Theme.of(context).primaryColor.withOpacity(0.3)
-                  : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+                  : Theme.of(
+                      context,
+                    ).colorScheme.surfaceContainerHighest.withOpacity(0.3),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: Theme.of(context).dividerColor.withOpacity(0.5),
@@ -68,7 +70,9 @@ class PendingChatMessageItem extends StatelessWidget {
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
                           valueColor: AlwaysStoppedAnimation<Color>(
-                            Theme.of(context).textTheme.bodySmall!.color!.withOpacity(0.6),
+                            Theme.of(
+                              context,
+                            ).textTheme.bodySmall!.color!.withOpacity(0.6),
                           ),
                         ),
                       ),
@@ -76,8 +80,10 @@ class PendingChatMessageItem extends StatelessWidget {
                       Text(
                         "送信中...",
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).textTheme.bodySmall!.color!.withOpacity(0.6),
-                            ),
+                          color: Theme.of(
+                            context,
+                          ).textTheme.bodySmall!.color!.withOpacity(0.6),
+                        ),
                       ),
                     ],
                   ),

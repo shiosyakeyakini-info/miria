@@ -4053,6 +4053,15 @@ class MockMisskeyChat extends _i1.Mock implements _i8.MisskeyChat {
                 ),
           )
           as _i17.Future<Iterable<_i3.ChatMessage>>);
+
+  @override
+  _i17.Future<void> readAll() =>
+      (super.noSuchMethod(
+            Invocation.method(#readAll, []),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
+          )
+          as _i17.Future<void>);
 }
 
 /// A class which mocks [MisskeyChatMessages].
