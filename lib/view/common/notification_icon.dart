@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
@@ -13,15 +15,31 @@ class NotificationIcon extends ConsumerWidget {
     final acct = ref.watch(
       accountContextProvider.select((value) => value.postAccount.acct),
     );
-    final hasUnread = ref.watch(
-      iProvider(acct).select((value) => value.hasUnreadNotification),
-    );
+    final i = ref.watch(iProvider(acct));
+    final hasUnreadNotification = i.hasUnreadNotification;
+    final hasUnreadChat = i.hasUnreadChatMessages ?? false;
+    final hasUnread = hasUnreadNotification || hasUnreadChat;
 
     if (hasUnread) {
       return IconButton(
-        onPressed: () async => context.pushRoute(
-          NotificationRoute(accountContext: ref.read(accountContextProvider)),
-        ),
+        onPressed: () async {
+          // チャット未読をクリア（新しいAPIを使用）
+          if (hasUnreadChat) {
+            unawaited(() async {
+              try {
+                await ref.read(misskeyPostContextProvider).chat.readAll();
+              } catch (e) {
+                debugPrint("Failed to call chat.readAll(): $e");
+              }
+            }());
+          }
+          
+          if (context.mounted) {
+            await context.pushRoute(
+              NotificationRoute(accountContext: ref.read(accountContextProvider)),
+            );
+          }
+        },
         icon: Stack(
           children: [
             const Icon(Icons.notifications),

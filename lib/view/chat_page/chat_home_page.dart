@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
@@ -35,6 +37,18 @@ class ChatHomePage extends ConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // チャットページを開いたときに未読状態をクリア
+    useEffect(() {
+      unawaited(() async {
+        try {
+          await ref.read(misskeyPostContextProvider).chat.readAll();
+        } catch (e) {
+          debugPrint("Failed to call chat.readAll() on chat home page: $e");
+        }
+      }());
+      return null;
+    }, []);
+
     return DefaultTabController(
       length: 4,
       initialIndex: initialTab,

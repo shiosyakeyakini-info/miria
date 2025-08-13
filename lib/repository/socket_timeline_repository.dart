@@ -324,8 +324,9 @@ abstract class SocketTimelineRepository extends TimelineRepository {
           case PollVotedChannelEvent():
           case UpdatedChannelEvent():
           case NewChatMessageEvent():
-            // TODO: Handle this case.
-            throw UnimplementedError();
+            // サーバー側でhasUnreadChatMessagesが管理されるため、
+            // クライアント側での独自管理は不要
+            break;
           case ChatMessageChannelEvent():
             // TODO: Handle this case.
             throw UnimplementedError();
@@ -395,8 +396,9 @@ abstract class SocketTimelineRepository extends TimelineRepository {
           case ReceiveFollowRequestChannelEvent():
           case FallbackChannelEvent():
           case NewChatMessageEvent():
-            // TODO: Handle this case.
-            throw UnimplementedError();
+            // サーバー側でhasUnreadChatMessagesが管理されるため、
+            // クライアント側での独自管理は不要
+            break;
           case ChatMessageChannelEvent():
             // TODO: Handle this case.
             throw UnimplementedError();
