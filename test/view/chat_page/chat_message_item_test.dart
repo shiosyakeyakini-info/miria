@@ -162,7 +162,7 @@ void main() {
         matching: find.byType(Align),
       );
       expect(alignInChatMessage, findsWidgets);
-      
+
       // 最初のAlignウィジェット（ChatMessageItemの直接の子）を取得
       final align = tester.widget<Align>(alignInChatMessage.first);
       expect(align.alignment, Alignment.topRight);

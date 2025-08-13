@@ -33,10 +33,12 @@ class NotificationIcon extends ConsumerWidget {
               }
             }());
           }
-          
+
           if (context.mounted) {
             await context.pushRoute(
-              NotificationRoute(accountContext: ref.read(accountContextProvider)),
+              NotificationRoute(
+                accountContext: ref.read(accountContextProvider),
+              ),
             );
           }
         },

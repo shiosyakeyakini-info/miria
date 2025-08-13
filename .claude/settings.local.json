@@ -17,7 +17,9 @@
       "WebFetch(domain:misskey-hub.net)",
       "Bash(find:*)",
       "Bash(grep:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(fvm dart format:*)",
+      "Bash(fvm dart fix:*)"
     ],
     "deny": []
   },

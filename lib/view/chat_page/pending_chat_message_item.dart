@@ -8,7 +8,8 @@ sealed class PendingChatMessage with _$PendingChatMessage {
   const factory PendingChatMessage({
     required String tempId,
     required String text,
-    required DateTime createdAt, String? fileId,
+    required DateTime createdAt,
+    String? fileId,
   }) = _PendingChatMessage;
 }
 
