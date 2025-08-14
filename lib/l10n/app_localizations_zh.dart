@@ -2072,6 +2072,9 @@ class SZh extends S {
   String get chatNsfw => 'NSFW';
 
   @override
+  String get chatUpdateCompleted => '好像更新成功了';
+
+  @override
   String chatRoomInvitation(String roomName) {
     return '您被邀请加入聊天室【$roomName】';
   }

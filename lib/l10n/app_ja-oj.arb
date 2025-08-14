@@ -159,6 +159,7 @@
     "noteBackgroundColor": "ノート背景色",
     
     "goToChat": "参りましょう",
+    "chatUpdateCompleted": "更新できたようですわ",
     "chatRoomInvitation": "チャットルーム【{roomName}】にお招きいただきましたの",
     "@chatRoomInvitation": {
         "placeholders": {

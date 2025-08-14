@@ -40,6 +40,13 @@ class ChatRoomInfo extends HookConsumerWidget {
                 description: descriptionEditingController.text,
               ),
             );
+
+        if (!context.mounted) return;
+        await ref
+            .read(dialogStateNotifierProvider.notifier)
+            .showSimpleDialog(
+              message: (context) => S.of(context).chatUpdateCompleted,
+            );
       });
     });
 

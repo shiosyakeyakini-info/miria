@@ -1110,6 +1110,7 @@
     "chatReactionList": "リアクション一覧",
     "chatUnknownUser": "Unknown User",
     "chatNsfw": "NSFW",
+    "chatUpdateCompleted": "更新できたみたいや",
 
     "chatRoomInvitation": "チャットルームに招待されたで【{roomName}】",
     "@chatRoomInvitation": {

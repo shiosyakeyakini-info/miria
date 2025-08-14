@@ -1012,6 +1012,7 @@
     "chatReactionList": "回应列表",
     "chatUnknownUser": "未知用户",
     "chatNsfw": "NSFW",
+    "chatUpdateCompleted": "好像更新成功了",
 
     "chatRoomInvitation": "您被邀请加入聊天室【{roomName}】",
     "@chatRoomInvitation": {

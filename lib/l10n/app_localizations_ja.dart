@@ -2080,6 +2080,9 @@ class SJa extends S {
   String get chatNsfw => 'NSFW';
 
   @override
+  String get chatUpdateCompleted => '更新できたみたいや';
+
+  @override
   String chatRoomInvitation(String roomName) {
     return 'チャットルームに招待されたで【$roomName】';
   }
@@ -2483,6 +2486,9 @@ class SJaOj extends SJa {
 
   @override
   String get profileFollowedMessage => 'フォローされたときのメッセージ';
+
+  @override
+  String get chatUpdateCompleted => '更新できたようですわ';
 
   @override
   String chatRoomInvitation(String roomName) {

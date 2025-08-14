@@ -3636,6 +3636,12 @@ abstract class S {
   /// **'NSFW'**
   String get chatNsfw;
 
+  /// No description provided for @chatUpdateCompleted.
+  ///
+  /// In ja, this message translates to:
+  /// **'更新できたみたいや'**
+  String get chatUpdateCompleted;
+
   /// No description provided for @chatRoomInvitation.
   ///
   /// In ja, this message translates to:
