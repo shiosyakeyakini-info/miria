@@ -2124,6 +2124,46 @@ class TestData {
 """),
   );
 
+  // Chat Rooms
+  static ChatRoom chatRoom1 = ChatRoom(
+    id: "chatroom-1",
+    createdAt: DateTime.parse("2024-01-01T12:00:00.000Z"),
+    ownerId: "ai",
+    owner: user1,
+    name: "テストルーム",
+    description: "テスト用のチャットルーム",
+    isMuted: false,
+  );
+
+  static ChatJoining chatJoining1 = ChatJoining(
+    id: "joining-1",
+    createdAt: DateTime.parse("2024-01-01T12:00:00.000Z"),
+    userId: "ai",
+    user: user1,
+    roomId: "chatroom-1",
+    room: chatRoom1,
+  );
+
+  static ChatRoom chatRoom2 = ChatRoom(
+    id: "chatroom-2",
+    createdAt: DateTime.parse("2024-01-02T12:00:00.000Z"),
+    ownerId: "ai",
+    owner: user1,
+    name: "プライベートルーム",
+    description: "プライベート用チャットルーム",
+    isMuted: true,
+  );
+
+  static ChatRoom emptyDescriptionRoom = ChatRoom(
+    id: "chatroom-empty",
+    createdAt: DateTime.parse("2024-01-03T12:00:00.000Z"),
+    ownerId: "ai",
+    owner: user1,
+    name: "説明なしルーム",
+    description: "",
+    isMuted: false,
+  );
+
   // Dio
   static DioException response404 = DioException(
     requestOptions: RequestOptions(),

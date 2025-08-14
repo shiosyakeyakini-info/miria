@@ -12,6 +12,7 @@
 .swiftpm/
 migrate_working_dir/
 /coverage/
+.claude/settings.local.json
 
 # IntelliJ related
 *.iml

@@ -878,6 +878,353 @@ class ChannelsRouteArgs {
 }
 
 /// generated route for
+/// [ChatHomePage]
+class ChatHomeRoute extends PageRouteInfo<ChatHomeRouteArgs> {
+  ChatHomeRoute({
+    required AccountContext accountContext,
+    int initialTab = 0,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ChatHomeRoute.name,
+         args: ChatHomeRouteArgs(
+           accountContext: accountContext,
+           initialTab: initialTab,
+           key: key,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'ChatHomeRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ChatHomeRouteArgs>();
+      return WrappedRoute(
+        child: ChatHomePage(
+          accountContext: args.accountContext,
+          initialTab: args.initialTab,
+          key: args.key,
+        ),
+      );
+    },
+  );
+}
+
+class ChatHomeRouteArgs {
+  const ChatHomeRouteArgs({
+    required this.accountContext,
+    this.initialTab = 0,
+    this.key,
+  });
+
+  final AccountContext accountContext;
+
+  final int initialTab;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ChatHomeRouteArgs{accountContext: $accountContext, initialTab: $initialTab, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ChatHomeRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        initialTab == other.initialTab &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode =>
+      accountContext.hashCode ^ initialTab.hashCode ^ key.hashCode;
+}
+
+/// generated route for
+/// [ChatMessageDetailPage]
+class ChatMessageDetailRoute extends PageRouteInfo<ChatMessageDetailRouteArgs> {
+  ChatMessageDetailRoute({
+    required Account account,
+    required String messageId,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ChatMessageDetailRoute.name,
+         args: ChatMessageDetailRouteArgs(
+           account: account,
+           messageId: messageId,
+           key: key,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'ChatMessageDetailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ChatMessageDetailRouteArgs>();
+      return WrappedRoute(
+        child: ChatMessageDetailPage(
+          account: args.account,
+          messageId: args.messageId,
+          key: args.key,
+        ),
+      );
+    },
+  );
+}
+
+class ChatMessageDetailRouteArgs {
+  const ChatMessageDetailRouteArgs({
+    required this.account,
+    required this.messageId,
+    this.key,
+  });
+
+  final Account account;
+
+  final String messageId;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ChatMessageDetailRouteArgs{account: $account, messageId: $messageId, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ChatMessageDetailRouteArgs) return false;
+    return account == other.account &&
+        messageId == other.messageId &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ messageId.hashCode ^ key.hashCode;
+}
+
+/// generated route for
+/// [ChatMessageMenuSheet]
+class ChatMessageMenuRoute extends PageRouteInfo<ChatMessageMenuRouteArgs> {
+  ChatMessageMenuRoute({
+    required Account account,
+    required ChatMessage message,
+    required User user,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ChatMessageMenuRoute.name,
+         args: ChatMessageMenuRouteArgs(
+           account: account,
+           message: message,
+           user: user,
+           key: key,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'ChatMessageMenuRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ChatMessageMenuRouteArgs>();
+      return WrappedRoute(
+        child: ChatMessageMenuSheet(
+          account: args.account,
+          message: args.message,
+          user: args.user,
+          key: args.key,
+        ),
+      );
+    },
+  );
+}
+
+class ChatMessageMenuRouteArgs {
+  const ChatMessageMenuRouteArgs({
+    required this.account,
+    required this.message,
+    required this.user,
+    this.key,
+  });
+
+  final Account account;
+
+  final ChatMessage message;
+
+  final User user;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ChatMessageMenuRouteArgs{account: $account, message: $message, user: $user, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ChatMessageMenuRouteArgs) return false;
+    return account == other.account &&
+        message == other.message &&
+        user == other.user &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode =>
+      account.hashCode ^ message.hashCode ^ user.hashCode ^ key.hashCode;
+}
+
+/// generated route for
+/// [ChatRoomCreatePage]
+class ChatRoomCreateRoute extends PageRouteInfo<ChatRoomCreateRouteArgs> {
+  ChatRoomCreateRoute({
+    required AccountContext accountContext,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ChatRoomCreateRoute.name,
+         args: ChatRoomCreateRouteArgs(
+           accountContext: accountContext,
+           key: key,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'ChatRoomCreateRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ChatRoomCreateRouteArgs>();
+      return WrappedRoute(
+        child: ChatRoomCreatePage(
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
+}
+
+class ChatRoomCreateRouteArgs {
+  const ChatRoomCreateRouteArgs({required this.accountContext, this.key});
+
+  final AccountContext accountContext;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ChatRoomCreateRouteArgs{accountContext: $accountContext, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ChatRoomCreateRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
+}
+
+/// generated route for
+/// [ChatSearchPage]
+class ChatSearchRoute extends PageRouteInfo<ChatSearchRouteArgs> {
+  ChatSearchRoute({
+    required Account account,
+    required String chatId,
+    required bool isChannel,
+    required String query,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ChatSearchRoute.name,
+         args: ChatSearchRouteArgs(
+           account: account,
+           chatId: chatId,
+           isChannel: isChannel,
+           query: query,
+           key: key,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'ChatSearchRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ChatSearchRouteArgs>();
+      return WrappedRoute(
+        child: ChatSearchPage(
+          account: args.account,
+          chatId: args.chatId,
+          isChannel: args.isChannel,
+          query: args.query,
+          key: args.key,
+        ),
+      );
+    },
+  );
+}
+
+class ChatSearchRouteArgs {
+  const ChatSearchRouteArgs({
+    required this.account,
+    required this.chatId,
+    required this.isChannel,
+    required this.query,
+    this.key,
+  });
+
+  final Account account;
+
+  final String chatId;
+
+  final bool isChannel;
+
+  final String query;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ChatSearchRouteArgs{account: $account, chatId: $chatId, isChannel: $isChannel, query: $query, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ChatSearchRouteArgs) return false;
+    return account == other.account &&
+        chatId == other.chatId &&
+        isChannel == other.isChannel &&
+        query == other.query &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode =>
+      account.hashCode ^
+      chatId.hashCode ^
+      isChannel.hashCode ^
+      query.hashCode ^
+      key.hashCode;
+}
+
+/// generated route for
 /// [ClipDetailPage]
 class ClipDetailRoute extends PageRouteInfo<ClipDetailRouteArgs> {
   ClipDetailRoute({
@@ -2882,6 +3229,72 @@ class RoleSelectRouteArgs {
 }
 
 /// generated route for
+/// [RoomChatPage]
+class RoomChatRoute extends PageRouteInfo<RoomChatRouteArgs> {
+  RoomChatRoute({
+    required ChatRoom room,
+    required AccountContext accountContext,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         RoomChatRoute.name,
+         args: RoomChatRouteArgs(
+           room: room,
+           accountContext: accountContext,
+           key: key,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'RoomChatRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<RoomChatRouteArgs>();
+      return WrappedRoute(
+        child: RoomChatPage(
+          room: args.room,
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
+}
+
+class RoomChatRouteArgs {
+  const RoomChatRouteArgs({
+    required this.room,
+    required this.accountContext,
+    this.key,
+  });
+
+  final ChatRoom room;
+
+  final AccountContext accountContext;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'RoomChatRouteArgs{room: $room, accountContext: $accountContext, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! RoomChatRouteArgs) return false;
+    return room == other.room &&
+        accountContext == other.accountContext &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => room.hashCode ^ accountContext.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [SearchPage]
 class SearchRoute extends PageRouteInfo<SearchRouteArgs> {
   SearchRoute({
@@ -3432,6 +3845,72 @@ class UpdateMemoRouteArgs {
 }
 
 /// generated route for
+/// [UserChatPage]
+class UserChatRoute extends PageRouteInfo<UserChatRouteArgs> {
+  UserChatRoute({
+    required User user,
+    required AccountContext accountContext,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         UserChatRoute.name,
+         args: UserChatRouteArgs(
+           user: user,
+           accountContext: accountContext,
+           key: key,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'UserChatRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<UserChatRouteArgs>();
+      return WrappedRoute(
+        child: UserChatPage(
+          user: args.user,
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
+}
+
+class UserChatRouteArgs {
+  const UserChatRouteArgs({
+    required this.user,
+    required this.accountContext,
+    this.key,
+  });
+
+  final User user;
+
+  final AccountContext accountContext;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'UserChatRouteArgs{user: $user, accountContext: $accountContext, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UserChatRouteArgs) return false;
+    return user == other.user &&
+        accountContext == other.accountContext &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => user.hashCode ^ accountContext.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [UserControlDialog]
 class UserControlRoute extends PageRouteInfo<UserControlRouteArgs> {
   UserControlRoute({
@@ -3757,11 +4236,16 @@ class UserRouteArgs {
 class UserSelectRoute extends PageRouteInfo<UserSelectRouteArgs> {
   UserSelectRoute({
     required AccountContext accountContext,
+    bool isLocalOnly = false,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
          UserSelectRoute.name,
-         args: UserSelectRouteArgs(accountContext: accountContext, key: key),
+         args: UserSelectRouteArgs(
+           accountContext: accountContext,
+           isLocalOnly: isLocalOnly,
+           key: key,
+         ),
          initialChildren: children,
        );
 
@@ -3774,6 +4258,7 @@ class UserSelectRoute extends PageRouteInfo<UserSelectRouteArgs> {
       return WrappedRoute(
         child: UserSelectDialog(
           accountContext: args.accountContext,
+          isLocalOnly: args.isLocalOnly,
           key: args.key,
         ),
       );
@@ -3782,26 +4267,35 @@ class UserSelectRoute extends PageRouteInfo<UserSelectRouteArgs> {
 }
 
 class UserSelectRouteArgs {
-  const UserSelectRouteArgs({required this.accountContext, this.key});
+  const UserSelectRouteArgs({
+    required this.accountContext,
+    this.isLocalOnly = false,
+    this.key,
+  });
 
   final AccountContext accountContext;
+
+  final bool isLocalOnly;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'UserSelectRouteArgs{accountContext: $accountContext, key: $key}';
+    return 'UserSelectRouteArgs{accountContext: $accountContext, isLocalOnly: $isLocalOnly, key: $key}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! UserSelectRouteArgs) return false;
-    return accountContext == other.accountContext && key == other.key;
+    return accountContext == other.accountContext &&
+        isLocalOnly == other.isLocalOnly &&
+        key == other.key;
   }
 
   @override
-  int get hashCode => accountContext.hashCode ^ key.hashCode;
+  int get hashCode =>
+      accountContext.hashCode ^ isLocalOnly.hashCode ^ key.hashCode;
 }
 
 /// generated route for

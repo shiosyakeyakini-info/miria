@@ -288,6 +288,8 @@ abstract class SocketTimelineRepository extends TimelineRepository {
             await accountRepository.addUnreadNotification(account);
           case ReadAllAnnouncementsChannelEvent():
             await accountRepository.removeUnreadAnnouncement(account);
+          case NewChatMessageEvent():
+            await accountRepository.addUnreadChatMessages(account);
           case AnnouncementCreatedChannelEvent():
           case NoteChannelEvent():
           case StatsLogChannelEvent():
@@ -323,21 +325,11 @@ abstract class SocketTimelineRepository extends TimelineRepository {
           case DeletedChannelEvent():
           case PollVotedChannelEvent():
           case UpdatedChannelEvent():
-          case NewChatMessageEvent():
-            // TODO: Handle this case.
-            throw UnimplementedError();
           case ChatMessageChannelEvent():
-            // TODO: Handle this case.
-            throw UnimplementedError();
           case ChatDeletedChannelEvent():
-            // TODO: Handle this case.
-            throw UnimplementedError();
           case ChatReactChannelEvent():
-            // TODO: Handle this case.
-            throw UnimplementedError();
           case ChatUnreactChannelEvent():
-            // TODO: Handle this case.
-            throw UnimplementedError();
+            break;
         }
       case StreamingChannelEmojiAddedResponse():
       case StreamingChannelEmojiUpdatedResponse():
@@ -351,7 +343,6 @@ abstract class SocketTimelineRepository extends TimelineRepository {
         );
       case StreamingChannelNoteUpdatedResponse():
       case StreamingChannelUnknownResponse():
-      // TODO: Handle this case.
     }
   }
 
@@ -395,20 +386,10 @@ abstract class SocketTimelineRepository extends TimelineRepository {
           case ReceiveFollowRequestChannelEvent():
           case FallbackChannelEvent():
           case NewChatMessageEvent():
-            // TODO: Handle this case.
-            throw UnimplementedError();
           case ChatMessageChannelEvent():
-            // TODO: Handle this case.
-            throw UnimplementedError();
           case ChatDeletedChannelEvent():
-            // TODO: Handle this case.
-            throw UnimplementedError();
           case ChatReactChannelEvent():
-            // TODO: Handle this case.
-            throw UnimplementedError();
           case ChatUnreactChannelEvent():
-            // TODO: Handle this case.
-            throw UnimplementedError();
         }
       case StreamingChannelNoteUpdatedResponse(:final body):
         switch (body) {

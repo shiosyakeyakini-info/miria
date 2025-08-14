@@ -8,6 +8,8 @@ import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/chat_page/chat_home_page.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/custom_emoji.dart";
@@ -34,8 +36,9 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final misskey = ref.read(misskeyPostContextProvider);
+    final canChat = accountContext.postAccount.i.canChat == true;
     return DefaultTabController(
-      length: 3,
+      length: 3 + (canChat ? 1 : 0),
       child: Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).notification),
@@ -43,6 +46,7 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
             tabs: [
               Tab(text: S.of(context).notificationAll),
               Tab(text: S.of(context).notificationForMe),
+              if (canChat) Tab(text: S.of(context).chat),
               Tab(text: S.of(context).notificationDirect),
             ],
           ),
@@ -105,6 +109,7 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
                   return misskey_note.MisskeyNote(note: note);
                 },
               ),
+              if (canChat) const ChatHome(),
               PushableListView<Note>(
                 initializeFuture: () async {
                   final notes = await ref
@@ -500,6 +505,39 @@ class NotificationItem extends ConsumerWidget {
                 ),
               ),
             ],
+          ),
+        );
+      case InvitedChatRoomNotification():
+        return SizedBox(
+          width: double.infinity,
+          child: Padding(
+            padding: const EdgeInsets.only(
+              top: 10,
+              bottom: 10,
+              right: 10,
+              left: 10.0,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SimpleMfmText(
+                  S
+                      .of(context)
+                      .chatRoomInvitation(
+                        notification.invitation.room?.name ?? "???",
+                      ),
+                ),
+                ElevatedButton(
+                  onPressed: () async => context.pushRoute(
+                    ChatHomeRoute(
+                      accountContext: ref.read(accountContextProvider),
+                      initialTab: 1,
+                    ),
+                  ),
+                  child: Text(S.of(context).goToChat),
+                ),
+              ],
+            ),
           ),
         );
     }

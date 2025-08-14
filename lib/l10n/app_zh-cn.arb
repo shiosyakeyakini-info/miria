@@ -980,5 +980,15 @@
     "profileFieldName": "名称",
     "profileFieldValue": "内容",
     "profileAddField": "添加",
-    "profileFollowedMessage": "被关注时的消息"
+    "profileFollowedMessage": "被关注时的消息",
+    
+    "goToChat": "前往",
+    "chatRoomInvitation": "您被邀请加入聊天室【{roomName}】",
+    "@chatRoomInvitation": {
+        "placeholders": {
+            "roomName": {
+                "type": "String"
+            }
+        }
+    }
 }
