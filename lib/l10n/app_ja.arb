@@ -1077,7 +1077,47 @@
     "profileFromDrive": "ドライブから",
     "profileFieldName": "名前",
     "profileFieldValue": "内容",
-    "profileAddField": "項目を追加",
-    "profileFollowedMessage": "フォローされたときのメッセージ"
+    "profileAddField": "追加",
+    "profileFollowedMessage": "フォローされたときのメッセージ",
+
+    "chat": "チャット",
+    "chatInvitation": "招待",
+    "chatOwnRooms": "自分で作ったやつ",
+    "chatNewChat": "新しいチャットを開始",
+    "chatIgnored": "無視したで",
+    "chatNoDescription": "説明はありません",
+    "chatJoin": "参加",
+    "chatIgnore": "無視",
+    "chatSearch": "チャット検索",
+    "chatInvited": "招待したで",
+    "chatRoomName": "名前",
+    "chatRoomDescription": "説明",
+    "chatUpdate": "更新",
+    "chatDelete": "削除する",
+    "chatCreator": "チャット立てた人",
+    "chatLeave": "チャットから退出",
+    "chatLeftRoom": "チャットから退出したで",
+    "chatRetry": "再試行",
+    "chatCreate": "作成",
+    "chatReaction": "リアクション",
+    "chatReport": "通報",
+    "chatAttachedFiles": "添付ファイル",
+    "chatDetailInfo": "詳細情報",
+    "chatSentAt": "送信日時",
+    "chatSenderId": "送信者ID",
+    "chatReactionCount": "リアクション数",
+    "chatReactionList": "リアクション一覧",
+    "chatUnknownUser": "Unknown User",
+    "chatNsfw": "NSFW",
+
+    "chatRoomInvitation": "チャットルームに招待されたで【{roomName}】",
+    "@chatRoomInvitation": {
+        "placeholders": {
+            "roomName": {
+                "type": "String"
+            }
+        }
+    },
+    "goToChat": "みにいく"
 
 }

@@ -144,6 +144,15 @@ class RoleNotification extends NotificationData {
   });
 }
 
+class InvitedChatRoomNotification extends NotificationData {
+  final ChatJoining invitation;
+  InvitedChatRoomNotification({
+    required this.invitation,
+    required super.createdAt,
+    required super.id,
+  });
+}
+
 extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
   List<NotificationData> toNotificationData(S localize) {
     final resultList = <NotificationData>[];
@@ -342,14 +351,6 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               id: element.id,
             ),
           );
-        case NotificationType.unknown:
-          resultList.add(
-            SimpleNotificationData(
-              text: localize.unknownNotification,
-              createdAt: element.createdAt,
-              id: element.id,
-            ),
-          );
         case NotificationType.createToken:
           resultList.add(
             SimpleNotificationData(
@@ -359,9 +360,28 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
             ),
           );
         case NotificationType.chatRoomInvitationReceived:
+          if (element.invitation != null) {
+            resultList.add(
+              InvitedChatRoomNotification(
+                invitation: element.invitation!,
+                createdAt: element.createdAt,
+                id: element.id,
+              ),
+            );
+          } else {
+            resultList.add(
+              SimpleNotificationData(
+                text: localize.chatRoomInvitationReceivedNotification,
+                createdAt: element.createdAt,
+                id: element.id,
+              ),
+            );
+          }
+
+        case NotificationType.unknown:
           resultList.add(
             SimpleNotificationData(
-              text: localize.chatRoomInvitationReceivedNotification,
+              text: localize.unknownNotification,
               createdAt: element.createdAt,
               id: element.id,
             ),

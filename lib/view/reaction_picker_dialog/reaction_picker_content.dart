@@ -50,46 +50,44 @@ class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          EmojiSearch(
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: EmojiSearch(
             onTap: widget.onTap,
             isAcceptSensitive: widget.isAcceptSensitive,
           ),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: categoryList.length,
-            itemBuilder: (context, index) => ExpansionTile(
-              title: Text(categoryList[index]),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Wrap(
-                      spacing: 5,
-                      runSpacing: 5,
-                      crossAxisAlignment: WrapCrossAlignment.start,
-                      children: [
-                        for (final emoji in (emojiRepository.emoji ?? []).where(
-                          (element) => element.category == categoryList[index],
-                        ))
-                          EmojiButton(
-                            emoji: emoji.emoji,
-                            onTap: widget.onTap,
-                            isAcceptSensitive: widget.isAcceptSensitive,
-                          ),
-                      ],
-                    ),
+        ),
+        SliverList.builder(
+          itemCount: categoryList.length,
+          itemBuilder: (context, index) => ExpansionTile(
+            title: Text(categoryList[index]),
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Wrap(
+                    spacing: 5,
+                    runSpacing: 5,
+                    crossAxisAlignment: WrapCrossAlignment.start,
+                    children: [
+                      for (final emoji in (emojiRepository.emoji ?? []).where(
+                        (element) => element.category == categoryList[index],
+                      ))
+                        EmojiButton(
+                          emoji: emoji.emoji,
+                          onTap: widget.onTap,
+                          isAcceptSensitive: widget.isAcceptSensitive,
+                        ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

@@ -404,7 +404,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                                 ),
                                 onPressed: () async {
                                   final result = await context.pushRoute<Color>(
-                                    const ColorPickerRoute(),
+                                    ColorPickerRoute(
+                                      initialColor: lightNoteBgPublic.value,
+                                    ),
                                   );
                                   if (result != null) {
                                     lightNoteBgPublic.value = result;
@@ -427,7 +429,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                                 ),
                                 onPressed: () async {
                                   final result = await context.pushRoute<Color>(
-                                    const ColorPickerRoute(),
+                                    ColorPickerRoute(
+                                      initialColor: darkNoteBgPublic.value,
+                                    ),
                                   );
                                   if (result != null) {
                                     darkNoteBgPublic.value = result;
@@ -456,7 +460,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                                 ),
                                 onPressed: () async {
                                   final result = await context.pushRoute<Color>(
-                                    const ColorPickerRoute(),
+                                    ColorPickerRoute(
+                                      initialColor: lightNoteBgHome.value,
+                                    ),
                                   );
                                   if (result != null) {
                                     lightNoteBgHome.value = result;
@@ -479,7 +485,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                                 ),
                                 onPressed: () async {
                                   final result = await context.pushRoute<Color>(
-                                    const ColorPickerRoute(),
+                                    ColorPickerRoute(
+                                      initialColor: darkNoteBgHome.value,
+                                    ),
                                   );
                                   if (result != null) {
                                     darkNoteBgHome.value = result;
@@ -508,7 +516,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                                 ),
                                 onPressed: () async {
                                   final result = await context.pushRoute<Color>(
-                                    const ColorPickerRoute(),
+                                    ColorPickerRoute(
+                                      initialColor: lightNoteBgFollowers.value,
+                                    ),
                                   );
                                   if (result != null) {
                                     lightNoteBgFollowers.value = result;
@@ -531,7 +541,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                                 ),
                                 onPressed: () async {
                                   final result = await context.pushRoute<Color>(
-                                    const ColorPickerRoute(),
+                                    ColorPickerRoute(
+                                      initialColor: darkNoteBgFollowers.value,
+                                    ),
                                   );
                                   if (result != null) {
                                     darkNoteBgFollowers.value = result;
@@ -560,7 +572,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                                 ),
                                 onPressed: () async {
                                   final result = await context.pushRoute<Color>(
-                                    const ColorPickerRoute(),
+                                    ColorPickerRoute(
+                                      initialColor: lightNoteBgDirect.value,
+                                    ),
                                   );
                                   if (result != null) {
                                     lightNoteBgDirect.value = result;
@@ -583,7 +597,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                                 ),
                                 onPressed: () async {
                                   final result = await context.pushRoute<Color>(
-                                    const ColorPickerRoute(),
+                                    ColorPickerRoute(
+                                      initialColor: darkNoteBgDirect.value,
+                                    ),
                                   );
                                   if (result != null) {
                                     darkNoteBgDirect.value = result;

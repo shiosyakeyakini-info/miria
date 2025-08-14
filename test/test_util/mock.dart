@@ -1,15 +1,19 @@
 import "dart:io";
 
+import "package:auto_route/auto_route.dart";
 import "package:dio/dio.dart";
 import "package:file_picker/file_picker.dart";
 import "package:flutter_cache_manager/flutter_cache_manager.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/repository/account_settings_repository.dart";
+import "package:miria/repository/chat_room_repository.dart";
 import "package:miria/repository/emoji_repository.dart";
 import "package:miria/repository/general_settings_repository.dart";
 import "package:miria/repository/note_repository.dart";
 import "package:miria/repository/tab_settings_repository.dart";
+import "package:miria/router/app_router.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:misskey_dart/src/misskey_chat.dart";
 import "package:mockito/annotations.dart";
 import "package:mockito/mockito.dart";
 import "package:plugin_platform_interface/plugin_platform_interface.dart";
@@ -19,6 +23,7 @@ import "package:url_launcher_platform_interface/url_launcher_platform_interface.
   // レポジトリ
   MockSpec<TabSettingsRepository>(),
   MockSpec<AccountSettingsRepository>(),
+  MockSpec<ChatRoomRepository>(),
   MockSpec<EmojiRepository>(),
   MockSpec<GeneralSettingsRepository>(),
   MockSpec<AccountRepository>(),
@@ -46,6 +51,12 @@ import "package:url_launcher_platform_interface/url_launcher_platform_interface.
   MockSpec<MisskeyRoles>(),
   MockSpec<MisskeyUsers>(),
 
+  // チャット関連
+  MockSpec<MisskeyChat>(),
+  MockSpec<MisskeyChatMessages>(),
+  MockSpec<MisskeyChatRooms>(),
+  MockSpec<MisskeyChatRoomsInvitations>(),
+
   // プラグインとか
   MockSpec<Dio>(),
   MockSpec<HttpClient>(),
@@ -67,3 +78,15 @@ class FakeFilePickerPlatform extends Mock
 class $MockUrlLauncherPlatform extends Mock
     with MockPlatformInterfaceMixin
     implements UrlLauncherPlatform {}
+
+class MockAppRouter extends Mock implements AppRouter {
+  @override
+  Future<T?> push<T extends Object?>(
+    PageRouteInfo<Object?> route, {
+    void Function(NavigationFailure)? onFailure,
+  }) => super.noSuchMethod(
+    Invocation.method(#push, [route], {#onFailure: onFailure}),
+    returnValue: Future<T?>.value(),
+    returnValueForMissingStub: Future<T?>.value(),
+  );
+}

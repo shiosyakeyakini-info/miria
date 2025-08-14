@@ -248,6 +248,24 @@ class AccountRepository extends _$AccountRepository {
     state = accounts;
   }
 
+  Future<void> addUnreadChatMessages(Account account) async {
+    final index = state.indexOf(account);
+    final i = state[index].i.copyWith(hasUnreadChatMessages: true);
+
+    final accounts = List.of(state);
+    accounts[index] = account.copyWith(i: i);
+    state = accounts;
+  }
+
+  Future<void> readAllChatMessages(Account account) async {
+    final index = state.indexOf(account);
+    final i = state[index].i.copyWith(hasUnreadChatMessages: false);
+
+    final accounts = List.of(state);
+    accounts[index] = account.copyWith(i: i);
+    state = accounts;
+  }
+
   Future<void> remove(Account account) async {
     state = state.where((e) => e != account).toList();
     _validatedAccts.remove(account.acct);
@@ -443,8 +461,9 @@ class AccountRepository extends _$AccountRepository {
   }
 
   Future<void> _addAccount(Account account) async {
-    if (state.map((e) => e.acct).contains(account.acct)) {
-      throw AlreadyLoggedInException(account.acct.toString());
+    final alreadyCreated = state.map((e) => e.acct).contains(account.acct);
+    if (alreadyCreated) {
+      state.removeWhere((e) => e.acct == account.acct);
     }
 
     state = [...state, account];
@@ -452,9 +471,11 @@ class AccountRepository extends _$AccountRepository {
     await ref.read(emojiRepositoryProvider(account)).loadFromSourceIfNeed();
 
     await _save();
-    await ref
-        .read(tabSettingsRepositoryProvider)
-        .initializeTabSettings(account);
+    if (!alreadyCreated) {
+      await ref
+          .read(tabSettingsRepositoryProvider)
+          .initializeTabSettings(account);
+    }
   }
 
   Future<void> reorder(int oldIndex, int newIndex) async {

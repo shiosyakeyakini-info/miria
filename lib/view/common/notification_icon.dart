@@ -13,15 +13,22 @@ class NotificationIcon extends ConsumerWidget {
     final acct = ref.watch(
       accountContextProvider.select((value) => value.postAccount.acct),
     );
-    final hasUnread = ref.watch(
-      iProvider(acct).select((value) => value.hasUnreadNotification),
-    );
+    final i = ref.watch(iProvider(acct));
+    final hasUnreadNotification = i.hasUnreadNotification;
+    final hasUnreadChat = i.hasUnreadChatMessages ?? false;
+    final hasUnread = hasUnreadNotification || hasUnreadChat;
 
     if (hasUnread) {
       return IconButton(
-        onPressed: () async => context.pushRoute(
-          NotificationRoute(accountContext: ref.read(accountContextProvider)),
-        ),
+        onPressed: () async {
+          if (context.mounted) {
+            await context.pushRoute(
+              NotificationRoute(
+                accountContext: ref.read(accountContextProvider),
+              ),
+            );
+          }
+        },
         icon: Stack(
           children: [
             const Icon(Icons.notifications),

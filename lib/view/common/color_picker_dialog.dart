@@ -6,11 +6,14 @@ import "package:miria/l10n/app_localizations.dart";
 
 @RoutePage()
 class ColorPickerDialog extends HookWidget {
-  const ColorPickerDialog({super.key});
+  final Color? initialColor;
+  const ColorPickerDialog({super.key, this.initialColor});
 
   @override
   Widget build(BuildContext context) {
-    final pickedColor = useState(const Color.fromRGBO(134, 179, 0, 1.0));
+    final pickedColor = useState(
+      initialColor ?? const Color.fromRGBO(134, 179, 0, 1.0),
+    );
     return AlertDialog(
       title: Text(S.of(context).pickColor),
       content: ColorPicker(

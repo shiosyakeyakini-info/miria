@@ -1,9 +1,11 @@
 import "dart:async";
 import "dart:io";
 
+import "package:auto_route/auto_route.dart";
 import "package:dio/dio.dart";
-import "package:flutter/cupertino.dart";
+import "package:flutter/material.dart";
 import "package:miria/l10n/app_localizations.dart";
+import "package:miria/router/app_router.dart";
 
 class ErrorDetail extends StatelessWidget {
   final Object? error;
@@ -22,6 +24,16 @@ class ErrorDetail extends StatelessWidget {
           e.type == DioExceptionType.receiveTimeout ||
           e.type == DioExceptionType.sendTimeout) {
         return Text(S.of(context).thrownConnectionTimeout);
+      } else if (e.response?.statusCode == 403) {
+        return Column(
+          children: [
+            Text("【エラー】APIの権限が不足しているか、アクセストークンが削除されています。"),
+            ElevatedButton(
+              onPressed: () async => context.pushRoute(const LoginRoute()),
+              child: Text("再ログイン"),
+            ),
+          ],
+        );
       } else if (response != null) {
         return Text("[${response.statusCode}] ${response.data}");
       }
