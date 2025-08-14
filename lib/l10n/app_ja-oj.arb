@@ -166,5 +166,7 @@
                 "type": "String"
             }
         }
-    }
+    },
+
+    "noSearchResults": "検索結果が見つかりませんでしたわ"
 }

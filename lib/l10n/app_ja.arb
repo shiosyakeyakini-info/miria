@@ -1118,6 +1118,8 @@
             }
         }
     },
-    "goToChat": "みにいく"
+    "goToChat": "みにいく",
+
+    "noSearchResults": "検索結果が見つかりませんでした"
 
 }
