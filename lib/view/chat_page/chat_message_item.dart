@@ -151,7 +151,6 @@ class ChatMessageItem extends ConsumerWidget {
     );
   }
 
-
   Future<void> _showMessageMenu(BuildContext context, WidgetRef ref) async {
     // 自分のメッセージの場合はpostAccountのユーザー情報を使用
     final displayUser = user ?? ref.read(accountContextProvider).postAccount.i;
@@ -270,10 +269,7 @@ class ChatMessageItem extends ConsumerWidget {
 class ReactionsListWidget extends StatelessWidget {
   final ChatMessage message;
 
-  const ReactionsListWidget({
-    required this.message,
-    super.key,
-  });
+  const ReactionsListWidget({required this.message, super.key});
 
   @override
   Widget build(BuildContext context) {

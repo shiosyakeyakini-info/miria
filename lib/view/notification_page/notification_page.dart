@@ -521,7 +521,11 @@ class NotificationItem extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SimpleMfmText(
-                  S.of(context).chatRoomInvitation(notification.invitation.room?.name ?? "???"),
+                  S
+                      .of(context)
+                      .chatRoomInvitation(
+                        notification.invitation.room?.name ?? "???",
+                      ),
                 ),
                 ElevatedButton(
                   onPressed: () async => context.pushRoute(

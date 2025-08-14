@@ -58,17 +58,12 @@ class ChatMessageDetailPage extends HookConsumerWidget
       },
     );
   }
-
-
 }
 
 class MessageDetailWidget extends HookConsumerWidget {
   final ChatMessage message;
 
-  const MessageDetailWidget({
-    required this.message,
-    super.key,
-  });
+  const MessageDetailWidget({required this.message, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -158,7 +153,8 @@ class MessageDetailWidget extends HookConsumerWidget {
                   const SizedBox(height: 8),
                   DetailRowWidget(
                     label: S.of(context).chatSentAt,
-                    value: "${message.createdAt.toLocal().toString().substring(0, 19)} (${message.createdAt.differenceNow(context)})",
+                    value:
+                        "${message.createdAt.toLocal().toString().substring(0, 19)} (${message.createdAt.differenceNow(context)})",
                   ),
                   const SizedBox(height: 8),
                   DetailRowWidget(
@@ -167,7 +163,10 @@ class MessageDetailWidget extends HookConsumerWidget {
                   ),
                   if (message.toUser != null) ...[
                     const SizedBox(height: 8),
-                    DetailRowWidget(label: S.of(context).user, value: message.toUser!.id),
+                    DetailRowWidget(
+                      label: S.of(context).user,
+                      value: message.toUser!.id,
+                    ),
                   ],
                   if (message.reactions.isNotEmpty) ...[
                     const SizedBox(height: 8),
@@ -230,11 +229,7 @@ class DetailRowWidget extends StatelessWidget {
   final String label;
   final String value;
 
-  const DetailRowWidget({
-    required this.label,
-    required this.value,
-    super.key,
-  });
+  const DetailRowWidget({required this.label, required this.value, super.key});
 
   @override
   Widget build(BuildContext context) {
