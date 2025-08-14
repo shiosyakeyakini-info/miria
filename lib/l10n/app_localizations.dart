@@ -3447,7 +3447,7 @@ abstract class S {
   /// No description provided for @profileAddField.
   ///
   /// In ja, this message translates to:
-  /// **'項目を追加'**
+  /// **'追加'**
   String get profileAddField;
 
   /// No description provided for @profileFollowedMessage.
@@ -3641,6 +3641,12 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'みにいく'**
   String get goToChat;
+
+  /// No description provided for @noSearchResults.
+  ///
+  /// In ja, this message translates to:
+  /// **'検索結果が見つかりませんでした'**
+  String get noSearchResults;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

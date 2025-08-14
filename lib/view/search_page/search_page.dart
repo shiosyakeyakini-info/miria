@@ -9,6 +9,7 @@ import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/search_page/note_search.dart";
+import "package:miria/view/search_page/play_search.dart";
 import "package:miria/view/user_select_dialog.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
@@ -37,8 +38,8 @@ class SearchPage extends HookConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final focusNodes = [useFocusNode(), useFocusNode()];
-    final tabController = useTabController(initialLength: 2);
+    final focusNodes = [useFocusNode(), useFocusNode(), useFocusNode()];
+    final tabController = useTabController(initialLength: 3);
     final tabIndex = useState(0);
     tabController.addListener(() {
       if (tabController.index != tabIndex.value) {
@@ -55,6 +56,7 @@ class SearchPage extends HookConsumerWidget implements AutoRouteWrapper {
           tabs: [
             Tab(text: S.of(context).note),
             Tab(text: S.of(context).user),
+            Tab(text: S.of(context).flash),
           ],
         ),
       ),
@@ -78,6 +80,7 @@ class SearchPage extends HookConsumerWidget implements AutoRouteWrapper {
               ),
             ),
           ),
+          PlaySearch(focusNode: focusNodes[2]),
         ],
       ),
     );

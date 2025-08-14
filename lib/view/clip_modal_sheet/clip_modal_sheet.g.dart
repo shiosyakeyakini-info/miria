@@ -155,7 +155,7 @@ final class _ClipModalSheetNotifierProvider
 }
 
 String _$clipModalSheetNotifierHash() =>
-    r'978ab378797102eac12dd3714bf742a671d769ad';
+    r'0751058a13d6c6ff7714eeef4110d399970c5b46';
 
 final class _ClipModalSheetNotifierFamily extends $Family
     with

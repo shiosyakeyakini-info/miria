@@ -2075,6 +2075,9 @@ class SZh extends S {
 
   @override
   String get goToChat => '前往';
+
+  @override
+  String get noSearchResults => '未找到搜索结果';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -3966,4 +3969,7 @@ class SZhCn extends SZh {
 
   @override
   String get goToChat => '前往';
+
+  @override
+  String get noSearchResults => '未找到搜索结果';
 }
