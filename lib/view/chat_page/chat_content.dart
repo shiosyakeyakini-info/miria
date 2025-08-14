@@ -28,15 +28,30 @@ class ChatContent extends ConsumerWidget {
       title: Row(
         children: [
           if (room != null)
-            Expanded(child: Text(room.name))
+            Expanded(
+              child: Text(
+                room.name,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+            )
           else
             Expanded(
-              child: SimpleMfmText(targetUser.name ?? targetUser.username),
+              child: SimpleMfmText(
+                targetUser.name ?? targetUser.username,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
             ),
-          Text(message.createdAt.differenceNow(context)),
+          Text(
+            message.createdAt.differenceNow(context),
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
         ],
       ),
-      subtitle: SimpleMfmText(message.text ?? ""),
+      subtitle: SimpleMfmText(
+        message.text ?? "",
+        style: Theme.of(context).textTheme.bodySmall,
+        maxLines: 5,
+      ),
     );
   }
 }
