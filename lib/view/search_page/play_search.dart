@@ -73,7 +73,9 @@ class PlaySearch extends HookConsumerWidget {
                   final response = await ref
                       .read(misskeyGetContextProvider)
                       .flash
-                      .search(FlashSearchRequest(query: searchQuery.value.trim()));
+                      .search(
+                        FlashSearchRequest(query: searchQuery.value.trim()),
+                      );
                   return response.toList();
                 },
                 nextFuture: (_, __) async => [],
