@@ -21,7 +21,7 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 part "chat_home_page.g.dart";
 
 @RoutePage()
-class ChatHomePage extends ConsumerWidget implements AutoRouteWrapper {
+class ChatHomePage extends HookConsumerWidget implements AutoRouteWrapper {
   final AccountContext accountContext;
   final int initialTab;
 
