@@ -24,8 +24,8 @@ final class _FormKeyProvider
         retry: null,
         name: r'_formKeyProvider',
         isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: const <ProviderOrFamily>[],
+        $allTransitiveDependencies: const <ProviderOrFamily>[],
       );
 
   @override
@@ -51,7 +51,7 @@ final class _FormKeyProvider
   }
 }
 
-String _$formKeyHash() => r'd50766db9667ea038f655d666e836a84897ee427';
+String _$formKeyHash() => r'd8a56e0366cb1a53da5331749cce00aef36862b1';
 
 @ProviderFor(_initialSettings)
 const _initialSettingsProvider = _InitialSettingsProvider._();
@@ -66,8 +66,8 @@ final class _InitialSettingsProvider
         retry: null,
         name: r'_initialSettingsProvider',
         isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: const <ProviderOrFamily>[],
+        $allTransitiveDependencies: const <ProviderOrFamily>[],
       );
 
   @override
@@ -92,7 +92,7 @@ final class _InitialSettingsProvider
   }
 }
 
-String _$initialSettingsHash() => r'f51f2ded589149448ba4ab01466f0672c334d0de';
+String _$initialSettingsHash() => r'5822fd6a8e4070e8a4da0c299a6149e49f7ef49e';
 
 @ProviderFor(_ClipSettingsNotifier)
 const _clipSettingsNotifierProvider = _ClipSettingsNotifierProvider._();
@@ -106,9 +106,13 @@ final class _ClipSettingsNotifierProvider
         retry: null,
         name: r'_clipSettingsNotifierProvider',
         isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: const <ProviderOrFamily>[_initialSettingsProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          _ClipSettingsNotifierProvider.$allTransitiveDependencies0,
+        ],
       );
+
+  static const $allTransitiveDependencies0 = _initialSettingsProvider;
 
   @override
   String debugGetCreateSourceHash() => _$clipSettingsNotifierHash();
@@ -127,7 +131,7 @@ final class _ClipSettingsNotifierProvider
 }
 
 String _$clipSettingsNotifierHash() =>
-    r'a31c8af941b36dbb6da351a2e072423b888c0daf';
+    r'004b0ddb0c4b37ca968f1da8c8390ef047727180';
 
 abstract class _$ClipSettingsNotifier extends $Notifier<ClipSettings> {
   ClipSettings build();
