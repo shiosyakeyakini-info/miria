@@ -1,4 +1,3 @@
-import "dart:async";
 
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
@@ -23,17 +22,6 @@ class NotificationIcon extends ConsumerWidget {
     if (hasUnread) {
       return IconButton(
         onPressed: () async {
-          // チャット未読をクリア（新しいAPIを使用）
-          if (hasUnreadChat) {
-            unawaited(() async {
-              try {
-                await ref.read(misskeyPostContextProvider).chat.readAll();
-              } catch (e) {
-                debugPrint("Failed to call chat.readAll(): $e");
-              }
-            }());
-          }
-
           if (context.mounted) {
             await context.pushRoute(
               NotificationRoute(
