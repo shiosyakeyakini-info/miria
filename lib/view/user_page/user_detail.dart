@@ -243,7 +243,9 @@ class UserDetail extends ConsumerWidget {
                         Row(
                           children: [
                             const Icon(Icons.warning_amber_rounded),
-                            Text(S.of(context).remoteUserCaution),
+                            Expanded(
+                              child: Text(S.of(context).remoteUserCaution),
+                            ),
                           ],
                         ),
                         GestureDetector(
