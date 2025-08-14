@@ -49,6 +49,7 @@ class ChatHomePage extends HookConsumerWidget implements AutoRouteWrapper {
           final tabController = DefaultTabController.of(context);
           return Scaffold(
             appBar: AppBar(
+              title: Text(S.of(context).chat),
               bottom: TabBar(
                 tabs: [
                   Tab(child: Text(S.of(context).home)),
@@ -354,7 +355,7 @@ class JoiningChat extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(right: 4.0),
       child: PushableListView(
         initializeFuture: () async => [
           ...await ref
