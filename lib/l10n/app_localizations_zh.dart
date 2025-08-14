@@ -1982,88 +1982,88 @@ class SZh extends S {
   String get profileFollowedMessage => '被关注时的消息';
 
   @override
-  String get chat => 'チャット';
+  String get chat => '聊天';
 
   @override
-  String get chatInvitation => '招待';
+  String get chatInvitation => '邀请';
 
   @override
-  String get chatOwnRooms => '自分で作ったやつ';
+  String get chatOwnRooms => '我创建的房间';
 
   @override
-  String get chatNewChat => '新しいチャットを開始';
+  String get chatNewChat => '开始新聊天';
 
   @override
-  String get chatIgnored => '無視したで';
+  String get chatIgnored => '已忽略';
 
   @override
-  String get chatNoDescription => '説明はありません';
+  String get chatNoDescription => '没有描述';
 
   @override
-  String get chatJoin => '参加';
+  String get chatJoin => '加入';
 
   @override
-  String get chatIgnore => '無視';
+  String get chatIgnore => '忽略';
 
   @override
-  String get chatSearch => 'チャット検索';
+  String get chatSearch => '聊天搜索';
 
   @override
-  String get chatInvited => '招待したで';
+  String get chatInvited => '已邀请';
 
   @override
-  String get chatRoomName => '名前';
+  String get chatRoomName => '名称';
 
   @override
-  String get chatRoomDescription => '説明';
+  String get chatRoomDescription => '描述';
 
   @override
   String get chatUpdate => '更新';
 
   @override
-  String get chatDelete => '削除する';
+  String get chatDelete => '删除';
 
   @override
-  String get chatCreator => 'チャット立てた人';
+  String get chatCreator => '聊天创建者';
 
   @override
-  String get chatLeave => 'チャットから退出';
+  String get chatLeave => '退出聊天';
 
   @override
-  String get chatLeftRoom => 'チャットから退出したで';
+  String get chatLeftRoom => '已退出聊天';
 
   @override
-  String get chatRetry => '再試行';
+  String get chatRetry => '重试';
 
   @override
-  String get chatCreate => '作成';
+  String get chatCreate => '创建';
 
   @override
-  String get chatReaction => 'リアクション';
+  String get chatReaction => '回应';
 
   @override
-  String get chatReport => '通報';
+  String get chatReport => '举报';
 
   @override
-  String get chatAttachedFiles => '添付ファイル';
+  String get chatAttachedFiles => '附件';
 
   @override
-  String get chatDetailInfo => '詳細情報';
+  String get chatDetailInfo => '详细信息';
 
   @override
-  String get chatSentAt => '送信日時';
+  String get chatSentAt => '发送时间';
 
   @override
-  String get chatSenderId => '送信者ID';
+  String get chatSenderId => '发送者ID';
 
   @override
-  String get chatReactionCount => 'リアクション数';
+  String get chatReactionCount => '回应数';
 
   @override
-  String get chatReactionList => 'リアクション一覧';
+  String get chatReactionList => '回应列表';
 
   @override
-  String get chatUnknownUser => 'Unknown User';
+  String get chatUnknownUser => '未知用户';
 
   @override
   String get chatNsfw => 'NSFW';
