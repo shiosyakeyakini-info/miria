@@ -3,7 +3,6 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/l10n/app_localizations.dart";
-import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/util/server_utils.dart";
