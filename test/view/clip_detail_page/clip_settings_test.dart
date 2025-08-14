@@ -7,7 +7,9 @@ import "package:miria/view/clip_list_page/clip_settings_dialog.dart";
 
 void main() {
   group("ClipSettingsDialog dependencies テスト", () {
-    testWidgets("dependenciesパラメーター追加後のProviderScopeが正しく動作すること", (tester) async {
+    testWidgets("dependenciesパラメーター追加後のProviderScopeが正しく動作すること", (
+      tester,
+    ) async {
       const testSettings = ClipSettings(
         name: "テストクリップ",
         description: "テスト説明",
@@ -31,10 +33,10 @@ void main() {
 
       // ダイアログが表示されることを確認
       expect(find.byType(AlertDialog), findsOneWidget);
-      
+
       // 初期値が正しく表示されることを確認
       expect(find.text("テストクリップ"), findsOneWidget);
-      
+
       // パブリックチェックボックスが正しく設定されていることを確認
       final checkbox = tester.widget<CheckboxListTile>(
         find.byType(CheckboxListTile),
