@@ -354,7 +354,7 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
         case NotificationType.createToken:
           resultList.add(
             SimpleNotificationData(
-              text: "トークンが作成されたで",
+              text: localize.createTokenNotification,
               createdAt: element.createdAt,
               id: element.id,
             ),
@@ -371,7 +371,7 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
           } else {
             resultList.add(
               SimpleNotificationData(
-                text: "チャットルームに招待されたで",
+                text: localize.chatRoomInvitationReceivedNotification,
                 createdAt: element.createdAt,
                 id: element.id,
               ),
@@ -382,22 +382,6 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
           resultList.add(
             SimpleNotificationData(
               text: localize.unknownNotification,
-              createdAt: element.createdAt,
-              id: element.id,
-            ),
-          );
-        case NotificationType.createToken:
-          resultList.add(
-            SimpleNotificationData(
-              text: localize.createTokenNotification,
-              createdAt: element.createdAt,
-              id: element.id,
-            ),
-          );
-        case NotificationType.chatRoomInvitationReceived:
-          resultList.add(
-            SimpleNotificationData(
-              text: localize.chatRoomInvitationReceivedNotification,
               createdAt: element.createdAt,
               id: element.id,
             ),
