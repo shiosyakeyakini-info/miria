@@ -143,7 +143,7 @@ class ChatMessageItem extends ConsumerWidget {
                 ],
               ),
               if (message.reactions.isNotEmpty ?? false)
-                _buildReactionsList(context, ref),
+                ReactionsListWidget(message: message),
             ],
           ),
         ),
@@ -151,21 +151,6 @@ class ChatMessageItem extends ConsumerWidget {
     );
   }
 
-  Widget _buildReactionsList(BuildContext context, WidgetRef ref) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 4),
-      child: Wrap(
-        spacing: 4,
-        runSpacing: 4,
-        children: message.reactions
-            .map(
-              (reaction) =>
-                  ChatReactionWidget(message: message, reactionData: reaction),
-            )
-            .toList(),
-      ),
-    );
-  }
 
   Future<void> _showMessageMenu(BuildContext context, WidgetRef ref) async {
     // 自分のメッセージの場合はpostAccountのユーザー情報を使用
@@ -279,5 +264,31 @@ class ChatMessageItem extends ConsumerWidget {
       case MutedEmojiData():
         return _getReactionString(emoji.originalData);
     }
+  }
+}
+
+class ReactionsListWidget extends StatelessWidget {
+  final ChatMessage message;
+
+  const ReactionsListWidget({
+    required this.message,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 4),
+      child: Wrap(
+        spacing: 4,
+        runSpacing: 4,
+        children: message.reactions
+            .map(
+              (reaction) =>
+                  ChatReactionWidget(message: message, reactionData: reaction),
+            )
+            .toList(),
+      ),
+    );
   }
 }

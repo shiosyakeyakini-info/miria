@@ -146,26 +146,26 @@ class ChatMessageDetailPage extends HookConsumerWidget
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                   const SizedBox(height: 8),
-                  _buildDetailRow("ID", message.id),
+                  DetailRowWidget(label: "ID", value: message.id),
                   const SizedBox(height: 8),
-                  _buildDetailRow(
-                    S.of(context).chatSentAt,
-                    "${message.createdAt.toLocal().toString().substring(0, 19)} (${message.createdAt.differenceNow(context)})",
+                  DetailRowWidget(
+                    label: S.of(context).chatSentAt,
+                    value: "${message.createdAt.toLocal().toString().substring(0, 19)} (${message.createdAt.differenceNow(context)})",
                   ),
                   const SizedBox(height: 8),
-                  _buildDetailRow(
-                    S.of(context).chatSenderId,
-                    message.fromUserId,
+                  DetailRowWidget(
+                    label: S.of(context).chatSenderId,
+                    value: message.fromUserId,
                   ),
                   if (message.toUser != null) ...[
                     const SizedBox(height: 8),
-                    _buildDetailRow(S.of(context).user, message.toUser!.id),
+                    DetailRowWidget(label: S.of(context).user, value: message.toUser!.id),
                   ],
                   if (message.reactions.isNotEmpty) ...[
                     const SizedBox(height: 8),
-                    _buildDetailRow(
-                      S.of(context).chatReactionCount,
-                      message.reactions.length.toString(),
+                    DetailRowWidget(
+                      label: S.of(context).chatReactionCount,
+                      value: message.reactions.length.toString(),
                     ),
                   ],
                 ],
@@ -217,7 +217,20 @@ class ChatMessageDetailPage extends HookConsumerWidget
     );
   }
 
-  Widget _buildDetailRow(String label, String value) {
+}
+
+class DetailRowWidget extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const DetailRowWidget({
+    required this.label,
+    required this.value,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
