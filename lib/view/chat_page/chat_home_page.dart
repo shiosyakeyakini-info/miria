@@ -6,6 +6,7 @@ import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/hooks/use_async.dart";
 import "package:miria/providers.dart";
+import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/chat_page/chat_content.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -38,16 +39,6 @@ class ChatHomePage extends HookConsumerWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // チャットページを開いたときに未読状態をクリア
-    useEffect(() {
-      unawaited(() async {
-        try {
-          await ref.read(misskeyPostContextProvider).chat.readAll();
-        } catch (e) {
-          debugPrint("Failed to call chat.readAll() on chat home page: $e");
-        }
-      }());
-      return null;
-    }, []);
 
     return DefaultTabController(
       length: 4,
@@ -142,12 +133,28 @@ Future<List<ChatMessage>> history(Ref ref) async {
   return [...a, ...b]..sort((a, b) => b.createdAt.compareTo(a.createdAt));
 }
 
-class ChatHome extends ConsumerWidget {
+class ChatHome extends HookConsumerWidget {
   const ChatHome({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final history = ref.watch(historyProvider);
+
+    useEffect(() {
+      unawaited(() async {
+        try {
+          await ref.read(misskeyPostContextProvider).chat.readAll();
+          await ref
+              .read(accountRepositoryProvider.notifier)
+              .readAllChatMessages(
+                ref.read(accountContextProvider).postAccount,
+              );
+        } catch (e) {
+          debugPrint("Failed to call chat.readAll() on chat home page: $e");
+        }
+      }());
+      return null;
+    }, []);
 
     return switch (history) {
       AsyncLoading() => const Center(child: CircularProgressIndicator()),

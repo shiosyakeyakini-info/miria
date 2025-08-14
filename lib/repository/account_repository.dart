@@ -248,6 +248,24 @@ class AccountRepository extends _$AccountRepository {
     state = accounts;
   }
 
+  Future<void> addUnreadChatMessages(Account account) async {
+    final index = state.indexOf(account);
+    final i = state[index].i.copyWith(hasUnreadChatMessages: true);
+
+    final accounts = List.of(state);
+    accounts[index] = account.copyWith(i: i);
+    state = accounts;
+  }
+
+  Future<void> readAllChatMessages(Account account) async {
+    final index = state.indexOf(account);
+    final i = state[index].i.copyWith(hasUnreadChatMessages: false);
+
+    final accounts = List.of(state);
+    accounts[index] = account.copyWith(i: i);
+    state = accounts;
+  }
+
   Future<void> remove(Account account) async {
     state = state.where((e) => e != account).toList();
     _validatedAccts.remove(account.acct);

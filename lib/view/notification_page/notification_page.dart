@@ -36,8 +36,9 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final misskey = ref.read(misskeyPostContextProvider);
+    final canChat = accountContext.postAccount.i.canChat == true;
     return DefaultTabController(
-      length: 4,
+      length: 3 + (canChat ? 1 : 0),
       child: Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).notification),
@@ -45,7 +46,7 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
             tabs: [
               Tab(text: S.of(context).notificationAll),
               Tab(text: S.of(context).notificationForMe),
-              Tab(text: "チャット"),
+              if (canChat) Tab(text: "チャット"),
               Tab(text: S.of(context).notificationDirect),
             ],
           ),
@@ -108,7 +109,7 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
                   return misskey_note.MisskeyNote(note: note);
                 },
               ),
-              const ChatHome(),
+              if (canChat) const ChatHome(),
               PushableListView<Note>(
                 initializeFuture: () async {
                   final notes = await ref
