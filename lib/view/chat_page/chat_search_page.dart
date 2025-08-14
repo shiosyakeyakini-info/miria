@@ -144,8 +144,9 @@ class ChatSearchPage extends HookConsumerWidget implements AutoRouteWrapper {
     ChatMessage lastMessage,
     bool isRoom,
   ) async {
-    // 現在のAPIがuntilIdをサポートしていないため、
-    // ページネーションは一時的に無効化
+    // NOTE: Misskey APIのchat/messages/searchエンドポイントはuntilIdパラメータを
+    // サポートしていないため、ページネーション機能は利用できません。
+    // 検索結果は初回のAPIコールで取得できる分（最大100件）のみ表示されます。
     return [];
   }
 }

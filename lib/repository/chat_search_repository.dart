@@ -14,7 +14,8 @@ class ChatSearchRepository extends _$ChatSearchRepository {
     required String userId,
     required String query,
     int? limit,
-    String? untilId,
+    // NOTE: Misskey APIのchat/messages/searchはuntilIdをサポートしていないため、
+    // ページネーション機能は現在利用できません
   }) async {
     try {
       final misskey = ref.read(misskeyGetContextProvider);
@@ -37,7 +38,8 @@ class ChatSearchRepository extends _$ChatSearchRepository {
     required String roomId,
     required String query,
     int? limit,
-    String? untilId,
+    // NOTE: Misskey APIのchat/messages/searchはuntilIdをサポートしていないため、
+    // ページネーション機能は現在利用できません
   }) async {
     try {
       final misskey = ref.read(misskeyGetContextProvider);
@@ -60,7 +62,7 @@ class ChatSearchRepository extends _$ChatSearchRepository {
     required String channelId,
     required String query,
     int? limit,
-    String? untilId,
+    // NOTE: Misskey APIのnotes/searchもuntilIdをサポートしていない可能性があります
   }) async {
     try {
       final misskey = ref.read(misskeyGetContextProvider);
@@ -98,37 +100,18 @@ class ChatSearchPagination extends _$ChatSearchPagination {
   @override
   List<ChatMessage> build(String searchKey) => [];
 
+  // NOTE: Misskey APIのchat/messages/searchはページネーションをサポートしていないため、
+  // loadMoreメソッドは現在機能しません。APIがuntilIdパラメータをサポートするまで
+  // ページネーション機能は無効化されています。
   Future<void> loadMore({
     required String chatId,
     required String query,
     required bool isChannel,
     required bool isRoom,
   }) async {
-    if (isChannel) {
-      // チャンネルの場合は実装が異なるため、別の処理が必要
-      return;
-    }
-
-    final repository = ref.read(chatSearchRepositoryProvider.notifier);
-    final currentResults = state;
-    final lastId = currentResults.isNotEmpty ? currentResults.last.id : null;
-
-    List<ChatMessage> newResults;
-    if (isRoom) {
-      newResults = await repository.searchRoomChatMessages(
-        roomId: chatId,
-        query: query,
-      );
-    } else {
-      newResults = await repository.searchUserChatMessages(
-        userId: chatId,
-        query: query,
-      );
-    }
-
-    if (newResults.isNotEmpty) {
-      state = [...currentResults, ...newResults];
-    }
+    // ページネーション機能は現在サポートされていません
+    // Misskey APIがuntilIdパラメータをサポートした場合に実装予定
+    return;
   }
 
   void reset() {

@@ -52,7 +52,7 @@ final class ChatSearchRepositoryProvider
 }
 
 String _$chatSearchRepositoryHash() =>
-    r'ce3f85ddb45c0e0b376a61f54c85b77d3429dc2d';
+    r'f2975c708250d8823be846d6467ee529ec46c59b';
 
 abstract class _$ChatSearchRepository
     extends $Notifier<Map<String, List<ChatMessage>>> {
@@ -132,7 +132,7 @@ final class ChatSearchPaginationProvider
 }
 
 String _$chatSearchPaginationHash() =>
-    r'16a70bbfc9d3636c3e5793d77b21ef13bfd747ba';
+    r'9017350b3137cec1d4033e1ae135f7b9ecbe97fe';
 
 final class ChatSearchPaginationFamily extends $Family
     with
