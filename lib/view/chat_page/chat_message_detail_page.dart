@@ -1,5 +1,6 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
@@ -45,7 +46,7 @@ class ChatMessageDetailPage extends HookConsumerWidget
     }, const []);
 
     return Scaffold(
-      appBar: AppBar(title: const Text("メッセージ詳細")),
+      appBar: AppBar(title: Text(S.of(context).detail)),
       body: switch (loadMessage.value) {
         AsyncLoading() => const Center(child: CircularProgressIndicator()),
         AsyncError(:final error, :final stackTrace) => ErrorDetail(
@@ -111,7 +112,7 @@ class ChatMessageDetailPage extends HookConsumerWidget
                 children: [
                   if (message.text != null && message.text!.isNotEmpty) ...[
                     Text(
-                      "メッセージ内容",
+                      S.of(context).note,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                     const SizedBox(height: 8),
@@ -120,7 +121,7 @@ class ChatMessageDetailPage extends HookConsumerWidget
                   ],
                   if (message.file != null) ...[
                     Text(
-                      "添付ファイル",
+                      S.of(context).chatAttachedFiles,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                     const SizedBox(height: 8),
@@ -140,24 +141,30 @@ class ChatMessageDetailPage extends HookConsumerWidget
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("詳細情報", style: Theme.of(context).textTheme.titleSmall),
+                  Text(
+                    S.of(context).chatDetailInfo,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
                   const SizedBox(height: 8),
-                  _buildDetailRow("メッセージID", message.id),
+                  _buildDetailRow("ID", message.id),
                   const SizedBox(height: 8),
                   _buildDetailRow(
-                    "送信日時",
+                    S.of(context).chatSentAt,
                     "${message.createdAt.toLocal().toString().substring(0, 19)} (${message.createdAt.differenceNow(context)})",
                   ),
                   const SizedBox(height: 8),
-                  _buildDetailRow("送信者ID", message.fromUserId),
+                  _buildDetailRow(
+                    S.of(context).chatSenderId,
+                    message.fromUserId,
+                  ),
                   if (message.toUser != null) ...[
                     const SizedBox(height: 8),
-                    _buildDetailRow("相手ユーザーID", message.toUser!.id),
+                    _buildDetailRow(S.of(context).user, message.toUser!.id),
                   ],
                   if (message.reactions.isNotEmpty) ...[
                     const SizedBox(height: 8),
                     _buildDetailRow(
-                      "リアクション数",
+                      S.of(context).chatReactionCount,
                       message.reactions.length.toString(),
                     ),
                   ],
@@ -176,7 +183,7 @@ class ChatMessageDetailPage extends HookConsumerWidget
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "リアクション一覧",
+                      S.of(context).chatReactionList,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                     const SizedBox(height: 8),
@@ -195,7 +202,7 @@ class ChatMessageDetailPage extends HookConsumerWidget
                               const SizedBox(width: 8),
                               Text(reaction.user!.username),
                             ] else
-                              const Text("Unknown User"),
+                              Text(S.of(context).chatUnknownUser),
                           ],
                         ),
                       ),

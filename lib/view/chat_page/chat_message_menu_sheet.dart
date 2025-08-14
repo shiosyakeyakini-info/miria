@@ -1,5 +1,6 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
@@ -35,17 +36,17 @@ class ChatMessageMenuSheet extends ConsumerWidget implements AutoRouteWrapper {
       children: [
         ListTile(
           leading: const Icon(Icons.add_reaction),
-          title: const Text("リアクション"),
+          title: Text(S.of(context).chatReaction),
           onTap: () => context.maybePop(ChatMessageMenuAction.reaction),
         ),
         ListTile(
           leading: const Icon(Icons.copy),
-          title: const Text("内容をコピー"),
+          title: Text(S.of(context).copyContents),
           onTap: () => context.maybePop(ChatMessageMenuAction.copy),
         ),
         ListTile(
           leading: const Icon(Icons.info_outline),
-          title: const Text("メッセージ詳細"),
+          title: Text(S.of(context).detail),
           onTap: () => context.maybePop(ChatMessageMenuAction.detail),
         ),
         if (isMyMessage)
@@ -55,7 +56,7 @@ class ChatMessageMenuSheet extends ConsumerWidget implements AutoRouteWrapper {
               color: Theme.of(context).colorScheme.error,
             ),
             title: Text(
-              "メッセージを削除",
+              S.of(context).delete,
               style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
             onTap: () => context.maybePop(ChatMessageMenuAction.delete),
@@ -63,7 +64,7 @@ class ChatMessageMenuSheet extends ConsumerWidget implements AutoRouteWrapper {
         if (!isMyMessage)
           ListTile(
             leading: const Icon(Icons.report),
-            title: const Text("通報"),
+            title: Text(S.of(context).chatReport),
             onTap: () => context.maybePop(ChatMessageMenuAction.report),
           ),
       ],

@@ -68,8 +68,8 @@ void main() {
         // 自分のメッセージの場合のメニュー項目を確認
         expect(find.text("リアクション"), findsOneWidget);
         expect(find.text("内容をコピー"), findsOneWidget);
-        expect(find.text("メッセージ詳細"), findsOneWidget);
-        expect(find.text("メッセージを削除"), findsOneWidget);
+        expect(find.text("詳細"), findsOneWidget);
+        expect(find.text("削除"), findsOneWidget);
         expect(find.text("通報"), findsNothing); // 自分のメッセージには通報オプションがない
       });
 
@@ -106,8 +106,8 @@ void main() {
         // 他人のメッセージの場合のメニュー項目を確認
         expect(find.text("リアクション"), findsOneWidget);
         expect(find.text("内容をコピー"), findsOneWidget);
-        expect(find.text("メッセージ詳細"), findsOneWidget);
-        expect(find.text("メッセージを削除"), findsNothing); // 他人のメッセージは削除できない
+        expect(find.text("詳細"), findsOneWidget);
+        expect(find.text("削除"), findsNothing); // 他人のメッセージは削除できない
         expect(find.text("通報"), findsOneWidget);
       });
 
@@ -137,8 +137,8 @@ void main() {
         expect(find.byType(BottomSheet), findsOneWidget);
         expect(find.text("リアクション"), findsOneWidget);
         expect(find.text("内容をコピー"), findsOneWidget);
-        expect(find.text("メッセージ詳細"), findsOneWidget);
-        expect(find.text("メッセージを削除"), findsOneWidget);
+        expect(find.text("詳細"), findsOneWidget);
+        expect(find.text("削除"), findsOneWidget);
       });
     });
 
@@ -166,10 +166,10 @@ void main() {
         await tester.pumpAndSettle();
 
         // 削除メニューが表示されていることを確認
-        expect(find.text("メッセージを削除"), findsOneWidget);
+        expect(find.text("削除"), findsOneWidget);
 
         // 削除メニューをタップ
-        await tester.tap(find.text("メッセージを削除"));
+        await tester.tap(find.text("削除"));
         await tester.pumpAndSettle();
 
         // メニューが閉じることを確認（ChatMessageMenuAction.deleteが返される）
@@ -198,10 +198,10 @@ void main() {
         await tester.pumpAndSettle();
 
         // 詳細メニューが表示されていることを確認
-        expect(find.text("メッセージ詳細"), findsOneWidget);
+        expect(find.text("詳細"), findsOneWidget);
 
         // 詳細メニューをタップ
-        await tester.tap(find.text("メッセージ詳細"));
+        await tester.tap(find.text("詳細"));
         await tester.pumpAndSettle();
 
         // アクションが返される（実際の画面遷移はchat_message_item.dartで処理される）
@@ -263,7 +263,7 @@ void main() {
         // 削除アイコンとテキストが適切な色で表示されることを確認
         final deleteIcon = tester.widget<Icon>(
           find.descendant(
-            of: find.widgetWithText(ListTile, "メッセージを削除"),
+            of: find.widgetWithText(ListTile, "削除"),
             matching: find.byType(Icon),
           ),
         );
@@ -325,7 +325,7 @@ void main() {
 
         // メッセージ詳細画面が表示されることを確認
         expect(find.byType(Scaffold), findsOneWidget);
-        expect(find.text("メッセージ詳細"), findsOneWidget);
+        expect(find.text("詳細"), findsOneWidget);
 
         // 詳細画面の主要コンポーネントが表示されることを確認
         expect(find.byType(Card), findsWidgets); // 情報カード
@@ -372,9 +372,9 @@ void main() {
         // 読み取り専用でも基本的なメニューは表示される
         expect(find.text("リアクション"), findsOneWidget);
         expect(find.text("内容をコピー"), findsOneWidget);
-        expect(find.text("メッセージ詳細"), findsOneWidget);
+        expect(find.text("詳細"), findsOneWidget);
         // 他人のメッセージなので削除オプションはない
-        expect(find.text("メッセージを削除"), findsNothing);
+        expect(find.text("削除"), findsNothing);
         expect(find.text("通報"), findsOneWidget);
       });
     });

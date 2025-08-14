@@ -3,6 +3,7 @@ import "dart:async";
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:hooks_riverpod/experimental/mutation.dart";
@@ -353,7 +354,7 @@ class UserChatTimeline extends HookConsumerWidget {
                               const SizedBox(height: 8),
                               ElevatedButton(
                                 onPressed: loadMoreMessages,
-                                child: const Text("再試行"),
+                                child: Text(S.of(context).chatRetry),
                               ),
                             ],
                           ),

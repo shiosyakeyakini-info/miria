@@ -1988,6 +1988,93 @@ class SJa extends S {
 
   @override
   String get profileFollowedMessage => 'フォローされたときのメッセージ';
+
+  @override
+  String get chat => 'チャット';
+
+  @override
+  String get chatInvitation => '招待';
+
+  @override
+  String get chatOwnRooms => '自分で作ったやつ';
+
+  @override
+  String get chatNewChat => '新しいチャットを開始';
+
+  @override
+  String get chatIgnored => '無視したで';
+
+  @override
+  String get chatNoDescription => '説明はありません';
+
+  @override
+  String get chatJoin => '参加';
+
+  @override
+  String get chatIgnore => '無視';
+
+  @override
+  String get chatSearch => 'チャット検索';
+
+  @override
+  String get chatInvited => '招待したで';
+
+  @override
+  String get chatRoomName => '名前';
+
+  @override
+  String get chatRoomDescription => '説明';
+
+  @override
+  String get chatUpdate => '更新';
+
+  @override
+  String get chatDelete => '削除する';
+
+  @override
+  String get chatCreator => 'チャット立てた人';
+
+  @override
+  String get chatLeave => 'チャットから退出';
+
+  @override
+  String get chatLeftRoom => 'チャットから退出したで';
+
+  @override
+  String get chatRetry => '再試行';
+
+  @override
+  String get chatCreate => '作成';
+
+  @override
+  String get chatReaction => 'リアクション';
+
+  @override
+  String get chatReport => '通報';
+
+  @override
+  String get chatAttachedFiles => '添付ファイル';
+
+  @override
+  String get chatDetailInfo => '詳細情報';
+
+  @override
+  String get chatSentAt => '送信日時';
+
+  @override
+  String get chatSenderId => '送信者ID';
+
+  @override
+  String get chatReactionCount => 'リアクション数';
+
+  @override
+  String get chatReactionList => 'リアクション一覧';
+
+  @override
+  String get chatUnknownUser => 'Unknown User';
+
+  @override
+  String get chatNsfw => 'NSFW';
 }
 
 /// The translations for Japanese (`ja_OJ`).

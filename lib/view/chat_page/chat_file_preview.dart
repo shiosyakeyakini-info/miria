@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/image_file.dart";
 
 class ChatFilePreview extends StatelessWidget {
@@ -66,8 +67,8 @@ class ChatFilePreview extends StatelessWidget {
                     color: Colors.red,
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  child: const Text(
-                    "NSFW",
+                  child: Text(
+                    S.of(context).chatNsfw,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 10,

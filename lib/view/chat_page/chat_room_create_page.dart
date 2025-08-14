@@ -1,5 +1,6 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/hooks/use_async.dart";
@@ -51,12 +52,12 @@ class ChatRoomCreatePage extends HookConsumerWidget
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("新しいルームを作成"),
+        title: Text(S.of(context).create),
         actions: [
           ElevatedButton.icon(
             onPressed: createRoom.executeOrNull,
             icon: const Icon(Icons.check),
-            label: const Text("作成"),
+            label: Text(S.of(context).chatCreate),
           ),
           const SizedBox(width: 16),
         ],
@@ -70,15 +71,15 @@ class ChatRoomCreatePage extends HookConsumerWidget
             children: [
               TextFormField(
                 controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: "ルーム名",
-                  hintText: "ルーム名を入力してください",
+                decoration: InputDecoration(
+                  labelText: S.of(context).chatRoomName,
+                  hintText: S.of(context).pleaseInput,
                   border: OutlineInputBorder(),
                 ),
                 maxLength: 100,
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return "ルーム名は必須です";
+                    return S.of(context).pleaseInput;
                   }
                   return null;
                 },
@@ -87,9 +88,9 @@ class ChatRoomCreatePage extends HookConsumerWidget
               const SizedBox(height: 16),
               TextFormField(
                 controller: descriptionController,
-                decoration: const InputDecoration(
-                  labelText: "ルーム説明（任意）",
-                  hintText: "ルームの説明を入力してください",
+                decoration: InputDecoration(
+                  labelText: S.of(context).chatRoomDescription,
+                  hintText: S.of(context).pleaseInput,
                   border: OutlineInputBorder(),
                 ),
                 maxLines: 3,
@@ -115,7 +116,7 @@ class ChatRoomCreatePage extends HookConsumerWidget
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            "ルーム作成について",
+                            S.of(context).create,
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
                         ],

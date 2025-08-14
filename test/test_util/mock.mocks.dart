@@ -1160,6 +1160,24 @@ class MockAccountRepository extends _i1.Mock implements _i28.AccountRepository {
           as _i17.Future<void>);
 
   @override
+  _i17.Future<void> addUnreadChatMessages(_i6.Account? account) =>
+      (super.noSuchMethod(
+            Invocation.method(#addUnreadChatMessages, [account]),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
+          )
+          as _i17.Future<void>);
+
+  @override
+  _i17.Future<void> readAllChatMessages(_i6.Account? account) =>
+      (super.noSuchMethod(
+            Invocation.method(#readAllChatMessages, [account]),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
+          )
+          as _i17.Future<void>);
+
+  @override
   _i17.Future<void> remove(_i6.Account? account) =>
       (super.noSuchMethod(
             Invocation.method(#remove, [account]),

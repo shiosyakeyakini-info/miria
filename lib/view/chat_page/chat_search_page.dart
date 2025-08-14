@@ -1,5 +1,6 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
@@ -44,7 +45,7 @@ class ChatSearchPage extends HookConsumerWidget implements AutoRouteWrapper {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("チャット検索"),
+        title: Text(S.of(context).chatSearch),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(60),
           child: Padding(
@@ -52,7 +53,7 @@ class ChatSearchPage extends HookConsumerWidget implements AutoRouteWrapper {
             child: TextField(
               controller: searchController,
               decoration: InputDecoration(
-                hintText: "メッセージを検索...",
+                hintText: S.of(context).search,
                 prefixIcon: const Icon(Icons.search),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.clear),
@@ -75,7 +76,7 @@ class ChatSearchPage extends HookConsumerWidget implements AutoRouteWrapper {
         ),
       ),
       body: currentQuery.value.isEmpty
-          ? const Center(child: Text("検索キーワードを入力してください"))
+          ? Center(child: Text(S.of(context).pleaseInput))
           : PushableListView<ChatMessage>(
               listKey: "${currentQuery.value}_${chatId}_$isChannel",
               initializeFuture: () =>

@@ -2,6 +2,7 @@ import "dart:async";
 
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/hooks/use_async.dart";
@@ -48,12 +49,12 @@ class ChatHomePage extends HookConsumerWidget implements AutoRouteWrapper {
           final tabController = DefaultTabController.of(context);
           return Scaffold(
             appBar: AppBar(
-              bottom: const TabBar(
+              bottom: TabBar(
                 tabs: [
-                  Tab(child: Text("ホーム")),
-                  Tab(child: Text("招待")),
-                  Tab(child: Text("入ってるルーム")),
-                  Tab(child: Text("自分で作ったやつ")),
+                  Tab(child: Text(S.of(context).home)),
+                  Tab(child: Text(S.of(context).chatInvitation)),
+                  Tab(child: Text(S.of(context).channel)),
+                  Tab(child: Text(S.of(context).chatOwnRooms)),
                 ],
               ),
             ),
@@ -90,7 +91,7 @@ class ChatHomePage extends HookConsumerWidget implements AutoRouteWrapper {
                               );
                             }
                           },
-                          tooltip: "新しいチャットを開始",
+                          tooltip: S.of(context).chatNewChat,
                           child: const Icon(Icons.person_add),
                         );
                       } else {
@@ -104,7 +105,7 @@ class ChatHomePage extends HookConsumerWidget implements AutoRouteWrapper {
                               ),
                             );
                           },
-                          tooltip: "新しいルームを作成",
+                          tooltip: S.of(context).create,
                           child: const Icon(Icons.add),
                         );
                       }
@@ -268,7 +269,7 @@ class InvitedChatItem extends HookConsumerWidget {
         valueNotifier.value = DateTime.now();
         await ref
             .read(dialogStateNotifierProvider.notifier)
-            .showSimpleDialog(message: (context) => "無視したで");
+            .showSimpleDialog(message: (context) => S.of(context).chatIgnored);
       });
     });
 
@@ -321,7 +322,7 @@ class InvitedChatItem extends HookConsumerWidget {
                         const Divider(),
                         Text(
                           room.description.isEmpty
-                              ? "説明はありません"
+                              ? S.of(context).chatNoDescription
                               : room.description,
                         ),
                       ],
@@ -337,13 +338,13 @@ class InvitedChatItem extends HookConsumerWidget {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: join.executeOrNull,
-                        child: Text("参加"),
+                        child: Text(S.of(context).chatJoin),
                       ),
                     ),
                     Expanded(
                       child: OutlinedButton(
                         onPressed: ignore.executeOrNull,
-                        child: Text("無視"),
+                        child: Text(S.of(context).chatIgnore),
                       ),
                     ),
                   ],

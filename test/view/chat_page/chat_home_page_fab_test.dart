@@ -142,7 +142,7 @@ void main() {
         final fab = tester.widget<FloatingActionButton>(
           find.byType(FloatingActionButton),
         );
-        expect(fab.tooltip, "新しいルームを作成");
+        expect(fab.tooltip, "作成");
       });
     });
 
@@ -228,7 +228,7 @@ void main() {
         // 4つのタブが表示されることを確認
         expect(find.text("ホーム"), findsOneWidget);
         expect(find.text("招待"), findsOneWidget);
-        expect(find.text("入ってるルーム"), findsOneWidget);
+        expect(find.text("チャンネル"), findsOneWidget);
         expect(find.text("自分で作ったやつ"), findsOneWidget);
 
         // TabBarが存在することを確認
@@ -248,7 +248,7 @@ void main() {
             child: DefaultRootNoRouterWidget(
               child: ChatHomePage(
                 accountContext: normalAccountContext,
-                initialTab: 2, // "入ってるルーム"タブ
+                initialTab: 2, // "チャンネル"タブ
               ),
             ),
           ),
