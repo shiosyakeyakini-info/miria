@@ -36,7 +36,7 @@ class ChatRoomRepository extends _$ChatRoomRepository {
     return room;
   }
 
-  /// ルームの情報を更新する（既存機能の拡張として将来実装予定）
+  /// ルームの情報を更新する
   Future<ChatRoom> updateRoom({
     required String roomId,
     String? name,
@@ -57,7 +57,7 @@ class ChatRoomRepository extends _$ChatRoomRepository {
         );
   }
 
-  /// ルームを削除する（将来実装予定）
+  /// ルームを削除する
   Future<void> deleteRoom({required String roomId}) async {
     await ref
         .read(misskeyPostContextProvider)
