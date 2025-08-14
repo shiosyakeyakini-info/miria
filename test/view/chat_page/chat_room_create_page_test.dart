@@ -134,90 +134,8 @@ void main() {
         expect(find.text("入れてや"), findsAtLeastNWidgets(1));
       });
 
-      testWidgets("長すぎるルーム名は入力制限により防がれる", (tester) async {
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              misskeyProvider.overrideWith((ref, account) => mockMisskey),
-              misskeyPostContextProvider.overrideWithValue(mockMisskey),
-              misskeyGetContextProvider.overrideWithValue(mockMisskey),
-              accountContextProvider.overrideWithValue(TestData.accountContext),
-            ],
-            child: DefaultRootWidget(
-              router: router,
-              initialRoute: ChatRoomCreateRoute(
-                accountContext: TestData.accountContext,
-              ),
-            ),
-          ),
-        );
-
-        await tester.pumpAndSettle();
-
-        // 101文字のルーム名を入力しようとする
-        final longName = "a" * 101;
-        await tester.enterText(find.byType(TextFormField).first, longName);
-
-        // maxLength=100により、100文字までしか入力されていないことを確認
-        final controller = tester
-            .widget<TextFormField>(find.byType(TextFormField).first)
-            .controller;
-        expect(controller?.text.length, 100); // maxLengthにより制限される
-
-        // 作成ボタンをタップ
-        await tester.tap(find.byIcon(Icons.check));
-        await tester.pump();
-        await tester.pumpAndSettle();
-
-        // maxLengthにより100文字までしか入力されないため、バリデーションエラーは発生しない
-        // サーバー側のバリデーションエラーは別途処理される
-        expect(find.text("ルーム名は100文字以内で入力してください"), findsNothing);
-      });
-
-      testWidgets("長すぎるルーム説明は入力制限により防がれる", (tester) async {
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              misskeyProvider.overrideWith((ref, account) => mockMisskey),
-              misskeyPostContextProvider.overrideWithValue(mockMisskey),
-              misskeyGetContextProvider.overrideWithValue(mockMisskey),
-              accountContextProvider.overrideWithValue(TestData.accountContext),
-            ],
-            child: DefaultRootWidget(
-              router: router,
-              initialRoute: ChatRoomCreateRoute(
-                accountContext: TestData.accountContext,
-              ),
-            ),
-          ),
-        );
-
-        await tester.pumpAndSettle();
-
-        // 有効なルーム名を入力
-        await tester.enterText(find.byType(TextFormField).first, "テストルーム");
-
-        // 501文字の説明を入力しようとする
-        final longDescription = "a" * 501;
-        await tester.enterText(
-          find.byType(TextFormField).last,
-          longDescription,
-        );
-
-        // maxLength=500により、500文字までしか入力されていないことを確認
-        final controller = tester
-            .widget<TextFormField>(find.byType(TextFormField).last)
-            .controller;
-        expect(controller?.text.length, 500); // maxLengthにより制限される
-
-        // 作成ボタンをタップ
-        await tester.tap(find.byIcon(Icons.check));
-        await tester.pump();
-        await tester.pumpAndSettle();
-
-        // maxLengthにより500文字までしか入力されないため、バリデーションエラーは発生しない
-        expect(find.text("ルーム説明は500文字以内で入力してください"), findsNothing);
-      });
+      // NOTE: 文字数制限等の詳細なバリデーションはサーバー側で行われるため、
+      // maxLengthが削除され、長いテキストの入力制限テストは削除しました
 
       testWidgets("有効な入力値でバリデーションが通る", (tester) async {
         await tester.pumpWidget(
@@ -251,60 +169,11 @@ void main() {
 
         // バリデーションエラーが表示されない
         expect(find.text("入れてや"), findsNothing);
-        expect(find.text("ルーム名は100文字以内で入力してください"), findsNothing);
-        expect(find.text("ルーム説明は500文字以内で入力してください"), findsNothing);
       });
     });
 
-    group("文字数制限表示テスト", () {
-      testWidgets("ルーム名の文字数制限が表示される", (tester) async {
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              misskeyProvider.overrideWith((ref, account) => mockMisskey),
-              misskeyPostContextProvider.overrideWithValue(mockMisskey),
-              misskeyGetContextProvider.overrideWithValue(mockMisskey),
-              accountContextProvider.overrideWithValue(TestData.accountContext),
-            ],
-            child: DefaultRootWidget(
-              router: router,
-              initialRoute: ChatRoomCreateRoute(
-                accountContext: TestData.accountContext,
-              ),
-            ),
-          ),
-        );
-
-        await tester.pumpAndSettle();
-
-        // 文字数制限の表示を確認
-        expect(find.textContaining("100"), findsOneWidget); // maxLength: 100
-      });
-
-      testWidgets("ルーム説明の文字数制限が表示される", (tester) async {
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              misskeyProvider.overrideWith((ref, account) => mockMisskey),
-              misskeyPostContextProvider.overrideWithValue(mockMisskey),
-              misskeyGetContextProvider.overrideWithValue(mockMisskey),
-              accountContextProvider.overrideWithValue(TestData.accountContext),
-            ],
-            child: DefaultRootWidget(
-              router: router,
-              initialRoute: ChatRoomCreateRoute(
-                accountContext: TestData.accountContext,
-              ),
-            ),
-          ),
-        );
-
-        await tester.pumpAndSettle();
-
-        // 文字数制限の表示を確認
-        expect(find.textContaining("500"), findsOneWidget); // maxLength: 500
-      });
-    });
+    // NOTE: 文字数制限表示テストはmaxLengthが削除されたため削除しました
+    // 文字数制限はサーバー側で行われます
 
     group("フォーム機能テスト", () {
       testWidgets("フォームが正しく機能する", (tester) async {

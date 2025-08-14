@@ -76,7 +76,7 @@ class ChatRoomCreatePage extends HookConsumerWidget
                   hintText: S.of(context).pleaseInput,
                   border: OutlineInputBorder(),
                 ),
-                maxLength: 100,
+                // 文字数制限はサーバー側で行われるため、maxLengthは設定しない
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return S.of(context).pleaseInput;
@@ -94,7 +94,7 @@ class ChatRoomCreatePage extends HookConsumerWidget
                   border: OutlineInputBorder(),
                 ),
                 maxLines: 3,
-                maxLength: 500,
+                // 文字数制限はサーバー側で行われるため、maxLengthは設定しない
                 validator: (value) {
                   // 説明は任意なので空白チェックなし
                   return null;

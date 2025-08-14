@@ -14,15 +14,10 @@ class ChatRoomRepository extends _$ChatRoomRepository {
     required String name,
     String? description,
   }) async {
-    // バリデーション
+    // 基本的なバリデーション（空欄チェックのみ）
+    // 文字数制限等の詳細なバリデーションはサーバー側で行われる
     if (name.trim().isEmpty) {
       throw ArgumentError("ルーム名は必須です");
-    }
-    if (name.trim().length > 100) {
-      throw ArgumentError("ルーム名は100文字以内で入力してください");
-    }
-    if (description != null && description.trim().length > 500) {
-      throw ArgumentError("ルーム説明は500文字以内で入力してください");
     }
 
     final room = await ref
