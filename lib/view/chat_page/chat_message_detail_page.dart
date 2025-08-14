@@ -53,17 +53,25 @@ class ChatMessageDetailPage extends HookConsumerWidget
           error: error,
           stackTrace: stackTrace,
         ),
-        AsyncData(:final value) => _buildMessageDetail(context, ref, value),
+        AsyncData(:final value) => MessageDetailWidget(message: value),
         null => const Center(child: CircularProgressIndicator()),
       },
     );
   }
 
-  Widget _buildMessageDetail(
-    BuildContext context,
-    WidgetRef ref,
-    ChatMessage message,
-  ) {
+
+}
+
+class MessageDetailWidget extends HookConsumerWidget {
+  final ChatMessage message;
+
+  const MessageDetailWidget({
+    required this.message,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final accountContext = ref.read(accountContextProvider);
     final isMyMessage = message.fromUserId == accountContext.postAccount.i.id;
 
@@ -216,7 +224,6 @@ class ChatMessageDetailPage extends HookConsumerWidget
       ),
     );
   }
-
 }
 
 class DetailRowWidget extends StatelessWidget {
