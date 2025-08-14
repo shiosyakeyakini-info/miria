@@ -1991,6 +1991,9 @@ class SZh extends S {
   String get chatOwnRooms => '我创建的房间';
 
   @override
+  String get chatJoining => '加入的房间';
+
+  @override
   String get chatNewChat => '开始新聊天';
 
   @override

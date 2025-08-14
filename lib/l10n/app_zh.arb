@@ -985,6 +985,7 @@
     "chat": "聊天",
     "chatInvitation": "邀请",
     "chatOwnRooms": "我创建的房间",
+    "chatJoining": "加入的房间",
     "chatNewChat": "开始新聊天",
     "chatIgnored": "已忽略",
     "chatNoDescription": "没有描述",

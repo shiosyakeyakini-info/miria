@@ -1083,6 +1083,7 @@
     "chat": "チャット",
     "chatInvitation": "招待",
     "chatOwnRooms": "自分で作ったやつ",
+    "chatJoining": "入ってるルーム",
     "chatNewChat": "新しいチャットを開始",
     "chatIgnored": "無視したで",
     "chatNoDescription": "説明はありません",

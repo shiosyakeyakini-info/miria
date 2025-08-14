@@ -3474,6 +3474,12 @@ abstract class S {
   /// **'自分で作ったやつ'**
   String get chatOwnRooms;
 
+  /// No description provided for @chatJoining.
+  ///
+  /// In ja, this message translates to:
+  /// **'入ってるルーム'**
+  String get chatJoining;
+
   /// No description provided for @chatNewChat.
   ///
   /// In ja, this message translates to:

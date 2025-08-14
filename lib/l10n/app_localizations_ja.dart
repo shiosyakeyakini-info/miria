@@ -1999,6 +1999,9 @@ class SJa extends S {
   String get chatOwnRooms => '自分で作ったやつ';
 
   @override
+  String get chatJoining => '入ってるルーム';
+
+  @override
   String get chatNewChat => '新しいチャットを開始';
 
   @override
