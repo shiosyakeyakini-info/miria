@@ -29,6 +29,7 @@ class MisskeyTimeline extends HookConsumerWidget {
     final timelineRepository = ref.read(timelineProvider(tabSetting));
     final isDownDirectionLoading = useState(false);
     final isLastLoaded = useState(false);
+    final isLoadError = useState(false);
 
     useEffect(() {
       timelineRepository.startTimeLine();
@@ -44,12 +45,14 @@ class MisskeyTimeline extends HookConsumerWidget {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (isDownDirectionLoading.value) return;
         try {
+          isLoadError.value = false;
           isDownDirectionLoading.value = true;
           final result = await timelineRepository.previousLoad();
           isDownDirectionLoading.value = false;
           isLastLoaded.value = result == 0;
         } catch (e) {
           isDownDirectionLoading.value = false;
+          isLoadError.value = true;
           rethrow;
         }
       });
@@ -110,11 +113,12 @@ class MisskeyTimeline extends HookConsumerWidget {
             }
 
             if (ref.read(
-                  generalSettingsRepositoryProvider.select(
-                    (value) => value.settings.automaticPush,
-                  ),
-                ) ==
-                AutomaticPush.automatic) {
+                      generalSettingsRepositoryProvider.select(
+                        (value) => value.settings.automaticPush,
+                      ),
+                    ) ==
+                    AutomaticPush.automatic &&
+                !isLoadError.value) {
               unawaited(downDirectionLoad());
             }
 
