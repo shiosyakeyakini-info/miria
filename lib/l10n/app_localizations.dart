@@ -3447,7 +3447,7 @@ abstract class S {
   /// No description provided for @profileAddField.
   ///
   /// In ja, this message translates to:
-  /// **'追加'**
+  /// **'項目を追加'**
   String get profileAddField;
 
   /// No description provided for @profileFollowedMessage.

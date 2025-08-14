@@ -109,8 +109,10 @@ class _ProfileEditForm extends HookConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
+            spacing: 16,
             children: [
               Row(
+                spacing: 16,
                 children: [
                   GestureDetector(
                     onTap: () async {
@@ -211,7 +213,6 @@ class _ProfileEditForm extends HookConsumerWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(width: 16),
                   Expanded(
                     child: TextField(
                       controller: useTextEditingController(text: data.name),
@@ -221,7 +222,6 @@ class _ProfileEditForm extends HookConsumerWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
               TextField(
                 controller: useTextEditingController(text: data.description),
                 maxLines: null,
@@ -257,58 +257,68 @@ class _ProfileEditForm extends HookConsumerWidget {
                   ),
                 ],
               ),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: data.fields.length,
-                itemBuilder: (context, index) {
-                  final field = data.fields[index];
-                  return HookBuilder(
-                    builder: (context) {
-                      final nameController = useTextEditingController(
-                        text: field.name,
-                      );
-                      final valueController = useTextEditingController(
-                        text: field.value,
-                      );
-                      return Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: nameController,
-                              onChanged: (value) =>
-                                  notifier.updateField(index, name: value),
-                              decoration: InputDecoration(
-                                labelText: s.profileFieldName,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: TextField(
-                              controller: valueController,
-                              onChanged: (value) =>
-                                  notifier.updateField(index, value: value),
-                              decoration: InputDecoration(
-                                labelText: s.profileFieldValue,
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.close),
-                            onPressed: () => notifier.removeField(index),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton(
-                  onPressed: notifier.addField,
-                  child: Text(s.profileAddField),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    children: [
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: data.fields.length,
+                        itemBuilder: (context, index) {
+                          final field = data.fields[index];
+                          return HookBuilder(
+                            builder: (context) {
+                              final nameController = useTextEditingController(
+                                text: field.name,
+                              );
+                              final valueController = useTextEditingController(
+                                text: field.value,
+                              );
+                              return Row(
+                                children: [
+                                  Expanded(
+                                    child: TextField(
+                                      controller: nameController,
+                                      onChanged: (value) => notifier
+                                          .updateField(index, name: value),
+                                      decoration: InputDecoration(
+                                        labelText: s.profileFieldName,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: TextField(
+                                      controller: valueController,
+                                      onChanged: (value) => notifier
+                                          .updateField(index, value: value),
+                                      decoration: InputDecoration(
+                                        labelText: s.profileFieldValue,
+                                      ),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.close),
+                                    onPressed: () =>
+                                        notifier.removeField(index),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton(
+                          onPressed: notifier.addField,
+                          child: Text(s.profileAddField),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               TextField(
