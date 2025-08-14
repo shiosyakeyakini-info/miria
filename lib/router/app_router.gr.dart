@@ -1469,18 +1469,51 @@ class ClipSettingsRouteArgs {
 
 /// generated route for
 /// [ColorPickerDialog]
-class ColorPickerRoute extends PageRouteInfo<void> {
-  const ColorPickerRoute({List<PageRouteInfo>? children})
-    : super(ColorPickerRoute.name, initialChildren: children);
+class ColorPickerRoute extends PageRouteInfo<ColorPickerRouteArgs> {
+  ColorPickerRoute({
+    Key? key,
+    Color? initialColor,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ColorPickerRoute.name,
+         args: ColorPickerRouteArgs(key: key, initialColor: initialColor),
+         initialChildren: children,
+       );
 
   static const String name = 'ColorPickerRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const ColorPickerDialog();
+      final args = data.argsAs<ColorPickerRouteArgs>(
+        orElse: () => const ColorPickerRouteArgs(),
+      );
+      return ColorPickerDialog(key: args.key, initialColor: args.initialColor);
     },
   );
+}
+
+class ColorPickerRouteArgs {
+  const ColorPickerRouteArgs({this.key, this.initialColor});
+
+  final Key? key;
+
+  final Color? initialColor;
+
+  @override
+  String toString() {
+    return 'ColorPickerRouteArgs{key: $key, initialColor: $initialColor}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ColorPickerRouteArgs) return false;
+    return key == other.key && initialColor == other.initialColor;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ initialColor.hashCode;
 }
 
 /// generated route for
