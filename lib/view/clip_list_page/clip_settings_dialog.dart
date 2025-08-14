@@ -7,15 +7,15 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "clip_settings_dialog.g.dart";
 
-@riverpod
+@Riverpod(dependencies: [])
 GlobalKey<FormState> _formKey(Ref ref) => GlobalKey<FormState>();
 
-@riverpod
+@Riverpod(dependencies: [])
 ClipSettings _initialSettings(Ref ref) {
   throw UnimplementedError();
 }
 
-@riverpod
+@Riverpod(dependencies: [_initialSettings])
 class _ClipSettingsNotifier extends _$ClipSettingsNotifier {
   @override
   ClipSettings build() {
