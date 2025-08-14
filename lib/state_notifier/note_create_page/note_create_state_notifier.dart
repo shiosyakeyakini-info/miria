@@ -608,8 +608,9 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.image,
         allowMultiple: true,
-        allowCompression: Platform.isIOS, // v8.1.3ではiOS以外でこの値を使用していない
-        compressionQuality: 0, // Androidでは0にすることで圧縮パススルー
+        // iOSでは0の場合HEICファイルがJPEGに変換されないため
+        // Androidでは圧縮時に画像の向きがおかしくなることがあるため圧縮パススルー
+        compressionQuality: (Platform.isIOS) ? 95 : 0,
       );
       if (result == null || result.files.isEmpty) return;
 

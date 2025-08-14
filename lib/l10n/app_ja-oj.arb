@@ -156,5 +156,15 @@
     "profileAddField": "追加",
     "profileFollowedMessage": "フォローされたときのメッセージ",
 
-    "noteBackgroundColor": "ノート背景色"
+    "noteBackgroundColor": "ノート背景色",
+    
+    "goToChat": "参りましょう",
+    "chatRoomInvitation": "チャットルーム【{roomName}】にお招きいただきましたの",
+    "@chatRoomInvitation": {
+        "placeholders": {
+            "roomName": {
+                "type": "String"
+            }
+        }
+    }
 }

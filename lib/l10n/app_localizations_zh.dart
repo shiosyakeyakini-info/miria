@@ -1980,6 +1980,101 @@ class SZh extends S {
 
   @override
   String get profileFollowedMessage => '被关注时的消息';
+
+  @override
+  String get chat => '聊天';
+
+  @override
+  String get chatInvitation => '邀请';
+
+  @override
+  String get chatOwnRooms => '我创建的房间';
+
+  @override
+  String get chatNewChat => '开始新聊天';
+
+  @override
+  String get chatIgnored => '已忽略';
+
+  @override
+  String get chatNoDescription => '没有描述';
+
+  @override
+  String get chatJoin => '加入';
+
+  @override
+  String get chatIgnore => '忽略';
+
+  @override
+  String get chatSearch => '聊天搜索';
+
+  @override
+  String get chatInvited => '已邀请';
+
+  @override
+  String get chatRoomName => '名称';
+
+  @override
+  String get chatRoomDescription => '描述';
+
+  @override
+  String get chatUpdate => '更新';
+
+  @override
+  String get chatDelete => '删除';
+
+  @override
+  String get chatCreator => '聊天创建者';
+
+  @override
+  String get chatLeave => '退出聊天';
+
+  @override
+  String get chatLeftRoom => '已退出聊天';
+
+  @override
+  String get chatRetry => '重试';
+
+  @override
+  String get chatCreate => '创建';
+
+  @override
+  String get chatReaction => '回应';
+
+  @override
+  String get chatReport => '举报';
+
+  @override
+  String get chatAttachedFiles => '附件';
+
+  @override
+  String get chatDetailInfo => '详细信息';
+
+  @override
+  String get chatSentAt => '发送时间';
+
+  @override
+  String get chatSenderId => '发送者ID';
+
+  @override
+  String get chatReactionCount => '回应数';
+
+  @override
+  String get chatReactionList => '回应列表';
+
+  @override
+  String get chatUnknownUser => '未知用户';
+
+  @override
+  String get chatNsfw => 'NSFW';
+
+  @override
+  String chatRoomInvitation(String roomName) {
+    return '您被邀请加入聊天室【$roomName】';
+  }
+
+  @override
+  String get goToChat => '前往';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -3863,4 +3958,12 @@ class SZhCn extends SZh {
 
   @override
   String get profileFollowedMessage => '被关注时的消息';
+
+  @override
+  String chatRoomInvitation(String roomName) {
+    return '您被邀请加入聊天室【$roomName】';
+  }
+
+  @override
+  String get goToChat => '前往';
 }

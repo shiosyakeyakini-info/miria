@@ -122,6 +122,19 @@ class CommonDrawer extends ConsumerWidget {
                         );
                       },
                     ),
+                    if (account.i.canChat == true)
+                      ListTile(
+                        leading: const Icon(Icons.chat),
+                        title: Text(S.of(context).chat),
+                        onTap: () async {
+                          closeDrawer(context);
+                          await context.pushRoute(
+                            ChatHomeRoute(
+                              accountContext: AccountContext.as(account),
+                            ),
+                          );
+                        },
+                      ),
                     ListTile(
                       leading: const Icon(Icons.search),
                       title: Text(S.of(context).search),

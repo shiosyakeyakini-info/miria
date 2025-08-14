@@ -38,6 +38,7 @@ class PushableListView<T> extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isLoading = useState(false);
+    final isError = useState(false);
     final error = useState<(Object?, StackTrace)?>(null);
     final isFinalPage = useState(false);
     final scrollController = useScrollController();
@@ -68,6 +69,7 @@ class PushableListView<T> extends HookConsumerWidget {
     final nextLoad = useCallback(() async {
       if (isLoading.value || items.value.isEmpty) return;
       isLoading.value = true;
+      isError.value = false;
       try {
         final result = await nextFuture(items.value.last, items.value.length);
         if (result.isEmpty) isFinalPage.value = true;
@@ -75,6 +77,7 @@ class PushableListView<T> extends HookConsumerWidget {
         isLoading.value = false;
       } catch (e) {
         isLoading.value = false;
+        isError.value = true;
       }
     }, [isLoading.value, items.value, nextFuture]);
 
@@ -123,11 +126,12 @@ class PushableListView<T> extends HookConsumerWidget {
             }
 
             if (ref.read(
-                  generalSettingsRepositoryProvider.select(
-                    (value) => value.settings.automaticPush,
-                  ),
-                ) ==
-                AutomaticPush.automatic) {
+                      generalSettingsRepositoryProvider.select(
+                        (value) => value.settings.automaticPush,
+                      ),
+                    ) ==
+                    AutomaticPush.automatic &&
+                !isError.value) {
               unawaited(nextLoad());
             }
 

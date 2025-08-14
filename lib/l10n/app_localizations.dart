@@ -3455,6 +3455,192 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'フォローされたときのメッセージ'**
   String get profileFollowedMessage;
+
+  /// No description provided for @chat.
+  ///
+  /// In ja, this message translates to:
+  /// **'チャット'**
+  String get chat;
+
+  /// No description provided for @chatInvitation.
+  ///
+  /// In ja, this message translates to:
+  /// **'招待'**
+  String get chatInvitation;
+
+  /// No description provided for @chatOwnRooms.
+  ///
+  /// In ja, this message translates to:
+  /// **'自分で作ったやつ'**
+  String get chatOwnRooms;
+
+  /// No description provided for @chatNewChat.
+  ///
+  /// In ja, this message translates to:
+  /// **'新しいチャットを開始'**
+  String get chatNewChat;
+
+  /// No description provided for @chatIgnored.
+  ///
+  /// In ja, this message translates to:
+  /// **'無視したで'**
+  String get chatIgnored;
+
+  /// No description provided for @chatNoDescription.
+  ///
+  /// In ja, this message translates to:
+  /// **'説明はありません'**
+  String get chatNoDescription;
+
+  /// No description provided for @chatJoin.
+  ///
+  /// In ja, this message translates to:
+  /// **'参加'**
+  String get chatJoin;
+
+  /// No description provided for @chatIgnore.
+  ///
+  /// In ja, this message translates to:
+  /// **'無視'**
+  String get chatIgnore;
+
+  /// No description provided for @chatSearch.
+  ///
+  /// In ja, this message translates to:
+  /// **'チャット検索'**
+  String get chatSearch;
+
+  /// No description provided for @chatInvited.
+  ///
+  /// In ja, this message translates to:
+  /// **'招待したで'**
+  String get chatInvited;
+
+  /// No description provided for @chatRoomName.
+  ///
+  /// In ja, this message translates to:
+  /// **'名前'**
+  String get chatRoomName;
+
+  /// No description provided for @chatRoomDescription.
+  ///
+  /// In ja, this message translates to:
+  /// **'説明'**
+  String get chatRoomDescription;
+
+  /// No description provided for @chatUpdate.
+  ///
+  /// In ja, this message translates to:
+  /// **'更新'**
+  String get chatUpdate;
+
+  /// No description provided for @chatDelete.
+  ///
+  /// In ja, this message translates to:
+  /// **'削除する'**
+  String get chatDelete;
+
+  /// No description provided for @chatCreator.
+  ///
+  /// In ja, this message translates to:
+  /// **'チャット立てた人'**
+  String get chatCreator;
+
+  /// No description provided for @chatLeave.
+  ///
+  /// In ja, this message translates to:
+  /// **'チャットから退出'**
+  String get chatLeave;
+
+  /// No description provided for @chatLeftRoom.
+  ///
+  /// In ja, this message translates to:
+  /// **'チャットから退出したで'**
+  String get chatLeftRoom;
+
+  /// No description provided for @chatRetry.
+  ///
+  /// In ja, this message translates to:
+  /// **'再試行'**
+  String get chatRetry;
+
+  /// No description provided for @chatCreate.
+  ///
+  /// In ja, this message translates to:
+  /// **'作成'**
+  String get chatCreate;
+
+  /// No description provided for @chatReaction.
+  ///
+  /// In ja, this message translates to:
+  /// **'リアクション'**
+  String get chatReaction;
+
+  /// No description provided for @chatReport.
+  ///
+  /// In ja, this message translates to:
+  /// **'通報'**
+  String get chatReport;
+
+  /// No description provided for @chatAttachedFiles.
+  ///
+  /// In ja, this message translates to:
+  /// **'添付ファイル'**
+  String get chatAttachedFiles;
+
+  /// No description provided for @chatDetailInfo.
+  ///
+  /// In ja, this message translates to:
+  /// **'詳細情報'**
+  String get chatDetailInfo;
+
+  /// No description provided for @chatSentAt.
+  ///
+  /// In ja, this message translates to:
+  /// **'送信日時'**
+  String get chatSentAt;
+
+  /// No description provided for @chatSenderId.
+  ///
+  /// In ja, this message translates to:
+  /// **'送信者ID'**
+  String get chatSenderId;
+
+  /// No description provided for @chatReactionCount.
+  ///
+  /// In ja, this message translates to:
+  /// **'リアクション数'**
+  String get chatReactionCount;
+
+  /// No description provided for @chatReactionList.
+  ///
+  /// In ja, this message translates to:
+  /// **'リアクション一覧'**
+  String get chatReactionList;
+
+  /// No description provided for @chatUnknownUser.
+  ///
+  /// In ja, this message translates to:
+  /// **'Unknown User'**
+  String get chatUnknownUser;
+
+  /// No description provided for @chatNsfw.
+  ///
+  /// In ja, this message translates to:
+  /// **'NSFW'**
+  String get chatNsfw;
+
+  /// No description provided for @chatRoomInvitation.
+  ///
+  /// In ja, this message translates to:
+  /// **'チャットルームに招待されたで【{roomName}】'**
+  String chatRoomInvitation(String roomName);
+
+  /// No description provided for @goToChat.
+  ///
+  /// In ja, this message translates to:
+  /// **'みにいく'**
+  String get goToChat;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

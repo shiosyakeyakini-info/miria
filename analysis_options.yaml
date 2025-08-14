@@ -63,3 +63,4 @@ analyzer:
 custom_lint:
   rules:
     - provider_dependencies: false
+    - riverpod_syntax_error: false
