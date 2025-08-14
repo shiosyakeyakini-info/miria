@@ -9,11 +9,13 @@ import "package:hooks_riverpod/legacy.dart";
 import "package:miria/extensions/text_editing_controller_extension.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
+import "package:miria/model/image_file.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/modal_indicator.dart";
 import "package:miria/view/note_create_page/channel_area.dart";
 import "package:miria/view/note_create_page/cw_text_area.dart";
@@ -151,7 +153,47 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
       contentPadding: const EdgeInsets.all(5),
     );
 
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+
+        final state = ref.read(noteCreateNotifierProvider);
+        final hasContent = _hasDraftContent(state);
+
+        if (hasContent) {
+          final dialogNotifier = ref.read(dialogStateNotifierProvider.notifier);
+          final choice = await dialogNotifier.showDialog(
+            message: (context) => S.of(context).saveToDrafts,
+            actions: (context) => [
+              S.of(context).discard,
+              S.of(context).cancel,
+              S.of(context).save,
+            ],
+          );
+
+          switch (choice) {
+            case 0: // Discard
+              if (context.mounted) {
+                Navigator.of(context).pop();
+              }
+              break;
+            case 1: // Cancel
+              return;
+            case 2: // Save
+              await _saveDraft(ref, state);
+              if (context.mounted) {
+                Navigator.of(context).pop();
+              }
+              break;
+            default:
+              return;
+          }
+        } else {
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).note),
         actions: [
@@ -273,6 +315,75 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
           const NoteEmoji(),
         ],
       ),
+    ),
+    );
+  }
+
+  /// 下書きとして保存する価値のあるコンテンツがあるかどうかを判定
+  bool _hasDraftContent(NoteCreate state) {
+    return state.text.trim().isNotEmpty ||
+        (state.isCw && state.cwText.trim().isNotEmpty) ||
+        state.files.isNotEmpty ||
+        (state.isVote && 
+         state.voteContent.any((content) => content.trim().isNotEmpty));
+  }
+
+  /// 現在の状態を下書きとして保存
+  Future<void> _saveDraft(WidgetRef ref, NoteCreate state) async {
+    final draftRepository = ref.read(noteDraftWithProvider);
+    
+    NotesDraftsCreatePoll? poll;
+    if (state.isVote && state.voteContent.any((content) => content.trim().isNotEmpty)) {
+      DateTime? expiresAt;
+      Duration? expiredAfter;
+      
+      switch (state.voteExpireType) {
+        case VoteExpireType.date:
+          expiresAt = state.voteDate;
+          break;
+        case VoteExpireType.duration:
+          if (state.voteDuration != null) {
+            final duration = Duration(
+              seconds: switch (state.voteDurationType) {
+                VoteExpireDurationType.seconds => state.voteDuration!,
+                VoteExpireDurationType.minutes => state.voteDuration! * 60,
+                VoteExpireDurationType.hours => state.voteDuration! * 3600,
+                VoteExpireDurationType.day => state.voteDuration! * 86400,
+              },
+            );
+            expiredAfter = duration;
+          }
+          break;
+        case VoteExpireType.unlimited:
+          break;
+      }
+      
+      poll = NotesDraftsCreatePoll(
+        choices: state.voteContent.where((content) => content.trim().isNotEmpty).toList(),
+        multiple: state.isVoteMultiple,
+        expiresAt: expiresAt,
+        expiredAfter: expiredAfter,
+      );
+    }
+
+    await draftRepository.create(
+      text: state.text.trim().isEmpty ? null : state.text,
+      cw: state.isCw && state.cwText.trim().isNotEmpty ? state.cwText : null,
+      visibility: state.noteVisibility,
+      localOnly: state.localOnly,
+      reactionAcceptance: state.reactionAcceptance,
+      fileIds: state.files
+        .where((file) => file is ImageFileAlreadyPostedFile || file is UnknownAlreadyPostedFile)
+        .map((file) => switch (file) {
+          ImageFileAlreadyPostedFile(id: final id) => id,
+          UnknownAlreadyPostedFile(id: final id) => id,
+          _ => throw UnsupportedError('Unsupported file type for draft: ${file.runtimeType}'),
+        })
+        .toList(),
+      replyId: state.reply?.id,
+      renoteId: state.renote?.id,
+      channelId: state.channel?.id,
+      poll: poll,
     );
   }
 }

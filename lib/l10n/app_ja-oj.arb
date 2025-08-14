@@ -168,5 +168,9 @@
         }
     },
 
-    "noSearchResults": "検索結果が見つかりませんでしたわ"
+    "noSearchResults": "検索結果が見つかりませんでしたわ",
+
+    "saveToDrafts": "下書きに保存いたしますか？",
+    "discard": "破棄",
+    "drafts": "下書き"
 }

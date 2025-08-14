@@ -25,6 +25,7 @@ import "package:miria/repository/home_time_line_repository.dart";
 import "package:miria/repository/hybrid_timeline_repository.dart";
 import "package:miria/repository/import_export_repository.dart";
 import "package:miria/repository/local_time_line_repository.dart";
+import "package:miria/repository/note_draft_repository.dart";
 import "package:miria/repository/note_repository.dart";
 import "package:miria/repository/role_timeline_repository.dart";
 import "package:miria/repository/shared_preference_controller.dart";
@@ -114,9 +115,18 @@ final notesProvider = ChangeNotifierProvider.family<NoteRepository, Account>(
   (ref, account) => NoteRepository(ref.read(misskeyProvider(account)), account),
 );
 
+final noteDraftProvider = ChangeNotifierProvider.family<NoteDraftRepository, Account>(
+  (ref, account) => NoteDraftRepository(ref.read(misskeyProvider(account)), account),
+);
+
 @Riverpod(dependencies: [accountContext])
 Raw<NoteRepository> notesWith(Ref ref) {
   return ref.read(notesProvider(ref.read(accountContextProvider).getAccount));
+}
+
+@Riverpod(dependencies: [accountContext])
+Raw<NoteDraftRepository> noteDraftWith(Ref ref) {
+  return ref.read(noteDraftProvider(ref.read(accountContextProvider).postAccount));
 }
 
 @Riverpod(keepAlive: true)

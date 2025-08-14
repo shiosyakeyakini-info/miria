@@ -2086,6 +2086,15 @@ class SJa extends S {
 
   @override
   String get noSearchResults => '検索結果が見つかりませんでした';
+
+  @override
+  String get saveToDrafts => '下書きに保存する？';
+
+  @override
+  String get discard => '破棄';
+
+  @override
+  String get drafts => '下書き';
 }
 
 /// The translations for Japanese (`ja_OJ`).
@@ -2491,4 +2500,13 @@ class SJaOj extends SJa {
 
   @override
   String get noSearchResults => '検索結果が見つかりませんでしたわ';
+
+  @override
+  String get saveToDrafts => '下書きに保存いたしますか？';
+
+  @override
+  String get discard => '破棄';
+
+  @override
+  String get drafts => '下書き';
 }

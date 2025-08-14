@@ -3647,6 +3647,24 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'検索結果が見つかりませんでした'**
   String get noSearchResults;
+
+  /// No description provided for @saveToDrafts.
+  ///
+  /// In ja, this message translates to:
+  /// **'下書きに保存する？'**
+  String get saveToDrafts;
+
+  /// No description provided for @discard.
+  ///
+  /// In ja, this message translates to:
+  /// **'破棄'**
+  String get discard;
+
+  /// No description provided for @drafts.
+  ///
+  /// In ja, this message translates to:
+  /// **'下書き'**
+  String get drafts;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

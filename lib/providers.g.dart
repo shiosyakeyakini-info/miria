@@ -337,6 +337,57 @@ final class NotesWithProvider
 
 String _$notesWithHash() => r'a9573c0a72738c0f75dfba0916d1722cd9be8a44';
 
+@ProviderFor(noteDraftWith)
+const noteDraftWithProvider = NoteDraftWithProvider._();
+
+final class NoteDraftWithProvider
+    extends
+        $FunctionalProvider<
+          Raw<NoteDraftRepository>,
+          Raw<NoteDraftRepository>,
+          Raw<NoteDraftRepository>
+        >
+    with $Provider<Raw<NoteDraftRepository>> {
+  const NoteDraftWithProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'noteDraftWithProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[accountContextProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          NoteDraftWithProvider.$allTransitiveDependencies0,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = accountContextProvider;
+
+  @override
+  String debugGetCreateSourceHash() => _$noteDraftWithHash();
+
+  @$internal
+  @override
+  $ProviderElement<Raw<NoteDraftRepository>> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  Raw<NoteDraftRepository> create(Ref ref) {
+    return noteDraftWith(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<NoteDraftRepository> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Raw<NoteDraftRepository>>(value),
+    );
+  }
+}
+
+String _$noteDraftWithHash() => r'70a2564494b324f8e7f3319a7a6849fcf3b54cc5';
+
 @ProviderFor(emojiRepository)
 const emojiRepositoryProvider = EmojiRepositoryFamily._();
 

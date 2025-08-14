@@ -1120,6 +1120,10 @@
     },
     "goToChat": "みにいく",
 
-    "noSearchResults": "検索結果が見つかりませんでした"
+    "noSearchResults": "検索結果が見つかりませんでした",
+
+    "saveToDrafts": "下書きに保存する？",
+    "discard": "破棄",
+    "drafts": "下書き"
 
 }
