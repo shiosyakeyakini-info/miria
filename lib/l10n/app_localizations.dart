@@ -3629,6 +3629,18 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'NSFW'**
   String get chatNsfw;
+
+  /// No description provided for @chatRoomInvitation.
+  ///
+  /// In ja, this message translates to:
+  /// **'チャットルームに招待されたで【{roomName}】'**
+  String chatRoomInvitation(String roomName);
+
+  /// No description provided for @goToChat.
+  ///
+  /// In ja, this message translates to:
+  /// **'みにいく'**
+  String get goToChat;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

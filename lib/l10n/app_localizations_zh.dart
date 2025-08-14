@@ -2067,6 +2067,14 @@ class SZh extends S {
 
   @override
   String get chatNsfw => 'NSFW';
+
+  @override
+  String chatRoomInvitation(String roomName) {
+    return '您被邀请加入聊天室【$roomName】';
+  }
+
+  @override
+  String get goToChat => '前往';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -3950,4 +3958,12 @@ class SZhCn extends SZh {
 
   @override
   String get profileFollowedMessage => '被关注时的消息';
+
+  @override
+  String chatRoomInvitation(String roomName) {
+    return '您被邀请加入聊天室【$roomName】';
+  }
+
+  @override
+  String get goToChat => '前往';
 }

@@ -87,7 +87,7 @@ class ChatMessageItem extends ConsumerWidget {
                 ],
               ),
               if (message.reactions.isNotEmpty)
-                _buildReactionsList(context, ref),
+                ReactionsListWidget(message: message),
             ],
           ),
         ),

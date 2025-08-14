@@ -2075,6 +2075,14 @@ class SJa extends S {
 
   @override
   String get chatNsfw => 'NSFW';
+
+  @override
+  String chatRoomInvitation(String roomName) {
+    return 'チャットルームに招待されたで【$roomName】';
+  }
+
+  @override
+  String get goToChat => 'みにいく';
 }
 
 /// The translations for Japanese (`ja_OJ`).
@@ -2469,4 +2477,12 @@ class SJaOj extends SJa {
 
   @override
   String get profileFollowedMessage => 'フォローされたときのメッセージ';
+
+  @override
+  String chatRoomInvitation(String roomName) {
+    return 'チャットルーム【$roomName】にお招きいただきましたの';
+  }
+
+  @override
+  String get goToChat => '参りましょう';
 }
