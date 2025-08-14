@@ -125,7 +125,7 @@ class CommonDrawer extends ConsumerWidget {
                     if (account.i.canChat == true)
                       ListTile(
                         leading: const Icon(Icons.chat),
-                        title: Text("チャット"),
+                        title: Text(S.of(context).chat),
                         onTap: () async {
                           closeDrawer(context);
                           await context.pushRoute(

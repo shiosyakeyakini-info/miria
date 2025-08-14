@@ -1108,6 +1108,16 @@
     "chatReactionCount": "リアクション数",
     "chatReactionList": "リアクション一覧",
     "chatUnknownUser": "Unknown User",
-    "chatNsfw": "NSFW"
+    "chatNsfw": "NSFW",
+
+    "chatRoomInvitation": "チャットルームに招待されたで【{roomName}】",
+    "@chatRoomInvitation": {
+        "placeholders": {
+            "roomName": {
+                "type": "String"
+            }
+        }
+    },
+    "goToChat": "みにいく"
 
 }

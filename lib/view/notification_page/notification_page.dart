@@ -46,7 +46,7 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
             tabs: [
               Tab(text: S.of(context).notificationAll),
               Tab(text: S.of(context).notificationForMe),
-              if (canChat) Tab(text: "チャット"),
+              if (canChat) Tab(text: S.of(context).chat),
               Tab(text: S.of(context).notificationDirect),
             ],
           ),
@@ -521,7 +521,7 @@ class NotificationItem extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SimpleMfmText(
-                  "チャットルームに招待されたで【${notification.invitation.room?.name ?? "???"}】",
+                  S.of(context).chatRoomInvitation(notification.invitation.room?.name ?? "???"),
                 ),
                 ElevatedButton(
                   onPressed: () async => context.pushRoute(
@@ -530,7 +530,7 @@ class NotificationItem extends ConsumerWidget {
                       initialTab: 1,
                     ),
                   ),
-                  child: Text("みにいく"),
+                  child: Text(S.of(context).goToChat),
                 ),
               ],
             ),

@@ -1010,5 +1010,15 @@
     "chatReactionCount": "回应数",
     "chatReactionList": "回应列表",
     "chatUnknownUser": "未知用户",
-    "chatNsfw": "NSFW"
+    "chatNsfw": "NSFW",
+
+    "chatRoomInvitation": "您被邀请加入聊天室【{roomName}】",
+    "@chatRoomInvitation": {
+        "placeholders": {
+            "roomName": {
+                "type": "String"
+            }
+        }
+    },
+    "goToChat": "前往"
 }

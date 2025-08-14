@@ -46,7 +46,7 @@ final class ChatRoomRepositoryProvider
 }
 
 String _$chatRoomRepositoryHash() =>
-    r'ebfc9b19e84123bae5b94d56672d4f2f8a3020c0';
+    r'077cf782a231cb3d64769dc5a155ab2bfb479d6b';
 
 abstract class _$ChatRoomRepository extends $Notifier<void> {
   void build();
