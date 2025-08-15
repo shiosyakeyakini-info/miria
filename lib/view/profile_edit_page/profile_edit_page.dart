@@ -225,6 +225,7 @@ class _ProfileEditForm extends HookConsumerWidget {
               TextField(
                 controller: useTextEditingController(text: data.description),
                 maxLines: null,
+                minLines: 5,
                 onChanged: notifier.updateDescription,
                 decoration: InputDecoration(labelText: s.profileBio),
               ),
@@ -235,13 +236,18 @@ class _ProfileEditForm extends HookConsumerWidget {
               ),
               Row(
                 children: [
-                  Expanded(
-                    child: Text(
-                      data.birthday?.toLocal().toString().split(" ")[0] ?? "",
+                  Text(data.birthday?.toLocal().toString().split(" ")[0] ?? ""),
+                  if (data.birthday != null)
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () {
+                        notifier.updateBirthday(null);
+                      },
                     ),
-                  ),
-                  IconButton(
+                  const Spacer(),
+                  ElevatedButton.icon(
                     icon: const Icon(Icons.date_range),
+                    label: const Text('誕生日を設定'),
                     onPressed: () async {
                       final now = DateTime.now();
                       final result = await showDatePicker(
@@ -257,70 +263,32 @@ class _ProfileEditForm extends HookConsumerWidget {
                   ),
                 ],
               ),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Column(
-                    children: [
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: data.fields.length,
-                        itemBuilder: (context, index) {
-                          final field = data.fields[index];
-                          return HookBuilder(
-                            builder: (context) {
-                              final nameController = useTextEditingController(
-                                text: field.name,
-                              );
-                              final valueController = useTextEditingController(
-                                text: field.value,
-                              );
-                              return Row(
-                                children: [
-                                  Expanded(
-                                    child: TextField(
-                                      controller: nameController,
-                                      onChanged: (value) => notifier
-                                          .updateField(index, name: value),
-                                      decoration: InputDecoration(
-                                        labelText: s.profileFieldName,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: TextField(
-                                      controller: valueController,
-                                      onChanged: (value) => notifier
-                                          .updateField(index, value: value),
-                                      decoration: InputDecoration(
-                                        labelText: s.profileFieldValue,
-                                      ),
-                                    ),
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.close),
-                                    onPressed: () =>
-                                        notifier.removeField(index),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: TextButton(
-                          onPressed: notifier.addField,
-                          child: Text(s.profileAddField),
-                        ),
-                      ),
-                    ],
-                  ),
+              ReorderableListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                buildDefaultDragHandles: false,
+                itemCount: data.fields.length,
+                onReorder: notifier.reorderFields,
+                itemBuilder: (context, index) {
+                  final field = data.fields[index];
+                  return _FieldListItem(
+                    key: ValueKey(field.id),
+                    field: field,
+                    index: index,
+                    notifier: notifier,
+                    s: s,
+                  );
+                },
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: ElevatedButton.icon(
+                  icon: const Icon(Icons.add),
+                  label: Text(s.profileAddField),
+                  onPressed: notifier.addField,
                 ),
               ),
+
               TextField(
                 controller: useTextEditingController(
                   text: data.followedMessage,
@@ -333,6 +301,74 @@ class _ProfileEditForm extends HookConsumerWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _FieldListItem extends HookWidget {
+  const _FieldListItem({
+    super.key,
+    required this.field,
+    required this.index,
+    required this.notifier,
+    required this.s,
+  });
+
+  final EditUserField field;
+  final int index;
+  final EditProfileStateNotifier notifier;
+  final S s;
+
+  @override
+  Widget build(BuildContext context) {
+    final nameController = useTextEditingController(text: field.name);
+    final valueController = useTextEditingController(text: field.value);
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 15, bottom: 15, right: 10),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => notifier.removeField(index),
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: nameController,
+                        onChanged: (value) =>
+                            notifier.updateField(index, name: value),
+                        decoration: InputDecoration(
+                          labelText: s.profileFieldName,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      TextField(
+                        controller: valueController,
+                        onChanged: (value) =>
+                            notifier.updateField(index, value: value),
+                        decoration: InputDecoration(
+                          labelText: s.profileFieldValue,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 10),
+                ReorderableDragStartListener(
+                  index: index,
+                  child: const Icon(Icons.drag_handle),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

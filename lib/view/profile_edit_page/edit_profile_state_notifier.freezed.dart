@@ -13,9 +13,142 @@ part of 'edit_profile_state_notifier.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
+mixin _$EditUserField {
+
+ String get id; String get name; String get value;
+/// Create a copy of EditUserField
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$EditUserFieldCopyWith<EditUserField> get copyWith => _$EditUserFieldCopyWithImpl<EditUserField>(this as EditUserField, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EditUserField&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.value, value) || other.value == value));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,id,name,value);
+
+@override
+String toString() {
+  return 'EditUserField(id: $id, name: $name, value: $value)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $EditUserFieldCopyWith<$Res>  {
+  factory $EditUserFieldCopyWith(EditUserField value, $Res Function(EditUserField) _then) = _$EditUserFieldCopyWithImpl;
+@useResult
+$Res call({
+ String id, String name, String value
+});
+
+
+
+
+}
+/// @nodoc
+class _$EditUserFieldCopyWithImpl<$Res>
+    implements $EditUserFieldCopyWith<$Res> {
+  _$EditUserFieldCopyWithImpl(this._self, this._then);
+
+  final EditUserField _self;
+  final $Res Function(EditUserField) _then;
+
+/// Create a copy of EditUserField
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? value = null,}) {
+  return _then(_self.copyWith(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,value: null == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+}
+
+
+/// @nodoc
+
+
+class _EditUserField implements EditUserField {
+  const _EditUserField({required this.id, required this.name, required this.value});
+  
+
+@override final  String id;
+@override final  String name;
+@override final  String value;
+
+/// Create a copy of EditUserField
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$EditUserFieldCopyWith<_EditUserField> get copyWith => __$EditUserFieldCopyWithImpl<_EditUserField>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EditUserField&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.value, value) || other.value == value));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,id,name,value);
+
+@override
+String toString() {
+  return 'EditUserField(id: $id, name: $name, value: $value)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$EditUserFieldCopyWith<$Res> implements $EditUserFieldCopyWith<$Res> {
+  factory _$EditUserFieldCopyWith(_EditUserField value, $Res Function(_EditUserField) _then) = __$EditUserFieldCopyWithImpl;
+@override @useResult
+$Res call({
+ String id, String name, String value
+});
+
+
+
+
+}
+/// @nodoc
+class __$EditUserFieldCopyWithImpl<$Res>
+    implements _$EditUserFieldCopyWith<$Res> {
+  __$EditUserFieldCopyWithImpl(this._self, this._then);
+
+  final _EditUserField _self;
+  final $Res Function(_EditUserField) _then;
+
+/// Create a copy of EditUserField
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? value = null,}) {
+  return _then(_EditUserField(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,value: null == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
 mixin _$EditProfileState {
 
- String get name; String get description; String get location; DateTime? get birthday; List<UserField> get fields; String get followedMessage; String? get avatarDriveId; ({Uint8List data, String name})? get avatarFile; Uri? get currentAvatarUrl; Uri? get selectedDriveFileUrl; bool get isLoading; bool get isSubmitting;
+ String get name; String get description; String get location; DateTime? get birthday; List<EditUserField> get fields; String get followedMessage; String? get avatarDriveId; ({Uint8List data, String name})? get avatarFile; Uri? get currentAvatarUrl; Uri? get selectedDriveFileUrl; bool get isLoading; bool get isSubmitting;
 /// Create a copy of EditProfileState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -46,7 +179,7 @@ abstract mixin class $EditProfileStateCopyWith<$Res>  {
   factory $EditProfileStateCopyWith(EditProfileState value, $Res Function(EditProfileState) _then) = _$EditProfileStateCopyWithImpl;
 @useResult
 $Res call({
- String name, String description, String location, DateTime? birthday, List<UserField> fields, String followedMessage, String? avatarDriveId, ({Uint8List data, String name})? avatarFile, Uri? currentAvatarUrl, Uri? selectedDriveFileUrl, bool isLoading, bool isSubmitting
+ String name, String description, String location, DateTime? birthday, List<EditUserField> fields, String followedMessage, String? avatarDriveId, ({Uint8List data, String name})? avatarFile, Uri? currentAvatarUrl, Uri? selectedDriveFileUrl, bool isLoading, bool isSubmitting
 });
 
 
@@ -70,7 +203,7 @@ as String,description: null == description ? _self.description : description // 
 as String,location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
 as String,birthday: freezed == birthday ? _self.birthday : birthday // ignore: cast_nullable_to_non_nullable
 as DateTime?,fields: null == fields ? _self.fields : fields // ignore: cast_nullable_to_non_nullable
-as List<UserField>,followedMessage: null == followedMessage ? _self.followedMessage : followedMessage // ignore: cast_nullable_to_non_nullable
+as List<EditUserField>,followedMessage: null == followedMessage ? _self.followedMessage : followedMessage // ignore: cast_nullable_to_non_nullable
 as String,avatarDriveId: freezed == avatarDriveId ? _self.avatarDriveId : avatarDriveId // ignore: cast_nullable_to_non_nullable
 as String?,avatarFile: freezed == avatarFile ? _self.avatarFile : avatarFile // ignore: cast_nullable_to_non_nullable
 as ({Uint8List data, String name})?,currentAvatarUrl: freezed == currentAvatarUrl ? _self.currentAvatarUrl : currentAvatarUrl // ignore: cast_nullable_to_non_nullable
@@ -88,15 +221,15 @@ as bool,
 
 
 class _EditProfileState implements EditProfileState {
-  const _EditProfileState({this.name = "", this.description = "", this.location = "", this.birthday, final  List<UserField> fields = const [], this.followedMessage = "", this.avatarDriveId, this.avatarFile, this.currentAvatarUrl, this.selectedDriveFileUrl, this.isLoading = false, this.isSubmitting = false}): _fields = fields;
+  const _EditProfileState({this.name = "", this.description = "", this.location = "", this.birthday, final  List<EditUserField> fields = const [], this.followedMessage = "", this.avatarDriveId, this.avatarFile, this.currentAvatarUrl, this.selectedDriveFileUrl, this.isLoading = false, this.isSubmitting = false}): _fields = fields;
   
 
 @override@JsonKey() final  String name;
 @override@JsonKey() final  String description;
 @override@JsonKey() final  String location;
 @override final  DateTime? birthday;
- final  List<UserField> _fields;
-@override@JsonKey() List<UserField> get fields {
+ final  List<EditUserField> _fields;
+@override@JsonKey() List<EditUserField> get fields {
   if (_fields is EqualUnmodifiableListView) return _fields;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_fields);
@@ -140,7 +273,7 @@ abstract mixin class _$EditProfileStateCopyWith<$Res> implements $EditProfileSta
   factory _$EditProfileStateCopyWith(_EditProfileState value, $Res Function(_EditProfileState) _then) = __$EditProfileStateCopyWithImpl;
 @override @useResult
 $Res call({
- String name, String description, String location, DateTime? birthday, List<UserField> fields, String followedMessage, String? avatarDriveId, ({Uint8List data, String name})? avatarFile, Uri? currentAvatarUrl, Uri? selectedDriveFileUrl, bool isLoading, bool isSubmitting
+ String name, String description, String location, DateTime? birthday, List<EditUserField> fields, String followedMessage, String? avatarDriveId, ({Uint8List data, String name})? avatarFile, Uri? currentAvatarUrl, Uri? selectedDriveFileUrl, bool isLoading, bool isSubmitting
 });
 
 
@@ -164,7 +297,7 @@ as String,description: null == description ? _self.description : description // 
 as String,location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
 as String,birthday: freezed == birthday ? _self.birthday : birthday // ignore: cast_nullable_to_non_nullable
 as DateTime?,fields: null == fields ? _self._fields : fields // ignore: cast_nullable_to_non_nullable
-as List<UserField>,followedMessage: null == followedMessage ? _self.followedMessage : followedMessage // ignore: cast_nullable_to_non_nullable
+as List<EditUserField>,followedMessage: null == followedMessage ? _self.followedMessage : followedMessage // ignore: cast_nullable_to_non_nullable
 as String,avatarDriveId: freezed == avatarDriveId ? _self.avatarDriveId : avatarDriveId // ignore: cast_nullable_to_non_nullable
 as String?,avatarFile: freezed == avatarFile ? _self.avatarFile : avatarFile // ignore: cast_nullable_to_non_nullable
 as ({Uint8List data, String name})?,currentAvatarUrl: freezed == currentAvatarUrl ? _self.currentAvatarUrl : currentAvatarUrl // ignore: cast_nullable_to_non_nullable
