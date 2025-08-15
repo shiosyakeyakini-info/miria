@@ -1979,6 +1979,9 @@ class SZh extends S {
   String get profileAddField => '添加';
 
   @override
+  String get profileSetBirthday => '选择生日';
+
+  @override
   String get profileFollowedMessage => '被关注时的消息';
 
   @override

@@ -247,7 +247,7 @@ class _ProfileEditForm extends HookConsumerWidget {
                   const Spacer(),
                   ElevatedButton.icon(
                     icon: const Icon(Icons.date_range),
-                    label: const Text('誕生日を設定'),
+                    label: Text(s.profileSetBirthday),
                     onPressed: () async {
                       final now = DateTime.now();
                       final result = await showDatePicker(

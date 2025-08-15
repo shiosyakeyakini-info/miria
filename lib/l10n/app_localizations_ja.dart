@@ -1984,7 +1984,10 @@ class SJa extends S {
   String get profileFieldValue => '内容';
 
   @override
-  String get profileAddField => '追加';
+  String get profileAddField => '項目を追加';
+
+  @override
+  String get profileSetBirthday => '誕生日を選択';
 
   @override
   String get profileFollowedMessage => 'フォローされたときのメッセージ';
