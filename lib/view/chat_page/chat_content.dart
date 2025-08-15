@@ -29,9 +29,22 @@ class ChatContent extends ConsumerWidget {
         children: [
           if (room != null)
             Expanded(
-              child: Text(
-                room.name,
-                style: Theme.of(context).textTheme.titleSmall,
+              child: Text.rich(
+                TextSpan(
+                  style: Theme.of(context).textTheme.titleSmall,
+                  children: [
+                    WidgetSpan(
+                      alignment: PlaceholderAlignment.middle,
+                      child: Icon(
+                        Icons.people_alt,
+                        size: 16,
+                        color: Theme.of(context).iconTheme.color,
+                      ),
+                    ),
+                    const WidgetSpan(child: SizedBox(width: 4)),
+                    TextSpan(text: room.name),
+                  ],
+                ),
               ),
             )
           else
