@@ -155,11 +155,6 @@ class ChatRoomInfo extends HookConsumerWidget {
                             .chat
                             .rooms
                             .delete(ChatRoomsDeleteRequest(roomId: room.id));
-                        await ref
-                            .read(dialogStateNotifierProvider.notifier)
-                            .showSimpleDialog(
-                              message: (context) => S.of(context).delete,
-                            );
                         if (!context.mounted) return;
                         // ルーム削除後は現在のルームチャット画面を削除して前の画面に戻る
                         // まずDrawerを閉じてからナビゲーションを実行
