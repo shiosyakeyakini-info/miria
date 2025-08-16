@@ -121,18 +121,18 @@ class ChatHomePage extends HookConsumerWidget implements AutoRouteWrapper {
 
 @Riverpod(dependencies: [misskeyPostContext])
 Future<List<ChatMessage>> history(Ref ref) async {
-  final (a, b) = await (
-    ref
-        .read(misskeyPostContextProvider)
-        .chat
-        .history(const ChatHistoryRequest(limit: 30, room: false)),
-    ref
-        .read(misskeyPostContextProvider)
-        .chat
-        .history(const ChatHistoryRequest(limit: 30, room: true)),
-  ).wait;
+  final history = await ref
+      .read(misskeyPostContextProvider)
+      .chat
+      .history(const ChatHistoryRequest(limit: 30, room: false));
 
-  return [...a, ...b]..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+  final roomHistory = await ref
+      .read(misskeyPostContextProvider)
+      .chat
+      .history(const ChatHistoryRequest(limit: 30, room: true));
+
+  return [...history, ...roomHistory]
+    ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
 }
 
 class ChatHome extends HookConsumerWidget {
