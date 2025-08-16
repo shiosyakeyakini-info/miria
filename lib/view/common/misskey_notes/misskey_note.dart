@@ -22,6 +22,8 @@ import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.
 import "package:miria/view/common/avatar_icon.dart";
 import "package:miria/view/common/constants.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
+import "package:miria/view/common/misskey_notes/ai_reaction_suggestion_button.dart";
+import "package:miria/view/common/misskey_notes/ai_translation_button.dart";
 import "package:miria/view/common/misskey_notes/in_note_button.dart";
 import "package:miria/view/common/misskey_notes/link_preview.dart";
 import "package:miria/view/common/misskey_notes/local_only_icon.dart";
@@ -823,6 +825,13 @@ class MisskeyNote extends HookConsumerWidget {
                                       await reactionControl(),
                                   displayNote: displayNote,
                                 ),
+                                AiReactionSuggestionButton(
+                                  note: displayNote,
+                                  onReactionSelected: (emojiData) async =>
+                                      await reactionControl(
+                                        requestEmoji: emojiData,
+                                      ),
+                                ),
                               ],
                               IconButton(
                                 onPressed: () async => context.pushRoute(
@@ -859,6 +868,8 @@ class MisskeyNote extends HookConsumerWidget {
                               ),
                             ],
                           ),
+                        // AI翻訳ボタン（別の行に配置）
+                        AiTranslationButton(note: displayNote),
                       ],
                     ),
                   ),

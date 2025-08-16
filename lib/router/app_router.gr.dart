@@ -181,6 +181,22 @@ class AccountSelectRouteArgs {
 }
 
 /// generated route for
+/// [AiSettingsPage]
+class AiSettingsRoute extends PageRouteInfo<void> {
+  const AiSettingsRoute({List<PageRouteInfo>? children})
+    : super(AiSettingsRoute.name, initialChildren: children);
+
+  static const String name = 'AiSettingsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AiSettingsPage();
+    },
+  );
+}
+
+/// generated route for
 /// [AnnouncementPage]
 class AnnouncementRoute extends PageRouteInfo<AnnouncementRouteArgs> {
   AnnouncementRoute({

@@ -441,6 +441,138 @@ abstract class S {
   /// **'設定'**
   String get settings;
 
+  /// No description provided for @ai_settings.
+  ///
+  /// In ja, this message translates to:
+  /// **'AI設定'**
+  String get ai_settings;
+
+  /// No description provided for @ai_features.
+  ///
+  /// In ja, this message translates to:
+  /// **'AI機能'**
+  String get ai_features;
+
+  /// No description provided for @ai_model_status.
+  ///
+  /// In ja, this message translates to:
+  /// **'AIモデル状態'**
+  String get ai_model_status;
+
+  /// No description provided for @ai_model_downloaded.
+  ///
+  /// In ja, this message translates to:
+  /// **'AIモデルがダウンロード済み'**
+  String get ai_model_downloaded;
+
+  /// No description provided for @ai_model_not_downloaded.
+  ///
+  /// In ja, this message translates to:
+  /// **'AIモデルが未ダウンロード'**
+  String get ai_model_not_downloaded;
+
+  /// No description provided for @ai_model_description.
+  ///
+  /// In ja, this message translates to:
+  /// **'Gemma3 270M モデル（約270MB）をダウンロードしてAI機能を有効にします'**
+  String get ai_model_description;
+
+  /// No description provided for @download_ai_model.
+  ///
+  /// In ja, this message translates to:
+  /// **'AIモデルをダウンロード'**
+  String get download_ai_model;
+
+  /// No description provided for @ai_model_download_success.
+  ///
+  /// In ja, this message translates to:
+  /// **'AIモデルのダウンロードが完了しました'**
+  String get ai_model_download_success;
+
+  /// No description provided for @ai_model_download_failed.
+  ///
+  /// In ja, this message translates to:
+  /// **'AIモデルのダウンロードに失敗しました'**
+  String get ai_model_download_failed;
+
+  /// No description provided for @ai_reaction_suggestion.
+  ///
+  /// In ja, this message translates to:
+  /// **'リアクション提案'**
+  String get ai_reaction_suggestion;
+
+  /// No description provided for @ai_reaction_suggestion_description.
+  ///
+  /// In ja, this message translates to:
+  /// **'AIがノートの内容に基づいてリアクションを提案します'**
+  String get ai_reaction_suggestion_description;
+
+  /// No description provided for @ai_translation.
+  ///
+  /// In ja, this message translates to:
+  /// **'自動翻訳'**
+  String get ai_translation;
+
+  /// No description provided for @ai_translation_description.
+  ///
+  /// In ja, this message translates to:
+  /// **'AIがノートを日本語に翻訳します'**
+  String get ai_translation_description;
+
+  /// No description provided for @ai_advanced_settings.
+  ///
+  /// In ja, this message translates to:
+  /// **'詳細設定'**
+  String get ai_advanced_settings;
+
+  /// No description provided for @ai_temperature.
+  ///
+  /// In ja, this message translates to:
+  /// **'温度'**
+  String get ai_temperature;
+
+  /// No description provided for @ai_temperature_description.
+  ///
+  /// In ja, this message translates to:
+  /// **'値が高いほど創造的で多様な結果になります（推奨: 0.7-1.0）'**
+  String get ai_temperature_description;
+
+  /// No description provided for @ai_max_tokens.
+  ///
+  /// In ja, this message translates to:
+  /// **'最大トークン数'**
+  String get ai_max_tokens;
+
+  /// No description provided for @ai_max_tokens_description.
+  ///
+  /// In ja, this message translates to:
+  /// **'生成される文章の最大長です'**
+  String get ai_max_tokens_description;
+
+  /// No description provided for @translate.
+  ///
+  /// In ja, this message translates to:
+  /// **'翻訳'**
+  String get translate;
+
+  /// No description provided for @show.
+  ///
+  /// In ja, this message translates to:
+  /// **'表示'**
+  String get show;
+
+  /// No description provided for @downloading.
+  ///
+  /// In ja, this message translates to:
+  /// **'ダウンロード中'**
+  String get downloading;
+
+  /// No description provided for @download.
+  ///
+  /// In ja, this message translates to:
+  /// **'ダウンロード'**
+  String get download;
+
   /// No description provided for @ad.
   ///
   /// In ja, this message translates to:

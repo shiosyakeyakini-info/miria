@@ -180,6 +180,73 @@ class SJa extends S {
   String get settings => '設定';
 
   @override
+  String get ai_settings => 'AI設定';
+
+  @override
+  String get ai_features => 'AI機能';
+
+  @override
+  String get ai_model_status => 'AIモデル状態';
+
+  @override
+  String get ai_model_downloaded => 'AIモデルがダウンロード済み';
+
+  @override
+  String get ai_model_not_downloaded => 'AIモデルが未ダウンロード';
+
+  @override
+  String get ai_model_description =>
+      'Gemma3 270M モデル（約270MB）をダウンロードしてAI機能を有効にします';
+
+  @override
+  String get download_ai_model => 'AIモデルをダウンロード';
+
+  @override
+  String get ai_model_download_success => 'AIモデルのダウンロードが完了しました';
+
+  @override
+  String get ai_model_download_failed => 'AIモデルのダウンロードに失敗しました';
+
+  @override
+  String get ai_reaction_suggestion => 'リアクション提案';
+
+  @override
+  String get ai_reaction_suggestion_description => 'AIがノートの内容に基づいてリアクションを提案します';
+
+  @override
+  String get ai_translation => '自動翻訳';
+
+  @override
+  String get ai_translation_description => 'AIがノートを日本語に翻訳します';
+
+  @override
+  String get ai_advanced_settings => '詳細設定';
+
+  @override
+  String get ai_temperature => '温度';
+
+  @override
+  String get ai_temperature_description => '値が高いほど創造的で多様な結果になります（推奨: 0.7-1.0）';
+
+  @override
+  String get ai_max_tokens => '最大トークン数';
+
+  @override
+  String get ai_max_tokens_description => '生成される文章の最大長です';
+
+  @override
+  String get translate => '翻訳';
+
+  @override
+  String get show => '表示';
+
+  @override
+  String get downloading => 'ダウンロード中';
+
+  @override
+  String get download => 'ダウンロード';
+
+  @override
   String get ad => '広告';
 
   @override

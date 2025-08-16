@@ -32,6 +32,12 @@ class SettingsPage extends StatelessWidget {
             onTap: () async => context.pushRoute(const TabSettingsListRoute()),
           ),
           ListTile(
+            title: Text(S.of(context).ai_settings),
+            leading: const Icon(Icons.auto_awesome),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () async => context.pushRoute(const AiSettingsRoute()),
+          ),
+          ListTile(
             title: Text(S.of(context).settingsImportAndExport),
             leading: const Icon(Icons.import_export),
             trailing: const Icon(Icons.chevron_right),
