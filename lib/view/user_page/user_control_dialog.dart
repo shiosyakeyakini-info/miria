@@ -238,6 +238,14 @@ class UserControlDialog extends HookConsumerWidget implements AutoRouteWrapper {
             },
           ),
         ],
+        if (user is MeDetailed)
+          ListTile(
+            leading: const Icon(Icons.edit),
+            title: Text(S.of(context).editProfile),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () async =>
+                await context.pushRoute(ProfileEditRoute(account: account)),
+          ),
       ],
     );
   }
