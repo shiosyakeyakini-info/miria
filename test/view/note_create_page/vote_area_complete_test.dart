@@ -49,7 +49,9 @@ void main() {
                   builder: (context, ref, child) {
                     return ElevatedButton(
                       onPressed: () {
-                        ref.read(noteCreateNotifierProvider.notifier).toggleVote();
+                        ref
+                            .read(noteCreateNotifierProvider.notifier)
+                            .toggleVote();
                       },
                       child: Text("Toggle Vote"),
                     );
@@ -69,7 +71,7 @@ void main() {
 
       // 初期状態では投票が無効なので、VoteAreaは空のContainer
       expect(find.byType(VoteArea), findsOneWidget);
-      
+
       // 投票関連のUIが表示されていないことを確認
       expect(find.byType(TextField), findsNothing);
       expect(find.byType(Switch), findsNothing);
@@ -89,7 +91,7 @@ void main() {
       expect(find.byType(Switch), findsOneWidget);
       expect(find.byType(ElevatedButton), findsWidgets);
       expect(find.byType(DropdownButton<VoteExpireType>), findsOneWidget);
-      
+
       print("✅ 全てのVoteArea UIコンポーネントが正常に表示されました");
     });
 

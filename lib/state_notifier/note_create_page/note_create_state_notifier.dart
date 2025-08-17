@@ -487,7 +487,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
     );
 
     state = resultState;
-    
+
     // デバッグ用：最終的な状態をログ出力
     print("DEBUG: Final state after draft restoration:");
     print("  state.isVote: ${state.isVote}");

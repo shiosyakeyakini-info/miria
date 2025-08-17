@@ -340,8 +340,16 @@ void main() {
         visibility: NoteVisibility.public,
         poll: const NoteDraftPoll(
           choices: [
-            "選択肢1", "選択肢2", "選択肢3", "選択肢4", "選択肢5",
-            "選択肢6", "選択肢7", "選択肢8", "選択肢9", "選択肢10"
+            "選択肢1",
+            "選択肢2",
+            "選択肢3",
+            "選択肢4",
+            "選択肢5",
+            "選択肢6",
+            "選択肢7",
+            "選択肢8",
+            "選択肢9",
+            "選択肢10",
           ],
           multiple: true,
           expiresAt: null,
@@ -356,10 +364,21 @@ void main() {
       expect(state.isVote, isTrue);
       expect(state.isVoteMultiple, isTrue);
       expect(state.voteContent.length, equals(10));
-      expect(state.voteContent, equals([
-        "選択肢1", "選択肢2", "選択肢3", "選択肢4", "選択肢5",
-        "選択肢6", "選択肢7", "選択肢8", "選択肢9", "選択肢10"
-      ]));
+      expect(
+        state.voteContent,
+        equals([
+          "選択肢1",
+          "選択肢2",
+          "選択肢3",
+          "選択肢4",
+          "選択肢5",
+          "選択肢6",
+          "選択肢7",
+          "選択肢8",
+          "選択肢9",
+          "選択肢10",
+        ]),
+      );
     });
 
     test("空の選択肢を含む投票が適切に処理されること", () async {

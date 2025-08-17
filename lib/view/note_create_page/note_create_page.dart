@@ -436,7 +436,9 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
 
     // デバッグ用：投票情報をログ出力
     if (poll != null) {
-      print("DEBUG: Saving draft with poll: choices=${poll.choices}, multiple=${poll.multiple}, expiresAt=${poll.expiresAt}, expiredAfter=${poll.expiredAfter}");
+      print(
+        "DEBUG: Saving draft with poll: choices=${poll.choices}, multiple=${poll.multiple}, expiresAt=${poll.expiresAt}, expiredAfter=${poll.expiredAfter}",
+      );
     } else {
       print("DEBUG: Saving draft without poll");
     }

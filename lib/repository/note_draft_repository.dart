@@ -52,7 +52,7 @@ class NoteDraftRepository extends ChangeNotifier {
 
     final response = await misskey.notes.drafts.create(request);
     final draft = response.createdDraft;
-    
+
     // デバッグ用：レスポンスをログ出力
     print("DEBUG: Created draft response:");
     print("  draft.id: ${draft.id}");
@@ -63,7 +63,7 @@ class NoteDraftRepository extends ChangeNotifier {
       print("    expiresAt: ${draft.poll!.expiresAt}");
       print("    expiredAfter: ${draft.poll!.expiredAfter}");
     }
-    
+
     _drafts[draft.id] = draft;
     notifyListeners();
     return draft;
@@ -133,7 +133,7 @@ class NoteDraftRepository extends ChangeNotifier {
 
     final response = await misskey.notes.drafts.update(request);
     final draft = response.updatedDraft;
-    
+
     // デバッグ用：レスポンスをログ出力
     print("DEBUG: Updated draft response:");
     print("  draft.id: ${draft.id}");
@@ -144,7 +144,7 @@ class NoteDraftRepository extends ChangeNotifier {
       print("    expiresAt: ${draft.poll!.expiresAt}");
       print("    expiredAfter: ${draft.poll!.expiredAfter}");
     }
-    
+
     _drafts[draft.id] = draft;
     notifyListeners();
     return draft;
