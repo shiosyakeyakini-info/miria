@@ -2096,6 +2096,9 @@ class SZh extends S {
 
   @override
   String get emptyNote => '空笔记';
+
+  @override
+  String get poll => 'アンケート';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).

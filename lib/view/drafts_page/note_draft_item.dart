@@ -129,7 +129,7 @@ class NoteDraftItem extends ConsumerWidget {
                               ),
                               const SizedBox(width: 2),
                               Text(
-                                "アンケート",
+                                S.of(context).poll,
                                 style: Theme.of(context).textTheme.labelSmall
                                     ?.copyWith(
                                       color: Theme.of(
@@ -147,7 +147,7 @@ class NoteDraftItem extends ConsumerWidget {
                             context: context,
                             builder: (context) => AlertDialog(
                               title: Text(S.of(context).confirmDelete),
-                              content: Text("この下書きを削除しますか？"),
+                              content: Text(S.of(context).confirmDeleteDraft),
                               actions: [
                                 TextButton(
                                   onPressed: () =>
@@ -210,7 +210,7 @@ class NoteDraftItem extends ConsumerWidget {
                 )
               else
                 Text(
-                  "空のノート",
+                  S.of(context).emptyNote,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontStyle: FontStyle.italic,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,

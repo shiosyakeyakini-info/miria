@@ -1122,11 +1122,12 @@
 
     "noSearchResults": "検索結果が見つかりませんでした",
 
-    "saveToDrafts": "下書きに保存する？",
-    "discard": "破棄",
+    "saveToDrafts": "下書きに保存しとく？",
+    "discard": "やめとく",
     "drafts": "下書き",
-    "noDrafts": "下書きがありません",
-    "confirmDeleteDraft": "この下書きを削除しますか？",
-    "emptyNote": "空のノート"
+    "noDrafts": "下書きあらへんで",
+    "confirmDeleteDraft": "この下書き削除してもええか？",
+    "emptyNote": "空っぽのノート",
+    "poll": "アンケート"
 
 }

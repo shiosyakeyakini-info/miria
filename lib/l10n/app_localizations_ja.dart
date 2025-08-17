@@ -2088,22 +2088,25 @@ class SJa extends S {
   String get noSearchResults => '検索結果が見つかりませんでした';
 
   @override
-  String get saveToDrafts => '下書きに保存する？';
+  String get saveToDrafts => '下書きに保存しとく？';
 
   @override
-  String get discard => '破棄';
+  String get discard => 'やめとく';
 
   @override
   String get drafts => '下書き';
 
   @override
-  String get noDrafts => '下書きがありません';
+  String get noDrafts => '下書きあらへんで';
 
   @override
-  String get confirmDeleteDraft => 'この下書きを削除しますか？';
+  String get confirmDeleteDraft => 'この下書き削除してもええか？';
 
   @override
-  String get emptyNote => '空のノート';
+  String get emptyNote => '空っぽのノート';
+
+  @override
+  String get poll => 'アンケート';
 }
 
 /// The translations for Japanese (`ja_OJ`).

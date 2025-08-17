@@ -3651,13 +3651,13 @@ abstract class S {
   /// No description provided for @saveToDrafts.
   ///
   /// In ja, this message translates to:
-  /// **'下書きに保存する？'**
+  /// **'下書きに保存しとく？'**
   String get saveToDrafts;
 
   /// No description provided for @discard.
   ///
   /// In ja, this message translates to:
-  /// **'破棄'**
+  /// **'やめとく'**
   String get discard;
 
   /// No description provided for @drafts.
@@ -3669,20 +3669,26 @@ abstract class S {
   /// No description provided for @noDrafts.
   ///
   /// In ja, this message translates to:
-  /// **'下書きがありません'**
+  /// **'下書きあらへんで'**
   String get noDrafts;
 
   /// No description provided for @confirmDeleteDraft.
   ///
   /// In ja, this message translates to:
-  /// **'この下書きを削除しますか？'**
+  /// **'この下書き削除してもええか？'**
   String get confirmDeleteDraft;
 
   /// No description provided for @emptyNote.
   ///
   /// In ja, this message translates to:
-  /// **'空のノート'**
+  /// **'空っぽのノート'**
   String get emptyNote;
+
+  /// No description provided for @poll.
+  ///
+  /// In ja, this message translates to:
+  /// **'アンケート'**
+  String get poll;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {
