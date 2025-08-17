@@ -91,8 +91,6 @@ void main() {
       expect(find.byType(Switch), findsOneWidget);
       expect(find.byType(ElevatedButton), findsWidgets);
       expect(find.byType(DropdownButton<VoteExpireType>), findsOneWidget);
-
-      print("✅ 全てのVoteArea UIコンポーネントが正常に表示されました");
     });
 
     testWidgets("複数選択スイッチの操作ができる", (tester) async {
@@ -118,7 +116,6 @@ void main() {
       // 値が変更されたことを確認
       switchWidget = tester.widget<Switch>(switchFinder);
       expect(switchWidget.value, !initialValue);
-      print("✅ 複数選択スイッチの操作が正常に動作しました");
     });
 
     testWidgets("選択肢にテキストを入力できる", (tester) async {
@@ -140,7 +137,6 @@ void main() {
 
         // 入力されたテキストが表示されることを確認
         expect(find.text("テスト選択肢1"), findsOneWidget);
-        print("✅ テキスト入力が正常に動作しました");
       }
     });
 
@@ -174,7 +170,6 @@ void main() {
       final newTextFields = find.byType(TextField);
       final newCount = newTextFields.evaluate().length;
       expect(newCount, greaterThan(initialCount));
-      print("✅ 選択肢追加ボタンが正常に動作しました");
     });
 
     testWidgets("選択肢削除ボタンが表示される", (tester) async {
@@ -187,7 +182,6 @@ void main() {
 
       // 削除ボタン（closeアイコン）が表示されることを確認
       expect(find.byIcon(Icons.close), findsWidgets);
-      print("✅ 削除ボタンが正常に表示されました");
     });
 
     testWidgets("DropdownButtonメニューが動作する", (tester) async {
@@ -208,7 +202,6 @@ void main() {
 
       // ドロップダウンアイテムが表示されることを確認
       expect(find.byType(DropdownMenuItem<VoteExpireType>), findsWidgets);
-      print("✅ DropdownButtonメニューが正常に動作しました");
     });
 
     testWidgets("投票機能のON/OFF切り替えテスト", (tester) async {
@@ -234,7 +227,6 @@ void main() {
       // 投票エリアが非表示になる
       expect(find.byType(Switch), findsNothing);
       expect(find.byType(DropdownButton<VoteExpireType>), findsNothing);
-      print("✅ 投票機能のON/OFF切り替えが正常に動作しました");
     });
 
     testWidgets("投票状態が保持されることのテスト", (tester) async {
@@ -264,7 +256,6 @@ void main() {
       expect(find.text("永続化テスト選択肢"), findsOneWidget);
       final switch_ = tester.widget<Switch>(switchWidget);
       expect(switch_.value, isTrue);
-      print("✅ 投票状態の保持が正常に動作しました");
     });
   });
 }

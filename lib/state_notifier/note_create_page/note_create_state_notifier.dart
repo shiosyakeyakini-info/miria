@@ -407,16 +407,6 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
     var voteDurationType = VoteExpireDurationType.day;
     var voteContent = <String>["", ""];
 
-    // デバッグ用：下書きの投票情報をログ出力
-    print("DEBUG: initializeFromDraft - draft.poll: ${draft.poll}");
-    if (draft.poll != null) {
-      print("DEBUG: Found poll in draft:");
-      print("  choices: ${draft.poll!.choices}");
-      print("  multiple: ${draft.poll!.multiple}");
-      print("  expiresAt: ${draft.poll!.expiresAt}");
-      print("  expiredAfter: ${draft.poll!.expiredAfter}");
-    }
-
     if (draft.poll != null) {
       isVote = true;
       isVoteMultiple = draft.poll!.multiple ?? false;
@@ -455,16 +445,6 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
     // Check one final time before updating state
     if (!ref.mounted) return;
 
-    // デバッグ用：復元される投票状態をログ出力
-    print("DEBUG: Setting poll state from draft:");
-    print("  isVote: $isVote");
-    print("  isVoteMultiple: $isVoteMultiple");
-    print("  voteExpireType: $voteExpireType");
-    print("  voteDate: $voteDate");
-    print("  voteDuration: $voteDuration");
-    print("  voteDurationType: $voteDurationType");
-    print("  voteContent: $voteContent");
-
     resultState = resultState.copyWith(
       noteVisibility: draft.visibility,
       localOnly: draft.localOnly ?? false,
@@ -487,12 +467,6 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
     );
 
     state = resultState;
-
-    // デバッグ用：最終的な状態をログ出力
-    print("DEBUG: Final state after draft restoration:");
-    print("  state.isVote: ${state.isVote}");
-    print("  state.isVoteMultiple: ${state.isVoteMultiple}");
-    print("  state.voteContent: ${state.voteContent}");
   }
 
   /// 下書きIDを設定する（新規作成後に使用）

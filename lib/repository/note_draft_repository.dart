@@ -25,17 +25,6 @@ class NoteDraftRepository extends ChangeNotifier {
     String? channelId,
     NotesCreatePollRequest? poll,
   }) async {
-    // デバッグ用：リクエストパラメータをログ出力
-    print("DEBUG: NoteDraftRepository.create() called with:");
-    print("  text: $text");
-    print("  poll: $poll");
-    if (poll != null) {
-      print("    choices: ${poll.choices}");
-      print("    multiple: ${poll.multiple}");
-      print("    expiresAt: ${poll.expiresAt}");
-      print("    expiredAfter: ${poll.expiredAfter}");
-    }
-
     final request = NotesDraftsCreateRequest(
       text: text,
       cw: cw,
@@ -52,17 +41,6 @@ class NoteDraftRepository extends ChangeNotifier {
 
     final response = await misskey.notes.drafts.create(request);
     final draft = response.createdDraft;
-
-    // デバッグ用：レスポンスをログ出力
-    print("DEBUG: Created draft response:");
-    print("  draft.id: ${draft.id}");
-    print("  draft.poll: ${draft.poll}");
-    if (draft.poll != null) {
-      print("    choices: ${draft.poll!.choices}");
-      print("    multiple: ${draft.poll!.multiple}");
-      print("    expiresAt: ${draft.poll!.expiresAt}");
-      print("    expiredAfter: ${draft.poll!.expiredAfter}");
-    }
 
     _drafts[draft.id] = draft;
     notifyListeners();
@@ -104,18 +82,6 @@ class NoteDraftRepository extends ChangeNotifier {
     String? channelId,
     NotesCreatePollRequest? poll,
   }) async {
-    // デバッグ用：リクエストパラメータをログ出力
-    print("DEBUG: NoteDraftRepository.update() called with:");
-    print("  draftId: $draftId");
-    print("  text: $text");
-    print("  poll: $poll");
-    if (poll != null) {
-      print("    choices: ${poll.choices}");
-      print("    multiple: ${poll.multiple}");
-      print("    expiresAt: ${poll.expiresAt}");
-      print("    expiredAfter: ${poll.expiredAfter}");
-    }
-
     final request = NotesDraftsUpdateRequest(
       draftId: draftId,
       text: text,
@@ -133,17 +99,6 @@ class NoteDraftRepository extends ChangeNotifier {
 
     final response = await misskey.notes.drafts.update(request);
     final draft = response.updatedDraft;
-
-    // デバッグ用：レスポンスをログ出力
-    print("DEBUG: Updated draft response:");
-    print("  draft.id: ${draft.id}");
-    print("  draft.poll: ${draft.poll}");
-    if (draft.poll != null) {
-      print("    choices: ${draft.poll!.choices}");
-      print("    multiple: ${draft.poll!.multiple}");
-      print("    expiresAt: ${draft.poll!.expiresAt}");
-      print("    expiredAfter: ${draft.poll!.expiredAfter}");
-    }
 
     _drafts[draft.id] = draft;
     notifyListeners();

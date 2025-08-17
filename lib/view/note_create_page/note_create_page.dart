@@ -434,15 +434,6 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
       return fileIds.isEmpty ? null : fileIds;
     }();
 
-    // デバッグ用：投票情報をログ出力
-    if (poll != null) {
-      print(
-        "DEBUG: Saving draft with poll: choices=${poll.choices}, multiple=${poll.multiple}, expiresAt=${poll.expiresAt}, expiredAfter=${poll.expiredAfter}",
-      );
-    } else {
-      print("DEBUG: Saving draft without poll");
-    }
-
     // 既存の下書きIDがある場合は更新、ない場合は新規作成
     if (state.selectedDraftId != null) {
       await draftRepository.update(
