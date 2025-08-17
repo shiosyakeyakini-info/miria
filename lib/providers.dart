@@ -115,9 +115,11 @@ final notesProvider = ChangeNotifierProvider.family<NoteRepository, Account>(
   (ref, account) => NoteRepository(ref.read(misskeyProvider(account)), account),
 );
 
-final noteDraftProvider = ChangeNotifierProvider.family<NoteDraftRepository, Account>(
-  (ref, account) => NoteDraftRepository(ref.read(misskeyProvider(account)), account),
-);
+final noteDraftProvider =
+    ChangeNotifierProvider.family<NoteDraftRepository, Account>(
+      (ref, account) =>
+          NoteDraftRepository(ref.read(misskeyProvider(account)), account),
+    );
 
 @Riverpod(dependencies: [accountContext])
 Raw<NoteRepository> notesWith(Ref ref) {
@@ -126,7 +128,9 @@ Raw<NoteRepository> notesWith(Ref ref) {
 
 @Riverpod(dependencies: [accountContext])
 Raw<NoteDraftRepository> noteDraftWith(Ref ref) {
-  return ref.read(noteDraftProvider(ref.read(accountContextProvider).postAccount));
+  return ref.read(
+    noteDraftProvider(ref.read(accountContextProvider).postAccount),
+  );
 }
 
 @Riverpod(keepAlive: true)

@@ -1124,6 +1124,9 @@
 
     "saveToDrafts": "下書きに保存する？",
     "discard": "破棄",
-    "drafts": "下書き"
+    "drafts": "下書き",
+    "noDrafts": "下書きがありません",
+    "confirmDeleteDraft": "この下書きを削除しますか？",
+    "emptyNote": "空のノート"
 
 }

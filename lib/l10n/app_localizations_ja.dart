@@ -2095,6 +2095,15 @@ class SJa extends S {
 
   @override
   String get drafts => '下書き';
+
+  @override
+  String get noDrafts => '下書きがありません';
+
+  @override
+  String get confirmDeleteDraft => 'この下書きを削除しますか？';
+
+  @override
+  String get emptyNote => '空のノート';
 }
 
 /// The translations for Japanese (`ja_OJ`).
@@ -2509,4 +2518,13 @@ class SJaOj extends SJa {
 
   @override
   String get drafts => '下書き';
+
+  @override
+  String get noDrafts => '下書きがございませんわ';
+
+  @override
+  String get confirmDeleteDraft => 'この下書きを削除いたしますか？';
+
+  @override
+  String get emptyNote => '空のノートですわ';
 }

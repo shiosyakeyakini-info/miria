@@ -23,8 +23,19 @@ class NoteDraftRepository extends ChangeNotifier {
     String? replyId,
     String? renoteId,
     String? channelId,
-    NotesDraftsCreatePoll? poll,
+    NotesCreatePollRequest? poll,
   }) async {
+    // デバッグ用：リクエストパラメータをログ出力
+    print("DEBUG: NoteDraftRepository.create() called with:");
+    print("  text: $text");
+    print("  poll: $poll");
+    if (poll != null) {
+      print("    choices: ${poll.choices}");
+      print("    multiple: ${poll.multiple}");
+      print("    expiresAt: ${poll.expiresAt}");
+      print("    expiredAfter: ${poll.expiredAfter}");
+    }
+
     final request = NotesDraftsCreateRequest(
       text: text,
       cw: cw,
@@ -41,6 +52,18 @@ class NoteDraftRepository extends ChangeNotifier {
 
     final response = await misskey.notes.drafts.create(request);
     final draft = response.createdDraft;
+    
+    // デバッグ用：レスポンスをログ出力
+    print("DEBUG: Created draft response:");
+    print("  draft.id: ${draft.id}");
+    print("  draft.poll: ${draft.poll}");
+    if (draft.poll != null) {
+      print("    choices: ${draft.poll!.choices}");
+      print("    multiple: ${draft.poll!.multiple}");
+      print("    expiresAt: ${draft.poll!.expiresAt}");
+      print("    expiredAfter: ${draft.poll!.expiredAfter}");
+    }
+    
     _drafts[draft.id] = draft;
     notifyListeners();
     return draft;
@@ -79,8 +102,20 @@ class NoteDraftRepository extends ChangeNotifier {
     String? replyId,
     String? renoteId,
     String? channelId,
-    NotesDraftsUpdatePoll? poll,
+    NotesCreatePollRequest? poll,
   }) async {
+    // デバッグ用：リクエストパラメータをログ出力
+    print("DEBUG: NoteDraftRepository.update() called with:");
+    print("  draftId: $draftId");
+    print("  text: $text");
+    print("  poll: $poll");
+    if (poll != null) {
+      print("    choices: ${poll.choices}");
+      print("    multiple: ${poll.multiple}");
+      print("    expiresAt: ${poll.expiresAt}");
+      print("    expiredAfter: ${poll.expiredAfter}");
+    }
+
     final request = NotesDraftsUpdateRequest(
       draftId: draftId,
       text: text,
@@ -96,7 +131,20 @@ class NoteDraftRepository extends ChangeNotifier {
       poll: poll,
     );
 
-    final draft = await misskey.notes.drafts.update(request);
+    final response = await misskey.notes.drafts.update(request);
+    final draft = response.updatedDraft;
+    
+    // デバッグ用：レスポンスをログ出力
+    print("DEBUG: Updated draft response:");
+    print("  draft.id: ${draft.id}");
+    print("  draft.poll: ${draft.poll}");
+    if (draft.poll != null) {
+      print("    choices: ${draft.poll!.choices}");
+      print("    multiple: ${draft.poll!.multiple}");
+      print("    expiresAt: ${draft.poll!.expiresAt}");
+      print("    expiredAfter: ${draft.poll!.expiredAfter}");
+    }
+    
     _drafts[draft.id] = draft;
     notifyListeners();
     return draft;
@@ -112,8 +160,7 @@ class NoteDraftRepository extends ChangeNotifier {
 
   /// 下書き数を取得
   Future<int> count() async {
-    final response = await misskey.notes.drafts.count();
-    return response.count;
+    return await misskey.notes.drafts.count();
   }
 
   /// 特定の下書きを取得

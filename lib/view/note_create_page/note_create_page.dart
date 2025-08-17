@@ -17,6 +17,7 @@ import "package:miria/state_notifier/note_create_page/note_create_state_notifier
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/modal_indicator.dart";
+import "package:miria/view/drafts_page/drafts_dialog.dart";
 import "package:miria/view/note_create_page/channel_area.dart";
 import "package:miria/view/note_create_page/cw_text_area.dart";
 import "package:miria/view/note_create_page/cw_toggle_button.dart";
@@ -65,6 +66,7 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
   final Note? renote;
   final Note? note;
   final NoteCreationMode? noteCreationMode;
+  final String? draftId;
 
   const NoteCreatePage({
     required this.initialAccount,
@@ -77,6 +79,7 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
     this.renote,
     this.note,
     this.noteCreationMode,
+    this.draftId,
   });
 
   static const shareExtensionMethodChannel = MethodChannel(
@@ -95,6 +98,16 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
 
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((timestamp) async {
+        // Load draft if draftId is provided
+        if (draftId != null) {
+          final draftRepository = ref.read(noteDraftWithProvider);
+          final draft = draftRepository.getDraft(draftId!);
+          if (draft != null) {
+            await notifier.initializeFromDraft(draft);
+            return;
+          }
+        }
+
         await notifier.initialize(
           channel,
           initialText,
@@ -160,8 +173,17 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
 
         final state = ref.read(noteCreateNotifierProvider);
         final hasContent = _hasDraftContent(state);
+        final draftLimitPolicy =
+            ref
+                .read(accountContextProvider)
+                .postAccount
+                .i
+                .policies
+                .noteDraftLimit ??
+            0;
 
-        if (hasContent) {
+        if (hasContent && draftLimitPolicy > 0) {
+          // Show save to draft dialog only if drafts are supported
           final dialogNotifier = ref.read(dialogStateNotifierProvider.notifier);
           final choice = await dialogNotifier.showDialog(
             message: (context) => S.of(context).saveToDrafts,
@@ -177,7 +199,6 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
               if (context.mounted) {
                 Navigator.of(context).pop();
               }
-              break;
             case 1: // Cancel
               return;
             case 2: // Save
@@ -185,7 +206,6 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
               if (context.mounted) {
                 Navigator.of(context).pop();
               }
-              break;
             default:
               return;
           }
@@ -194,128 +214,149 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
         }
       },
       child: Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).note),
-        actions: [
-          IconButton(
-            onPressed: () async => await notifier.note(),
-            icon: const Icon(Icons.send),
-          ),
-        ],
-      ),
-      resizeToAvoidBottomInset: true,
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 5, right: 5),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    if (noteCreationMode != NoteCreationMode.update)
-                      const NoteCreateSettingTop()
-                    else
-                      const Padding(padding: EdgeInsets.only(top: 30)),
-                    const ChannelArea(),
-                    const ReplyArea(),
-                    const ReplyToArea(),
-                    const CwTextArea(),
-                    Focus(
-                      onKeyEvent: (node, event) {
-                        if (event is KeyDownEvent) {
-                          if (event.logicalKey == LogicalKeyboardKey.enter &&
-                              HardwareKeyboard.instance.isControlPressed) {
-                            unawaited(notifier.note());
-                            return KeyEventResult.handled;
+        appBar: AppBar(
+          title: Text(S.of(context).note),
+          actions: [
+            // Show drafts button only if drafts are supported
+            if ((ref
+                        .read(accountContextProvider)
+                        .postAccount
+                        .i
+                        .policies
+                        .noteDraftLimit ??
+                    0) >
+                0)
+              IconButton(
+                onPressed: () async {
+                  final selectedDraft = await showDraftsDialog(context, ref);
+                  if (selectedDraft != null) {
+                    // Load the selected draft into the current page
+                    await notifier.initializeFromDraft(selectedDraft);
+                  }
+                },
+                icon: const Icon(Icons.drafts),
+                tooltip: S.of(context).drafts,
+              ),
+            IconButton(
+              onPressed: () async => await notifier.note(),
+              icon: const Icon(Icons.send),
+            ),
+          ],
+        ),
+        resizeToAvoidBottomInset: true,
+        body: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      if (noteCreationMode != NoteCreationMode.update)
+                        const NoteCreateSettingTop()
+                      else
+                        const Padding(padding: EdgeInsets.only(top: 30)),
+                      const ChannelArea(),
+                      const ReplyArea(),
+                      const ReplyToArea(),
+                      const CwTextArea(),
+                      Focus(
+                        onKeyEvent: (node, event) {
+                          if (event is KeyDownEvent) {
+                            if (event.logicalKey == LogicalKeyboardKey.enter &&
+                                HardwareKeyboard.instance.isControlPressed) {
+                              unawaited(notifier.note());
+                              return KeyEventResult.handled;
+                            }
                           }
-                        }
-                        return KeyEventResult.ignored;
-                      },
-                      child: TextField(
-                        controller: controller,
-                        focusNode: focusNode,
-                        maxLines: null,
-                        minLines: 5,
-                        keyboardType: TextInputType.multiline,
-                        decoration: noteDecoration,
-                        autofocus: true,
+                          return KeyEventResult.ignored;
+                        },
+                        child: TextField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          maxLines: null,
+                          minLines: 5,
+                          keyboardType: TextInputType.multiline,
+                          decoration: noteDecoration,
+                          autofocus: true,
+                        ),
                       ),
-                    ),
-                    Row(
-                      children: [
-                        if (noteCreationMode != NoteCreationMode.update) ...[
-                          IconButton(
-                            onPressed: () async => await notifier.chooseFile(),
-                            icon: const Icon(Icons.image),
-                          ),
+                      Row(
+                        children: [
+                          if (noteCreationMode != NoteCreationMode.update) ...[
+                            IconButton(
+                              onPressed: () async =>
+                                  await notifier.chooseFile(),
+                              icon: const Icon(Icons.image),
+                            ),
+                            if (noteCreationMode != NoteCreationMode.update)
+                              IconButton(
+                                onPressed: () {
+                                  ref
+                                      .read(noteCreateNotifierProvider.notifier)
+                                      .toggleVote();
+                                },
+                                icon: const Icon(Icons.how_to_vote),
+                              ),
+                          ],
+                          const CwToggleButton(),
                           if (noteCreationMode != NoteCreationMode.update)
                             IconButton(
-                              onPressed: () {
-                                ref
-                                    .read(noteCreateNotifierProvider.notifier)
-                                    .toggleVote();
-                              },
-                              icon: const Icon(Icons.how_to_vote),
+                              onPressed: () async => notifier.addReplyUser(),
+                              icon: const Icon(Icons.mail_outline),
                             ),
-                        ],
-                        const CwToggleButton(),
-                        if (noteCreationMode != NoteCreationMode.update)
                           IconButton(
-                            onPressed: () async => notifier.addReplyUser(),
-                            icon: const Icon(Icons.mail_outline),
+                            onPressed: () async {
+                              final selectedEmoji = await context
+                                  .pushRoute<MisskeyEmojiData>(
+                                    ReactionPickerRoute(
+                                      account: ref
+                                          .read(accountContextProvider)
+                                          .postAccount,
+                                      isAcceptSensitive: true,
+                                    ),
+                                  );
+                              if (selectedEmoji == null) return;
+                              switch (selectedEmoji) {
+                                case CustomEmojiData():
+                                  ref
+                                      .read(noteInputTextProvider)
+                                      .insert(":${selectedEmoji.baseName}:");
+                                case UnicodeEmojiData():
+                                  ref
+                                      .read(noteInputTextProvider)
+                                      .insert(selectedEmoji.char);
+                                default:
+                                  break;
+                              }
+                              ref.read(noteFocusProvider).requestFocus();
+                            },
+                            icon: const Icon(Icons.tag_faces),
                           ),
-                        IconButton(
-                          onPressed: () async {
-                            final selectedEmoji = await context
-                                .pushRoute<MisskeyEmojiData>(
-                                  ReactionPickerRoute(
-                                    account: ref
-                                        .read(accountContextProvider)
-                                        .postAccount,
-                                    isAcceptSensitive: true,
-                                  ),
-                                );
-                            if (selectedEmoji == null) return;
-                            switch (selectedEmoji) {
-                              case CustomEmojiData():
-                                ref
-                                    .read(noteInputTextProvider)
-                                    .insert(":${selectedEmoji.baseName}:");
-                              case UnicodeEmojiData():
-                                ref
-                                    .read(noteInputTextProvider)
-                                    .insert(selectedEmoji.char);
-                              default:
-                                break;
-                            }
-                            ref.read(noteFocusProvider).requestFocus();
-                          },
-                          icon: const Icon(Icons.tag_faces),
-                        ),
-                      ],
-                    ),
-                    const MfmPreview(),
-                    if (noteCreationMode != NoteCreationMode.update)
-                      const FilePreview()
-                    else if (note?.files.isNotEmpty == true)
-                      Text(S.of(context).hasMediaButCannotEdit),
-                    const RenoteArea(),
-                    if (noteCreationMode != NoteCreationMode.update)
-                      const VoteArea()
-                    else if (note?.poll != null)
-                      Text(S.of(context).hasVoteButCannotEdit),
-                  ],
+                        ],
+                      ),
+                      const MfmPreview(),
+                      if (noteCreationMode != NoteCreationMode.update)
+                        const FilePreview()
+                      else if (note?.files.isNotEmpty == true)
+                        Text(S.of(context).hasMediaButCannotEdit),
+                      const RenoteArea(),
+                      if (noteCreationMode != NoteCreationMode.update)
+                        const VoteArea()
+                      else if (note?.poll != null)
+                        Text(S.of(context).hasVoteButCannotEdit),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          const NoteEmoji(),
-        ],
+            const NoteEmoji(),
+          ],
+        ),
       ),
-    ),
     );
   }
 
@@ -324,23 +365,24 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
     return state.text.trim().isNotEmpty ||
         (state.isCw && state.cwText.trim().isNotEmpty) ||
         state.files.isNotEmpty ||
-        (state.isVote && 
-         state.voteContent.any((content) => content.trim().isNotEmpty));
+        (state.isVote &&
+            state.voteContent.any((content) => content.trim().isNotEmpty));
   }
 
   /// 現在の状態を下書きとして保存
   Future<void> _saveDraft(WidgetRef ref, NoteCreate state) async {
+    final notifier = ref.read(noteCreateNotifierProvider.notifier);
     final draftRepository = ref.read(noteDraftWithProvider);
-    
-    NotesDraftsCreatePoll? poll;
-    if (state.isVote && state.voteContent.any((content) => content.trim().isNotEmpty)) {
+
+    NotesCreatePollRequest? poll;
+    if (state.isVote &&
+        state.voteContent.any((content) => content.trim().isNotEmpty)) {
       DateTime? expiresAt;
       Duration? expiredAfter;
-      
+
       switch (state.voteExpireType) {
         case VoteExpireType.date:
           expiresAt = state.voteDate;
-          break;
         case VoteExpireType.duration:
           if (state.voteDuration != null) {
             final duration = Duration(
@@ -353,37 +395,82 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
             );
             expiredAfter = duration;
           }
-          break;
         case VoteExpireType.unlimited:
           break;
       }
-      
-      poll = NotesDraftsCreatePoll(
-        choices: state.voteContent.where((content) => content.trim().isNotEmpty).toList(),
+
+      poll = NotesCreatePollRequest(
+        choices: state.voteContent
+            .where((content) => content.trim().isNotEmpty)
+            .toList(),
         multiple: state.isVoteMultiple,
         expiresAt: expiresAt,
         expiredAfter: expiredAfter,
       );
     }
 
-    await draftRepository.create(
-      text: state.text.trim().isEmpty ? null : state.text,
-      cw: state.isCw && state.cwText.trim().isNotEmpty ? state.cwText : null,
-      visibility: state.noteVisibility,
-      localOnly: state.localOnly,
-      reactionAcceptance: state.reactionAcceptance,
-      fileIds: state.files
-        .where((file) => file is ImageFileAlreadyPostedFile || file is UnknownAlreadyPostedFile)
-        .map((file) => switch (file) {
-          ImageFileAlreadyPostedFile(id: final id) => id,
-          UnknownAlreadyPostedFile(id: final id) => id,
-          _ => throw UnsupportedError('Unsupported file type for draft: ${file.runtimeType}'),
-        })
-        .toList(),
-      replyId: state.reply?.id,
-      renoteId: state.renote?.id,
-      channelId: state.channel?.id,
-      poll: poll,
-    );
+    // 共通のパラメータを準備
+    final text = state.text.trim().isEmpty ? null : state.text;
+    final cw = state.isCw && state.cwText.trim().isNotEmpty
+        ? state.cwText
+        : null;
+    final fileIds = () {
+      final fileIds = state.files
+          .where(
+            (file) =>
+                file is ImageFileAlreadyPostedFile ||
+                file is UnknownAlreadyPostedFile,
+          )
+          .map(
+            (file) => switch (file) {
+              ImageFileAlreadyPostedFile(id: final id) => id,
+              UnknownAlreadyPostedFile(id: final id) => id,
+              _ => throw UnsupportedError(
+                "Unsupported file type for draft: ${file.runtimeType}",
+              ),
+            },
+          )
+          .toList();
+      return fileIds.isEmpty ? null : fileIds;
+    }();
+
+    // デバッグ用：投票情報をログ出力
+    if (poll != null) {
+      print("DEBUG: Saving draft with poll: choices=${poll.choices}, multiple=${poll.multiple}, expiresAt=${poll.expiresAt}, expiredAfter=${poll.expiredAfter}");
+    } else {
+      print("DEBUG: Saving draft without poll");
+    }
+
+    // 既存の下書きIDがある場合は更新、ない場合は新規作成
+    if (state.selectedDraftId != null) {
+      await draftRepository.update(
+        draftId: state.selectedDraftId!,
+        text: text,
+        cw: cw,
+        visibility: state.noteVisibility,
+        localOnly: state.localOnly,
+        reactionAcceptance: state.reactionAcceptance,
+        fileIds: fileIds,
+        replyId: state.reply?.id,
+        renoteId: state.renote?.id,
+        channelId: state.channel?.id,
+        poll: poll,
+      );
+    } else {
+      final newDraft = await draftRepository.create(
+        text: text,
+        cw: cw,
+        visibility: state.noteVisibility,
+        localOnly: state.localOnly,
+        reactionAcceptance: state.reactionAcceptance,
+        fileIds: fileIds,
+        replyId: state.reply?.id,
+        renoteId: state.renote?.id,
+        channelId: state.channel?.id,
+        poll: poll,
+      );
+      // 新規作成の場合は下書きIDを設定
+      notifier.setSelectedDraftId(newDraft.id);
+    }
   }
 }

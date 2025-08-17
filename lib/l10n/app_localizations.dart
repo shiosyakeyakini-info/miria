@@ -3665,6 +3665,24 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'下書き'**
   String get drafts;
+
+  /// No description provided for @noDrafts.
+  ///
+  /// In ja, this message translates to:
+  /// **'下書きがありません'**
+  String get noDrafts;
+
+  /// No description provided for @confirmDeleteDraft.
+  ///
+  /// In ja, this message translates to:
+  /// **'この下書きを削除しますか？'**
+  String get confirmDeleteDraft;
+
+  /// No description provided for @emptyNote.
+  ///
+  /// In ja, this message translates to:
+  /// **'空のノート'**
+  String get emptyNote;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$NoteCreate {
 
- NoteVisibility get noteVisibility; bool get localOnly; ReactionAcceptance? get reactionAcceptance; List<User> get replyTo; List<MisskeyPostFile> get files; NoteCreateChannel? get channel; Note? get reply; Note? get renote; bool get isCw; String get cwText; String get text; bool get isTextFocused; NoteSendStatus? get isNoteSending; bool get isVote; List<String> get voteContent; int get voteContentCount; VoteExpireType get voteExpireType; bool get isVoteMultiple; DateTime? get voteDate; int? get voteDuration; VoteExpireDurationType get voteDurationType; NoteCreationMode? get noteCreationMode; String? get noteId;
+ NoteVisibility get noteVisibility; bool get localOnly; ReactionAcceptance? get reactionAcceptance; List<User> get replyTo; List<MisskeyPostFile> get files; NoteCreateChannel? get channel; Note? get reply; Note? get renote; bool get isCw; String get cwText; String get text; bool get isTextFocused; NoteSendStatus? get isNoteSending; bool get isVote; List<String> get voteContent; int get voteContentCount; VoteExpireType get voteExpireType; bool get isVoteMultiple; DateTime? get voteDate; int? get voteDuration; VoteExpireDurationType get voteDurationType; NoteCreationMode? get noteCreationMode; String? get noteId; String? get selectedDraftId;
 /// Create a copy of NoteCreate
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $NoteCreateCopyWith<NoteCreate> get copyWith => _$NoteCreateCopyWithImpl<NoteCre
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NoteCreate&&(identical(other.noteVisibility, noteVisibility) || other.noteVisibility == noteVisibility)&&(identical(other.localOnly, localOnly) || other.localOnly == localOnly)&&(identical(other.reactionAcceptance, reactionAcceptance) || other.reactionAcceptance == reactionAcceptance)&&const DeepCollectionEquality().equals(other.replyTo, replyTo)&&const DeepCollectionEquality().equals(other.files, files)&&(identical(other.channel, channel) || other.channel == channel)&&(identical(other.reply, reply) || other.reply == reply)&&(identical(other.renote, renote) || other.renote == renote)&&(identical(other.isCw, isCw) || other.isCw == isCw)&&(identical(other.cwText, cwText) || other.cwText == cwText)&&(identical(other.text, text) || other.text == text)&&(identical(other.isTextFocused, isTextFocused) || other.isTextFocused == isTextFocused)&&(identical(other.isNoteSending, isNoteSending) || other.isNoteSending == isNoteSending)&&(identical(other.isVote, isVote) || other.isVote == isVote)&&const DeepCollectionEquality().equals(other.voteContent, voteContent)&&(identical(other.voteContentCount, voteContentCount) || other.voteContentCount == voteContentCount)&&(identical(other.voteExpireType, voteExpireType) || other.voteExpireType == voteExpireType)&&(identical(other.isVoteMultiple, isVoteMultiple) || other.isVoteMultiple == isVoteMultiple)&&(identical(other.voteDate, voteDate) || other.voteDate == voteDate)&&(identical(other.voteDuration, voteDuration) || other.voteDuration == voteDuration)&&(identical(other.voteDurationType, voteDurationType) || other.voteDurationType == voteDurationType)&&(identical(other.noteCreationMode, noteCreationMode) || other.noteCreationMode == noteCreationMode)&&(identical(other.noteId, noteId) || other.noteId == noteId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is NoteCreate&&(identical(other.noteVisibility, noteVisibility) || other.noteVisibility == noteVisibility)&&(identical(other.localOnly, localOnly) || other.localOnly == localOnly)&&(identical(other.reactionAcceptance, reactionAcceptance) || other.reactionAcceptance == reactionAcceptance)&&const DeepCollectionEquality().equals(other.replyTo, replyTo)&&const DeepCollectionEquality().equals(other.files, files)&&(identical(other.channel, channel) || other.channel == channel)&&(identical(other.reply, reply) || other.reply == reply)&&(identical(other.renote, renote) || other.renote == renote)&&(identical(other.isCw, isCw) || other.isCw == isCw)&&(identical(other.cwText, cwText) || other.cwText == cwText)&&(identical(other.text, text) || other.text == text)&&(identical(other.isTextFocused, isTextFocused) || other.isTextFocused == isTextFocused)&&(identical(other.isNoteSending, isNoteSending) || other.isNoteSending == isNoteSending)&&(identical(other.isVote, isVote) || other.isVote == isVote)&&const DeepCollectionEquality().equals(other.voteContent, voteContent)&&(identical(other.voteContentCount, voteContentCount) || other.voteContentCount == voteContentCount)&&(identical(other.voteExpireType, voteExpireType) || other.voteExpireType == voteExpireType)&&(identical(other.isVoteMultiple, isVoteMultiple) || other.isVoteMultiple == isVoteMultiple)&&(identical(other.voteDate, voteDate) || other.voteDate == voteDate)&&(identical(other.voteDuration, voteDuration) || other.voteDuration == voteDuration)&&(identical(other.voteDurationType, voteDurationType) || other.voteDurationType == voteDurationType)&&(identical(other.noteCreationMode, noteCreationMode) || other.noteCreationMode == noteCreationMode)&&(identical(other.noteId, noteId) || other.noteId == noteId)&&(identical(other.selectedDraftId, selectedDraftId) || other.selectedDraftId == selectedDraftId));
 }
 
 
 @override
-int get hashCode => Object.hashAll([runtimeType,noteVisibility,localOnly,reactionAcceptance,const DeepCollectionEquality().hash(replyTo),const DeepCollectionEquality().hash(files),channel,reply,renote,isCw,cwText,text,isTextFocused,isNoteSending,isVote,const DeepCollectionEquality().hash(voteContent),voteContentCount,voteExpireType,isVoteMultiple,voteDate,voteDuration,voteDurationType,noteCreationMode,noteId]);
+int get hashCode => Object.hashAll([runtimeType,noteVisibility,localOnly,reactionAcceptance,const DeepCollectionEquality().hash(replyTo),const DeepCollectionEquality().hash(files),channel,reply,renote,isCw,cwText,text,isTextFocused,isNoteSending,isVote,const DeepCollectionEquality().hash(voteContent),voteContentCount,voteExpireType,isVoteMultiple,voteDate,voteDuration,voteDurationType,noteCreationMode,noteId,selectedDraftId]);
 
 @override
 String toString() {
-  return 'NoteCreate(noteVisibility: $noteVisibility, localOnly: $localOnly, reactionAcceptance: $reactionAcceptance, replyTo: $replyTo, files: $files, channel: $channel, reply: $reply, renote: $renote, isCw: $isCw, cwText: $cwText, text: $text, isTextFocused: $isTextFocused, isNoteSending: $isNoteSending, isVote: $isVote, voteContent: $voteContent, voteContentCount: $voteContentCount, voteExpireType: $voteExpireType, isVoteMultiple: $isVoteMultiple, voteDate: $voteDate, voteDuration: $voteDuration, voteDurationType: $voteDurationType, noteCreationMode: $noteCreationMode, noteId: $noteId)';
+  return 'NoteCreate(noteVisibility: $noteVisibility, localOnly: $localOnly, reactionAcceptance: $reactionAcceptance, replyTo: $replyTo, files: $files, channel: $channel, reply: $reply, renote: $renote, isCw: $isCw, cwText: $cwText, text: $text, isTextFocused: $isTextFocused, isNoteSending: $isNoteSending, isVote: $isVote, voteContent: $voteContent, voteContentCount: $voteContentCount, voteExpireType: $voteExpireType, isVoteMultiple: $isVoteMultiple, voteDate: $voteDate, voteDuration: $voteDuration, voteDurationType: $voteDurationType, noteCreationMode: $noteCreationMode, noteId: $noteId, selectedDraftId: $selectedDraftId)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $NoteCreateCopyWith<$Res>  {
   factory $NoteCreateCopyWith(NoteCreate value, $Res Function(NoteCreate) _then) = _$NoteCreateCopyWithImpl;
 @useResult
 $Res call({
- NoteVisibility noteVisibility, bool localOnly, ReactionAcceptance? reactionAcceptance, List<User> replyTo, List<MisskeyPostFile> files, NoteCreateChannel? channel, Note? reply, Note? renote, bool isCw, String cwText, String text, bool isTextFocused, NoteSendStatus? isNoteSending, bool isVote, List<String> voteContent, int voteContentCount, VoteExpireType voteExpireType, bool isVoteMultiple, DateTime? voteDate, int? voteDuration, VoteExpireDurationType voteDurationType, NoteCreationMode? noteCreationMode, String? noteId
+ NoteVisibility noteVisibility, bool localOnly, ReactionAcceptance? reactionAcceptance, List<User> replyTo, List<MisskeyPostFile> files, NoteCreateChannel? channel, Note? reply, Note? renote, bool isCw, String cwText, String text, bool isTextFocused, NoteSendStatus? isNoteSending, bool isVote, List<String> voteContent, int voteContentCount, VoteExpireType voteExpireType, bool isVoteMultiple, DateTime? voteDate, int? voteDuration, VoteExpireDurationType voteDurationType, NoteCreationMode? noteCreationMode, String? noteId, String? selectedDraftId
 });
 
 
@@ -63,7 +63,7 @@ class _$NoteCreateCopyWithImpl<$Res>
 
 /// Create a copy of NoteCreate
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? noteVisibility = null,Object? localOnly = null,Object? reactionAcceptance = freezed,Object? replyTo = null,Object? files = null,Object? channel = freezed,Object? reply = freezed,Object? renote = freezed,Object? isCw = null,Object? cwText = null,Object? text = null,Object? isTextFocused = null,Object? isNoteSending = freezed,Object? isVote = null,Object? voteContent = null,Object? voteContentCount = null,Object? voteExpireType = null,Object? isVoteMultiple = null,Object? voteDate = freezed,Object? voteDuration = freezed,Object? voteDurationType = null,Object? noteCreationMode = freezed,Object? noteId = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? noteVisibility = null,Object? localOnly = null,Object? reactionAcceptance = freezed,Object? replyTo = null,Object? files = null,Object? channel = freezed,Object? reply = freezed,Object? renote = freezed,Object? isCw = null,Object? cwText = null,Object? text = null,Object? isTextFocused = null,Object? isNoteSending = freezed,Object? isVote = null,Object? voteContent = null,Object? voteContentCount = null,Object? voteExpireType = null,Object? isVoteMultiple = null,Object? voteDate = freezed,Object? voteDuration = freezed,Object? voteDurationType = null,Object? noteCreationMode = freezed,Object? noteId = freezed,Object? selectedDraftId = freezed,}) {
   return _then(_self.copyWith(
 noteVisibility: null == noteVisibility ? _self.noteVisibility : noteVisibility // ignore: cast_nullable_to_non_nullable
 as NoteVisibility,localOnly: null == localOnly ? _self.localOnly : localOnly // ignore: cast_nullable_to_non_nullable
@@ -88,6 +88,7 @@ as DateTime?,voteDuration: freezed == voteDuration ? _self.voteDuration : voteDu
 as int?,voteDurationType: null == voteDurationType ? _self.voteDurationType : voteDurationType // ignore: cast_nullable_to_non_nullable
 as VoteExpireDurationType,noteCreationMode: freezed == noteCreationMode ? _self.noteCreationMode : noteCreationMode // ignore: cast_nullable_to_non_nullable
 as NoteCreationMode?,noteId: freezed == noteId ? _self.noteId : noteId // ignore: cast_nullable_to_non_nullable
+as String?,selectedDraftId: freezed == selectedDraftId ? _self.selectedDraftId : selectedDraftId // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -135,7 +136,7 @@ $NoteCopyWith<$Res>? get renote {
 
 
 class _NoteCreate implements NoteCreate {
-  const _NoteCreate({required this.noteVisibility, required this.localOnly, required this.reactionAcceptance, final  List<User> replyTo = const [], final  List<MisskeyPostFile> files = const [], this.channel, this.reply, this.renote, this.isCw = false, this.cwText = "", this.text = "", this.isTextFocused = false, this.isNoteSending, this.isVote = false, final  List<String> voteContent = const ["", ""], this.voteContentCount = 2, this.voteExpireType = VoteExpireType.unlimited, this.isVoteMultiple = false, this.voteDate, this.voteDuration, this.voteDurationType = VoteExpireDurationType.seconds, this.noteCreationMode, this.noteId}): _replyTo = replyTo,_files = files,_voteContent = voteContent;
+  const _NoteCreate({required this.noteVisibility, required this.localOnly, required this.reactionAcceptance, final  List<User> replyTo = const [], final  List<MisskeyPostFile> files = const [], this.channel, this.reply, this.renote, this.isCw = false, this.cwText = "", this.text = "", this.isTextFocused = false, this.isNoteSending, this.isVote = false, final  List<String> voteContent = const ["", ""], this.voteContentCount = 2, this.voteExpireType = VoteExpireType.unlimited, this.isVoteMultiple = false, this.voteDate, this.voteDuration, this.voteDurationType = VoteExpireDurationType.seconds, this.noteCreationMode, this.noteId, this.selectedDraftId}): _replyTo = replyTo,_files = files,_voteContent = voteContent;
   
 
 @override final  NoteVisibility noteVisibility;
@@ -179,6 +180,7 @@ class _NoteCreate implements NoteCreate {
 @override@JsonKey() final  VoteExpireDurationType voteDurationType;
 @override final  NoteCreationMode? noteCreationMode;
 @override final  String? noteId;
+@override final  String? selectedDraftId;
 
 /// Create a copy of NoteCreate
 /// with the given fields replaced by the non-null parameter values.
@@ -190,16 +192,16 @@ _$NoteCreateCopyWith<_NoteCreate> get copyWith => __$NoteCreateCopyWithImpl<_Not
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoteCreate&&(identical(other.noteVisibility, noteVisibility) || other.noteVisibility == noteVisibility)&&(identical(other.localOnly, localOnly) || other.localOnly == localOnly)&&(identical(other.reactionAcceptance, reactionAcceptance) || other.reactionAcceptance == reactionAcceptance)&&const DeepCollectionEquality().equals(other._replyTo, _replyTo)&&const DeepCollectionEquality().equals(other._files, _files)&&(identical(other.channel, channel) || other.channel == channel)&&(identical(other.reply, reply) || other.reply == reply)&&(identical(other.renote, renote) || other.renote == renote)&&(identical(other.isCw, isCw) || other.isCw == isCw)&&(identical(other.cwText, cwText) || other.cwText == cwText)&&(identical(other.text, text) || other.text == text)&&(identical(other.isTextFocused, isTextFocused) || other.isTextFocused == isTextFocused)&&(identical(other.isNoteSending, isNoteSending) || other.isNoteSending == isNoteSending)&&(identical(other.isVote, isVote) || other.isVote == isVote)&&const DeepCollectionEquality().equals(other._voteContent, _voteContent)&&(identical(other.voteContentCount, voteContentCount) || other.voteContentCount == voteContentCount)&&(identical(other.voteExpireType, voteExpireType) || other.voteExpireType == voteExpireType)&&(identical(other.isVoteMultiple, isVoteMultiple) || other.isVoteMultiple == isVoteMultiple)&&(identical(other.voteDate, voteDate) || other.voteDate == voteDate)&&(identical(other.voteDuration, voteDuration) || other.voteDuration == voteDuration)&&(identical(other.voteDurationType, voteDurationType) || other.voteDurationType == voteDurationType)&&(identical(other.noteCreationMode, noteCreationMode) || other.noteCreationMode == noteCreationMode)&&(identical(other.noteId, noteId) || other.noteId == noteId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoteCreate&&(identical(other.noteVisibility, noteVisibility) || other.noteVisibility == noteVisibility)&&(identical(other.localOnly, localOnly) || other.localOnly == localOnly)&&(identical(other.reactionAcceptance, reactionAcceptance) || other.reactionAcceptance == reactionAcceptance)&&const DeepCollectionEquality().equals(other._replyTo, _replyTo)&&const DeepCollectionEquality().equals(other._files, _files)&&(identical(other.channel, channel) || other.channel == channel)&&(identical(other.reply, reply) || other.reply == reply)&&(identical(other.renote, renote) || other.renote == renote)&&(identical(other.isCw, isCw) || other.isCw == isCw)&&(identical(other.cwText, cwText) || other.cwText == cwText)&&(identical(other.text, text) || other.text == text)&&(identical(other.isTextFocused, isTextFocused) || other.isTextFocused == isTextFocused)&&(identical(other.isNoteSending, isNoteSending) || other.isNoteSending == isNoteSending)&&(identical(other.isVote, isVote) || other.isVote == isVote)&&const DeepCollectionEquality().equals(other._voteContent, _voteContent)&&(identical(other.voteContentCount, voteContentCount) || other.voteContentCount == voteContentCount)&&(identical(other.voteExpireType, voteExpireType) || other.voteExpireType == voteExpireType)&&(identical(other.isVoteMultiple, isVoteMultiple) || other.isVoteMultiple == isVoteMultiple)&&(identical(other.voteDate, voteDate) || other.voteDate == voteDate)&&(identical(other.voteDuration, voteDuration) || other.voteDuration == voteDuration)&&(identical(other.voteDurationType, voteDurationType) || other.voteDurationType == voteDurationType)&&(identical(other.noteCreationMode, noteCreationMode) || other.noteCreationMode == noteCreationMode)&&(identical(other.noteId, noteId) || other.noteId == noteId)&&(identical(other.selectedDraftId, selectedDraftId) || other.selectedDraftId == selectedDraftId));
 }
 
 
 @override
-int get hashCode => Object.hashAll([runtimeType,noteVisibility,localOnly,reactionAcceptance,const DeepCollectionEquality().hash(_replyTo),const DeepCollectionEquality().hash(_files),channel,reply,renote,isCw,cwText,text,isTextFocused,isNoteSending,isVote,const DeepCollectionEquality().hash(_voteContent),voteContentCount,voteExpireType,isVoteMultiple,voteDate,voteDuration,voteDurationType,noteCreationMode,noteId]);
+int get hashCode => Object.hashAll([runtimeType,noteVisibility,localOnly,reactionAcceptance,const DeepCollectionEquality().hash(_replyTo),const DeepCollectionEquality().hash(_files),channel,reply,renote,isCw,cwText,text,isTextFocused,isNoteSending,isVote,const DeepCollectionEquality().hash(_voteContent),voteContentCount,voteExpireType,isVoteMultiple,voteDate,voteDuration,voteDurationType,noteCreationMode,noteId,selectedDraftId]);
 
 @override
 String toString() {
-  return 'NoteCreate(noteVisibility: $noteVisibility, localOnly: $localOnly, reactionAcceptance: $reactionAcceptance, replyTo: $replyTo, files: $files, channel: $channel, reply: $reply, renote: $renote, isCw: $isCw, cwText: $cwText, text: $text, isTextFocused: $isTextFocused, isNoteSending: $isNoteSending, isVote: $isVote, voteContent: $voteContent, voteContentCount: $voteContentCount, voteExpireType: $voteExpireType, isVoteMultiple: $isVoteMultiple, voteDate: $voteDate, voteDuration: $voteDuration, voteDurationType: $voteDurationType, noteCreationMode: $noteCreationMode, noteId: $noteId)';
+  return 'NoteCreate(noteVisibility: $noteVisibility, localOnly: $localOnly, reactionAcceptance: $reactionAcceptance, replyTo: $replyTo, files: $files, channel: $channel, reply: $reply, renote: $renote, isCw: $isCw, cwText: $cwText, text: $text, isTextFocused: $isTextFocused, isNoteSending: $isNoteSending, isVote: $isVote, voteContent: $voteContent, voteContentCount: $voteContentCount, voteExpireType: $voteExpireType, isVoteMultiple: $isVoteMultiple, voteDate: $voteDate, voteDuration: $voteDuration, voteDurationType: $voteDurationType, noteCreationMode: $noteCreationMode, noteId: $noteId, selectedDraftId: $selectedDraftId)';
 }
 
 
@@ -210,7 +212,7 @@ abstract mixin class _$NoteCreateCopyWith<$Res> implements $NoteCreateCopyWith<$
   factory _$NoteCreateCopyWith(_NoteCreate value, $Res Function(_NoteCreate) _then) = __$NoteCreateCopyWithImpl;
 @override @useResult
 $Res call({
- NoteVisibility noteVisibility, bool localOnly, ReactionAcceptance? reactionAcceptance, List<User> replyTo, List<MisskeyPostFile> files, NoteCreateChannel? channel, Note? reply, Note? renote, bool isCw, String cwText, String text, bool isTextFocused, NoteSendStatus? isNoteSending, bool isVote, List<String> voteContent, int voteContentCount, VoteExpireType voteExpireType, bool isVoteMultiple, DateTime? voteDate, int? voteDuration, VoteExpireDurationType voteDurationType, NoteCreationMode? noteCreationMode, String? noteId
+ NoteVisibility noteVisibility, bool localOnly, ReactionAcceptance? reactionAcceptance, List<User> replyTo, List<MisskeyPostFile> files, NoteCreateChannel? channel, Note? reply, Note? renote, bool isCw, String cwText, String text, bool isTextFocused, NoteSendStatus? isNoteSending, bool isVote, List<String> voteContent, int voteContentCount, VoteExpireType voteExpireType, bool isVoteMultiple, DateTime? voteDate, int? voteDuration, VoteExpireDurationType voteDurationType, NoteCreationMode? noteCreationMode, String? noteId, String? selectedDraftId
 });
 
 
@@ -227,7 +229,7 @@ class __$NoteCreateCopyWithImpl<$Res>
 
 /// Create a copy of NoteCreate
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? noteVisibility = null,Object? localOnly = null,Object? reactionAcceptance = freezed,Object? replyTo = null,Object? files = null,Object? channel = freezed,Object? reply = freezed,Object? renote = freezed,Object? isCw = null,Object? cwText = null,Object? text = null,Object? isTextFocused = null,Object? isNoteSending = freezed,Object? isVote = null,Object? voteContent = null,Object? voteContentCount = null,Object? voteExpireType = null,Object? isVoteMultiple = null,Object? voteDate = freezed,Object? voteDuration = freezed,Object? voteDurationType = null,Object? noteCreationMode = freezed,Object? noteId = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? noteVisibility = null,Object? localOnly = null,Object? reactionAcceptance = freezed,Object? replyTo = null,Object? files = null,Object? channel = freezed,Object? reply = freezed,Object? renote = freezed,Object? isCw = null,Object? cwText = null,Object? text = null,Object? isTextFocused = null,Object? isNoteSending = freezed,Object? isVote = null,Object? voteContent = null,Object? voteContentCount = null,Object? voteExpireType = null,Object? isVoteMultiple = null,Object? voteDate = freezed,Object? voteDuration = freezed,Object? voteDurationType = null,Object? noteCreationMode = freezed,Object? noteId = freezed,Object? selectedDraftId = freezed,}) {
   return _then(_NoteCreate(
 noteVisibility: null == noteVisibility ? _self.noteVisibility : noteVisibility // ignore: cast_nullable_to_non_nullable
 as NoteVisibility,localOnly: null == localOnly ? _self.localOnly : localOnly // ignore: cast_nullable_to_non_nullable
@@ -252,6 +254,7 @@ as DateTime?,voteDuration: freezed == voteDuration ? _self.voteDuration : voteDu
 as int?,voteDurationType: null == voteDurationType ? _self.voteDurationType : voteDurationType // ignore: cast_nullable_to_non_nullable
 as VoteExpireDurationType,noteCreationMode: freezed == noteCreationMode ? _self.noteCreationMode : noteCreationMode // ignore: cast_nullable_to_non_nullable
 as NoteCreationMode?,noteId: freezed == noteId ? _self.noteId : noteId // ignore: cast_nullable_to_non_nullable
+as String?,selectedDraftId: freezed == selectedDraftId ? _self.selectedDraftId : selectedDraftId // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
