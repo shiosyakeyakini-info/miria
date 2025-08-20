@@ -46,6 +46,12 @@ jobs:
         run: |
           curl -o ${{ env.builddir }}\ChineseSimplified.isl https://raw.githubusercontent.com/jrsoftware/issrc/main/Files/Languages/Unofficial/ChineseSimplified.isl
 
+      - name: Copy DLL
+        run: |
+          cp C:\Windows\System32\msvcp140.dll build\windows\x64\runner\Release\
+          cp C:\Windows\System32\vcruntime140.dll build\windows\x64\runner\Release\
+          cp C:\Windows\System32\vcruntime140_1.dll build\windows\x64\runner\Release\
+
       - name: Compile .ISS to .EXE Installer
         run: iscc windows/innosetup.iss /dMyAppVersion="${{ env.version }}" /dMyWorkDir="${{ env.builddir }}" /Qp
 
