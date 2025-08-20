@@ -2030,6 +2030,9 @@ class SZh extends S {
   String get chatCreator => '聊天创建者';
 
   @override
+  String get confirmChatLeave => '真的可以退出这个聊天吗？';
+
+  @override
   String get chatLeave => '退出聊天';
 
   @override

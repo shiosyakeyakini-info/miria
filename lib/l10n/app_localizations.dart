@@ -3549,8 +3549,14 @@ abstract class S {
   /// No description provided for @chatCreator.
   ///
   /// In ja, this message translates to:
-  /// **'チャット立てた人'**
+  /// **'チャットを立てた人'**
   String get chatCreator;
+
+  /// No description provided for @confirmChatLeave.
+  ///
+  /// In ja, this message translates to:
+  /// **'ほんまにチャットから退出してええな？'**
+  String get confirmChatLeave;
 
   /// No description provided for @chatLeave.
   ///

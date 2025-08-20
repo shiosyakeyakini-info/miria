@@ -263,7 +263,7 @@ class ChatRoomInfo extends HookConsumerWidget {
                     final isConfirm = await ref
                         .read(dialogStateNotifierProvider.notifier)
                         .showDialog(
-                          message: (context) => S.of(context).chatLeave,
+                          message: (context) => S.of(context).confirmChatLeave,
                           actions: (context) => [
                             S.of(context).chatLeave,
                             S.of(context).cancel,

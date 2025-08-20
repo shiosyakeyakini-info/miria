@@ -998,6 +998,7 @@
     "chatUpdate": "更新",
     "chatDelete": "删除",
     "chatCreator": "聊天创建者",
+    "confirmChatLeave": "真的可以退出这个聊天吗？",
     "chatLeave": "退出聊天",
     "chatLeftRoom": "已退出聊天",
     "chatRetry": "重试",
