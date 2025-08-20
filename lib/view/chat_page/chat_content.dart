@@ -22,7 +22,7 @@ class ChatContent extends ConsumerWidget {
         ref.read(accountContextProvider).getAccount.i;
 
     return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 4.0),
+      contentPadding: EdgeInsets.only(right: 5.0),
       leading: AvatarIcon(user: targetUser),
       onTap: onTap,
       title: Row(

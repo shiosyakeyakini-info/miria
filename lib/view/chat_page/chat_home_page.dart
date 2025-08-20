@@ -165,7 +165,7 @@ class ChatHome extends HookConsumerWidget {
         stackTrace: stackTrace,
       ),
       AsyncData(:final value) => Padding(
-        padding: const EdgeInsets.only(right: 4.0),
+        padding: const EdgeInsets.only(left: 5.0, right: 5.0),
         child: ListView.builder(
           itemCount: value.length,
           itemBuilder: (context, index) => ChatContent(
@@ -207,7 +207,7 @@ class InvitedChat extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final valueNotifier = useState(DateTime.now());
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.only(left: 10, right: 10),
       child: PushableListView(
         initializeFuture: () async => [
           ...await ref
@@ -355,7 +355,7 @@ class JoiningChat extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: const EdgeInsets.only(right: 4.0),
+      padding: const EdgeInsets.only(left: 5.0, right: 5.0),
       child: PushableListView(
         initializeFuture: () async => [
           ...await ref
@@ -384,7 +384,6 @@ class RoomInfo extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 4.0),
       title: Text(room.name),
       subtitle: Text(room.description),
       onTap: () async {
@@ -405,7 +404,7 @@ class OwnedChat extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: const EdgeInsets.only(right: 4.0),
+      padding: const EdgeInsets.only(left: 5.0, right: 5.0),
       child: PushableListView(
         initializeFuture: () async {
           final response = await ref

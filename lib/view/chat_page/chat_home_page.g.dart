@@ -52,7 +52,7 @@ final class HistoryProvider
   }
 }
 
-String _$historyHash() => r'cb9e7c0825ef6f68d2b46eea4a992376349bf480';
+String _$historyHash() => r'ae1373b3117e2e676062c1ec82522950a6a76cfa';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
