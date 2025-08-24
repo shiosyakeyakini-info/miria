@@ -1077,7 +1077,8 @@
     "profileFromDrive": "ドライブから",
     "profileFieldName": "名前",
     "profileFieldValue": "内容",
-    "profileAddField": "追加",
+    "profileAddField": "項目を追加",
+    "profileSetBirthday": "誕生日を選択",
     "profileFollowedMessage": "フォローされたときのメッセージ",
 
     "chat": "チャット",
