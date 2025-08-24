@@ -1517,6 +1517,104 @@ class ColorPickerRouteArgs {
 }
 
 /// generated route for
+/// [DraftsModalDialog]
+class DraftsModalRoute extends PageRouteInfo<DraftsModalRouteArgs> {
+  DraftsModalRoute({
+    required Account account,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         DraftsModalRoute.name,
+         args: DraftsModalRouteArgs(account: account, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'DraftsModalRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DraftsModalRouteArgs>();
+      return WrappedRoute(
+        child: DraftsModalDialog(account: args.account, key: args.key),
+      );
+    },
+  );
+}
+
+class DraftsModalRouteArgs {
+  const DraftsModalRouteArgs({required this.account, this.key});
+
+  final Account account;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'DraftsModalRouteArgs{account: $account, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! DraftsModalRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
+}
+
+/// generated route for
+/// [DraftsPage]
+class DraftsRoute extends PageRouteInfo<DraftsRouteArgs> {
+  DraftsRoute({
+    required AccountContext accountContext,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         DraftsRoute.name,
+         args: DraftsRouteArgs(accountContext: accountContext, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'DraftsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DraftsRouteArgs>();
+      return WrappedRoute(
+        child: DraftsPage(accountContext: args.accountContext, key: args.key),
+      );
+    },
+  );
+}
+
+class DraftsRouteArgs {
+  const DraftsRouteArgs({required this.accountContext, this.key});
+
+  final AccountContext accountContext;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'DraftsRouteArgs{accountContext: $accountContext, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! DraftsRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [DriveFileSelectDialog]
 class DriveFileSelectRoute extends PageRouteInfo<DriveFileSelectRouteArgs> {
   DriveFileSelectRoute({
@@ -2346,6 +2444,7 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
     Note? renote,
     Note? note,
     NoteCreationMode? noteCreationMode,
+    String? draftId,
     List<PageRouteInfo>? children,
   }) : super(
          NoteCreateRoute.name,
@@ -2360,6 +2459,7 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
            renote: renote,
            note: note,
            noteCreationMode: noteCreationMode,
+           draftId: draftId,
          ),
          initialChildren: children,
        );
@@ -2382,6 +2482,7 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
           renote: args.renote,
           note: args.note,
           noteCreationMode: args.noteCreationMode,
+          draftId: args.draftId,
         ),
       );
     },
@@ -2400,6 +2501,7 @@ class NoteCreateRouteArgs {
     this.renote,
     this.note,
     this.noteCreationMode,
+    this.draftId,
   });
 
   final Account initialAccount;
@@ -2422,9 +2524,11 @@ class NoteCreateRouteArgs {
 
   final NoteCreationMode? noteCreationMode;
 
+  final String? draftId;
+
   @override
   String toString() {
-    return 'NoteCreateRouteArgs{initialAccount: $initialAccount, key: $key, initialText: $initialText, initialMediaFiles: $initialMediaFiles, exitOnNoted: $exitOnNoted, channel: $channel, reply: $reply, renote: $renote, note: $note, noteCreationMode: $noteCreationMode}';
+    return 'NoteCreateRouteArgs{initialAccount: $initialAccount, key: $key, initialText: $initialText, initialMediaFiles: $initialMediaFiles, exitOnNoted: $exitOnNoted, channel: $channel, reply: $reply, renote: $renote, note: $note, noteCreationMode: $noteCreationMode, draftId: $draftId}';
   }
 
   @override
@@ -2443,7 +2547,8 @@ class NoteCreateRouteArgs {
         reply == other.reply &&
         renote == other.renote &&
         note == other.note &&
-        noteCreationMode == other.noteCreationMode;
+        noteCreationMode == other.noteCreationMode &&
+        draftId == other.draftId;
   }
 
   @override
@@ -2457,7 +2562,8 @@ class NoteCreateRouteArgs {
       reply.hashCode ^
       renote.hashCode ^
       note.hashCode ^
-      noteCreationMode.hashCode;
+      noteCreationMode.hashCode ^
+      draftId.hashCode;
 }
 
 /// generated route for

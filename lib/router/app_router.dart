@@ -37,6 +37,8 @@ import "package:miria/view/common/color_picker_dialog.dart";
 import "package:miria/view/common/misskey_notes/reaction_user_dialog.dart";
 import "package:miria/view/common/misskey_notes/renote_modal_sheet.dart";
 import "package:miria/view/common/misskey_notes/renote_user_dialog.dart";
+import "package:miria/view/drafts_page/drafts_dialog.dart";
+import "package:miria/view/drafts_page/drafts_page.dart";
 import "package:miria/view/explore_page/explore_page.dart";
 import "package:miria/view/explore_page/explore_role_users_page.dart";
 import "package:miria/view/favorited_note_page/favorited_note_page.dart";
@@ -123,6 +125,7 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: FavoritedNoteRoute.page),
     AutoRoute(page: ClipListRoute.page),
     AutoRoute(page: ClipDetailRoute.page),
+    AutoRoute(page: DraftsRoute.page),
     AutoRoute(page: ChannelsRoute.page),
     AutoRoute(page: ChannelDetailRoute.page),
     AutoRoute(page: HashtagRoute.page),
@@ -186,6 +189,7 @@ class AppRouter extends RootStackRouter {
     AutoDialogRoute<FolderResult>(page: FolderSelectRoute.page),
     AutoDialogRoute<List<DriveFile>>(page: DriveFileSelectRoute.page),
     AutoDialogRoute<TimelinePreset>(page: TimelinePresetRoute.page),
+    AutoDialogRoute(page: DraftsModalRoute.page),
 
     // モーダルシート
     AutoModalRouteSheet(page: UserControlRoute.page),

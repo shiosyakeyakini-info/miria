@@ -168,5 +168,12 @@
         }
     },
 
-    "noSearchResults": "検索結果が見つかりませんでしたわ"
+    "noSearchResults": "検索結果が見つかりませんでしたわ",
+
+    "saveToDrafts": "下書きに保存いたしますか？",
+    "discard": "破棄",
+    "drafts": "下書き",
+    "noDrafts": "下書きがございませんわ",
+    "confirmDeleteDraft": "この下書きを削除いたしますか？",
+    "emptyNote": "空のノートですわ"
 }

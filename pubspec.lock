@@ -1121,7 +1121,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: dbe7da3cf3ee391b1df5b2464d8357bb530d4af1
+      resolved-ref: "279e1e390e89182e38004363fe894e02841cb5f2"
       url: "https://github.com/shiosyakeyakini-info/misskey_dart.git"
     source: git
     version: "1.0.0"
