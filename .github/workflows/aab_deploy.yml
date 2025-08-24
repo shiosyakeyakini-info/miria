@@ -42,7 +42,7 @@ jobs:
               **/.flutter-plugins
               **/.flutter-plugin-dependencies
               **/.dart_tool/package_config.json
-            key: build-pubspec-${{ hashFiles('**/pubspec.lock') }}
+            key: build-aab-pubspec-${{ hashFiles('**/pubspec.lock') }}
             restore-keys: |
               build-aab-pubspec-
 
