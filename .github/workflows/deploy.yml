@@ -22,10 +22,6 @@ jobs:
           with:
             xcode-version: "16.*"
 
-        # 必要なiOSプラットフォームを取得
-        - name: Ensure iOS platform
-          run: sudo xcodebuild -downloadPlatform iOS
-
         - name: Get Flutter version from .fvmrc
           run:  echo "FLUTTER_FVM_VERSION=$(jq -r .flutter .fvmrc)" >> $GITHUB_ENV
 
