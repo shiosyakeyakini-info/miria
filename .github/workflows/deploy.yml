@@ -12,19 +12,35 @@ env:
 jobs:
   build_for_iOS:
     name: iOS・Android用ビルド
-    runs-on: macos-15
+    runs-on: macos-latest
 
     steps:
         - uses: actions/checkout@v4
 
-        # Xcodeバージョンを明示（16系を選択）
-        - uses: maxim-lobanov/setup-xcode@v1
-          with:
-            xcode-version: "16.*"
-
-        # 必要なiOSプラットフォームを取得
-        - name: Ensure iOS platform
-          run: sudo xcodebuild -downloadPlatform iOS
+        # iOSプラットフォームを確実に取得（リトライ機能付き）
+        - name: Ensure iOS platform with retry
+          run: |
+            echo "Checking iOS platform availability..."
+            if xcodebuild -showsdks | grep -q "iphoneos"; then
+              echo "iOS SDK already available"
+            else
+              echo "iOS SDK not found, attempting to download..."
+              for i in {1..3}; do
+                echo "Attempt $i to download iOS platform..."
+                if sudo xcodebuild -downloadPlatform iOS; then
+                  echo "iOS platform downloaded successfully"
+                  break
+                elif [ $i -eq 3 ]; then
+                  echo "Failed to download iOS platform after 3 attempts"
+                  echo "Available SDKs:"
+                  xcodebuild -showsdks
+                  exit 1
+                else
+                  echo "Download failed, retrying in 30 seconds..."
+                  sleep 30
+                fi
+              done
+            fi
 
         - name: Get Flutter version from .fvmrc
           run:  echo "FLUTTER_FVM_VERSION=$(jq -r .flutter .fvmrc)" >> $GITHUB_ENV
