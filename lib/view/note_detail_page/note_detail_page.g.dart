@@ -29,7 +29,7 @@ final class _NotesShowProvider
   static const $allTransitiveDependencies2 = notesWithProvider;
 
   @override
-  String debugGetCreateSourceHash() => _$notesShowHash();
+  String debugGetCreateSourceHash() => _$_notesShowHash();
 
   @override
   String toString() {
@@ -60,7 +60,7 @@ final class _NotesShowProvider
   }
 }
 
-String _$notesShowHash() => r'69e8ff0eaa98e6a6047750a22d7fdacc566a28af';
+String _$_notesShowHash() => r'69e8ff0eaa98e6a6047750a22d7fdacc566a28af';
 
 final class _NotesShowFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<Note>, String> {
@@ -115,7 +115,7 @@ final class _ConversationProvider
   static const $allTransitiveDependencies2 = notesWithProvider;
 
   @override
-  String debugGetCreateSourceHash() => _$conversationHash();
+  String debugGetCreateSourceHash() => _$_conversationHash();
 
   @override
   String toString() {
@@ -146,7 +146,7 @@ final class _ConversationProvider
   }
 }
 
-String _$conversationHash() => r'b69ce226a89b66118fb9eb993e16b802e9c6210d';
+String _$_conversationHash() => r'b69ce226a89b66118fb9eb993e16b802e9c6210d';
 
 final class _ConversationFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<Note>>, String> {

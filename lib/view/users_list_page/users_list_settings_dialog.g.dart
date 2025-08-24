@@ -29,7 +29,7 @@ final class _InitialSettingsProvider
       );
 
   @override
-  String debugGetCreateSourceHash() => _$initialSettingsHash();
+  String debugGetCreateSourceHash() => _$_initialSettingsHash();
 
   @$internal
   @override
@@ -51,7 +51,7 @@ final class _InitialSettingsProvider
   }
 }
 
-String _$initialSettingsHash() => r'3dec59c0d7a3e36d255b82bfd7ea8eda758e9cf3';
+String _$_initialSettingsHash() => r'3dec59c0d7a3e36d255b82bfd7ea8eda758e9cf3';
 
 @ProviderFor(_UsersListSettingsNotifier)
 const _usersListSettingsNotifierProvider =
@@ -75,7 +75,7 @@ final class _UsersListSettingsNotifierProvider
   static const $allTransitiveDependencies0 = _initialSettingsProvider;
 
   @override
-  String debugGetCreateSourceHash() => _$usersListSettingsNotifierHash();
+  String debugGetCreateSourceHash() => _$_usersListSettingsNotifierHash();
 
   @$internal
   @override
@@ -90,7 +90,7 @@ final class _UsersListSettingsNotifierProvider
   }
 }
 
-String _$usersListSettingsNotifierHash() =>
+String _$_usersListSettingsNotifierHash() =>
     r'6e354936966b2a1d0e0c4dca6d41e74ff0ccb243';
 
 abstract class _$UsersListSettingsNotifier

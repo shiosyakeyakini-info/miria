@@ -14,7 +14,7 @@ void main() {
       final clip = MockMisskeyClips();
       final misskey = MockMisskey();
       when(misskey.clips).thenReturn(clip);
-      when(clip.list()).thenAnswer((_) async => [TestData.clip]);
+      when(clip.list(any)).thenAnswer((_) async => [TestData.clip]);
 
       await tester.pumpWidget(
         ProviderScope(

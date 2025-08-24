@@ -31,7 +31,7 @@ final class _OnlineCountsProvider
       MisskeyGetContextProvider.$allTransitiveDependencies0;
 
   @override
-  String debugGetCreateSourceHash() => _$onlineCountsHash();
+  String debugGetCreateSourceHash() => _$_onlineCountsHash();
 
   @$internal
   @override
@@ -44,7 +44,7 @@ final class _OnlineCountsProvider
   }
 }
 
-String _$onlineCountsHash() => r'948bcc533f8c06ee79935fc5386ad67051c03bb9';
+String _$_onlineCountsHash() => r'948bcc533f8c06ee79935fc5386ad67051c03bb9';
 
 @ProviderFor(_totalMemories)
 const _totalMemoriesProvider = _TotalMemoriesProvider._();
@@ -71,7 +71,7 @@ final class _TotalMemoriesProvider
       MisskeyGetContextProvider.$allTransitiveDependencies0;
 
   @override
-  String debugGetCreateSourceHash() => _$totalMemoriesHash();
+  String debugGetCreateSourceHash() => _$_totalMemoriesHash();
 
   @$internal
   @override
@@ -84,7 +84,7 @@ final class _TotalMemoriesProvider
   }
 }
 
-String _$totalMemoriesHash() => r'd7f5bc52076ca1a74f8cdf65938cff571a92acd8';
+String _$_totalMemoriesHash() => r'd7f5bc52076ca1a74f8cdf65938cff571a92acd8';
 
 @ProviderFor(_ping)
 const _pingProvider = _PingProvider._();
@@ -111,7 +111,7 @@ final class _PingProvider
       MisskeyGetContextProvider.$allTransitiveDependencies0;
 
   @override
-  String debugGetCreateSourceHash() => _$pingHash();
+  String debugGetCreateSourceHash() => _$_pingHash();
 
   @$internal
   @override
@@ -124,7 +124,7 @@ final class _PingProvider
   }
 }
 
-String _$pingHash() => r'3e002e48252dd1158c3ecdf4c6c4a635c5bc80fa';
+String _$_pingHash() => r'3e002e48252dd1158c3ecdf4c6c4a635c5bc80fa';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -36,7 +36,7 @@ final class _UsersListProvider
       MisskeyGetContextProvider.$allTransitiveDependencies0;
 
   @override
-  String debugGetCreateSourceHash() => _$usersListHash();
+  String debugGetCreateSourceHash() => _$_usersListHash();
 
   @$internal
   @override
@@ -50,7 +50,7 @@ final class _UsersListProvider
   }
 }
 
-String _$usersListHash() => r'd7fab580bf6bc18fc282743de3d482f5d1d62a49';
+String _$_usersListHash() => r'd7fab580bf6bc18fc282743de3d482f5d1d62a49';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

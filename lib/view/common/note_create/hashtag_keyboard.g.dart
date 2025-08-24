@@ -23,7 +23,7 @@ final class _HashtagsSearchProvider
        );
 
   @override
-  String debugGetCreateSourceHash() => _$hashtagsSearchHash();
+  String debugGetCreateSourceHash() => _$_hashtagsSearchHash();
 
   @override
   String toString() {
@@ -47,7 +47,7 @@ final class _HashtagsSearchProvider
   }
 }
 
-String _$hashtagsSearchHash() => r'33995ae8bae76065902a767060f73a587cb7664a';
+String _$_hashtagsSearchHash() => r'33995ae8bae76065902a767060f73a587cb7664a';
 
 final class _HashtagsSearchFamily extends $Family
     with

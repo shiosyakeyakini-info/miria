@@ -38,7 +38,7 @@ final class _PinnedUserProvider
       MisskeyGetContextProvider.$allTransitiveDependencies0;
 
   @override
-  String debugGetCreateSourceHash() => _$pinnedUserHash();
+  String debugGetCreateSourceHash() => _$_pinnedUserHash();
 
   @$internal
   @override
@@ -52,7 +52,7 @@ final class _PinnedUserProvider
   }
 }
 
-String _$pinnedUserHash() => r'bc9d937e7e437c825d643641c24715a4d5762f89';
+String _$_pinnedUserHash() => r'bc9d937e7e437c825d643641c24715a4d5762f89';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

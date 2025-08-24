@@ -29,7 +29,7 @@ final class _FormKeyProvider
       );
 
   @override
-  String debugGetCreateSourceHash() => _$formKeyHash();
+  String debugGetCreateSourceHash() => _$_formKeyHash();
 
   @$internal
   @override
@@ -51,7 +51,7 @@ final class _FormKeyProvider
   }
 }
 
-String _$formKeyHash() => r'd8a56e0366cb1a53da5331749cce00aef36862b1';
+String _$_formKeyHash() => r'd8a56e0366cb1a53da5331749cce00aef36862b1';
 
 @ProviderFor(_initialSettings)
 const _initialSettingsProvider = _InitialSettingsProvider._();
@@ -71,7 +71,7 @@ final class _InitialSettingsProvider
       );
 
   @override
-  String debugGetCreateSourceHash() => _$initialSettingsHash();
+  String debugGetCreateSourceHash() => _$_initialSettingsHash();
 
   @$internal
   @override
@@ -92,7 +92,7 @@ final class _InitialSettingsProvider
   }
 }
 
-String _$initialSettingsHash() => r'5822fd6a8e4070e8a4da0c299a6149e49f7ef49e';
+String _$_initialSettingsHash() => r'5822fd6a8e4070e8a4da0c299a6149e49f7ef49e';
 
 @ProviderFor(_ClipSettingsNotifier)
 const _clipSettingsNotifierProvider = _ClipSettingsNotifierProvider._();
@@ -115,7 +115,7 @@ final class _ClipSettingsNotifierProvider
   static const $allTransitiveDependencies0 = _initialSettingsProvider;
 
   @override
-  String debugGetCreateSourceHash() => _$clipSettingsNotifierHash();
+  String debugGetCreateSourceHash() => _$_clipSettingsNotifierHash();
 
   @$internal
   @override
@@ -130,7 +130,7 @@ final class _ClipSettingsNotifierProvider
   }
 }
 
-String _$clipSettingsNotifierHash() =>
+String _$_clipSettingsNotifierHash() =>
     r'004b0ddb0c4b37ca968f1da8c8390ef047727180';
 
 abstract class _$ClipSettingsNotifier extends $Notifier<ClipSettings> {

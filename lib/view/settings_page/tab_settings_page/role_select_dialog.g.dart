@@ -38,7 +38,7 @@ final class _RolesProvider
       MisskeyGetContextProvider.$allTransitiveDependencies0;
 
   @override
-  String debugGetCreateSourceHash() => _$rolesHash();
+  String debugGetCreateSourceHash() => _$_rolesHash();
 
   @$internal
   @override
@@ -52,7 +52,7 @@ final class _RolesProvider
   }
 }
 
-String _$rolesHash() => r'c10d381c1a9041d45d7197d476ce56705dd16100';
+String _$_rolesHash() => r'c10d381c1a9041d45d7197d476ce56705dd16100';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

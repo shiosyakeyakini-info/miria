@@ -33,7 +33,7 @@ final class _EmojiProvider
       MisskeyPostContextProvider.$allTransitiveDependencies0;
 
   @override
-  String debugGetCreateSourceHash() => _$emojiHash();
+  String debugGetCreateSourceHash() => _$_emojiHash();
 
   @override
   String toString() {
@@ -65,7 +65,7 @@ final class _EmojiProvider
   }
 }
 
-String _$emojiHash() => r'4d613b2d1965a683c3d159578f812609b9f6cbd1';
+String _$_emojiHash() => r'4d613b2d1965a683c3d159578f812609b9f6cbd1';
 
 final class _EmojiFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<EmojiResponse>, String> {

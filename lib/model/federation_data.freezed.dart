@@ -1,6 +1,5 @@
-// dart format width=80
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -105,6 +104,136 @@ $MetaResponseCopyWith<$Res>? get meta {
 }
 }
 
+
+/// Adds pattern-matching-related methods to [FederationData].
+extension FederationDataPatterns on FederationData {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _FederationData value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _FederationData() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _FederationData value)  $default,){
+final _that = this;
+switch (_that) {
+case _FederationData():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _FederationData value)?  $default,){
+final _that = this;
+switch (_that) {
+case _FederationData() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isSupportedEmoji,  bool isSupportedAnnouncement,  bool isSupportedLocalTimeline,  String? bannerUrl,  String? faviconUrl,  String? tosUrl,  String? privacyPolicyUrl,  String? impressumUrl,  String? repositoryUrl,  List<String> serverRules,  String name,  String description,  String? maintainerName,  String? maintainerEmail,  int? usersCount,  int? notesCount,  int? reactionCount,  String softwareName,  String softwareVersion,  List<String> languages,  List<MetaAd> ads,  MetaResponse? meta)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _FederationData() when $default != null:
+return $default(_that.isSupportedEmoji,_that.isSupportedAnnouncement,_that.isSupportedLocalTimeline,_that.bannerUrl,_that.faviconUrl,_that.tosUrl,_that.privacyPolicyUrl,_that.impressumUrl,_that.repositoryUrl,_that.serverRules,_that.name,_that.description,_that.maintainerName,_that.maintainerEmail,_that.usersCount,_that.notesCount,_that.reactionCount,_that.softwareName,_that.softwareVersion,_that.languages,_that.ads,_that.meta);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isSupportedEmoji,  bool isSupportedAnnouncement,  bool isSupportedLocalTimeline,  String? bannerUrl,  String? faviconUrl,  String? tosUrl,  String? privacyPolicyUrl,  String? impressumUrl,  String? repositoryUrl,  List<String> serverRules,  String name,  String description,  String? maintainerName,  String? maintainerEmail,  int? usersCount,  int? notesCount,  int? reactionCount,  String softwareName,  String softwareVersion,  List<String> languages,  List<MetaAd> ads,  MetaResponse? meta)  $default,) {final _that = this;
+switch (_that) {
+case _FederationData():
+return $default(_that.isSupportedEmoji,_that.isSupportedAnnouncement,_that.isSupportedLocalTimeline,_that.bannerUrl,_that.faviconUrl,_that.tosUrl,_that.privacyPolicyUrl,_that.impressumUrl,_that.repositoryUrl,_that.serverRules,_that.name,_that.description,_that.maintainerName,_that.maintainerEmail,_that.usersCount,_that.notesCount,_that.reactionCount,_that.softwareName,_that.softwareVersion,_that.languages,_that.ads,_that.meta);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isSupportedEmoji,  bool isSupportedAnnouncement,  bool isSupportedLocalTimeline,  String? bannerUrl,  String? faviconUrl,  String? tosUrl,  String? privacyPolicyUrl,  String? impressumUrl,  String? repositoryUrl,  List<String> serverRules,  String name,  String description,  String? maintainerName,  String? maintainerEmail,  int? usersCount,  int? notesCount,  int? reactionCount,  String softwareName,  String softwareVersion,  List<String> languages,  List<MetaAd> ads,  MetaResponse? meta)?  $default,) {final _that = this;
+switch (_that) {
+case _FederationData() when $default != null:
+return $default(_that.isSupportedEmoji,_that.isSupportedAnnouncement,_that.isSupportedLocalTimeline,_that.bannerUrl,_that.faviconUrl,_that.tosUrl,_that.privacyPolicyUrl,_that.impressumUrl,_that.repositoryUrl,_that.serverRules,_that.name,_that.description,_that.maintainerName,_that.maintainerEmail,_that.usersCount,_that.notesCount,_that.reactionCount,_that.softwareName,_that.softwareVersion,_that.languages,_that.ads,_that.meta);case _:
+  return null;
+
+}
+}
+
+}
 
 /// @nodoc
 

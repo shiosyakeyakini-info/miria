@@ -25,7 +25,7 @@ final class _InitialSettingsProvider
       );
 
   @override
-  String debugGetCreateSourceHash() => _$initialSettingsHash();
+  String debugGetCreateSourceHash() => _$_initialSettingsHash();
 
   @$internal
   @override
@@ -46,7 +46,7 @@ final class _InitialSettingsProvider
   }
 }
 
-String _$initialSettingsHash() => r'5e44622c97f922cd7aa8410ac695fa6f5f3351b0';
+String _$_initialSettingsHash() => r'5e44622c97f922cd7aa8410ac695fa6f5f3351b0';
 
 @ProviderFor(_AntennaSettingsNotifier)
 const _antennaSettingsNotifierProvider = _AntennaSettingsNotifierProvider._();
@@ -69,7 +69,7 @@ final class _AntennaSettingsNotifierProvider
   static const $allTransitiveDependencies0 = _initialSettingsProvider;
 
   @override
-  String debugGetCreateSourceHash() => _$antennaSettingsNotifierHash();
+  String debugGetCreateSourceHash() => _$_antennaSettingsNotifierHash();
 
   @$internal
   @override
@@ -84,7 +84,7 @@ final class _AntennaSettingsNotifierProvider
   }
 }
 
-String _$antennaSettingsNotifierHash() =>
+String _$_antennaSettingsNotifierHash() =>
     r'a33758bbcc3f54c6eb50d2176d6ed1ce7b54f9b5';
 
 abstract class _$AntennaSettingsNotifier extends $Notifier<AntennaSettings> {
@@ -136,7 +136,7 @@ final class _UsersListListProvider
       MisskeyGetContextProvider.$allTransitiveDependencies0;
 
   @override
-  String debugGetCreateSourceHash() => _$usersListListHash();
+  String debugGetCreateSourceHash() => _$_usersListListHash();
 
   @$internal
   @override
@@ -150,7 +150,7 @@ final class _UsersListListProvider
   }
 }
 
-String _$usersListListHash() => r'038d168265d5f26396ee6dd063774e9b55055283';
+String _$_usersListListHash() => r'038d168265d5f26396ee6dd063774e9b55055283';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
