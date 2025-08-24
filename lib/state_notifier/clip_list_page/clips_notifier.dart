@@ -15,9 +15,10 @@ class ClipsNotifier extends _$ClipsNotifier {
   }
 
   Future<List<Clip>> loadClips({String? untilId, int limit = 10}) async {
-    final response = await ref.read(misskeyPostContextProvider).clips.list(
-      ClipsListRequest(untilId: untilId, limit: limit),
-    );
+    final response = await ref
+        .read(misskeyPostContextProvider)
+        .clips
+        .list(ClipsListRequest(untilId: untilId, limit: limit));
     return response.toList();
   }
 

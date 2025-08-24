@@ -47,9 +47,9 @@ class ClipListPage extends ConsumerWidget implements AutoRouteWrapper {
           return await ref.read(clipsNotifierProvider.notifier).loadClips();
         },
         nextFuture: (lastItem, _) async {
-          return await ref.read(clipsNotifierProvider.notifier).loadClips(
-            untilId: lastItem.id,
-          );
+          return await ref
+              .read(clipsNotifierProvider.notifier)
+              .loadClips(untilId: lastItem.id);
         },
         itemBuilder: (context, clip) => ClipItem(
           clip: clip,
