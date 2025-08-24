@@ -387,7 +387,11 @@ class GeneralSettingsPage extends HookConsumerWidget {
                           // パブリック
                           TableRow(
                             children: [
-                              Text(S.of(context).public),
+                              TableCell(
+                                verticalAlignment:
+                                    TableCellVerticalAlignment.middle,
+                                child: Text(S.of(context).public),
+                              ),
                               IconButton(
                                 icon: Container(
                                   width: 24,
@@ -443,7 +447,11 @@ class GeneralSettingsPage extends HookConsumerWidget {
                           // ホームのみ
                           TableRow(
                             children: [
-                              Text(S.of(context).homeOnly),
+                              TableCell(
+                                verticalAlignment:
+                                    TableCellVerticalAlignment.middle,
+                                child: Text(S.of(context).homeOnly),
+                              ),
                               IconButton(
                                 icon: Container(
                                   width: 24,
@@ -499,7 +507,11 @@ class GeneralSettingsPage extends HookConsumerWidget {
                           // フォロワーのみ
                           TableRow(
                             children: [
-                              Text(S.of(context).followersOnly),
+                              TableCell(
+                                verticalAlignment:
+                                    TableCellVerticalAlignment.middle,
+                                child: Text(S.of(context).followersOnly),
+                              ),
                               IconButton(
                                 icon: Container(
                                   width: 24,
@@ -555,7 +567,11 @@ class GeneralSettingsPage extends HookConsumerWidget {
                           // ダイレクト
                           TableRow(
                             children: [
-                              Text(S.of(context).direct),
+                              TableCell(
+                                verticalAlignment:
+                                    TableCellVerticalAlignment.middle,
+                                child: Text(S.of(context).direct),
+                              ),
                               IconButton(
                                 icon: Container(
                                   width: 24,
