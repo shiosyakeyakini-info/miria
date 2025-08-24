@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
+import "package:miria/repository/note_draft_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/error_detail.dart";
@@ -31,7 +32,7 @@ class DraftsPage extends ConsumerWidget implements AutoRouteWrapper {
 class _DraftsListView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final draftRepository = ref.watch(noteDraftWithProvider);
+    final draftRepository = ref.watch(noteDraftRepositoryProvider.notifier);
 
     return FutureBuilder<List<NoteDraft>>(
       future: draftRepository.list(),

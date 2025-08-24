@@ -12,6 +12,7 @@ import "package:miria/model/account.dart";
 import "package:miria/model/image_file.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
+import "package:miria/repository/note_draft_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -100,7 +101,9 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
       WidgetsBinding.instance.addPostFrameCallback((timestamp) async {
         // Load draft if draftId is provided
         if (draftId != null) {
-          final draftRepository = ref.read(noteDraftWithProvider);
+          final draftRepository = ref.read(
+            noteDraftRepositoryProvider.notifier,
+          );
           final draft = draftRepository.getDraft(draftId!);
           if (draft != null) {
             await notifier.initializeFromDraft(draft);
@@ -372,7 +375,7 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
   /// 現在の状態を下書きとして保存
   Future<void> _saveDraft(WidgetRef ref, NoteCreate state) async {
     final notifier = ref.read(noteCreateNotifierProvider.notifier);
-    final draftRepository = ref.read(noteDraftWithProvider);
+    final draftRepository = ref.read(noteDraftRepositoryProvider.notifier);
 
     NotesCreatePollRequest? poll;
     if (state.isVote &&

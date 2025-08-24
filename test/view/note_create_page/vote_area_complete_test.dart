@@ -9,9 +9,9 @@ import "package:miria/view/note_create_page/vote_area.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:mockito/mockito.dart";
 
+import "../../test_util/default_root_widget.dart";
 import "../../test_util/mock.mocks.dart";
 import "../../test_util/test_datas.dart";
-import "../../test_util/default_root_widget.dart";
 
 void main() {
   group("VoteArea Complete Widget Test", () {
@@ -106,7 +106,7 @@ void main() {
       expect(switchFinder, findsOneWidget);
 
       // 初期値を取得
-      Switch switchWidget = tester.widget<Switch>(switchFinder);
+      var switchWidget = tester.widget<Switch>(switchFinder);
       final initialValue = switchWidget.value;
 
       // スイッチをタップ
@@ -157,7 +157,7 @@ void main() {
       for (final buttonElement in elevatedButtons.evaluate()) {
         final button = buttonElement.widget as ElevatedButton;
         if (button.child is Text) {
-          final text = (button.child as Text).data;
+          final text = (button.child! as Text).data;
           if (text != "Toggle Vote") {
             await tester.tap(find.byWidget(button));
             await tester.pumpAndSettle();

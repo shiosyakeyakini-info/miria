@@ -1,15 +1,20 @@
-import "package:flutter/foundation.dart";
-import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-class NoteDraftRepository extends ChangeNotifier {
-  final Misskey misskey;
-  final Account account;
+part "note_draft_repository.g.dart";
+
+@riverpod
+class NoteDraftRepository extends _$NoteDraftRepository {
+  late final Misskey _misskey = ref.read(misskeyPostContextProvider);
   final Map<String, NoteDraft> _drafts = {};
 
-  NoteDraftRepository(this.misskey, this.account);
+  @override
+  Map<String, NoteDraft> build() {
+    return _drafts;
+  }
 
-  Map<String, NoteDraft> get drafts => _drafts;
+  Map<String, NoteDraft> get drafts => state;
 
   /// 下書きを作成
   Future<NoteDraft> create({
@@ -39,11 +44,11 @@ class NoteDraftRepository extends ChangeNotifier {
       poll: poll,
     );
 
-    final response = await misskey.notes.drafts.create(request);
+    final response = await _misskey.notes.drafts.create(request);
     final draft = response.createdDraft;
 
     _drafts[draft.id] = draft;
-    notifyListeners();
+    state = Map.from(_drafts);
     return draft;
   }
 
@@ -59,11 +64,11 @@ class NoteDraftRepository extends ChangeNotifier {
       untilId: untilId,
     );
 
-    final drafts = await misskey.notes.drafts.list(request);
+    final drafts = await _misskey.notes.drafts.list(request);
     for (final draft in drafts) {
       _drafts[draft.id] = draft;
     }
-    notifyListeners();
+    state = Map.from(_drafts);
     return drafts.toList();
   }
 
@@ -97,25 +102,25 @@ class NoteDraftRepository extends ChangeNotifier {
       poll: poll,
     );
 
-    final response = await misskey.notes.drafts.update(request);
+    final response = await _misskey.notes.drafts.update(request);
     final draft = response.updatedDraft;
 
     _drafts[draft.id] = draft;
-    notifyListeners();
+    state = Map.from(_drafts);
     return draft;
   }
 
   /// 下書きを削除
   Future<void> delete(String draftId) async {
     final request = NotesDraftsDeleteRequest(draftId: draftId);
-    await misskey.notes.drafts.delete(request);
+    await _misskey.notes.drafts.delete(request);
     _drafts.remove(draftId);
-    notifyListeners();
+    state = Map.from(_drafts);
   }
 
   /// 下書き数を取得
   Future<int> count() async {
-    return await misskey.notes.drafts.count();
+    return await _misskey.notes.drafts.count();
   }
 
   /// 特定の下書きを取得
@@ -124,7 +129,7 @@ class NoteDraftRepository extends ChangeNotifier {
   /// ローカルキャッシュから下書きを登録
   void registerDraft(NoteDraft draft) {
     _drafts[draft.id] = draft;
-    notifyListeners();
+    state = Map.from(_drafts);
   }
 
   /// ローカルキャッシュから複数の下書きを登録
@@ -132,6 +137,6 @@ class NoteDraftRepository extends ChangeNotifier {
     for (final draft in drafts) {
       _drafts[draft.id] = draft;
     }
-    notifyListeners();
+    state = Map.from(_drafts);
   }
 }
