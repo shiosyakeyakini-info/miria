@@ -12,10 +12,19 @@ env:
 jobs:
   build_for_iOS:
     name: iOS・Android用ビルド
-    runs-on: macos-latest
+    runs-on: macos-15
 
     steps:
         - uses: actions/checkout@v4
+
+        # Xcodeバージョンを明示（16系を選択）
+        - uses: maxim-lobanov/setup-xcode@v1
+          with:
+            xcode-version: "16.*"
+
+        # 必要なiOSプラットフォームを取得
+        - name: Ensure iOS platform
+          run: sudo xcodebuild -downloadPlatform iOS
 
         - name: Get Flutter version from .fvmrc
           run:  echo "FLUTTER_FVM_VERSION=$(jq -r .flutter .fvmrc)" >> $GITHUB_ENV
