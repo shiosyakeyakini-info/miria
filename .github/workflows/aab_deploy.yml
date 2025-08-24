@@ -44,7 +44,7 @@ jobs:
               **/.dart_tool/package_config.json
             key: build-pubspec-${{ hashFiles('**/pubspec.lock') }}
             restore-keys: |
-              build-pubspec-
+              build-aab-pubspec-
 
         - name: Create symbolic link
           run: ln -s ${{ env.FLUTTER_ROOT }} $HOME/work/flutter
