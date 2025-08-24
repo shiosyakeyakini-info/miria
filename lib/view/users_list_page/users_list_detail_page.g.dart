@@ -23,7 +23,7 @@ final class _UsersListNotifierProvider
        );
 
   @override
-  String debugGetCreateSourceHash() => _$usersListNotifierHash();
+  String debugGetCreateSourceHash() => _$_usersListNotifierHash();
 
   @override
   String toString() {
@@ -47,7 +47,8 @@ final class _UsersListNotifierProvider
   }
 }
 
-String _$usersListNotifierHash() => r'c51fadbf7615f1343297d33391c16f5ef99d84d8';
+String _$_usersListNotifierHash() =>
+    r'c51fadbf7615f1343297d33391c16f5ef99d84d8';
 
 final class _UsersListNotifierFamily extends $Family
     with
@@ -114,7 +115,7 @@ final class _UsersListUsersProvider
        );
 
   @override
-  String debugGetCreateSourceHash() => _$usersListUsersHash();
+  String debugGetCreateSourceHash() => _$_usersListUsersHash();
 
   @override
   String toString() {
@@ -138,7 +139,7 @@ final class _UsersListUsersProvider
   }
 }
 
-String _$usersListUsersHash() => r'd4f5066da6faec88593e8f35da198edb0b3150a4';
+String _$_usersListUsersHash() => r'd4f5066da6faec88593e8f35da198edb0b3150a4';
 
 final class _UsersListUsersFamily extends $Family
     with

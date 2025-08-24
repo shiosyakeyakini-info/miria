@@ -11,7 +11,7 @@ part "clips_notifier.g.dart";
 class ClipsNotifier extends _$ClipsNotifier {
   @override
   Future<List<Clip>> build() async {
-    final response = await ref.read(misskeyPostContextProvider).clips.list();
+    final response = await ref.read(misskeyPostContextProvider).clips.list(const ClipsListRequest());
     return response.toList();
   }
 

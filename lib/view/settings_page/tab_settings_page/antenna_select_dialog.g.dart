@@ -36,7 +36,7 @@ final class _AntennasProvider
       MisskeyGetContextProvider.$allTransitiveDependencies0;
 
   @override
-  String debugGetCreateSourceHash() => _$antennasHash();
+  String debugGetCreateSourceHash() => _$_antennasHash();
 
   @$internal
   @override
@@ -50,7 +50,7 @@ final class _AntennasProvider
   }
 }
 
-String _$antennasHash() => r'789e8f8a722a66e9c9270594c9307d9257a14936';
+String _$_antennasHash() => r'789e8f8a722a66e9c9270594c9307d9257a14936';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -2396,9 +2396,9 @@ class MockMisskeyChannels extends _i1.Mock implements _i3.MisskeyChannels {
 /// See the documentation for Mockito's code generation for more information.
 class MockMisskeyClips extends _i1.Mock implements _i3.MisskeyClips {
   @override
-  _i17.Future<Iterable<_i3.Clip>> list() =>
+  _i17.Future<Iterable<_i3.Clip>> list(_i3.ClipsListRequest? request) =>
       (super.noSuchMethod(
-            Invocation.method(#list, []),
+            Invocation.method(#list, [request]),
             returnValue: _i17.Future<Iterable<_i3.Clip>>.value(<_i3.Clip>[]),
             returnValueForMissingStub: _i17.Future<Iterable<_i3.Clip>>.value(
               <_i3.Clip>[],

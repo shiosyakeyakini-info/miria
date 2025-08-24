@@ -27,7 +27,7 @@ final class _NotesClipsNotifierProvider
       MisskeyPostContextProvider.$allTransitiveDependencies0;
 
   @override
-  String debugGetCreateSourceHash() => _$notesClipsNotifierHash();
+  String debugGetCreateSourceHash() => _$_notesClipsNotifierHash();
 
   @override
   String toString() {
@@ -51,7 +51,7 @@ final class _NotesClipsNotifierProvider
   }
 }
 
-String _$notesClipsNotifierHash() =>
+String _$_notesClipsNotifierHash() =>
     r'ac73f5e5d6dcc731e9c023a03e84eb10fd14de9c';
 
 final class _NotesClipsNotifierFamily extends $Family
@@ -129,7 +129,7 @@ final class _ClipModalSheetNotifierProvider
   static const $allTransitiveDependencies3 = _notesClipsNotifierProvider;
 
   @override
-  String debugGetCreateSourceHash() => _$clipModalSheetNotifierHash();
+  String debugGetCreateSourceHash() => _$_clipModalSheetNotifierHash();
 
   @override
   String toString() {
@@ -154,7 +154,7 @@ final class _ClipModalSheetNotifierProvider
   }
 }
 
-String _$clipModalSheetNotifierHash() =>
+String _$_clipModalSheetNotifierHash() =>
     r'0751058a13d6c6ff7714eeef4110d399970c5b46';
 
 final class _ClipModalSheetNotifierFamily extends $Family
