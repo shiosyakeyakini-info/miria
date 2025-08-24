@@ -4,9 +4,19 @@ import "package:freezed_annotation/freezed_annotation.dart";
 import "package:miria/providers.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
+import "package:uuid/uuid.dart";
 
 part "edit_profile_state_notifier.freezed.dart";
 part "edit_profile_state_notifier.g.dart";
+
+@freezed
+abstract class EditUserField with _$EditUserField {
+  const factory EditUserField({
+    required String id,
+    required String name,
+    required String value,
+  }) = _EditUserField;
+}
 
 @freezed
 sealed class EditProfileState with _$EditProfileState {
@@ -15,7 +25,7 @@ sealed class EditProfileState with _$EditProfileState {
     @Default("") String description,
     @Default("") String location,
     DateTime? birthday,
-    @Default([]) List<UserField> fields,
+    @Default([]) List<EditUserField> fields,
     @Default("") String followedMessage,
     String? avatarDriveId,
     ({Uint8List data, String name})? avatarFile,
@@ -40,10 +50,12 @@ class EditProfileStateNotifier extends _$EditProfileStateNotifier {
       location: me.location ?? "",
       birthday: me.birthday,
       fields: [
-        ...fields,
+        ...fields.map(
+          (e) => EditUserField(id: Uuid().v4(), name: e.name, value: e.value),
+        ),
         ...List.generate(
           min - fields.length,
-          (_) => const UserField(name: "", value: ""),
+          (_) => EditUserField(id: Uuid().v4(), name: "", value: ""),
         ),
       ],
       followedMessage: me.followedMessage ?? "",
@@ -102,9 +114,10 @@ class EditProfileStateNotifier extends _$EditProfileStateNotifier {
         final newFields = data.fields.toList();
         if (index >= newFields.length) return;
 
-        newFields[index] = UserField(
-          name: name ?? newFields[index].name,
-          value: value ?? newFields[index].value,
+        final target = newFields[index];
+        newFields[index] = target.copyWith(
+          name: name ?? target.name,
+          value: value ?? target.value,
         );
 
         state = AsyncData(data.copyWith(fields: newFields));
@@ -120,7 +133,7 @@ class EditProfileStateNotifier extends _$EditProfileStateNotifier {
           data.copyWith(
             fields: [
               ...data.fields,
-              const UserField(name: "", value: ""),
+              EditUserField(id: Uuid().v4(), name: "", value: ""),
             ],
           ),
         );
@@ -137,6 +150,21 @@ class EditProfileStateNotifier extends _$EditProfileStateNotifier {
           newFields.removeAt(index);
           state = AsyncData(data.copyWith(fields: newFields));
         }
+      default:
+        break;
+    }
+  }
+
+  void reorderFields(int oldIndex, int newIndex) {
+    switch (state) {
+      case AsyncData(value: final data):
+        final newFields = data.fields.toList();
+        if (oldIndex < newIndex) {
+          newIndex -= 1;
+        }
+        final item = newFields.removeAt(oldIndex);
+        newFields.insert(newIndex, item);
+        state = AsyncData(data.copyWith(fields: newFields));
       default:
         break;
     }
@@ -204,6 +232,7 @@ class EditProfileStateNotifier extends _$EditProfileStateNotifier {
         birthday: currentState.birthday,
         fields: currentState.fields
             .where((f) => f.name.isNotEmpty || f.value.isNotEmpty)
+            .map((e) => UserField(name: e.name, value: e.value))
             .toList(),
         followedMessage: currentState.followedMessage.isEmpty
             ? null

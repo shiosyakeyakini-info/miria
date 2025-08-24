@@ -181,26 +181,26 @@ packages:
     dependency: "direct main"
     description:
       name: cached_network_image
-      sha256: "4a5d8d2c728b0f3d0245f69f921d7be90cae4c2fd5288f773088672c0893f819"
+      sha256: "7c1183e361e5c8b0a0f21a28401eecdbde252441106a9816400dd4c2b2424916"
       url: "https://pub.dev"
     source: hosted
-    version: "3.4.0"
+    version: "3.4.1"
   cached_network_image_platform_interface:
     dependency: transitive
     description:
       name: cached_network_image_platform_interface
-      sha256: ff0c949e323d2a1b52be73acce5b4a7b04063e61414c8ca542dbba47281630a7
+      sha256: "35814b016e37fbdc91f7ae18c8caf49ba5c88501813f73ce8a07027a395e2829"
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.0"
+    version: "4.1.1"
   cached_network_image_web:
     dependency: transitive
     description:
       name: cached_network_image_web
-      sha256: "6322dde7a5ad92202e64df659241104a43db20ed594c41ca18de1014598d7996"
+      sha256: "980842f4e8e2535b8dbd3d5ca0b1f0ba66bf61d14cc3a17a9b4788a3685ba062"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.0"
+    version: "1.3.1"
   change:
     dependency: transitive
     description:
@@ -505,11 +505,12 @@ packages:
   flutter_cache_manager:
     dependency: "direct main"
     description:
-      name: flutter_cache_manager
-      sha256: a77f77806a790eb9ba0118a5a3a936e81c4fea2b61533033b2b0c3d50bbde5ea
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.4.0"
+      path: flutter_cache_manager
+      ref: "54904e499a06d0364a2b3f4ca9789e5f829f1879"
+      resolved-ref: "54904e499a06d0364a2b3f4ca9789e5f829f1879"
+      url: "https://github.com/Baseflow/flutter_cache_manager"
+    source: git
+    version: "3.4.1"
   flutter_colorpicker:
     dependency: "direct main"
     description:
@@ -1103,10 +1104,10 @@ packages:
     dependency: "direct main"
     description:
       name: mfm
-      sha256: "239bf1671acac3466e66dc4eb6b6e8ee3601cb138ce129bd7c192364e7633fd0"
+      sha256: cdfc10dfbb44fb3e42be68310722166d10e3f0aa51f2681b29bfffaee49605c2
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.6"
+    version: "1.0.8"
   mfm_parser:
     dependency: "direct main"
     description:
@@ -1128,7 +1129,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: dbe7da3cf3ee391b1df5b2464d8357bb530d4af1
+      resolved-ref: "279e1e390e89182e38004363fe894e02841cb5f2"
       url: "https://github.com/shiosyakeyakini-info/misskey_dart.git"
     source: git
     version: "1.0.0"

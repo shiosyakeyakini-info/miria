@@ -25,7 +25,6 @@ class PlaySearch extends HookConsumerWidget {
         children: [
           TextField(
             controller: searchController,
-            focusNode: focusNode,
             decoration: InputDecoration(
               hintText: S.of(context).search,
               prefixIcon: const Icon(Icons.search),
@@ -39,32 +38,14 @@ class PlaySearch extends HookConsumerWidget {
                       },
                     )
                   : null,
-              border: const OutlineInputBorder(),
             ),
-            onChanged: (value) {
-              searchQuery.value = value;
-            },
-            onSubmitted: (value) {
-              if (value.trim().isNotEmpty) {
-                listViewKey.value++;
-              }
-            },
+            focusNode: focusNode,
+            autofocus: true,
+            textInputAction: TextInputAction.done,
+            onSubmitted: (value) => searchQuery.value = value,
           ),
           const SizedBox(height: 10),
-          if (searchQuery.value.trim().isEmpty)
-            Expanded(
-              child: Center(
-                child: Text(
-                  S.of(context).search,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(
-                      context,
-                    ).textTheme.bodyMedium?.color?.withValues(alpha: 0.6),
-                  ),
-                ),
-              ),
-            )
-          else
+          if (searchQuery.value.trim().isNotEmpty)
             Expanded(
               child: PushableListView<Flash>(
                 key: ValueKey(listViewKey.value),

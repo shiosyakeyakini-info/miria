@@ -1099,7 +1099,8 @@
     "profileFromDrive": "ドライブから",
     "profileFieldName": "名前",
     "profileFieldValue": "内容",
-    "profileAddField": "追加",
+    "profileAddField": "項目を追加",
+    "profileSetBirthday": "誕生日を選択",
     "profileFollowedMessage": "フォローされたときのメッセージ",
 
     "chat": "チャット",
@@ -1142,6 +1143,14 @@
     },
     "goToChat": "みにいく",
 
-    "noSearchResults": "検索結果が見つかりませんでした"
+    "noSearchResults": "検索結果が見つかりませんでした",
+
+    "saveToDrafts": "下書きに保存しとく？",
+    "discard": "やめとく",
+    "drafts": "下書き",
+    "noDrafts": "下書きあらへんで",
+    "confirmDeleteDraft": "この下書き削除してもええか？",
+    "emptyNote": "空っぽのノート",
+    "poll": "アンケート"
 
 }

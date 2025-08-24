@@ -85,6 +85,7 @@ abstract class NoteCreate with _$NoteCreate {
     VoteExpireDurationType voteDurationType,
     NoteCreationMode? noteCreationMode,
     String? noteId,
+    String? selectedDraftId,
   }) = _NoteCreate;
 }
 
@@ -321,6 +322,156 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
     }
 
     state = resultState;
+  }
+
+  /// 下書きから初期化する
+  Future<void> initializeFromDraft(NoteDraft draft) async {
+    var resultState = state;
+
+    // Channel setting
+    final NoteCreateChannel? channelData;
+    if (draft.channel != null) {
+      channelData = NoteCreateChannel(
+        id: draft.channel!.id,
+        name: draft.channel!.name,
+      );
+    } else {
+      channelData = null;
+    }
+
+    // Load files if present
+    final files = <MisskeyPostFile>[];
+    if (draft.files != null && draft.files!.isNotEmpty) {
+      for (final driveFile in draft.files!) {
+        // Check if the provider is still mounted before async operations
+        if (!ref.mounted) return;
+
+        // DriveFileをMisskeyPostFileに変換
+        // ファイルタイプに基づいて適切なクラスを選択
+        if (driveFile.type.startsWith("image/")) {
+          // 画像ファイルの場合、実際のデータをダウンロード
+          try {
+            final response = await _dio.get(
+              driveFile.url,
+              options: Options(responseType: ResponseType.bytes),
+            );
+
+            // Check again after async operation
+            if (!ref.mounted) return;
+
+            files.add(
+              ImageFileAlreadyPostedFile(
+                data: response.data,
+                id: driveFile.id,
+                fileName: driveFile.name,
+                isNsfw: driveFile.isSensitive ?? false,
+                caption: driveFile.comment,
+              ),
+            );
+          } catch (e) {
+            // Check if still mounted before handling error
+            if (!ref.mounted) return;
+
+            // ダウンロードに失敗した場合はUnknownAlreadyPostedFileとして扱う
+            files.add(
+              UnknownAlreadyPostedFile(
+                url: driveFile.url,
+                id: driveFile.id,
+                fileName: driveFile.name,
+                isNsfw: driveFile.isSensitive ?? false,
+                caption: driveFile.comment,
+              ),
+            );
+          }
+        } else {
+          // その他のファイルの場合
+          files.add(
+            UnknownAlreadyPostedFile(
+              url: driveFile.url,
+              id: driveFile.id,
+              fileName: driveFile.name,
+              isNsfw: driveFile.isSensitive ?? false,
+              caption: driveFile.comment,
+            ),
+          );
+        }
+      }
+    }
+
+    // Poll settings
+    var isVote = false;
+    var isVoteMultiple = false;
+    var voteExpireType = VoteExpireType.unlimited;
+    DateTime? voteDate;
+    int? voteDuration;
+    var voteDurationType = VoteExpireDurationType.day;
+    var voteContent = <String>["", ""];
+
+    if (draft.poll != null) {
+      isVote = true;
+      isVoteMultiple = draft.poll!.multiple ?? false;
+      voteContent = List.from(draft.poll!.choices);
+
+      if (draft.poll!.expiresAt != null) {
+        voteExpireType = VoteExpireType.date;
+        voteDate = draft.poll!.expiresAt;
+      } else if (draft.poll!.expiredAfter != null) {
+        voteExpireType = VoteExpireType.duration;
+        final duration = draft.poll!.expiredAfter!;
+
+        // Use the most specific unit that doesn't result in fractions
+        if (duration.inSeconds % 60 == 0 && duration.inMinutes > 0) {
+          if (duration.inMinutes % 60 == 0 && duration.inHours > 0) {
+            if (duration.inHours % 24 == 0 && duration.inDays > 1) {
+              // Only use days if more than 1 day
+              voteDuration = duration.inDays;
+              voteDurationType = VoteExpireDurationType.day;
+            } else {
+              // Use hours for anything <= 24 hours or not evenly divisible by days
+              voteDuration = duration.inHours;
+              voteDurationType = VoteExpireDurationType.hours;
+            }
+          } else {
+            voteDuration = duration.inMinutes;
+            voteDurationType = VoteExpireDurationType.minutes;
+          }
+        } else {
+          voteDuration = duration.inSeconds;
+          voteDurationType = VoteExpireDurationType.seconds;
+        }
+      }
+    }
+
+    // Check one final time before updating state
+    if (!ref.mounted) return;
+
+    resultState = resultState.copyWith(
+      noteVisibility: draft.visibility,
+      localOnly: draft.localOnly ?? false,
+      files: files,
+      channel: channelData,
+      cwText: draft.cw ?? "",
+      isCw: draft.cw?.isNotEmpty == true,
+      text: draft.text ?? "",
+      reactionAcceptance: draft.reactionAcceptance,
+      reply: draft.reply,
+      renote: draft.renote,
+      isVote: isVote,
+      isVoteMultiple: isVoteMultiple,
+      voteExpireType: voteExpireType,
+      voteDate: voteDate,
+      voteDuration: voteDuration,
+      voteDurationType: voteDurationType,
+      voteContent: voteContent,
+      selectedDraftId: draft.id,
+    );
+
+    state = resultState;
+  }
+
+  /// 下書きIDを設定する（新規作成後に使用）
+  void setSelectedDraftId(String draftId) {
+    state = state.copyWith(selectedDraftId: draftId);
   }
 
   /// ノートを投稿する

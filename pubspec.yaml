@@ -18,7 +18,7 @@ dependencies:
     git: 
       url: https://github.com/shiosyakeyakini-info/misskey_dart.git
       ref: master
-  mfm: ^1.0.5
+  mfm: ^1.0.8
   tuple: ^2.0.1
   path_provider: ^2.0.14
   dio: ^5.1.1
@@ -74,7 +74,7 @@ dependencies:
   window_manager: ^0.5.0
   shared_preference_app_group: ^1.0.0+1
   stack_trace: ^1.11.1
-  flutter_cache_manager: 3.4.0
+  flutter_cache_manager: ^3.4.1
   riverpod_annotation: ^3.0.0-dev.16
   simple_logger: ^1.9.0+3
   hooks_riverpod: ^3.0.0-dev.16
@@ -112,6 +112,11 @@ dependency_overrides:
       url: https://github.com/4ster1sk/media-kit.git
       ref: 28292926cfd1e75611f7dcf39248124197d131cf
       path: ./media_kit_video/
+  flutter_cache_manager:
+    git:
+      url: https://github.com/Baseflow/flutter_cache_manager
+      ref: 54904e499a06d0364a2b3f4ca9789e5f829f1879
+      path: ./flutter_cache_manager
 
 dev_dependencies:
   flutter_test:

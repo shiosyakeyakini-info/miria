@@ -992,5 +992,12 @@
         }
     },
 
-    "noSearchResults": "未找到搜索结果"
+    "noSearchResults": "未找到搜索结果",
+
+    "saveToDrafts": "保存为草稿吗？",
+    "discard": "丢弃",
+    "drafts": "草稿",
+    "noDrafts": "没有草稿",
+    "confirmDeleteDraft": "要删除这个草稿吗？",
+    "emptyNote": "空笔记"
 }

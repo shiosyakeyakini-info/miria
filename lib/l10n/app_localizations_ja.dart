@@ -2051,7 +2051,10 @@ class SJa extends S {
   String get profileFieldValue => '内容';
 
   @override
-  String get profileAddField => '追加';
+  String get profileAddField => '項目を追加';
+
+  @override
+  String get profileSetBirthday => '誕生日を選択';
 
   @override
   String get profileFollowedMessage => 'フォローされたときのメッセージ';
@@ -2153,6 +2156,27 @@ class SJa extends S {
 
   @override
   String get noSearchResults => '検索結果が見つかりませんでした';
+
+  @override
+  String get saveToDrafts => '下書きに保存しとく？';
+
+  @override
+  String get discard => 'やめとく';
+
+  @override
+  String get drafts => '下書き';
+
+  @override
+  String get noDrafts => '下書きあらへんで';
+
+  @override
+  String get confirmDeleteDraft => 'この下書き削除してもええか？';
+
+  @override
+  String get emptyNote => '空っぽのノート';
+
+  @override
+  String get poll => 'アンケート';
 }
 
 /// The translations for Japanese (`ja_OJ`).
@@ -2558,4 +2582,22 @@ class SJaOj extends SJa {
 
   @override
   String get noSearchResults => '検索結果が見つかりませんでしたわ';
+
+  @override
+  String get saveToDrafts => '下書きに保存いたしますか？';
+
+  @override
+  String get discard => '破棄';
+
+  @override
+  String get drafts => '下書き';
+
+  @override
+  String get noDrafts => '下書きがございませんわ';
+
+  @override
+  String get confirmDeleteDraft => 'この下書きを削除いたしますか？';
+
+  @override
+  String get emptyNote => '空のノートですわ';
 }
