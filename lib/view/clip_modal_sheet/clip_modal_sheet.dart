@@ -1,5 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
+import "package:hooks_riverpod/experimental/mutation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/hooks/use_async.dart";
 import "package:miria/l10n/app_localizations.dart";
@@ -56,6 +58,12 @@ class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
     ];
   }
 
+  Future<List<Clip>> loadClips({String? untilId, int limit = 10}) async {
+    return ref
+        .read(clipsNotifierProvider.notifier)
+        .loadClips(untilId: untilId, limit: limit);
+  }
+
   Future<void> addToClip(Clip clip) async {
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
       try {
@@ -99,6 +107,8 @@ class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
   }
 }
 
+final loadClipsMutation = Mutation();
+
 @RoutePage()
 class ClipModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
   final Account account;
@@ -118,6 +128,8 @@ class ClipModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(_clipModalSheetNotifierProvider(noteId));
     final notifier = _clipModalSheetNotifierProvider(noteId).notifier;
+    final loadClips = ref.watch(loadClipsMutation);
+    final isFinalPage = useState(false);
 
     final create = useAsync(() async {
       final settings = await context.pushRoute<ClipSettings>(
@@ -128,8 +140,9 @@ class ClipModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
     });
 
     return switch (state) {
-      AsyncData(:final value) => ListView.builder(
-        itemCount: value.length + 1,
+      AsyncData(:final value) ||
+      AsyncLoading(:final value?) => ListView.builder(
+        itemCount: value.length + 2,
         itemBuilder: (context, index) {
           if (index < value.length) {
             final (clip, isClipped) = value[index];
@@ -147,6 +160,28 @@ class ClipModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
               title: Text(clip.name ?? ""),
               subtitle: Text(clip.description ?? ""),
             );
+          } else if (index == value.length) {
+            if (isFinalPage.value) {
+              return SizedBox.shrink();
+            }
+
+            return switch (loadClips) {
+              MutationIdle() || MutationSuccess() => IconButton(
+                onPressed: () => loadClipsMutation.run(ref, (tsx) async {
+                  final items = await tsx
+                      .get(_clipModalSheetNotifierProvider(noteId).notifier)
+                      .loadClips(untilId: value.lastOrNull?.$1.id);
+                  isFinalPage.value = items.isEmpty;
+                }),
+                icon: Icon(Icons.keyboard_arrow_down),
+              ),
+              MutationPending() => const Center(
+                child: CircularProgressIndicator.adaptive(),
+              ),
+              MutationError(:final error, :final stackTrace) => Center(
+                child: ErrorDetail(error: error, stackTrace: stackTrace),
+              ),
+            };
           } else {
             return ListTile(
               leading: const Icon(Icons.add),

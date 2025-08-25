@@ -24,6 +24,8 @@ class ClipListPage extends ConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(clipsNotifierProvider, (_, _) {});
+
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).clip),
@@ -44,7 +46,7 @@ class ClipListPage extends ConsumerWidget implements AutoRouteWrapper {
       body: PushableListView<Clip>(
         listKey: "clips_list",
         initializeFuture: () async {
-          return await ref.read(clipsNotifierProvider.notifier).loadClips();
+          return await ref.read(clipsNotifierProvider.future);
         },
         nextFuture: (lastItem, _) async {
           return await ref

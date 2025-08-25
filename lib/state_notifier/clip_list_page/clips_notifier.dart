@@ -11,7 +11,7 @@ part "clips_notifier.g.dart";
 class ClipsNotifier extends _$ClipsNotifier {
   @override
   Future<List<Clip>> build() async {
-    return [];
+    return await loadClips();
   }
 
   Future<List<Clip>> loadClips({String? untilId, int limit = 10}) async {
@@ -19,7 +19,11 @@ class ClipsNotifier extends _$ClipsNotifier {
         .read(misskeyPostContextProvider)
         .clips
         .list(ClipsListRequest(untilId: untilId, limit: limit));
-    return response.toList();
+    final clips = untilId != null
+        ? response.where((clip) => clip.id.compareTo(untilId) < 0)
+        : response;
+    state = AsyncValue.data([...?state.value, ...clips]);
+    return clips.toList();
   }
 
   Future<void> create(ClipSettings settings) async {
