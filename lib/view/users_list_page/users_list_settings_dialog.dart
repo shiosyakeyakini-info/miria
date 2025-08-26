@@ -92,7 +92,9 @@ class UsersListSettingsDialog extends HookConsumerWidget
                 onPressed: () {
                   if (formKey.value.currentState!.validate()) {
                     formKey.value.currentState!.save();
-                    final settings = ref.read(_usersListSettingsNotifierProvider);
+                    final settings = ref.read(
+                      _usersListSettingsNotifierProvider,
+                    );
                     if (settings == initialSettings) {
                       Navigator.of(context).pop();
                     } else {

@@ -37,11 +37,15 @@ class FederationPage extends ConsumerWidget implements AutoRouteWrapper {
     return switch (federate) {
       AsyncLoading() => Scaffold(
         appBar: AppBar(title: Text(host)),
-        body: const Center(child: CircularProgressIndicator.adaptive()),
+        body: const SafeArea(
+          child: Center(child: CircularProgressIndicator.adaptive()),
+        ),
       ),
       AsyncError(:final error, :final stackTrace) => Scaffold(
         appBar: AppBar(title: Text(host)),
-        body: ErrorDetail(error: error, stackTrace: stackTrace),
+        body: SafeArea(
+          child: ErrorDetail(error: error, stackTrace: stackTrace),
+        ),
       ),
       AsyncData(:final value) => Builder(
         builder: (context) {
@@ -84,47 +88,52 @@ class FederationPage extends ConsumerWidget implements AutoRouteWrapper {
                   tabAlignment: TabAlignment.center,
                 ),
               ),
-              body: TabBarView(
-                children: [
-                  FederationInfo(data: value),
-                  if (isAnotherHost) FederationUsers(host: host),
-                  if (adsAvailable) FederationAds(ads: [...value.ads]),
-                  if (isMisskey)
-                    AccountContextScope(
-                      context: AccountContext(
-                        getAccount: Account.demoAccount(host, value.meta),
-                        postAccount: accountContext.postAccount,
+              body: SafeArea(
+                child: TabBarView(
+                  children: [
+                    FederationInfo(data: value),
+                    if (isAnotherHost) FederationUsers(host: host),
+                    if (adsAvailable) FederationAds(ads: [...value.ads]),
+                    if (isMisskey)
+                      AccountContextScope(
+                        context: AccountContext(
+                          getAccount: Account.demoAccount(host, value.meta),
+                          postAccount: accountContext.postAccount,
+                        ),
+                        child: FederationAnnouncements(host: host),
                       ),
-                      child: FederationAnnouncements(host: host),
-                    ),
-                  if (isSupportedTimeline)
-                    AccountContextScope(
-                      context: AccountContext(
-                        getAccount: Account.demoAccount(host, value.meta),
-                        postAccount: accountContext.postAccount,
+                    if (isSupportedTimeline)
+                      AccountContextScope(
+                        context: AccountContext(
+                          getAccount: Account.demoAccount(host, value.meta),
+                          postAccount: accountContext.postAccount,
+                        ),
+                        child: FederationCustomEmojis(
+                          host: host,
+                          meta: value.meta!,
+                        ),
                       ),
-                      child: FederationCustomEmojis(
-                        host: host,
-                        meta: value.meta!,
+                    if (isSupportedTimeline)
+                      AccountContextScope(
+                        context: AccountContext(
+                          getAccount: Account.demoAccount(host, value.meta),
+                          postAccount: accountContext.postAccount,
+                        ),
+                        child: FederationTimeline(
+                          host: host,
+                          meta: value.meta!,
+                        ),
                       ),
-                    ),
-                  if (isSupportedTimeline)
-                    AccountContextScope(
-                      context: AccountContext(
-                        getAccount: Account.demoAccount(host, value.meta),
-                        postAccount: accountContext.postAccount,
+                    if (enableSearch)
+                      AccountContextScope(
+                        context: AccountContext(
+                          getAccount: Account.demoAccount(host, value.meta),
+                          postAccount: accountContext.postAccount,
+                        ),
+                        child: NoteSearch(focusNode: FocusNode()),
                       ),
-                      child: FederationTimeline(host: host, meta: value.meta!),
-                    ),
-                  if (enableSearch)
-                    AccountContextScope(
-                      context: AccountContext(
-                        getAccount: Account.demoAccount(host, value.meta),
-                        postAccount: accountContext.postAccount,
-                      ),
-                      child: NoteSearch(focusNode: FocusNode()),
-                    ),
-                ],
+                  ],
+                ),
               ),
             ),
           );

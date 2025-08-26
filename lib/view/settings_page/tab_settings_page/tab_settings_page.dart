@@ -167,392 +167,402 @@ class TabSettingsPage extends HookConsumerWidget {
           child: Padding(
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Text(S.of(context).account),
-              DropdownButton<Account>(
-                items: [
-                  for (final account in accounts)
-                    DropdownMenuItem(
-                      value: account,
-                      child: Text(account.acct.toString()),
-                    ),
-                ],
-                onChanged: (value) {
-                  final tabType = selectedTabType.value;
-                  selectedAccount.value = value;
-                  selectedTabType.value =
-                      tabType != null && isTabTypeAvailable(tabType)
-                      ? tabType
-                      : null;
-                  selectedAntenna.value = null;
-                  selectedUserList.value = null;
-                  selectedChannel.value = null;
-                  if (selectedIcon.value?.customEmojiName != null) {
-                    selectedIcon.value = null;
-                  }
-                },
-                value: selectedAccount.value,
-              ),
-              const Padding(padding: EdgeInsets.all(10)),
-              Text(S.of(context).tabType),
-              DropdownButton<TabType>(
-                items: [
-                  for (final tabType in TabType.values)
-                    if (isTabTypeAvailable(tabType))
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Text(S.of(context).account),
+                DropdownButton<Account>(
+                  items: [
+                    for (final account in accounts)
                       DropdownMenuItem(
-                        value: tabType,
-                        child: Text(tabType.displayName(context)),
+                        value: account,
+                        child: Text(account.acct.toString()),
                       ),
-                ],
-                onChanged: (value) {
-                  selectedTabType.value = value;
-                },
-                value: selectedTabType.value,
-              ),
-              const Padding(padding: EdgeInsets.all(10)),
-              if (selectedTabType.value == TabType.roleTimeline) ...[
-                Text(S.of(context).roleTimeline),
-                switch (initialize.value) {
-                  AsyncData() => Row(
-                    children: [
-                      Expanded(child: Text(selectedRole.value?.name ?? "")),
-                      IconButton(
-                        onPressed: () async {
-                          final selected = selectedAccount.value;
-                          if (selected == null) return;
-
-                          selectedRole.value = await context
-                              .pushRoute<RolesListResponse>(
-                                RoleSelectRoute(account: selected),
-                              );
-                          nameController.text =
-                              selectedRole.value?.name ?? nameController.text;
-                        },
-                        icon: const Icon(Icons.navigate_next),
-                      ),
-                    ],
-                  ),
-                  _ => const CircularProgressIndicator.adaptive(),
-                },
-              ],
-              if (selectedTabType.value == TabType.channel) ...[
-                Text(S.of(context).channel),
-                switch (initialize.value) {
-                  AsyncData() => Row(
-                    children: [
-                      Expanded(child: Text(selectedChannel.value?.name ?? "")),
-                      IconButton(
-                        onPressed: () async {
-                          final selected = selectedAccount.value;
-                          if (selected == null) return;
-
-                          selectedChannel.value = await context.pushRoute(
-                            ChannelSelectRoute(account: selected),
-                          );
-                          nameController.text =
-                              selectedChannel.value?.name ??
-                              nameController.text;
-                        },
-                        icon: const Icon(Icons.navigate_next),
-                      ),
-                    ],
-                  ),
-                  _ => const CircularProgressIndicator.adaptive(),
-                },
-              ],
-              if (selectedTabType.value == TabType.userList) ...[
-                Text(S.of(context).list),
-                switch (initialize.value) {
-                  AsyncData() => Row(
-                    children: [
-                      Expanded(child: Text(selectedUserList.value?.name ?? "")),
-                      IconButton(
-                        onPressed: () async {
-                          final selected = selectedAccount.value;
-                          if (selected == null) return;
-
-                          selectedUserList.value = await context.pushRoute(
-                            UserListSelectRoute(account: selected),
-                          );
-                          nameController.text =
-                              selectedUserList.value?.name ??
-                              nameController.text;
-                        },
-                        icon: const Icon(Icons.navigate_next),
-                      ),
-                    ],
-                  ),
-                  _ => const CircularProgressIndicator.adaptive(),
-                },
-              ],
-              if (selectedTabType.value == TabType.antenna) ...[
-                Text(S.of(context).antenna),
-                Row(
-                  children: [
-                    Expanded(child: Text(selectedAntenna.value?.name ?? "")),
-                    switch (initialize.value) {
-                      AsyncData() => IconButton(
-                        onPressed: () async {
-                          final selected = selectedAccount.value;
-                          if (selected == null) return;
-
-                          selectedAntenna.value = await context.pushRoute(
-                            AntennaSelectRoute(account: selected),
-                          );
-                          nameController.text =
-                              selectedAntenna.value?.name ??
-                              nameController.text;
-                        },
-                        icon: const Icon(Icons.navigate_next),
-                      ),
-                      _ => const CircularProgressIndicator.adaptive(),
-                    },
                   ],
+                  onChanged: (value) {
+                    final tabType = selectedTabType.value;
+                    selectedAccount.value = value;
+                    selectedTabType.value =
+                        tabType != null && isTabTypeAvailable(tabType)
+                        ? tabType
+                        : null;
+                    selectedAntenna.value = null;
+                    selectedUserList.value = null;
+                    selectedChannel.value = null;
+                    if (selectedIcon.value?.customEmojiName != null) {
+                      selectedIcon.value = null;
+                    }
+                  },
+                  value: selectedAccount.value,
                 ),
-              ],
-              if (selectedTabType.value == TabType.customTimeline) ...[
-                Row(
-                  children: [
-                    Expanded(child: Text(S.of(context).customChannelName)),
-                    OutlinedButton.icon(
-                      icon: const Icon(Icons.list, size: 18),
-                      label: Text(S.of(context).template),
-                      onPressed: () async {
-                        final preset = await context.pushRoute<TimelinePreset>(
-                          TimelinePresetRoute(),
-                        );
-                        if (preset != null) {
-                          customChannelController.text =
-                              preset.websocketChannelName;
-                          customApiController.text = preset.endpoint;
-                          customParamsController.text = jsonEncode(
-                            preset.parameters,
-                          );
-                          nameController.text = preset.name;
-                        }
-                      },
+                const Padding(padding: EdgeInsets.all(10)),
+                Text(S.of(context).tabType),
+                DropdownButton<TabType>(
+                  items: [
+                    for (final tabType in TabType.values)
+                      if (isTabTypeAvailable(tabType))
+                        DropdownMenuItem(
+                          value: tabType,
+                          child: Text(tabType.displayName(context)),
+                        ),
+                  ],
+                  onChanged: (value) {
+                    selectedTabType.value = value;
+                  },
+                  value: selectedTabType.value,
+                ),
+                const Padding(padding: EdgeInsets.all(10)),
+                if (selectedTabType.value == TabType.roleTimeline) ...[
+                  Text(S.of(context).roleTimeline),
+                  switch (initialize.value) {
+                    AsyncData() => Row(
+                      children: [
+                        Expanded(child: Text(selectedRole.value?.name ?? "")),
+                        IconButton(
+                          onPressed: () async {
+                            final selected = selectedAccount.value;
+                            if (selected == null) return;
+
+                            selectedRole.value = await context
+                                .pushRoute<RolesListResponse>(
+                                  RoleSelectRoute(account: selected),
+                                );
+                            nameController.text =
+                                selectedRole.value?.name ?? nameController.text;
+                          },
+                          icon: const Icon(Icons.navigate_next),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                TextField(controller: customChannelController),
+                    _ => const CircularProgressIndicator.adaptive(),
+                  },
+                ],
+                if (selectedTabType.value == TabType.channel) ...[
+                  Text(S.of(context).channel),
+                  switch (initialize.value) {
+                    AsyncData() => Row(
+                      children: [
+                        Expanded(
+                          child: Text(selectedChannel.value?.name ?? ""),
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            final selected = selectedAccount.value;
+                            if (selected == null) return;
+
+                            selectedChannel.value = await context.pushRoute(
+                              ChannelSelectRoute(account: selected),
+                            );
+                            nameController.text =
+                                selectedChannel.value?.name ??
+                                nameController.text;
+                          },
+                          icon: const Icon(Icons.navigate_next),
+                        ),
+                      ],
+                    ),
+                    _ => const CircularProgressIndicator.adaptive(),
+                  },
+                ],
+                if (selectedTabType.value == TabType.userList) ...[
+                  Text(S.of(context).list),
+                  switch (initialize.value) {
+                    AsyncData() => Row(
+                      children: [
+                        Expanded(
+                          child: Text(selectedUserList.value?.name ?? ""),
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            final selected = selectedAccount.value;
+                            if (selected == null) return;
+
+                            selectedUserList.value = await context.pushRoute(
+                              UserListSelectRoute(account: selected),
+                            );
+                            nameController.text =
+                                selectedUserList.value?.name ??
+                                nameController.text;
+                          },
+                          icon: const Icon(Icons.navigate_next),
+                        ),
+                      ],
+                    ),
+                    _ => const CircularProgressIndicator.adaptive(),
+                  },
+                ],
+                if (selectedTabType.value == TabType.antenna) ...[
+                  Text(S.of(context).antenna),
+                  Row(
+                    children: [
+                      Expanded(child: Text(selectedAntenna.value?.name ?? "")),
+                      switch (initialize.value) {
+                        AsyncData() => IconButton(
+                          onPressed: () async {
+                            final selected = selectedAccount.value;
+                            if (selected == null) return;
+
+                            selectedAntenna.value = await context.pushRoute(
+                              AntennaSelectRoute(account: selected),
+                            );
+                            nameController.text =
+                                selectedAntenna.value?.name ??
+                                nameController.text;
+                          },
+                          icon: const Icon(Icons.navigate_next),
+                        ),
+                        _ => const CircularProgressIndicator.adaptive(),
+                      },
+                    ],
+                  ),
+                ],
+                if (selectedTabType.value == TabType.customTimeline) ...[
+                  Row(
+                    children: [
+                      Expanded(child: Text(S.of(context).customChannelName)),
+                      OutlinedButton.icon(
+                        icon: const Icon(Icons.list, size: 18),
+                        label: Text(S.of(context).template),
+                        onPressed: () async {
+                          final preset = await context
+                              .pushRoute<TimelinePreset>(TimelinePresetRoute());
+                          if (preset != null) {
+                            customChannelController.text =
+                                preset.websocketChannelName;
+                            customApiController.text = preset.endpoint;
+                            customParamsController.text = jsonEncode(
+                              preset.parameters,
+                            );
+                            nameController.text = preset.name;
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                  TextField(controller: customChannelController),
+                  const Padding(padding: EdgeInsets.all(10)),
+                  Text(S.of(context).customApiPath),
+                  TextField(controller: customApiController),
+                  const Padding(padding: EdgeInsets.all(10)),
+                  Text(S.of(context).customTimelineParameters),
+                  TextField(
+                    controller: customParamsController,
+                    minLines: 3,
+                    maxLines: null,
+                  ),
+                ],
                 const Padding(padding: EdgeInsets.all(10)),
-                Text(S.of(context).customApiPath),
-                TextField(controller: customApiController),
-                const Padding(padding: EdgeInsets.all(10)),
-                Text(S.of(context).customTimelineParameters),
+                Text(S.of(context).tabName),
                 TextField(
-                  controller: customParamsController,
-                  minLines: 3,
-                  maxLines: null,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.edit),
+                  ),
+                  controller: nameController,
                 ),
-              ],
-              const Padding(padding: EdgeInsets.all(10)),
-              Text(S.of(context).tabName),
-              TextField(
-                decoration: const InputDecoration(prefixIcon: Icon(Icons.edit)),
-                controller: nameController,
-              ),
-              const Padding(padding: EdgeInsets.all(10)),
-              Text(S.of(context).icon),
-              Row(
-                children: [
-                  Expanded(
-                    child: selectedAccount.value == null
-                        ? Container()
-                        : AccountContextScope.as(
-                            account: selectedAccount.value!,
-                            child: SizedBox(
-                              height: 32,
-                              child: TabIconView(
-                                icon: selectedIcon.value,
-                                size: IconTheme.of(context).size,
+                const Padding(padding: EdgeInsets.all(10)),
+                Text(S.of(context).icon),
+                Row(
+                  children: [
+                    Expanded(
+                      child: selectedAccount.value == null
+                          ? Container()
+                          : AccountContextScope.as(
+                              account: selectedAccount.value!,
+                              child: SizedBox(
+                                height: 32,
+                                child: TabIconView(
+                                  icon: selectedIcon.value,
+                                  size: IconTheme.of(context).size,
+                                ),
                               ),
                             ),
-                          ),
-                  ),
-                  IconButton(
-                    onPressed: () async {
-                      if (selectedAccount.value == null) return;
-                      selectedIcon.value = await showDialog<TabIcon>(
-                        context: context,
-                        builder: (context) =>
-                            IconSelectDialog(account: selectedAccount.value!),
-                      );
-                    },
-                    icon: const Icon(Icons.navigate_next),
-                  ),
-                ],
-              ),
-              CheckboxListTile(
-                title: Text(S.of(context).displayRenotes),
-                value: renoteDisplay.value,
-                onChanged: (value) =>
-                    renoteDisplay.value = !renoteDisplay.value,
-              ),
-              if (availableIncludeReply)
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        if (selectedAccount.value == null) return;
+                        selectedIcon.value = await showDialog<TabIcon>(
+                          context: context,
+                          builder: (context) =>
+                              IconSelectDialog(account: selectedAccount.value!),
+                        );
+                      },
+                      icon: const Icon(Icons.navigate_next),
+                    ),
+                  ],
+                ),
                 CheckboxListTile(
-                  title: Text(S.of(context).includeReplies),
-                  subtitle: Text(S.of(context).includeRepliesAvailability),
-                  value: isIncludeReply.value,
-                  enabled: !isMediaOnly.value,
+                  title: Text(S.of(context).displayRenotes),
+                  value: renoteDisplay.value,
+                  onChanged: (value) =>
+                      renoteDisplay.value = !renoteDisplay.value,
+                ),
+                if (availableIncludeReply)
+                  CheckboxListTile(
+                    title: Text(S.of(context).includeReplies),
+                    subtitle: Text(S.of(context).includeRepliesAvailability),
+                    value: isIncludeReply.value,
+                    enabled: !isMediaOnly.value,
+                    onChanged: (value) {
+                      isIncludeReply.value = !isIncludeReply.value;
+                      if (value ?? false) {
+                        isMediaOnly.value = false;
+                      }
+                    },
+                  ),
+                CheckboxListTile(
+                  title: Text(S.of(context).mediaOnly),
+                  value: isMediaOnly.value,
+                  enabled: !isIncludeReply.value,
                   onChanged: (value) {
-                    isIncludeReply.value = !isIncludeReply.value;
+                    isMediaOnly.value = !isMediaOnly.value;
                     if (value ?? false) {
-                      isMediaOnly.value = false;
+                      isIncludeReply.value = false;
                     }
                   },
                 ),
-              CheckboxListTile(
-                title: Text(S.of(context).mediaOnly),
-                value: isMediaOnly.value,
-                enabled: !isIncludeReply.value,
-                onChanged: (value) {
-                  isMediaOnly.value = !isMediaOnly.value;
-                  if (value ?? false) {
-                    isIncludeReply.value = false;
-                  }
-                },
-              ),
-              CheckboxListTile(
-                title: Text(S.of(context).subscribeNotes),
-                subtitle: Text(S.of(context).subscribeNotesDescription),
-                value: isSubscribe.value,
-                onChanged: (value) => isSubscribe.value = !isSubscribe.value,
-              ),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    final account = selectedAccount.value;
-                    if (account == null) {
-                      await SimpleMessageDialog.show(
-                        context,
-                        S.of(context).pleaseSelectAccount,
-                      );
-                      return;
-                    }
-
-                    final tabType = selectedTabType.value;
-                    if (tabType == null) {
-                      await SimpleMessageDialog.show(
-                        context,
-                        S.of(context).pleaseSelectTabType,
-                      );
-                      return;
-                    }
-
-                    final icon = selectedIcon.value;
-                    if (icon == null) {
-                      await SimpleMessageDialog.show(
-                        context,
-                        S.of(context).pleaseSelectIcon,
-                      );
-                      return;
-                    }
-
-                    if (tabType == TabType.channel &&
-                        selectedChannel.value == null) {
-                      await SimpleMessageDialog.show(
-                        context,
-                        S.of(context).pleaseSelectChannel,
-                      );
-                      return;
-                    }
-
-                    if (tabType == TabType.userList &&
-                        selectedUserList.value == null) {
-                      await SimpleMessageDialog.show(
-                        context,
-                        S.of(context).pleaseSelectList,
-                      );
-                      return;
-                    }
-
-                    if (tabType == TabType.antenna &&
-                        selectedAntenna.value == null) {
-                      await SimpleMessageDialog.show(
-                        context,
-                        S.of(context).pleaseSelectAntenna,
-                      );
-                      return;
-                    }
-                    if (tabType == TabType.roleTimeline &&
-                        selectedRole.value == null) {
-                      await SimpleMessageDialog.show(
-                        context,
-                        S.of(context).pleaseSelectRole,
-                      );
-                      return;
-                    }
-                    Map<String, dynamic>? customParams;
-                    if (tabType == TabType.customTimeline) {
-                      if (customApiController.text.isEmpty) {
+                CheckboxListTile(
+                  title: Text(S.of(context).subscribeNotes),
+                  subtitle: Text(S.of(context).subscribeNotesDescription),
+                  value: isSubscribe.value,
+                  onChanged: (value) => isSubscribe.value = !isSubscribe.value,
+                ),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      final account = selectedAccount.value;
+                      if (account == null) {
                         await SimpleMessageDialog.show(
                           context,
-                          S.of(context).invalidInput,
+                          S.of(context).pleaseSelectAccount,
                         );
                         return;
                       }
-                      try {
-                        final decoded = jsonDecode(customParamsController.text);
-                        if (decoded is Map<String, dynamic>) {
-                          customParams = decoded;
-                        } else {
-                          throw Exception();
+
+                      final tabType = selectedTabType.value;
+                      if (tabType == null) {
+                        await SimpleMessageDialog.show(
+                          context,
+                          S.of(context).pleaseSelectTabType,
+                        );
+                        return;
+                      }
+
+                      final icon = selectedIcon.value;
+                      if (icon == null) {
+                        await SimpleMessageDialog.show(
+                          context,
+                          S.of(context).pleaseSelectIcon,
+                        );
+                        return;
+                      }
+
+                      if (tabType == TabType.channel &&
+                          selectedChannel.value == null) {
+                        await SimpleMessageDialog.show(
+                          context,
+                          S.of(context).pleaseSelectChannel,
+                        );
+                        return;
+                      }
+
+                      if (tabType == TabType.userList &&
+                          selectedUserList.value == null) {
+                        await SimpleMessageDialog.show(
+                          context,
+                          S.of(context).pleaseSelectList,
+                        );
+                        return;
+                      }
+
+                      if (tabType == TabType.antenna &&
+                          selectedAntenna.value == null) {
+                        await SimpleMessageDialog.show(
+                          context,
+                          S.of(context).pleaseSelectAntenna,
+                        );
+                        return;
+                      }
+                      if (tabType == TabType.roleTimeline &&
+                          selectedRole.value == null) {
+                        await SimpleMessageDialog.show(
+                          context,
+                          S.of(context).pleaseSelectRole,
+                        );
+                        return;
+                      }
+                      Map<String, dynamic>? customParams;
+                      if (tabType == TabType.customTimeline) {
+                        if (customApiController.text.isEmpty) {
+                          await SimpleMessageDialog.show(
+                            context,
+                            S.of(context).invalidInput,
+                          );
+                          return;
                         }
-                      } catch (_) {
-                        await SimpleMessageDialog.show(
-                          context,
-                          S.of(context).invalidInput,
-                        );
-                        return;
+                        try {
+                          final decoded = jsonDecode(
+                            customParamsController.text,
+                          );
+                          if (decoded is Map<String, dynamic>) {
+                            customParams = decoded;
+                          } else {
+                            throw Exception();
+                          }
+                        } catch (_) {
+                          await SimpleMessageDialog.show(
+                            context,
+                            S.of(context).invalidInput,
+                          );
+                          return;
+                        }
                       }
-                    }
 
-                    final list = ref
-                        .read(tabSettingsRepositoryProvider)
-                        .tabSettings
-                        .toList();
-                    final newTabSetting = TabSetting(
-                      icon: icon,
-                      tabType: tabType,
-                      name: nameController.text,
-                      acct: account.acct,
-                      roleId: selectedRole.value?.id,
-                      channelId: selectedChannel.value?.id,
-                      listId: selectedUserList.value?.id,
-                      antennaId: selectedAntenna.value?.id,
-                      customChannelName: customChannelController.text.isNotEmpty
-                          ? customChannelController.text
-                          : null,
-                      customApiPath: customApiController.text.isNotEmpty
-                          ? customApiController.text
-                          : null,
-                      customParameters: customParams,
-                      renoteDisplay: renoteDisplay.value,
-                      isSubscribe: isSubscribe.value,
-                      isIncludeReplies: isIncludeReply.value,
-                      isMediaOnly: isMediaOnly.value,
-                    );
-                    if (tabIndex == null) {
-                      await ref.read(tabSettingsRepositoryProvider).save([
-                        ...list,
-                        newTabSetting,
-                      ]);
-                    } else {
-                      list[tabIndex!] = newTabSetting;
-                      await ref.read(tabSettingsRepositoryProvider).save(list);
-                    }
+                      final list = ref
+                          .read(tabSettingsRepositoryProvider)
+                          .tabSettings
+                          .toList();
+                      final newTabSetting = TabSetting(
+                        icon: icon,
+                        tabType: tabType,
+                        name: nameController.text,
+                        acct: account.acct,
+                        roleId: selectedRole.value?.id,
+                        channelId: selectedChannel.value?.id,
+                        listId: selectedUserList.value?.id,
+                        antennaId: selectedAntenna.value?.id,
+                        customChannelName:
+                            customChannelController.text.isNotEmpty
+                            ? customChannelController.text
+                            : null,
+                        customApiPath: customApiController.text.isNotEmpty
+                            ? customApiController.text
+                            : null,
+                        customParameters: customParams,
+                        renoteDisplay: renoteDisplay.value,
+                        isSubscribe: isSubscribe.value,
+                        isIncludeReplies: isIncludeReply.value,
+                        isMediaOnly: isMediaOnly.value,
+                      );
+                      if (tabIndex == null) {
+                        await ref.read(tabSettingsRepositoryProvider).save([
+                          ...list,
+                          newTabSetting,
+                        ]);
+                      } else {
+                        list[tabIndex!] = newTabSetting;
+                        await ref
+                            .read(tabSettingsRepositoryProvider)
+                            .save(list);
+                      }
 
-                    if (!context.mounted) return;
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(S.of(context).done),
+                      if (!context.mounted) return;
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(S.of(context).done),
+                  ),
                 ),
-              ),
-            ],
+              ],
             ),
           ),
         ),

@@ -61,100 +61,100 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
           padding: const EdgeInsets.all(10),
           child: SingleChildScrollView(
             child: Column(
-            children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: ReorderableWrap(
-                    scrollPhysics: const NeverScrollableScrollPhysics(),
-                    spacing: 5,
-                    runSpacing: 5,
-                    children: [
-                      for (final reaction in reactions)
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              reactions.remove(reaction);
-                              save();
-                            });
-                          },
-                          child: CustomEmoji(
-                            emojiData: reaction,
-                            fontSizeRatio: 2,
-                            isAttachTooltip: false,
+              children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: ReorderableWrap(
+                      scrollPhysics: const NeverScrollableScrollPhysics(),
+                      spacing: 5,
+                      runSpacing: 5,
+                      children: [
+                        for (final reaction in reactions)
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                reactions.remove(reaction);
+                                save();
+                              });
+                            },
+                            child: CustomEmoji(
+                              emojiData: reaction,
+                              fontSizeRatio: 2,
+                              isAttachTooltip: false,
+                            ),
                           ),
-                        ),
-                    ],
-                    onReorder: (oldIndex, newIndex) {
-                      setState(() {
-                        final element = reactions.removeAt(oldIndex);
-                        reactions.insert(newIndex, element);
-                        save();
-                      });
-                    },
+                      ],
+                      onReorder: (oldIndex, newIndex) {
+                        setState(() {
+                          final element = reactions.removeAt(oldIndex);
+                          reactions.insert(newIndex, element);
+                          save();
+                        });
+                      },
+                    ),
                   ),
                 ),
-              ),
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () async {
-                      final reaction = await context
-                          .pushRoute<MisskeyEmojiData>(
-                            ReactionPickerRoute(
-                              account: widget.account,
-                              isAcceptSensitive: true,
-                            ),
-                          );
-                      if (reaction == null) return;
-                      if (reactions.any(
-                        (element) => element.baseName == reaction.baseName,
-                      )) {
-                        // already added.
-                        return;
-                      }
-                      setState(() {
-                        reactions.add(reaction);
-                        save();
-                      });
-                    },
-                    icon: const Icon(Icons.add),
-                  ),
-                  Expanded(
-                    child: Text(S.of(context).editReactionDeckDescription),
-                  ),
-                ],
-              ),
-              const Padding(padding: EdgeInsets.only(top: 10)),
-              Wrap(
-                direction: Axis.horizontal,
-                alignment: WrapAlignment.center,
-                spacing: 10,
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: () async {
-                      await showAddReactionsDialog(context: context);
-                    },
-                    icon: const Icon(Icons.file_download_outlined),
-                    label: Text(S.of(context).bulkAddReactions),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: () async {
-                      await copyReactions(context: context);
-                    },
-                    icon: const Icon(Icons.copy_all),
-                    label: Text(S.of(context).copy),
-                  ),
-                  OutlinedButton(
-                    onPressed: () async {
-                      await clearReactions(context: context);
-                    },
-                    child: const Icon(Icons.clear),
-                  ),
-                ],
-              ),
-            ],
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () async {
+                        final reaction = await context
+                            .pushRoute<MisskeyEmojiData>(
+                              ReactionPickerRoute(
+                                account: widget.account,
+                                isAcceptSensitive: true,
+                              ),
+                            );
+                        if (reaction == null) return;
+                        if (reactions.any(
+                          (element) => element.baseName == reaction.baseName,
+                        )) {
+                          // already added.
+                          return;
+                        }
+                        setState(() {
+                          reactions.add(reaction);
+                          save();
+                        });
+                      },
+                      icon: const Icon(Icons.add),
+                    ),
+                    Expanded(
+                      child: Text(S.of(context).editReactionDeckDescription),
+                    ),
+                  ],
+                ),
+                const Padding(padding: EdgeInsets.only(top: 10)),
+                Wrap(
+                  direction: Axis.horizontal,
+                  alignment: WrapAlignment.center,
+                  spacing: 10,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        await showAddReactionsDialog(context: context);
+                      },
+                      icon: const Icon(Icons.file_download_outlined),
+                      label: Text(S.of(context).bulkAddReactions),
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        await copyReactions(context: context);
+                      },
+                      icon: const Icon(Icons.copy_all),
+                      label: Text(S.of(context).copy),
+                    ),
+                    OutlinedButton(
+                      onPressed: () async {
+                        await clearReactions(context: context);
+                      },
+                      child: const Icon(Icons.clear),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),

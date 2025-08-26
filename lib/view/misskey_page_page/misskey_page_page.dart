@@ -42,33 +42,92 @@ class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).page)),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 800),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  MfmText(
-                    mfmText: page.title,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  if (page.summary != null)
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 800),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
                     MfmText(
-                      mfmText: page.summary,
-                      style: Theme.of(context).textTheme.bodySmall,
+                      mfmText: page.title,
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Wrap(
+                    if (page.summary != null)
+                      MfmText(
+                        mfmText: page.summary,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Wrap(
+                        spacing: 5,
+                        alignment: WrapAlignment.end,
+                        children: [
+                          OutlinedButton(
+                            onPressed: () async => launchUrl(
+                              Uri(
+                                scheme: "https",
+                                host: accountContext.getAccount.host,
+                                pathSegments: [
+                                  "@${page.user.username}",
+                                  "pages",
+                                  page.name,
+                                ],
+                              ),
+                            ),
+                            child: Text(
+                              S.of(context).openBrowsers,
+                              style: AppTheme.of(context).linkStyle,
+                            ),
+                          ),
+                          OutlinedButton(
+                            onPressed: () async {
+                              await Clipboard.setData(
+                                ClipboardData(
+                                  text:
+                                      "https://${accountContext.getAccount.host}/@${page.user.username}/pages/${page.name}",
+                                ),
+                              );
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(S.of(context).doneCopy),
+                                  duration: const Duration(seconds: 1),
+                                ),
+                              );
+                            },
+                            child: const Icon(Icons.link),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Divider(),
+                    if (page.eyeCatchingImage != null)
+                      NetworkImageView(
+                        url: page.eyeCatchingImage!.url,
+                        type: ImageType.image,
+                      ),
+                    for (final content in page.content)
+                      PageContent(content: content, page: page),
+                    const Divider(),
+                    Text(S.of(context).pageWrittenBy),
+                    UserListItem(user: page.user),
+                    Wrap(
                       spacing: 5,
-                      alignment: WrapAlignment.end,
                       children: [
+                        PageLikeButton(
+                          initialLiked: page.isLiked ?? false,
+                          likeCount: page.likedCount,
+                          pageId: page.id,
+                          userId: page.userId,
+                        ),
                         OutlinedButton(
                           onPressed: () async => launchUrl(
                             Uri(
@@ -106,77 +165,20 @@ class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
                         ),
                       ],
                     ),
-                  ),
-                  const Divider(),
-                  if (page.eyeCatchingImage != null)
-                    NetworkImageView(
-                      url: page.eyeCatchingImage!.url,
-                      type: ImageType.image,
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(S.of(context).pageCreatedAt(page.createdAt)),
+                          Text(S.of(context).pageUpdatedAt(page.updatedAt)),
+                        ],
+                      ),
                     ),
-                  for (final content in page.content)
-                    PageContent(content: content, page: page),
-                  const Divider(),
-                  Text(S.of(context).pageWrittenBy),
-                  UserListItem(user: page.user),
-                  Wrap(
-                    spacing: 5,
-                    children: [
-                      PageLikeButton(
-                        initialLiked: page.isLiked ?? false,
-                        likeCount: page.likedCount,
-                        pageId: page.id,
-                        userId: page.userId,
-                      ),
-                      OutlinedButton(
-                        onPressed: () async => launchUrl(
-                          Uri(
-                            scheme: "https",
-                            host: accountContext.getAccount.host,
-                            pathSegments: [
-                              "@${page.user.username}",
-                              "pages",
-                              page.name,
-                            ],
-                          ),
-                        ),
-                        child: Text(
-                          S.of(context).openBrowsers,
-                          style: AppTheme.of(context).linkStyle,
-                        ),
-                      ),
-                      OutlinedButton(
-                        onPressed: () async {
-                          await Clipboard.setData(
-                            ClipboardData(
-                              text:
-                                  "https://${accountContext.getAccount.host}/@${page.user.username}/pages/${page.name}",
-                            ),
-                          );
-                          if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(S.of(context).doneCopy),
-                              duration: const Duration(seconds: 1),
-                            ),
-                          );
-                        },
-                        child: const Icon(Icons.link),
-                      ),
-                    ],
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(S.of(context).pageCreatedAt(page.createdAt)),
-                        Text(S.of(context).pageUpdatedAt(page.updatedAt)),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

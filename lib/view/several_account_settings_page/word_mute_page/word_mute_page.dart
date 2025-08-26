@@ -84,37 +84,37 @@ class WordMutePage extends HookConsumerWidget implements AutoRouteWrapper {
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: CommonFuture<MeDetailed>(
-            future: ref.read(misskeyPostContextProvider).i.i(),
-            futureFinished: (data) {
-              controller.text = muteValueString(
-                muteType == MuteType.soft
-                    ? data.mutedWords
-                    : data.hardMutedWords,
-              );
-            },
-            complete: (context, data) {
-              return Column(
-                children: [
-                  const Padding(padding: EdgeInsets.only(top: 10)),
-                  TextField(
-                    maxLines: null,
-                    minLines: 5,
-                    controller: controller,
-                    autofocus: true,
-                  ),
-                  Text(
-                    S.of(context).wordMuteDescription,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: () => save(controller.text, context, ref),
-                    icon: const Icon(Icons.save),
-                    label: Text(S.of(context).save),
-                  ),
-                ],
-              );
-            },
-          ),
+              future: ref.read(misskeyPostContextProvider).i.i(),
+              futureFinished: (data) {
+                controller.text = muteValueString(
+                  muteType == MuteType.soft
+                      ? data.mutedWords
+                      : data.hardMutedWords,
+                );
+              },
+              complete: (context, data) {
+                return Column(
+                  children: [
+                    const Padding(padding: EdgeInsets.only(top: 10)),
+                    TextField(
+                      maxLines: null,
+                      minLines: 5,
+                      controller: controller,
+                      autofocus: true,
+                    ),
+                    Text(
+                      S.of(context).wordMuteDescription,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: () => save(controller.text, context, ref),
+                      icon: const Icon(Icons.save),
+                      label: Text(S.of(context).save),
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),

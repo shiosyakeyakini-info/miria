@@ -48,11 +48,13 @@ class ProfileEditPage extends HookConsumerWidget implements AutoRouteWrapper {
       ),
       AsyncLoading() => Scaffold(
         appBar: AppBar(title: Text(s.edit)),
-        body: const Center(child: CircularProgressIndicator.adaptive()),
+        body: const SafeArea(
+          child: Center(child: CircularProgressIndicator.adaptive()),
+        ),
       ),
       AsyncError(error: final error) => Scaffold(
         appBar: AppBar(title: Text(s.edit)),
-        body: Center(child: Text(error.toString())),
+        body: SafeArea(child: Center(child: Text(error.toString()))),
       ),
     };
   }
@@ -105,201 +107,204 @@ class _ProfileEditForm extends HookConsumerWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            spacing: 16,
-            children: [
-              Row(
-                spacing: 16,
-                children: [
-                  GestureDetector(
-                    onTap: () async {
-                      final result =
-                          await showModalBottomSheet<
-                            DriveModalSheetReturnValue
-                          >(
-                            context: context,
-                            builder: (context) => const DriveModalSheet(),
-                          );
-                      if (result == null) return;
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              spacing: 16,
+              children: [
+                Row(
+                  spacing: 16,
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        final result =
+                            await showModalBottomSheet<
+                              DriveModalSheetReturnValue
+                            >(
+                              context: context,
+                              builder: (context) => const DriveModalSheet(),
+                            );
+                        if (result == null) return;
 
-                      if (result == DriveModalSheetReturnValue.upload) {
-                        final pickedFile = await FilePicker.platform.pickFiles(
-                          withData: true,
-                          type: FileType.image,
-                        );
-                        if (pickedFile != null && pickedFile.files.isNotEmpty) {
-                          final f = pickedFile.files.first;
-                          if (f.bytes != null) {
-                            if (context.mounted) {
-                              final editedBytes = await context
-                                  .pushRoute<Uint8List>(
-                                    PhotoEditRoute(
-                                      accountContext: ref.read(
-                                        accountContextProvider,
+                        if (result == DriveModalSheetReturnValue.upload) {
+                          final pickedFile = await FilePicker.platform
+                              .pickFiles(withData: true, type: FileType.image);
+                          if (pickedFile != null &&
+                              pickedFile.files.isNotEmpty) {
+                            final f = pickedFile.files.first;
+                            if (f.bytes != null) {
+                              if (context.mounted) {
+                                final editedBytes = await context
+                                    .pushRoute<Uint8List>(
+                                      PhotoEditRoute(
+                                        accountContext: ref.read(
+                                          accountContextProvider,
+                                        ),
+                                        file: ImageFile(
+                                          data: f.bytes!,
+                                          fileName: f.name,
+                                        ),
+                                        onSubmit: (editedData) {
+                                          Navigator.of(context).pop(editedData);
+                                        },
                                       ),
-                                      file: ImageFile(
-                                        data: f.bytes!,
-                                        fileName: f.name,
-                                      ),
-                                      onSubmit: (editedData) {
-                                        Navigator.of(context).pop(editedData);
-                                      },
-                                    ),
-                                  );
-                              if (editedBytes != null) {
-                                notifier.updateAvatarFile((
-                                  data: editedBytes,
-                                  name: f.name,
-                                ));
+                                    );
+                                if (editedBytes != null) {
+                                  notifier.updateAvatarFile((
+                                    data: editedBytes,
+                                    name: f.name,
+                                  ));
+                                }
                               }
                             }
                           }
-                        }
-                      } else if (result == DriveModalSheetReturnValue.drive) {
-                        final selected = await context
-                            .pushRoute<List<DriveFile>?>(
-                              DriveFileSelectRoute(
-                                account: account,
-                                allowMultiple: false,
-                              ),
+                        } else if (result == DriveModalSheetReturnValue.drive) {
+                          final selected = await context
+                              .pushRoute<List<DriveFile>?>(
+                                DriveFileSelectRoute(
+                                  account: account,
+                                  allowMultiple: false,
+                                ),
+                              );
+                          if (selected != null && selected.isNotEmpty) {
+                            notifier.updateAvatarDriveId(
+                              selected.first.id,
+                              Uri.parse(selected.first.url),
                             );
-                        if (selected != null && selected.isNotEmpty) {
-                          notifier.updateAvatarDriveId(
-                            selected.first.id,
-                            Uri.parse(selected.first.url),
-                          );
+                          }
                         }
-                      }
-                    },
-                    child: Stack(
-                      children: [
-                        if (data.avatarFile != null)
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(64),
-                            child: SizedBox(
-                              width: 64,
+                      },
+                      child: Stack(
+                        children: [
+                          if (data.avatarFile != null)
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(64),
+                              child: SizedBox(
+                                width: 64,
+                                height: 64,
+                                child: Image.memory(
+                                  data.avatarFile!.data,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            )
+                          else
+                            AvatarIcon(
+                              user: _createTempUser(data, account),
+                              onTap: null,
                               height: 64,
-                              child: Image.memory(
-                                data.avatarFile!.data,
-                                fit: BoxFit.cover,
+                            ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
+                                shape: BoxShape.circle,
+                              ),
+                              padding: const EdgeInsets.all(4),
+                              child: const Icon(
+                                Icons.camera_alt,
+                                size: 16,
+                                color: Colors.white,
                               ),
                             ),
-                          )
-                        else
-                          AvatarIcon(
-                            user: _createTempUser(data, account),
-                            onTap: null,
-                            height: 64,
                           ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              shape: BoxShape.circle,
-                            ),
-                            padding: const EdgeInsets.all(4),
-                            child: const Icon(
-                              Icons.camera_alt,
-                              size: 16,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: TextField(
-                      controller: useTextEditingController(text: data.name),
-                      onChanged: notifier.updateName,
-                      decoration: InputDecoration(labelText: s.profileName),
+                    Expanded(
+                      child: TextField(
+                        controller: useTextEditingController(text: data.name),
+                        onChanged: notifier.updateName,
+                        decoration: InputDecoration(labelText: s.profileName),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              TextField(
-                controller: useTextEditingController(text: data.description),
-                maxLines: null,
-                minLines: 5,
-                onChanged: notifier.updateDescription,
-                decoration: InputDecoration(labelText: s.profileBio),
-              ),
-              TextField(
-                controller: useTextEditingController(text: data.location),
-                onChanged: notifier.updateLocation,
-                decoration: InputDecoration(labelText: s.location),
-              ),
-              Row(
-                children: [
-                  Text(data.birthday?.toLocal().toString().split(" ")[0] ?? ""),
-                  if (data.birthday != null)
-                    IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () {
-                        notifier.updateBirthday(null);
+                  ],
+                ),
+                TextField(
+                  controller: useTextEditingController(text: data.description),
+                  maxLines: null,
+                  minLines: 5,
+                  onChanged: notifier.updateDescription,
+                  decoration: InputDecoration(labelText: s.profileBio),
+                ),
+                TextField(
+                  controller: useTextEditingController(text: data.location),
+                  onChanged: notifier.updateLocation,
+                  decoration: InputDecoration(labelText: s.location),
+                ),
+                Row(
+                  children: [
+                    Text(
+                      data.birthday?.toLocal().toString().split(" ")[0] ?? "",
+                    ),
+                    if (data.birthday != null)
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          notifier.updateBirthday(null);
+                        },
+                      ),
+                    const Spacer(),
+                    ElevatedButton.icon(
+                      icon: const Icon(Icons.date_range),
+                      label: Text(s.profileSetBirthday),
+                      onPressed: () async {
+                        final now = DateTime.now();
+                        final result = await showDatePicker(
+                          context: context,
+                          initialDate: data.birthday ?? now,
+                          firstDate: DateTime(0, 1, 1),
+                          lastDate: DateTime(9999, 12, 31),
+                        );
+                        if (result != null) {
+                          notifier.updateBirthday(result);
+                        }
                       },
                     ),
-                  const Spacer(),
-                  ElevatedButton.icon(
-                    icon: const Icon(Icons.date_range),
-                    label: Text(s.profileSetBirthday),
-                    onPressed: () async {
-                      final now = DateTime.now();
-                      final result = await showDatePicker(
-                        context: context,
-                        initialDate: data.birthday ?? now,
-                        firstDate: DateTime(0, 1, 1),
-                        lastDate: DateTime(9999, 12, 31),
-                      );
-                      if (result != null) {
-                        notifier.updateBirthday(result);
-                      }
-                    },
+                  ],
+                ),
+                ReorderableListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  buildDefaultDragHandles: false,
+                  itemCount: data.fields.length,
+                  onReorder: notifier.reorderFields,
+                  itemBuilder: (context, index) {
+                    final field = data.fields[index];
+                    return _FieldListItem(
+                      key: ValueKey(field.id),
+                      field: field,
+                      index: index,
+                      notifier: notifier,
+                      s: s,
+                    );
+                  },
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.add),
+                    label: Text(s.profileAddField),
+                    onPressed: notifier.addField,
                   ),
-                ],
-              ),
-              ReorderableListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                buildDefaultDragHandles: false,
-                itemCount: data.fields.length,
-                onReorder: notifier.reorderFields,
-                itemBuilder: (context, index) {
-                  final field = data.fields[index];
-                  return _FieldListItem(
-                    key: ValueKey(field.id),
-                    field: field,
-                    index: index,
-                    notifier: notifier,
-                    s: s,
-                  );
-                },
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: ElevatedButton.icon(
-                  icon: const Icon(Icons.add),
-                  label: Text(s.profileAddField),
-                  onPressed: notifier.addField,
                 ),
-              ),
 
-              TextField(
-                controller: useTextEditingController(
-                  text: data.followedMessage,
+                TextField(
+                  controller: useTextEditingController(
+                    text: data.followedMessage,
+                  ),
+                  maxLines: null,
+                  onChanged: notifier.updateFollowedMessage,
+                  decoration: InputDecoration(
+                    labelText: s.profileFollowedMessage,
+                  ),
                 ),
-                maxLines: null,
-                onChanged: notifier.updateFollowedMessage,
-                decoration: InputDecoration(
-                  labelText: s.profileFollowedMessage,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -309,11 +314,11 @@ class _ProfileEditForm extends HookConsumerWidget {
 
 class _FieldListItem extends HookWidget {
   const _FieldListItem({
-    super.key,
     required this.field,
     required this.index,
     required this.notifier,
     required this.s,
+    super.key,
   });
 
   final EditUserField field;

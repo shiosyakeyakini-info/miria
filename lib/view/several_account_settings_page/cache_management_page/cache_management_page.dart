@@ -98,88 +98,92 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                S.of(context).userCache,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              DropdownButton(
-                items: buildCacheStrategyItems,
-                value: iCacheStrategy,
-                isExpanded: true,
-                onChanged: (value) => setState(() {
-                  iCacheStrategy = value;
-                  save();
-                }),
-              ),
-              const Padding(padding: EdgeInsets.only(top: 10)),
-              Text(
-                S.of(context).emojiCache,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              DropdownButton(
-                items: buildCacheStrategyItems,
-                value: emojisCacheStrategy,
-                isExpanded: true,
-                onChanged: (value) => setState(() {
-                  emojisCacheStrategy = value;
-                  save();
-                }),
-              ),
-              const Padding(padding: EdgeInsets.only(top: 10)),
-              Text(
-                S.of(context).serverCache,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              DropdownButton(
-                items: buildCacheStrategyItems,
-                value: metaCacheStrategy,
-                isExpanded: true,
-                onChanged: (value) => setState(() {
-                  metaCacheStrategy = value;
-                  save();
-                }),
-              ),
-              const Padding(padding: EdgeInsets.only(top: 20)),
-              if (isRefreshing)
-                OutlinedButton(
-                  onPressed: null,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.all(5),
-                    minimumSize: const Size(double.infinity, 0),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width:
-                            Theme.of(context).textTheme.bodyMedium?.fontSize ??
-                            22,
-                        height:
-                            Theme.of(context).textTheme.bodyMedium?.fontSize ??
-                            22,
-                        child: const CircularProgressIndicator(),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(S.of(context).refreshing),
-                    ],
-                  ),
-                )
-              else
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.refresh),
-                  onPressed: refresh,
-                  label: Text(S.of(context).cacheRefreshNow),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.all(5),
-                    minimumSize: const Size(double.infinity, 0),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  S.of(context).userCache,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
-            ],
+                DropdownButton(
+                  items: buildCacheStrategyItems,
+                  value: iCacheStrategy,
+                  isExpanded: true,
+                  onChanged: (value) => setState(() {
+                    iCacheStrategy = value;
+                    save();
+                  }),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 10)),
+                Text(
+                  S.of(context).emojiCache,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                DropdownButton(
+                  items: buildCacheStrategyItems,
+                  value: emojisCacheStrategy,
+                  isExpanded: true,
+                  onChanged: (value) => setState(() {
+                    emojisCacheStrategy = value;
+                    save();
+                  }),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 10)),
+                Text(
+                  S.of(context).serverCache,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                DropdownButton(
+                  items: buildCacheStrategyItems,
+                  value: metaCacheStrategy,
+                  isExpanded: true,
+                  onChanged: (value) => setState(() {
+                    metaCacheStrategy = value;
+                    save();
+                  }),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 20)),
+                if (isRefreshing)
+                  OutlinedButton(
+                    onPressed: null,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.all(5),
+                      minimumSize: const Size(double.infinity, 0),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width:
+                              Theme.of(
+                                context,
+                              ).textTheme.bodyMedium?.fontSize ??
+                              22,
+                          height:
+                              Theme.of(
+                                context,
+                              ).textTheme.bodyMedium?.fontSize ??
+                              22,
+                          child: const CircularProgressIndicator(),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(S.of(context).refreshing),
+                      ],
+                    ),
+                  )
+                else
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: refresh,
+                    label: Text(S.of(context).cacheRefreshNow),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.all(5),
+                      minimumSize: const Size(double.infinity, 0),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                  ),
+              ],
             ),
           ),
         ),
