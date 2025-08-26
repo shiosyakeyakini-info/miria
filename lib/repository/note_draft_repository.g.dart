@@ -18,9 +18,13 @@ final class NoteDraftRepositoryProvider
         retry: null,
         name: r'noteDraftRepositoryProvider',
         isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          NoteDraftRepositoryProvider.$allTransitiveDependencies0,
+        ],
       );
+
+  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
 
   @override
   String debugGetCreateSourceHash() => _$noteDraftRepositoryHash();
