@@ -138,7 +138,7 @@ void main() {
       final homePreset = taiChanPresets.firstWhere(
         (preset) => preset.name == "ホームタイムライン（ローカルのみ）",
       );
-      expect(homePreset.endpoint, "api/notes/timeline");
+      expect(homePreset.endpoint, "notes/timeline");
       expect(homePreset.websocketChannelName, "localTimeline");
       expect(homePreset.parameters, {"onlyLocal": true});
 
@@ -146,7 +146,7 @@ void main() {
       final socialPreset = taiChanPresets.firstWhere(
         (preset) => preset.name == "ソーシャルタイムライン（ローカルのみ）",
       );
-      expect(socialPreset.endpoint, "api/notes/hybrid-timeline");
+      expect(socialPreset.endpoint, "notes/hybrid-timeline");
       expect(socialPreset.websocketChannelName, "hybridTimeline");
       expect(socialPreset.parameters, {"onlyLocal": true});
     });
