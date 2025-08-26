@@ -82,32 +82,34 @@ class PhotoEditPageState extends ConsumerState<PhotoEditPage> {
             ),
           ],
         ),
-        body: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Expanded(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                    photoEdit.decideDrawArea(
-                      Size(constraints.maxWidth, constraints.maxHeight),
+        body: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                      photoEdit.decideDrawArea(
+                        Size(constraints.maxWidth, constraints.maxHeight),
+                      );
+                    });
+                    return SizedBox(
+                      width: constraints.maxWidth,
+                      height: constraints.maxHeight,
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: ClipMode(renderingGlobalKey: renderingAreaKey),
+                      ),
                     );
-                  });
-                  return SizedBox(
-                    width: constraints.maxWidth,
-                    height: constraints.maxHeight,
-                    child: FittedBox(
-                      fit: BoxFit.contain,
-                      child: ClipMode(renderingGlobalKey: renderingAreaKey),
-                    ),
-                  );
-                },
+                  },
+                ),
               ),
-            ),
-            const ColorFilterImagePreview(),
-          ],
+              const ColorFilterImagePreview(),
+            ],
+          ),
         ),
         bottomNavigationBar: const PhotoEditBottomBar(),
       ),

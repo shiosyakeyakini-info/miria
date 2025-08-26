@@ -43,27 +43,29 @@ class ChannelDetailPage extends ConsumerWidget implements AutoRouteWrapper {
             tabAlignment: TabAlignment.center,
           ),
         ),
-        body: TabBarView(
-          children: [
-            SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                child: ChannelDetailInfo(channelId: channelId),
+        body: SafeArea(
+          child: TabBarView(
+            children: [
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: ChannelDetailInfo(channelId: channelId),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: ChannelTimeline(channelId: channelId),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: ChannelNoteHighlight(channelId: channelId),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: ChannelNoteSearch(channelId: channelId),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: ChannelTimeline(channelId: channelId),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: ChannelNoteHighlight(channelId: channelId),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: ChannelNoteSearch(channelId: channelId),
+              ),
+            ],
+          ),
         ),
         floatingActionButton: ref.read(accountContextProvider).isSame
             ? ChannelDetailFloatingActionButton(channelId: channelId)
