@@ -50,94 +50,96 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
 
   @override
   Widget build(BuildContext context) {
-    return CenteringWidget(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Table(
-            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            columnWidths: const {
-              0: IntrinsicColumnWidth(),
-              1: FlexColumnWidth(),
-            },
-            children: [
-              TableRow(
-                children: [
-                  Text(S.of(context).server),
-                  TextField(
-                    controller: serverController,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.dns),
-                      suffixIcon: IconButton(
-                        onPressed: () async {
-                          final url = await showDialog<String?>(
-                            context: context,
-                            builder: (context) =>
-                                const MisskeyServerListDialog(),
-                          );
-                          if (url != null && url.isNotEmpty) {
-                            serverController.text = url;
-                          }
-                        },
-                        icon: const Icon(Icons.search),
+    return SafeArea(
+      child: CenteringWidget(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Table(
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              columnWidths: const {
+                0: IntrinsicColumnWidth(),
+                1: FlexColumnWidth(),
+              },
+              children: [
+                TableRow(
+                  children: [
+                    Text(S.of(context).server),
+                    TextField(
+                      controller: serverController,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.dns),
+                        suffixIcon: IconButton(
+                          onPressed: () async {
+                            final url = await showDialog<String?>(
+                              context: context,
+                              builder: (context) =>
+                                  const MisskeyServerListDialog(),
+                            );
+                            if (url != null && url.isNotEmpty) {
+                              serverController.text = url;
+                            }
+                          },
+                          icon: const Icon(Icons.search),
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  const Padding(padding: EdgeInsets.only(bottom: 10)),
-                  Container(),
-                ],
-              ),
-              TableRow(
-                children: [
-                  Container(),
-                  ElevatedButton(
-                    onPressed: () async {
-                      await ref
-                          .read(dialogStateNotifierProvider.notifier)
-                          .guard(() async {
-                            await ref
-                                .read(accountRepositoryProvider.notifier)
-                                .openMiAuth(
-                                  normalizeServer(serverController.text),
-                                );
-                          });
-                      setState(() {
-                        isAuthed = true;
-                      });
-                    },
-                    child: Text(
-                      isAuthed
-                          ? S.of(context).reauthorizate
-                          : S.of(context).authorizate,
-                    ),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  const Padding(padding: EdgeInsets.only(bottom: 10)),
-                  Container(),
-                ],
-              ),
-              if (isAuthed)
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    const Padding(padding: EdgeInsets.only(bottom: 10)),
+                    Container(),
+                  ],
+                ),
                 TableRow(
                   children: [
                     Container(),
                     ElevatedButton(
-                      onPressed: () async => ref
-                          .read(dialogStateNotifierProvider.notifier)
-                          .guard(() => login()),
-                      child: Text(S.of(context).didAuthorize),
+                      onPressed: () async {
+                        await ref
+                            .read(dialogStateNotifierProvider.notifier)
+                            .guard(() async {
+                              await ref
+                                  .read(accountRepositoryProvider.notifier)
+                                  .openMiAuth(
+                                    normalizeServer(serverController.text),
+                                  );
+                            });
+                        setState(() {
+                          isAuthed = true;
+                        });
+                      },
+                      child: Text(
+                        isAuthed
+                            ? S.of(context).reauthorizate
+                            : S.of(context).authorizate,
+                      ),
                     ),
                   ],
                 ),
-            ],
-          ),
-        ],
+                TableRow(
+                  children: [
+                    const Padding(padding: EdgeInsets.only(bottom: 10)),
+                    Container(),
+                  ],
+                ),
+                if (isAuthed)
+                  TableRow(
+                    children: [
+                      Container(),
+                      ElevatedButton(
+                        onPressed: () async => ref
+                            .read(dialogStateNotifierProvider.notifier)
+                            .guard(() => login()),
+                        child: Text(S.of(context).didAuthorize),
+                      ),
+                    ],
+                  ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -142,721 +142,748 @@ class GeneralSettingsPage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).generalSettings)),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        S.of(context).general,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 10)),
-                      Text(S.of(context).language),
-                      DropdownButton<Languages>(
-                        isExpanded: true,
-                        items: [
-                          for (final element in Languages.values)
-                            DropdownMenuItem(
-                              value: element,
-                              child: Text(element.displayName),
-                            ),
-                        ],
-                        value: language.value,
-                        onChanged: (value) async {
-                          language.value = value ?? Languages.jaJP;
-                          await save();
-                        },
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 10)),
-                      Text(S.of(context).displayOfSensitiveNotes),
-                      DropdownButton<NSFWInherit>(
-                        isExpanded: true,
-                        items: [
-                          for (final element in NSFWInherit.values)
-                            DropdownMenuItem(
-                              value: element,
-                              child: Text(element.displayName(context)),
-                            ),
-                        ],
-                        value: nsfwInherit.value,
-                        onChanged: (value) async =>
-                            nsfwInherit.value = value ?? NSFWInherit.inherit,
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 10)),
-                      Text(S.of(context).infiniteScroll),
-                      DropdownButton<AutomaticPush>(
-                        isExpanded: true,
-                        items: [
-                          for (final element in AutomaticPush.values)
-                            DropdownMenuItem(
-                              value: element,
-                              child: Text(element.displayName(context)),
-                            ),
-                        ],
-                        value: automaticPush.value,
-                        onChanged: (value) async =>
-                            automaticPush.value = value ?? AutomaticPush.none,
-                      ),
-                      Text(S.of(context).deckMode),
-                      CheckboxListTile(
-                        title: Text(S.of(context).enableDeckMode),
-                        value: isDeckMode.value,
-                        onChanged: (value) => isDeckMode.value = value ?? false,
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 10)),
-                      Text(S.of(context).enableAnimatedMfm),
-                      CheckboxListTile(
-                        value: enableAnimatedMFM.value,
-                        onChanged: (value) =>
-                            enableAnimatedMFM.value = value ?? true,
-                        title: Text(S.of(context).enableAnimatedMfmDescription),
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 10)),
-                      Text(S.of(context).collapseNotes),
-                      CheckboxListTile(
-                        value: enableFavoritedRenoteElipsed.value,
-                        onChanged: (value) =>
-                            enableFavoritedRenoteElipsed.value = value ?? true,
-                        title: Text(S.of(context).collapseReactionedRenotes),
-                      ),
-                      CheckboxListTile(
-                        value: enableLongTextElipsed.value,
-                        onChanged: (value) async =>
-                            enableLongTextElipsed.value = value ?? true,
-                        title: Text(S.of(context).collapseLongNotes),
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 10)),
-                      Text(S.of(context).tabPosition),
-                      DropdownButton<TabPosition>(
-                        isExpanded: true,
-                        items: [
-                          for (final element in TabPosition.values)
-                            DropdownMenuItem(
-                              value: element,
-                              child: Text(
-                                S
-                                    .of(context)
-                                    .tabPositionDescription(
-                                      element.displayName(context),
-                                    ),
-                              ),
-                            ),
-                        ],
-                        value: tabPosition.value,
-                        onChanged: (value) async =>
-                            tabPosition.value = value ?? TabPosition.top,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        S.of(context).theme,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 10)),
-                      Text(S.of(context).themeForLightMode),
-                      DropdownButton<String>(
-                        items: [
-                          for (final element in builtInColorThemes.where(
-                            (element) => !element.isDarkTheme,
-                          ))
-                            DropdownMenuItem(
-                              value: element.id,
-                              child: Text(S.of(context).themeIsh(element.name)),
-                            ),
-                        ],
-                        value: lightModeTheme.value,
-                        onChanged: (value) async =>
-                            lightModeTheme.value = value ?? "",
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 10)),
-                      Text(S.of(context).themeForDarkMode),
-                      DropdownButton<String>(
-                        items: [
-                          for (final element in builtInColorThemes.where(
-                            (element) => element.isDarkTheme,
-                          ))
-                            DropdownMenuItem(
-                              value: element.id,
-                              child: Text(S.of(context).themeIsh(element.name)),
-                            ),
-                        ],
-                        value: darkModeTheme.value,
-                        onChanged: (value) => darkModeTheme.value = value ?? "",
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 10)),
-                      Text(S.of(context).selectLightOrDarkMode),
-                      DropdownButton<ThemeColorSystem>(
-                        items: [
-                          for (final colorSystem in ThemeColorSystem.values)
-                            DropdownMenuItem(
-                              value: colorSystem,
-                              child: Text(colorSystem.displayName(context)),
-                            ),
-                        ],
-                        value: colorSystem.value,
-                        onChanged: (value) => colorSystem.value =
-                            value ?? ThemeColorSystem.system,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        S.of(context).reaction,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      CheckboxListTile(
-                        value: enableDirectReaction.value,
-                        title: Text(S.of(context).emojiTapReaction),
-                        subtitle: Text(
-                          S.of(context).emojiTapReactionDescription,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          S.of(context).general,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
-                        onChanged: (value) =>
-                            enableDirectReaction.value = value ?? false,
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 10)),
-                      Text(S.of(context).emojiStyle),
-                      DropdownButton(
-                        items: [
-                          for (final type in EmojiType.values)
-                            DropdownMenuItem(
-                              value: type,
-                              child: Text(type.displayName(context)),
-                            ),
-                        ],
-                        value: emojiType.value,
-                        isExpanded: true,
-                        onChanged: (value) =>
-                            emojiType.value = value ?? EmojiType.twemoji,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        S.of(context).noteBackgroundColor,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 10)),
-                      Table(
-                        children: [
-                          // ヘッダー
-                          TableRow(
-                            children: [
-                              SizedBox.shrink(),
-                              Text(S.of(context).lightMode),
-                              Text(S.of(context).darkMode),
-                            ],
-                          ),
-                          // パブリック
-                          TableRow(
-                            children: [
-                              TableCell(
-                                verticalAlignment:
-                                    TableCellVerticalAlignment.middle,
-                                child: Text(S.of(context).public),
+                        const Padding(padding: EdgeInsets.only(top: 10)),
+                        Text(S.of(context).language),
+                        DropdownButton<Languages>(
+                          isExpanded: true,
+                          items: [
+                            for (final element in Languages.values)
+                              DropdownMenuItem(
+                                value: element,
+                                child: Text(element.displayName),
                               ),
-                              IconButton(
-                                icon: Container(
-                                  width: 24,
-                                  height: 24,
-                                  decoration: BoxDecoration(
-                                    color:
-                                        lightNoteBgPublic.value ??
-                                        Colors.transparent,
-                                    border: Border.all(
-                                      color: Theme.of(context).primaryColor,
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                ),
-                                onPressed: () async {
-                                  final result = await context.pushRoute<Color>(
-                                    ColorPickerRoute(
-                                      initialColor: lightNoteBgPublic.value,
-                                    ),
-                                  );
-                                  if (result != null) {
-                                    lightNoteBgPublic.value = result;
-                                  }
-                                },
-                              ),
-                              IconButton(
-                                icon: Container(
-                                  width: 24,
-                                  height: 24,
-                                  decoration: BoxDecoration(
-                                    color:
-                                        darkNoteBgPublic.value ??
-                                        Colors.transparent,
-                                    border: Border.all(
-                                      color: Theme.of(context).primaryColor,
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                ),
-                                onPressed: () async {
-                                  final result = await context.pushRoute<Color>(
-                                    ColorPickerRoute(
-                                      initialColor: darkNoteBgPublic.value,
-                                    ),
-                                  );
-                                  if (result != null) {
-                                    darkNoteBgPublic.value = result;
-                                  }
-                                },
-                              ),
-                            ],
-                          ),
-                          // ホームのみ
-                          TableRow(
-                            children: [
-                              TableCell(
-                                verticalAlignment:
-                                    TableCellVerticalAlignment.middle,
-                                child: Text(S.of(context).homeOnly),
-                              ),
-                              IconButton(
-                                icon: Container(
-                                  width: 24,
-                                  height: 24,
-                                  decoration: BoxDecoration(
-                                    color:
-                                        lightNoteBgHome.value ??
-                                        Colors.transparent,
-                                    border: Border.all(
-                                      color: Theme.of(context).primaryColor,
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                ),
-                                onPressed: () async {
-                                  final result = await context.pushRoute<Color>(
-                                    ColorPickerRoute(
-                                      initialColor: lightNoteBgHome.value,
-                                    ),
-                                  );
-                                  if (result != null) {
-                                    lightNoteBgHome.value = result;
-                                  }
-                                },
-                              ),
-                              IconButton(
-                                icon: Container(
-                                  width: 24,
-                                  height: 24,
-                                  decoration: BoxDecoration(
-                                    color:
-                                        darkNoteBgHome.value ??
-                                        Colors.transparent,
-                                    border: Border.all(
-                                      color: Theme.of(context).primaryColor,
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                ),
-                                onPressed: () async {
-                                  final result = await context.pushRoute<Color>(
-                                    ColorPickerRoute(
-                                      initialColor: darkNoteBgHome.value,
-                                    ),
-                                  );
-                                  if (result != null) {
-                                    darkNoteBgHome.value = result;
-                                  }
-                                },
-                              ),
-                            ],
-                          ),
-                          // フォロワーのみ
-                          TableRow(
-                            children: [
-                              TableCell(
-                                verticalAlignment:
-                                    TableCellVerticalAlignment.middle,
-                                child: Text(S.of(context).followersOnly),
-                              ),
-                              IconButton(
-                                icon: Container(
-                                  width: 24,
-                                  height: 24,
-                                  decoration: BoxDecoration(
-                                    color:
-                                        lightNoteBgFollowers.value ??
-                                        Colors.transparent,
-                                    border: Border.all(
-                                      color: Theme.of(context).primaryColor,
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                ),
-                                onPressed: () async {
-                                  final result = await context.pushRoute<Color>(
-                                    ColorPickerRoute(
-                                      initialColor: lightNoteBgFollowers.value,
-                                    ),
-                                  );
-                                  if (result != null) {
-                                    lightNoteBgFollowers.value = result;
-                                  }
-                                },
-                              ),
-                              IconButton(
-                                icon: Container(
-                                  width: 24,
-                                  height: 24,
-                                  decoration: BoxDecoration(
-                                    color:
-                                        darkNoteBgFollowers.value ??
-                                        Colors.transparent,
-                                    border: Border.all(
-                                      color: Theme.of(context).primaryColor,
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                ),
-                                onPressed: () async {
-                                  final result = await context.pushRoute<Color>(
-                                    ColorPickerRoute(
-                                      initialColor: darkNoteBgFollowers.value,
-                                    ),
-                                  );
-                                  if (result != null) {
-                                    darkNoteBgFollowers.value = result;
-                                  }
-                                },
-                              ),
-                            ],
-                          ),
-                          // ダイレクト
-                          TableRow(
-                            children: [
-                              TableCell(
-                                verticalAlignment:
-                                    TableCellVerticalAlignment.middle,
-                                child: Text(S.of(context).direct),
-                              ),
-                              IconButton(
-                                icon: Container(
-                                  width: 24,
-                                  height: 24,
-                                  decoration: BoxDecoration(
-                                    color:
-                                        lightNoteBgDirect.value ??
-                                        Colors.transparent,
-                                    border: Border.all(
-                                      color: Theme.of(context).primaryColor,
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                ),
-                                onPressed: () async {
-                                  final result = await context.pushRoute<Color>(
-                                    ColorPickerRoute(
-                                      initialColor: lightNoteBgDirect.value,
-                                    ),
-                                  );
-                                  if (result != null) {
-                                    lightNoteBgDirect.value = result;
-                                  }
-                                },
-                              ),
-                              IconButton(
-                                icon: Container(
-                                  width: 24,
-                                  height: 24,
-                                  decoration: BoxDecoration(
-                                    color:
-                                        darkNoteBgDirect.value ??
-                                        Colors.transparent,
-                                    border: Border.all(
-                                      color: Theme.of(context).primaryColor,
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                ),
-                                onPressed: () async {
-                                  final result = await context.pushRoute<Color>(
-                                    ColorPickerRoute(
-                                      initialColor: darkNoteBgDirect.value,
-                                    ),
-                                  );
-                                  if (result != null) {
-                                    darkNoteBgDirect.value = result;
-                                  }
-                                },
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        S.of(context).fontSize,
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                      Slider(
-                        value: textScaleFactor.value,
-                        min: 0.5,
-                        max: 1.5,
-                        divisions: 10,
-                        label: "${(textScaleFactor.value * 100).toInt()}%",
-                        onChanged: (value) {
-                          textScaleFactor.value = value;
-                        },
-                      ),
-                      Center(
-                        child: ElevatedButton(
-                          onPressed:
-                              (settings.textScaleFactor ==
-                                  textScaleFactor.value)
-                              ? null
-                              : save,
-                          child: Text(S.of(context).apply),
+                          ],
+                          value: language.value,
+                          onChanged: (value) async {
+                            language.value = value ?? Languages.jaJP;
+                            await save();
+                          },
                         ),
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 10)),
-                      Text(
-                        S.of(context).fontStandard,
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                      DropdownButton<Font>(
-                        items: [
-                          for (final font in choosableFonts)
-                            DropdownMenuItem(
-                              value: font,
-                              child: Text(
-                                font.actualName.isEmpty
-                                    ? S.of(context).systemFont
-                                    : font.displayName,
+                        const Padding(padding: EdgeInsets.only(top: 10)),
+                        Text(S.of(context).displayOfSensitiveNotes),
+                        DropdownButton<NSFWInherit>(
+                          isExpanded: true,
+                          items: [
+                            for (final element in NSFWInherit.values)
+                              DropdownMenuItem(
+                                value: element,
+                                child: Text(element.displayName(context)),
                               ),
-                            ),
-                        ],
-                        value:
-                            choosableFonts.firstWhereOrNull(
-                              (e) => e.actualName == defaultFontName.value,
-                            ) ??
-                            choosableFonts.first,
-                        isExpanded: true,
-                        onChanged: (item) =>
-                            defaultFontName.value = item?.actualName ?? "",
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 10)),
-                      Text(
-                        S.of(context).fontSerif,
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                      DropdownButton<Font>(
-                        items: [
-                          for (final font in choosableFonts)
-                            DropdownMenuItem(
-                              value: font,
-                              child: Text(
-                                font.actualName.isEmpty
-                                    ? S.of(context).systemFont
-                                    : font.displayName,
+                          ],
+                          value: nsfwInherit.value,
+                          onChanged: (value) async =>
+                              nsfwInherit.value = value ?? NSFWInherit.inherit,
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 10)),
+                        Text(S.of(context).infiniteScroll),
+                        DropdownButton<AutomaticPush>(
+                          isExpanded: true,
+                          items: [
+                            for (final element in AutomaticPush.values)
+                              DropdownMenuItem(
+                                value: element,
+                                child: Text(element.displayName(context)),
                               ),
-                            ),
-                        ],
-                        value:
-                            choosableFonts.firstWhereOrNull(
-                              (e) => e.actualName == serifFontName.value,
-                            ) ??
-                            choosableFonts.first,
-                        isExpanded: true,
-                        onChanged: (item) =>
-                            serifFontName.value = item?.actualName ?? "",
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 10)),
-                      Text(
-                        S.of(context).fontMonospace,
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                      DropdownButton<Font>(
-                        items: [
-                          for (final font in choosableFonts)
-                            DropdownMenuItem(
-                              value: font,
-                              child: Text(
-                                font.actualName.isEmpty
-                                    ? S.of(context).systemFont
-                                    : font.displayName,
+                          ],
+                          value: automaticPush.value,
+                          onChanged: (value) async =>
+                              automaticPush.value = value ?? AutomaticPush.none,
+                        ),
+                        Text(S.of(context).deckMode),
+                        CheckboxListTile(
+                          title: Text(S.of(context).enableDeckMode),
+                          value: isDeckMode.value,
+                          onChanged: (value) =>
+                              isDeckMode.value = value ?? false,
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 10)),
+                        Text(S.of(context).enableAnimatedMfm),
+                        CheckboxListTile(
+                          value: enableAnimatedMFM.value,
+                          onChanged: (value) =>
+                              enableAnimatedMFM.value = value ?? true,
+                          title: Text(
+                            S.of(context).enableAnimatedMfmDescription,
+                          ),
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 10)),
+                        Text(S.of(context).collapseNotes),
+                        CheckboxListTile(
+                          value: enableFavoritedRenoteElipsed.value,
+                          onChanged: (value) =>
+                              enableFavoritedRenoteElipsed.value =
+                                  value ?? true,
+                          title: Text(S.of(context).collapseReactionedRenotes),
+                        ),
+                        CheckboxListTile(
+                          value: enableLongTextElipsed.value,
+                          onChanged: (value) async =>
+                              enableLongTextElipsed.value = value ?? true,
+                          title: Text(S.of(context).collapseLongNotes),
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 10)),
+                        Text(S.of(context).tabPosition),
+                        DropdownButton<TabPosition>(
+                          isExpanded: true,
+                          items: [
+                            for (final element in TabPosition.values)
+                              DropdownMenuItem(
+                                value: element,
+                                child: Text(
+                                  S
+                                      .of(context)
+                                      .tabPositionDescription(
+                                        element.displayName(context),
+                                      ),
+                                ),
                               ),
-                            ),
-                        ],
-                        value:
-                            choosableFonts.firstWhereOrNull(
-                              (e) => e.actualName == monospaceFontName.value,
-                            ) ??
-                            choosableFonts.first,
-                        isExpanded: true,
-                        onChanged: (item) =>
-                            monospaceFontName.value = item?.actualName ?? "",
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 10)),
-                      Text(
-                        S.of(context).fontCursive,
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                      DropdownButton<Font>(
-                        items: [
-                          for (final font in choosableFonts)
-                            DropdownMenuItem(
-                              value: font,
-                              child: Text(
-                                font.actualName.isEmpty
-                                    ? S.of(context).systemFont
-                                    : font.displayName,
-                              ),
-                            ),
-                        ],
-                        value:
-                            choosableFonts.firstWhereOrNull(
-                              (e) => e.actualName == cursiveFontName.value,
-                            ) ??
-                            choosableFonts.first,
-                        isExpanded: true,
-                        onChanged: (item) =>
-                            cursiveFontName.value = item?.actualName ?? "",
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 10)),
-                      Text(
-                        S.of(context).fontFantasy,
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                      DropdownButton<Font>(
-                        items: [
-                          for (final font in choosableFonts)
-                            DropdownMenuItem(
-                              value: font,
-                              child: Text(
-                                font.actualName.isEmpty
-                                    ? S.of(context).systemFont
-                                    : font.displayName,
-                              ),
-                            ),
-                        ],
-                        value:
-                            choosableFonts.firstWhereOrNull(
-                              (e) => e.actualName == fantasyFontName.value,
-                            ) ??
-                            choosableFonts.first,
-                        isExpanded: true,
-                        onChanged: (item) =>
-                            fantasyFontName.value = item?.actualName ?? "",
-                      ),
-                    ],
+                          ],
+                          value: tabPosition.value,
+                          onChanged: (value) async =>
+                              tabPosition.value = value ?? TabPosition.top,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Table(
-                        defaultVerticalAlignment:
-                            TableCellVerticalAlignment.middle,
-                        columnWidths: const {
-                          0: IntrinsicColumnWidth(),
-                          1: FlexColumnWidth(),
-                        },
-                        children: [
-                          TableRow(
-                            children: [
-                              Text(S.of(context).cacheSize),
-                              Center(
-                                child: cacheSize.when(
-                                  loading: () =>
-                                      const CircularProgressIndicator(),
-                                  error: (_, __) =>
-                                      Text(S.of(context).cacheSizeError),
-                                  data: (cacheSize) {
-                                    if (cacheSize.isEmpty) {
-                                      return ElevatedButton(
-                                        onPressed: () async {
-                                          await ref
-                                              .read(
-                                                cacheSizeNotifierProvider
-                                                    .notifier,
-                                              )
-                                              .updateCacheSize();
-                                        },
-                                        child: Text(S.of(context).getCacheSize),
-                                      );
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          S.of(context).theme,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 10)),
+                        Text(S.of(context).themeForLightMode),
+                        DropdownButton<String>(
+                          items: [
+                            for (final element in builtInColorThemes.where(
+                              (element) => !element.isDarkTheme,
+                            ))
+                              DropdownMenuItem(
+                                value: element.id,
+                                child: Text(
+                                  S.of(context).themeIsh(element.name),
+                                ),
+                              ),
+                          ],
+                          value: lightModeTheme.value,
+                          onChanged: (value) async =>
+                              lightModeTheme.value = value ?? "",
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 10)),
+                        Text(S.of(context).themeForDarkMode),
+                        DropdownButton<String>(
+                          items: [
+                            for (final element in builtInColorThemes.where(
+                              (element) => element.isDarkTheme,
+                            ))
+                              DropdownMenuItem(
+                                value: element.id,
+                                child: Text(
+                                  S.of(context).themeIsh(element.name),
+                                ),
+                              ),
+                          ],
+                          value: darkModeTheme.value,
+                          onChanged: (value) =>
+                              darkModeTheme.value = value ?? "",
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 10)),
+                        Text(S.of(context).selectLightOrDarkMode),
+                        DropdownButton<ThemeColorSystem>(
+                          items: [
+                            for (final colorSystem in ThemeColorSystem.values)
+                              DropdownMenuItem(
+                                value: colorSystem,
+                                child: Text(colorSystem.displayName(context)),
+                              ),
+                          ],
+                          value: colorSystem.value,
+                          onChanged: (value) => colorSystem.value =
+                              value ?? ThemeColorSystem.system,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          S.of(context).reaction,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        CheckboxListTile(
+                          value: enableDirectReaction.value,
+                          title: Text(S.of(context).emojiTapReaction),
+                          subtitle: Text(
+                            S.of(context).emojiTapReactionDescription,
+                          ),
+                          onChanged: (value) =>
+                              enableDirectReaction.value = value ?? false,
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 10)),
+                        Text(S.of(context).emojiStyle),
+                        DropdownButton(
+                          items: [
+                            for (final type in EmojiType.values)
+                              DropdownMenuItem(
+                                value: type,
+                                child: Text(type.displayName(context)),
+                              ),
+                          ],
+                          value: emojiType.value,
+                          isExpanded: true,
+                          onChanged: (value) =>
+                              emojiType.value = value ?? EmojiType.twemoji,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          S.of(context).noteBackgroundColor,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 10)),
+                        Table(
+                          children: [
+                            // ヘッダー
+                            TableRow(
+                              children: [
+                                SizedBox.shrink(),
+                                Text(S.of(context).lightMode),
+                                Text(S.of(context).darkMode),
+                              ],
+                            ),
+                            // パブリック
+                            TableRow(
+                              children: [
+                                TableCell(
+                                  verticalAlignment:
+                                      TableCellVerticalAlignment.middle,
+                                  child: Text(S.of(context).public),
+                                ),
+                                IconButton(
+                                  icon: Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      color:
+                                          lightNoteBgPublic.value ??
+                                          Colors.transparent,
+                                      border: Border.all(
+                                        color: Theme.of(context).primaryColor,
+                                        width: 1.0,
+                                      ),
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    final result = await context
+                                        .pushRoute<Color>(
+                                          ColorPickerRoute(
+                                            initialColor:
+                                                lightNoteBgPublic.value,
+                                          ),
+                                        );
+                                    if (result != null) {
+                                      lightNoteBgPublic.value = result;
                                     }
-                                    return Text(cacheSize);
                                   },
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      if (cacheSize.hasValue && cacheSize.value!.isNotEmpty)
-                        Center(
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              await ref
-                                  .read(cacheSizeNotifierProvider.notifier)
-                                  .clear();
-                            },
-                            child: Text(S.of(context).clearCache),
-                          ),
+                                IconButton(
+                                  icon: Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      color:
+                                          darkNoteBgPublic.value ??
+                                          Colors.transparent,
+                                      border: Border.all(
+                                        color: Theme.of(context).primaryColor,
+                                        width: 1.0,
+                                      ),
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    final result = await context
+                                        .pushRoute<Color>(
+                                          ColorPickerRoute(
+                                            initialColor:
+                                                darkNoteBgPublic.value,
+                                          ),
+                                        );
+                                    if (result != null) {
+                                      darkNoteBgPublic.value = result;
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                            // ホームのみ
+                            TableRow(
+                              children: [
+                                TableCell(
+                                  verticalAlignment:
+                                      TableCellVerticalAlignment.middle,
+                                  child: Text(S.of(context).homeOnly),
+                                ),
+                                IconButton(
+                                  icon: Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      color:
+                                          lightNoteBgHome.value ??
+                                          Colors.transparent,
+                                      border: Border.all(
+                                        color: Theme.of(context).primaryColor,
+                                        width: 1.0,
+                                      ),
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    final result = await context
+                                        .pushRoute<Color>(
+                                          ColorPickerRoute(
+                                            initialColor: lightNoteBgHome.value,
+                                          ),
+                                        );
+                                    if (result != null) {
+                                      lightNoteBgHome.value = result;
+                                    }
+                                  },
+                                ),
+                                IconButton(
+                                  icon: Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      color:
+                                          darkNoteBgHome.value ??
+                                          Colors.transparent,
+                                      border: Border.all(
+                                        color: Theme.of(context).primaryColor,
+                                        width: 1.0,
+                                      ),
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    final result = await context
+                                        .pushRoute<Color>(
+                                          ColorPickerRoute(
+                                            initialColor: darkNoteBgHome.value,
+                                          ),
+                                        );
+                                    if (result != null) {
+                                      darkNoteBgHome.value = result;
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                            // フォロワーのみ
+                            TableRow(
+                              children: [
+                                TableCell(
+                                  verticalAlignment:
+                                      TableCellVerticalAlignment.middle,
+                                  child: Text(S.of(context).followersOnly),
+                                ),
+                                IconButton(
+                                  icon: Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      color:
+                                          lightNoteBgFollowers.value ??
+                                          Colors.transparent,
+                                      border: Border.all(
+                                        color: Theme.of(context).primaryColor,
+                                        width: 1.0,
+                                      ),
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    final result = await context
+                                        .pushRoute<Color>(
+                                          ColorPickerRoute(
+                                            initialColor:
+                                                lightNoteBgFollowers.value,
+                                          ),
+                                        );
+                                    if (result != null) {
+                                      lightNoteBgFollowers.value = result;
+                                    }
+                                  },
+                                ),
+                                IconButton(
+                                  icon: Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      color:
+                                          darkNoteBgFollowers.value ??
+                                          Colors.transparent,
+                                      border: Border.all(
+                                        color: Theme.of(context).primaryColor,
+                                        width: 1.0,
+                                      ),
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    final result = await context
+                                        .pushRoute<Color>(
+                                          ColorPickerRoute(
+                                            initialColor:
+                                                darkNoteBgFollowers.value,
+                                          ),
+                                        );
+                                    if (result != null) {
+                                      darkNoteBgFollowers.value = result;
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                            // ダイレクト
+                            TableRow(
+                              children: [
+                                TableCell(
+                                  verticalAlignment:
+                                      TableCellVerticalAlignment.middle,
+                                  child: Text(S.of(context).direct),
+                                ),
+                                IconButton(
+                                  icon: Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      color:
+                                          lightNoteBgDirect.value ??
+                                          Colors.transparent,
+                                      border: Border.all(
+                                        color: Theme.of(context).primaryColor,
+                                        width: 1.0,
+                                      ),
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    final result = await context
+                                        .pushRoute<Color>(
+                                          ColorPickerRoute(
+                                            initialColor:
+                                                lightNoteBgDirect.value,
+                                          ),
+                                        );
+                                    if (result != null) {
+                                      lightNoteBgDirect.value = result;
+                                    }
+                                  },
+                                ),
+                                IconButton(
+                                  icon: Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      color:
+                                          darkNoteBgDirect.value ??
+                                          Colors.transparent,
+                                      border: Border.all(
+                                        color: Theme.of(context).primaryColor,
+                                        width: 1.0,
+                                      ),
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    final result = await context
+                                        .pushRoute<Color>(
+                                          ColorPickerRoute(
+                                            initialColor:
+                                                darkNoteBgDirect.value,
+                                          ),
+                                        );
+                                    if (result != null) {
+                                      darkNoteBgDirect.value = result;
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          S.of(context).fontSize,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                        Slider(
+                          value: textScaleFactor.value,
+                          min: 0.5,
+                          max: 1.5,
+                          divisions: 10,
+                          label: "${(textScaleFactor.value * 100).toInt()}%",
+                          onChanged: (value) {
+                            textScaleFactor.value = value;
+                          },
+                        ),
+                        Center(
+                          child: ElevatedButton(
+                            onPressed:
+                                (settings.textScaleFactor ==
+                                    textScaleFactor.value)
+                                ? null
+                                : save,
+                            child: Text(S.of(context).apply),
+                          ),
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 10)),
+                        Text(
+                          S.of(context).fontStandard,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                        DropdownButton<Font>(
+                          items: [
+                            for (final font in choosableFonts)
+                              DropdownMenuItem(
+                                value: font,
+                                child: Text(
+                                  font.actualName.isEmpty
+                                      ? S.of(context).systemFont
+                                      : font.displayName,
+                                ),
+                              ),
+                          ],
+                          value:
+                              choosableFonts.firstWhereOrNull(
+                                (e) => e.actualName == defaultFontName.value,
+                              ) ??
+                              choosableFonts.first,
+                          isExpanded: true,
+                          onChanged: (item) =>
+                              defaultFontName.value = item?.actualName ?? "",
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 10)),
+                        Text(
+                          S.of(context).fontSerif,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                        DropdownButton<Font>(
+                          items: [
+                            for (final font in choosableFonts)
+                              DropdownMenuItem(
+                                value: font,
+                                child: Text(
+                                  font.actualName.isEmpty
+                                      ? S.of(context).systemFont
+                                      : font.displayName,
+                                ),
+                              ),
+                          ],
+                          value:
+                              choosableFonts.firstWhereOrNull(
+                                (e) => e.actualName == serifFontName.value,
+                              ) ??
+                              choosableFonts.first,
+                          isExpanded: true,
+                          onChanged: (item) =>
+                              serifFontName.value = item?.actualName ?? "",
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 10)),
+                        Text(
+                          S.of(context).fontMonospace,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                        DropdownButton<Font>(
+                          items: [
+                            for (final font in choosableFonts)
+                              DropdownMenuItem(
+                                value: font,
+                                child: Text(
+                                  font.actualName.isEmpty
+                                      ? S.of(context).systemFont
+                                      : font.displayName,
+                                ),
+                              ),
+                          ],
+                          value:
+                              choosableFonts.firstWhereOrNull(
+                                (e) => e.actualName == monospaceFontName.value,
+                              ) ??
+                              choosableFonts.first,
+                          isExpanded: true,
+                          onChanged: (item) =>
+                              monospaceFontName.value = item?.actualName ?? "",
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 10)),
+                        Text(
+                          S.of(context).fontCursive,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                        DropdownButton<Font>(
+                          items: [
+                            for (final font in choosableFonts)
+                              DropdownMenuItem(
+                                value: font,
+                                child: Text(
+                                  font.actualName.isEmpty
+                                      ? S.of(context).systemFont
+                                      : font.displayName,
+                                ),
+                              ),
+                          ],
+                          value:
+                              choosableFonts.firstWhereOrNull(
+                                (e) => e.actualName == cursiveFontName.value,
+                              ) ??
+                              choosableFonts.first,
+                          isExpanded: true,
+                          onChanged: (item) =>
+                              cursiveFontName.value = item?.actualName ?? "",
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 10)),
+                        Text(
+                          S.of(context).fontFantasy,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                        DropdownButton<Font>(
+                          items: [
+                            for (final font in choosableFonts)
+                              DropdownMenuItem(
+                                value: font,
+                                child: Text(
+                                  font.actualName.isEmpty
+                                      ? S.of(context).systemFont
+                                      : font.displayName,
+                                ),
+                              ),
+                          ],
+                          value:
+                              choosableFonts.firstWhereOrNull(
+                                (e) => e.actualName == fantasyFontName.value,
+                              ) ??
+                              choosableFonts.first,
+                          isExpanded: true,
+                          onChanged: (item) =>
+                              fantasyFontName.value = item?.actualName ?? "",
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Table(
+                          defaultVerticalAlignment:
+                              TableCellVerticalAlignment.middle,
+                          columnWidths: const {
+                            0: IntrinsicColumnWidth(),
+                            1: FlexColumnWidth(),
+                          },
+                          children: [
+                            TableRow(
+                              children: [
+                                Text(S.of(context).cacheSize),
+                                Center(
+                                  child: cacheSize.when(
+                                    loading: () =>
+                                        const CircularProgressIndicator(),
+                                    error: (_, __) =>
+                                        Text(S.of(context).cacheSizeError),
+                                    data: (cacheSize) {
+                                      if (cacheSize.isEmpty) {
+                                        return ElevatedButton(
+                                          onPressed: () async {
+                                            await ref
+                                                .read(
+                                                  cacheSizeNotifierProvider
+                                                      .notifier,
+                                                )
+                                                .updateCacheSize();
+                                          },
+                                          child: Text(
+                                            S.of(context).getCacheSize,
+                                          ),
+                                        );
+                                      }
+                                      return Text(cacheSize);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        if (cacheSize.hasValue && cacheSize.value!.isNotEmpty)
+                          Center(
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                await ref
+                                    .read(cacheSizeNotifierProvider.notifier)
+                                    .clear();
+                              },
+                              child: Text(S.of(context).clearCache),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

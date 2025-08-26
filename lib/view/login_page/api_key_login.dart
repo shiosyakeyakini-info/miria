@@ -54,79 +54,81 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
 
   @override
   Widget build(BuildContext context) {
-    return CenteringWidget(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Table(
-            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            columnWidths: const {
-              0: IntrinsicColumnWidth(),
-              1: FlexColumnWidth(),
-            },
-            children: [
-              TableRow(
-                children: [
-                  Text(S.of(context).server),
-                  TextField(
-                    controller: serverController,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.dns),
-                      suffixIcon: IconButton(
-                        onPressed: () async {
-                          final url = await showDialog<String?>(
-                            context: context,
-                            builder: (context) =>
-                                const MisskeyServerListDialog(),
-                          );
-                          if (url != null && url.isNotEmpty) {
-                            serverController.text = url;
-                          }
-                        },
-                        icon: const Icon(Icons.search),
+    return SafeArea(
+      child: CenteringWidget(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Table(
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              columnWidths: const {
+                0: IntrinsicColumnWidth(),
+                1: FlexColumnWidth(),
+              },
+              children: [
+                TableRow(
+                  children: [
+                    Text(S.of(context).server),
+                    TextField(
+                      controller: serverController,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.dns),
+                        suffixIcon: IconButton(
+                          onPressed: () async {
+                            final url = await showDialog<String?>(
+                              context: context,
+                              builder: (context) =>
+                                  const MisskeyServerListDialog(),
+                            );
+                            if (url != null && url.isNotEmpty) {
+                              serverController.text = url;
+                            }
+                          },
+                          icon: const Icon(Icons.search),
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  const Padding(padding: EdgeInsets.only(bottom: 10)),
-                  Container(),
-                ],
-              ),
-              TableRow(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20),
-                    child: Text(S.of(context).apiKey),
-                  ),
-                  TextField(
-                    controller: apiKeyController,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.key),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    const Padding(padding: EdgeInsets.only(bottom: 10)),
+                    Container(),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: Text(S.of(context).apiKey),
                     ),
-                  ),
-                ],
-              ),
-              // ],
-              TableRow(
-                children: [
-                  Container(),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: ElevatedButton(
-                      onPressed: () async => ref
-                          .read(dialogStateNotifierProvider.notifier)
-                          .guard(() => login()),
-                      child: Text(S.of(context).login),
+                    TextField(
+                      controller: apiKeyController,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.key),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
+                  ],
+                ),
+                // ],
+                TableRow(
+                  children: [
+                    Container(),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: ElevatedButton(
+                        onPressed: () async => ref
+                            .read(dialogStateNotifierProvider.notifier)
+                            .guard(() => login()),
+                        child: Text(S.of(context).login),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

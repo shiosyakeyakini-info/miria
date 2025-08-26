@@ -5,10 +5,8 @@ import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/note_draft_repository.dart";
 import "package:miria/router/app_router.dart";
-import "package:miria/view/common/account_scope.dart";
-import "package:miria/view/drafts_page/drafts_page.dart";
-import "package:mockito/mockito.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:mockito/mockito.dart";
 
 import "../test_util/default_root_widget.dart";
 import "../test_util/mock.mocks.dart";
