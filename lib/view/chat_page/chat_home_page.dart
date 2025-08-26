@@ -63,55 +63,53 @@ class ChatHomePage extends HookConsumerWidget implements AutoRouteWrapper {
             ),
             floatingActionButton: !ref.read(accountContextProvider).isSame
                 ? null
-                : SafeArea(
-                    child: AnimatedBuilder(
-                      animation: tabController,
-                      builder: (context, child) {
-                        final currentTab = tabController.index;
-                        // ホームタブ（0）では対ユーザーチャット、その他ではルーム作成
-                        if (currentTab == 0) {
-                          return FloatingActionButton(
-                            onPressed: () async {
-                              final selectedUser = await context.router
-                                  .push<User>(
-                                    UserSelectRoute(
-                                      accountContext: ref.read(
-                                        accountContextProvider,
-                                      ),
-                                    ),
-                                  );
-                              if (selectedUser != null) {
-                                if (!context.mounted) return;
-                                await context.router.push(
-                                  UserChatRoute(
-                                    user: selectedUser,
+                : AnimatedBuilder(
+                    animation: tabController,
+                    builder: (context, child) {
+                      final currentTab = tabController.index;
+                      // ホームタブ（0）では対ユーザーチャット、その他ではルーム作成
+                      if (currentTab == 0) {
+                        return FloatingActionButton(
+                          onPressed: () async {
+                            final selectedUser = await context.router
+                                .push<User>(
+                                  UserSelectRoute(
                                     accountContext: ref.read(
                                       accountContextProvider,
                                     ),
                                   ),
                                 );
-                              }
-                            },
-                            tooltip: S.of(context).chatNewChat,
-                            child: const Icon(Icons.person_add),
-                          );
-                        } else {
-                          return FloatingActionButton(
-                            onPressed: () async {
+                            if (selectedUser != null) {
+                              if (!context.mounted) return;
                               await context.router.push(
-                                ChatRoomCreateRoute(
+                                UserChatRoute(
+                                  user: selectedUser,
                                   accountContext: ref.read(
                                     accountContextProvider,
                                   ),
                                 ),
                               );
-                            },
-                            tooltip: S.of(context).create,
-                            child: const Icon(Icons.add),
-                          );
-                        }
-                      },
-                    ),
+                            }
+                          },
+                          tooltip: S.of(context).chatNewChat,
+                          child: const Icon(Icons.person_add),
+                        );
+                      } else {
+                        return FloatingActionButton(
+                          onPressed: () async {
+                            await context.router.push(
+                              ChatRoomCreateRoute(
+                                accountContext: ref.read(
+                                  accountContextProvider,
+                                ),
+                              ),
+                            );
+                          },
+                          tooltip: S.of(context).create,
+                          child: const Icon(Icons.add),
+                        );
+                      }
+                    },
                   ),
           );
         },

@@ -120,21 +120,19 @@ class UsersListSettingsForm extends ConsumerWidget {
                 .read(_clipSettingsNotifierProvider.notifier)
                 .updateIsPublic,
           ),
-          SafeArea(
-            child: ElevatedButton(
-              child: Text(S.of(context).done),
-              onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  formKey.currentState!.save();
-                  final settings = ref.read(_clipSettingsNotifierProvider);
-                  if (settings == initialSettings) {
-                    Navigator.of(context).pop();
-                  } else {
-                    Navigator.of(context).pop(settings);
-                  }
+          ElevatedButton(
+            child: Text(S.of(context).done),
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                formKey.currentState!.save();
+                final settings = ref.read(_clipSettingsNotifierProvider);
+                if (settings == initialSettings) {
+                  Navigator.of(context).pop();
+                } else {
+                  Navigator.of(context).pop(settings);
                 }
-              },
-            ),
+              }
+            },
           ),
         ],
       ),

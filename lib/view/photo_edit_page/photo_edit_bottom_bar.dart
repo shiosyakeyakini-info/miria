@@ -16,45 +16,40 @@ class PhotoEditBottomBar extends ConsumerWidget {
       photoEditStateNotifierProvider.select((value) => value.colorFilterMode),
     );
 
-    return SafeArea(
-      child: BottomAppBar(
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            DecoratedBox(
-              decoration: BoxDecoration(
-                color: isClipMode ? Theme.of(context).primaryColorDark : null,
-              ),
-              child: IconButton(
-                onPressed: () async => photoEdit.crop(),
-                icon: const Icon(Icons.crop, color: Colors.white),
-              ),
+    return BottomAppBar(
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: isClipMode ? Theme.of(context).primaryColorDark : null,
             ),
-            IconButton(
-              onPressed: () async => photoEdit.rotate(),
-              icon: const Icon(Icons.refresh, color: Colors.white),
+            child: IconButton(
+              onPressed: () async => photoEdit.crop(),
+              icon: const Icon(Icons.crop, color: Colors.white),
             ),
-            DecoratedBox(
-              decoration: BoxDecoration(
-                color: isColorFilterMode
-                    ? Theme.of(context).primaryColorDark
-                    : null,
-              ),
-              child: IconButton(
-                onPressed: () async => photoEdit.colorFilter(),
-                icon: const Icon(Icons.palette_outlined, color: Colors.white),
-              ),
+          ),
+          IconButton(
+            onPressed: () async => photoEdit.rotate(),
+            icon: const Icon(Icons.refresh, color: Colors.white),
+          ),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: isColorFilterMode
+                  ? Theme.of(context).primaryColorDark
+                  : null,
             ),
-            IconButton(
-              onPressed: () async => photoEdit.addReaction(),
-              icon: const Icon(
-                Icons.add_reaction_outlined,
-                color: Colors.white,
-              ),
+            child: IconButton(
+              onPressed: () async => photoEdit.colorFilter(),
+              icon: const Icon(Icons.palette_outlined, color: Colors.white),
             ),
-          ],
-        ),
+          ),
+          IconButton(
+            onPressed: () async => photoEdit.addReaction(),
+            icon: const Icon(Icons.add_reaction_outlined, color: Colors.white),
+          ),
+        ],
       ),
     );
   }
