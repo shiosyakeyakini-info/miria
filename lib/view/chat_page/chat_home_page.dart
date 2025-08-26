@@ -70,7 +70,6 @@ class ChatHomePage extends HookConsumerWidget implements AutoRouteWrapper {
                         final currentTab = tabController.index;
                         // ホームタブ（0）では対ユーザーチャット、その他ではルーム作成
                         if (currentTab == 0) {
-                          // TODO: issue #823 - Edge to Edge対応: FABがナビゲーションバー/ジェスチャーエリアと重なる可能性
                           return FloatingActionButton(
                             onPressed: () async {
                               final selectedUser = await context.router
