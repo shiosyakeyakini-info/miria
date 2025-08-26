@@ -56,10 +56,11 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).reactionDeck)),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: SingleChildScrollView(
-          child: Column(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: SingleChildScrollView(
+            child: Column(
             children: [
               Align(
                 alignment: Alignment.topLeft,
@@ -154,6 +155,7 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
                 ],
               ),
             ],
+            ),
           ),
         ),
       ),

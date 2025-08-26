@@ -54,7 +54,8 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
 
   @override
   Widget build(BuildContext context) {
-    return CenteringWidget(
+    return SafeArea(
+      child: CenteringWidget(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -127,6 +128,7 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
             ],
           ),
         ],
+      ),
       ),
     );
   }

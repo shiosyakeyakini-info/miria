@@ -324,20 +324,22 @@ class AntennaSettingsForm extends HookConsumerWidget {
           ),
 
           // notifyは機能していない?
-          Center(
-            child: ElevatedButton(
-              child: Text(S.of(context).done),
-              onPressed: () {
-                if (formKey.value.currentState!.validate()) {
-                  formKey.value.currentState!.save();
-                  final settings = ref.read(_antennaSettingsNotifierProvider);
-                  if (settings == initialSettings) {
-                    Navigator.of(context).pop();
-                  } else {
-                    Navigator.of(context).pop(settings);
+          SafeArea(
+            child: Center(
+              child: ElevatedButton(
+                child: Text(S.of(context).done),
+                onPressed: () {
+                  if (formKey.value.currentState!.validate()) {
+                    formKey.value.currentState!.save();
+                    final settings = ref.read(_antennaSettingsNotifierProvider);
+                    if (settings == initialSettings) {
+                      Navigator.of(context).pop();
+                    } else {
+                      Navigator.of(context).pop(settings);
+                    }
                   }
-                }
-              },
+                },
+              ),
             ),
           ),
         ],

@@ -162,10 +162,11 @@ class TabSettingsPage extends HookConsumerWidget {
             ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10),
-          child: Column(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
@@ -552,6 +553,7 @@ class TabSettingsPage extends HookConsumerWidget {
                 ),
               ),
             ],
+            ),
           ),
         ),
       ),

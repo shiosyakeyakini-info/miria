@@ -51,16 +51,18 @@ class HashtagPage extends ConsumerWidget implements AutoRouteWrapper {
           itemBuilder: (context, item) => MisskeyNote(note: item),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await context.pushRoute(
-            NoteCreateRoute(
-              initialAccount: accountContext.postAccount,
-              initialText: "#$hashtag",
-            ),
-          );
-        },
-        child: const Icon(Icons.edit),
+      floatingActionButton: SafeArea(
+        child: FloatingActionButton(
+          onPressed: () async {
+            await context.pushRoute(
+              NoteCreateRoute(
+                initialAccount: accountContext.postAccount,
+                initialText: "#$hashtag",
+              ),
+            );
+          },
+          child: const Icon(Icons.edit),
+        ),
       ),
     );
   }

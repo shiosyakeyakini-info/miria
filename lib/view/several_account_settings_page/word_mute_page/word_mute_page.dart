@@ -79,10 +79,11 @@ class WordMutePage extends HookConsumerWidget implements AutoRouteWrapper {
           MuteType.hard => S.of(context).hardWordMute,
         }),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: CommonFuture<MeDetailed>(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: CommonFuture<MeDetailed>(
             future: ref.read(misskeyPostContextProvider).i.i(),
             futureFinished: (data) {
               controller.text = muteValueString(
@@ -113,6 +114,7 @@ class WordMutePage extends HookConsumerWidget implements AutoRouteWrapper {
                 ],
               );
             },
+          ),
           ),
         ),
       ),

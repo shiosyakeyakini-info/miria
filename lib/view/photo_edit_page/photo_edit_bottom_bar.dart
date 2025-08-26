@@ -16,8 +16,9 @@ class PhotoEditBottomBar extends ConsumerWidget {
       photoEditStateNotifierProvider.select((value) => value.colorFilterMode),
     );
 
-    return BottomAppBar(
-      child: Row(
+    return SafeArea(
+      child: BottomAppBar(
+        child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -50,6 +51,7 @@ class PhotoEditBottomBar extends ConsumerWidget {
             icon: const Icon(Icons.add_reaction_outlined, color: Colors.white),
           ),
         ],
+        ),
       ),
     );
   }

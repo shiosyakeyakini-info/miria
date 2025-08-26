@@ -50,7 +50,8 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
 
   @override
   Widget build(BuildContext context) {
-    return CenteringWidget(
+    return SafeArea(
+      child: CenteringWidget(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -138,6 +139,7 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
             ],
           ),
         ],
+      ),
       ),
     );
   }

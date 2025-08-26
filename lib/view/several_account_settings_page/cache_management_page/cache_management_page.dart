@@ -93,10 +93,11 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).cacheSettings)),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -179,6 +180,7 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
                   ),
                 ),
             ],
+            ),
           ),
         ),
       ),

@@ -30,9 +30,10 @@ class ReactionMutePage extends HookConsumerWidget implements AutoRouteWrapper {
 
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).reactionMute)),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
@@ -90,6 +91,7 @@ class ReactionMutePage extends HookConsumerWidget implements AutoRouteWrapper {
               ],
             ),
           ],
+          ),
         ),
       ),
     );

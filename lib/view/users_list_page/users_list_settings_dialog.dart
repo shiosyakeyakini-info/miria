@@ -86,19 +86,21 @@ class UsersListSettingsDialog extends HookConsumerWidget
                   .read(_usersListSettingsNotifierProvider.notifier)
                   .updateIsPublic,
             ),
-            ElevatedButton(
-              child: Text(S.of(context).done),
-              onPressed: () {
-                if (formKey.value.currentState!.validate()) {
-                  formKey.value.currentState!.save();
-                  final settings = ref.read(_usersListSettingsNotifierProvider);
-                  if (settings == initialSettings) {
-                    Navigator.of(context).pop();
-                  } else {
-                    Navigator.of(context).pop(settings);
+            SafeArea(
+              child: ElevatedButton(
+                child: Text(S.of(context).done),
+                onPressed: () {
+                  if (formKey.value.currentState!.validate()) {
+                    formKey.value.currentState!.save();
+                    final settings = ref.read(_usersListSettingsNotifierProvider);
+                    if (settings == initialSettings) {
+                      Navigator.of(context).pop();
+                    } else {
+                      Navigator.of(context).pop(settings);
+                    }
                   }
-                }
-              },
+                },
+              ),
             ),
           ],
         ),
