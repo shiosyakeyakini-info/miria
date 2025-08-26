@@ -18,9 +18,19 @@ final class NoteDraftRepositoryProvider
         retry: null,
         name: r'noteDraftRepositoryProvider',
         isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: const <ProviderOrFamily>[
+          misskeyPostContextProvider,
+          accountContextProvider,
+        ],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          NoteDraftRepositoryProvider.$allTransitiveDependencies0,
+          NoteDraftRepositoryProvider.$allTransitiveDependencies1,
+        ],
       );
+
+  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static const $allTransitiveDependencies1 =
+      MisskeyPostContextProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$noteDraftRepositoryHash();
@@ -39,7 +49,7 @@ final class NoteDraftRepositoryProvider
 }
 
 String _$noteDraftRepositoryHash() =>
-    r'44834623bacb7d1671eed10f299ea2c3342c89bd';
+    r'ecb44ba7a6699f380a00d9b0439b91541db7d535';
 
 abstract class _$NoteDraftRepository extends $Notifier<Map<String, NoteDraft>> {
   Map<String, NoteDraft> build();

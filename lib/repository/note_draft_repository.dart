@@ -4,7 +4,7 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "note_draft_repository.g.dart";
 
-@riverpod
+@Riverpod(dependencies: [misskeyPostContext, accountContext])
 class NoteDraftRepository extends _$NoteDraftRepository {
   late final Misskey _misskey = ref.read(misskeyPostContextProvider);
   final Map<String, NoteDraft> _drafts = {};
