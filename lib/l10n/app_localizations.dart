@@ -3695,6 +3695,24 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'アンケート'**
   String get poll;
+
+  /// No description provided for @continueEditing.
+  ///
+  /// In ja, this message translates to:
+  /// **'もうちょっと編集を続ける'**
+  String get continueEditing;
+
+  /// No description provided for @saveAndClose.
+  ///
+  /// In ja, this message translates to:
+  /// **'保存して閉じる'**
+  String get saveAndClose;
+
+  /// No description provided for @discardAndReturn.
+  ///
+  /// In ja, this message translates to:
+  /// **'保存せずに戻る'**
+  String get discardAndReturn;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

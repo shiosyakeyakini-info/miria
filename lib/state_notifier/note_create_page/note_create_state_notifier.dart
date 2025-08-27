@@ -15,6 +15,7 @@ import "package:miria/l10n/app_localizations.dart";
 import "package:miria/log.dart";
 import "package:miria/model/image_file.dart";
 import "package:miria/providers.dart";
+import "package:miria/repository/note_draft_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/note_create_page/drive_modal_sheet.dart";
@@ -95,7 +96,14 @@ abstract class NoteCreateChannel with _$NoteCreateChannel {
       _NoteCreateChannel;
 }
 
-@Riverpod(dependencies: [misskeyPostContext, notesWith, accountContext])
+@Riverpod(
+  dependencies: [
+    misskeyPostContext,
+    notesWith,
+    accountContext,
+    NoteDraftRepository,
+  ],
+)
 class NoteCreateNotifier extends _$NoteCreateNotifier {
   late final _fileSystem = ref.read(fileSystemProvider);
   late final _dio = ref.read(dioProvider);
@@ -105,6 +113,12 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
 
   @override
   NoteCreate build() {
+    // Issue #830修正: NoteDraftRepositoryの自動破棄を防ぐ
+    // NoteCreatePageから_saveDraft()でNoteDraftRepositoryを使用する際、
+    // autoDisposeProviderが誰からも監視されていない場合、即座に破棄される問題を回避
+    // ref.listen()で依存関係を確立し、NoteCreateNotifierと同じライフサイクルにする
+    ref.listen(noteDraftRepositoryProvider, (_, _) {});
+
     final account = ref.read(accountContextProvider).postAccount;
     return NoteCreate(
       noteVisibility: ref

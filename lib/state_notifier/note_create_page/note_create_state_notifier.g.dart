@@ -22,18 +22,21 @@ final class NoteCreateNotifierProvider
           misskeyPostContextProvider,
           notesWithProvider,
           accountContextProvider,
+          noteDraftRepositoryProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        $allTransitiveDependencies: const <ProviderOrFamily>{
           NoteCreateNotifierProvider.$allTransitiveDependencies0,
           NoteCreateNotifierProvider.$allTransitiveDependencies1,
           NoteCreateNotifierProvider.$allTransitiveDependencies2,
-        ],
+          NoteCreateNotifierProvider.$allTransitiveDependencies3,
+        },
       );
 
   static const $allTransitiveDependencies0 = misskeyPostContextProvider;
   static const $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
   static const $allTransitiveDependencies2 = notesWithProvider;
+  static const $allTransitiveDependencies3 = noteDraftRepositoryProvider;
 
   @override
   String debugGetCreateSourceHash() => _$noteCreateNotifierHash();
@@ -52,7 +55,7 @@ final class NoteCreateNotifierProvider
 }
 
 String _$noteCreateNotifierHash() =>
-    r'1b5bd9da659afc5215fbc8407441df396fa87122';
+    r'0742f393ed2005cb9981cbbff5451b5a4dfb6f8d';
 
 abstract class _$NoteCreateNotifier extends $Notifier<NoteCreate> {
   NoteCreate build();

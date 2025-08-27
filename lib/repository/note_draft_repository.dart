@@ -14,8 +14,6 @@ class NoteDraftRepository extends _$NoteDraftRepository {
     return _drafts;
   }
 
-  Map<String, NoteDraft> get drafts => state;
-
   /// 下書きを作成
   Future<NoteDraft> create({
     String? text,
