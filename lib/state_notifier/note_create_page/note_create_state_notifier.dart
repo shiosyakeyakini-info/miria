@@ -113,7 +113,10 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
 
   @override
   NoteCreate build() {
-    // スコープを同じにして、disposeされないようにする
+    // Issue #830修正: NoteDraftRepositoryの自動破棄を防ぐ
+    // NoteCreatePageから_saveDraft()でNoteDraftRepositoryを使用する際、
+    // autoDisposeProviderが誰からも監視されていない場合、即座に破棄される問題を回避
+    // ref.listen()で依存関係を確立し、NoteCreateNotifierと同じライフサイクルにする
     ref.listen(noteDraftRepositoryProvider, (_, _) {});
 
     final account = ref.read(accountContextProvider).postAccount;

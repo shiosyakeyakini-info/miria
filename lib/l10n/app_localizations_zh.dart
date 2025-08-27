@@ -2101,16 +2101,16 @@ class SZh extends S {
   String get emptyNote => '空笔记';
 
   @override
-  String get poll => 'アンケート';
+  String get poll => '投票';
 
   @override
-  String get continueEditing => 'もうちょっと編集を続ける';
+  String get continueEditing => '继续编辑';
 
   @override
-  String get saveAndClose => '保存して閉じる';
+  String get saveAndClose => '保存并关闭';
 
   @override
-  String get discardAndReturn => '保存せずに戻る';
+  String get discardAndReturn => '放弃并返回';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
