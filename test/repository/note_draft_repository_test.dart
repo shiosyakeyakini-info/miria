@@ -60,12 +60,13 @@ void main() {
       expect(state.isEmpty, isTrue);
     });
 
-    test("should have access to drafts property", () {
+    test("should have access to drafts state", () {
       final repository = container.read(noteDraftRepositoryProvider.notifier);
+      final state = container.read(noteDraftRepositoryProvider);
 
-      // The drafts getter should return the current state
-      expect(repository.drafts, isA<Map<String, NoteDraft>>());
-      expect(repository.drafts.isEmpty, isTrue);
+      // The state should return the current drafts
+      expect(state, isA<Map<String, NoteDraft>>());
+      expect(state.isEmpty, isTrue);
     });
 
     group("Within AccountContextScope", () {
