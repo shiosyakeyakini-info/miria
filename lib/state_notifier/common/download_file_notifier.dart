@@ -24,7 +24,8 @@ class DownloadFileNotifier extends _$DownloadFileNotifier {
   Future<DownloadFileResult> downloadFile(DriveFile driveFile) async {
     if (defaultTargetPlatform == TargetPlatform.android) {
       final androidInfo = await DeviceInfoPlugin().androidInfo;
-      if (androidInfo.version.sdkInt <= 32) {
+      if (androidInfo.version.sdkInt <= 29) {
+        // Android 9 and below: Need storage permission
         final permissionStatus = await Permission.storage.status;
         if (!permissionStatus.isGranted) {
           final p = await Permission.storage.request();
@@ -32,15 +33,8 @@ class DownloadFileNotifier extends _$DownloadFileNotifier {
             return DownloadFileResult.permissionDenied;
           }
         }
-      } else {
-        final permissionStatus = await Permission.photos.status;
-        if (!permissionStatus.isGranted) {
-          final p = await Permission.photos.request();
-          if (!p.isGranted) {
-            return DownloadFileResult.permissionDenied;
-          }
-        }
       }
+      // Android 10+ (API 29+): No permissions needed for saving new files to MediaStore
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       final permissionStatus = await Permission.photosAddOnly.status;
       if (!permissionStatus.isGranted) {
@@ -92,7 +86,20 @@ class DownloadFileNotifier extends _$DownloadFileNotifier {
         }
       }
     }
-    await ImageGallerySaver.saveFile(savePath, name: driveFile.name);
-    return DownloadFileResult.succeeded;
+    try {
+      final result = await ImageGallerySaver.saveFile(
+        savePath,
+        name: driveFile.name,
+      );
+      // Check if the save was successful
+      if (result is Map &&
+          (result["isSuccess"] == true || result["filePath"] != null)) {
+        return DownloadFileResult.succeeded;
+      } else {
+        return DownloadFileResult.failed;
+      }
+    } catch (e) {
+      return DownloadFileResult.failed;
+    }
   }
 }
