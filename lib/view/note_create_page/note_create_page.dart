@@ -191,9 +191,9 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
           final choice = await dialogNotifier.showDialog(
             message: (context) => S.of(context).saveToDrafts,
             actions: (context) => [
-              S.of(context).discard,
-              S.of(context).cancel,
-              S.of(context).save,
+              S.of(context).discardAndReturn,
+              S.of(context).continueEditing,
+              S.of(context).saveAndClose,
             ],
           );
 

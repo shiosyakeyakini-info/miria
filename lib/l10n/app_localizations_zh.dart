@@ -2102,6 +2102,15 @@ class SZh extends S {
 
   @override
   String get poll => 'アンケート';
+
+  @override
+  String get continueEditing => 'もうちょっと編集を続ける';
+
+  @override
+  String get saveAndClose => '保存して閉じる';
+
+  @override
+  String get discardAndReturn => '保存せずに戻る';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).

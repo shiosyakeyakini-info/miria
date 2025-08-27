@@ -175,5 +175,8 @@
     "drafts": "下書き",
     "noDrafts": "下書きがございませんわ",
     "confirmDeleteDraft": "この下書きを削除いたしますか？",
-    "emptyNote": "空のノートですわ"
+    "emptyNote": "空のノートですわ",
+    "continueEditing": "もう少し編集を続けますわ",
+    "saveAndClose": "保存して閉じますわ",
+    "discardAndReturn": "保存せずに戻りますわ"
 }

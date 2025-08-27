@@ -1129,6 +1129,9 @@
     "noDrafts": "下書きあらへんで",
     "confirmDeleteDraft": "この下書き削除してもええか？",
     "emptyNote": "空っぽのノート",
-    "poll": "アンケート"
+    "poll": "アンケート",
+    "continueEditing": "もうちょっと編集を続ける",
+    "saveAndClose": "保存して閉じる", 
+    "discardAndReturn": "保存せずに戻る"
 
 }

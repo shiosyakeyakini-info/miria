@@ -2110,6 +2110,15 @@ class SJa extends S {
 
   @override
   String get poll => 'アンケート';
+
+  @override
+  String get continueEditing => 'もうちょっと編集を続ける';
+
+  @override
+  String get saveAndClose => '保存して閉じる';
+
+  @override
+  String get discardAndReturn => '保存せずに戻る';
 }
 
 /// The translations for Japanese (`ja_OJ`).
@@ -2533,4 +2542,13 @@ class SJaOj extends SJa {
 
   @override
   String get emptyNote => '空のノートですわ';
+
+  @override
+  String get continueEditing => 'もう少し編集を続けますわ';
+
+  @override
+  String get saveAndClose => '保存して閉じますわ';
+
+  @override
+  String get discardAndReturn => '保存せずに戻りますわ';
 }
