@@ -550,6 +550,8 @@ class UserChatTextField extends HookConsumerWidget {
                 child: TextField(
                   controller: textEditingController,
                   focusNode: focusNode,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
                 ),
               ),
             ),
