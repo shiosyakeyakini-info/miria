@@ -66,11 +66,11 @@ dependencies:
   webview_flutter: ^4.3.0
   webview_flutter_android: ^4.7.0
   webview_flutter_wkwebview: ^3.9.0
-  media_kit: ^1.1.11
-  media_kit_video: ^1.2.5
-  media_kit_libs_video: ^1.0.5
+  media_kit: ^1.2.0
+  media_kit_video: ^1.3.0
+  media_kit_libs_video: ^1.0.6
   flutter_colorpicker: ^1.1.0
-  volume_controller: ^2.0.7
+  volume_controller: ^3.0.2
   window_manager: ^0.5.0
   shared_preference_app_group: ^1.0.0+1
   stack_trace: ^1.11.1
@@ -104,13 +104,18 @@ dependency_overrides:
   media_kit:
     git:
       url: https://github.com/4ster1sk/media-kit.git
-      ref: 28292926cfd1e75611f7dcf39248124197d131cf
+      ref: 4e6ff31ab027fb270ec5da491c1bf559ad5115b6
       path: ./media_kit/
   media_kit_video:
     git:
       url: https://github.com/4ster1sk/media-kit.git
-      ref: 28292926cfd1e75611f7dcf39248124197d131cf
+      ref: 4e6ff31ab027fb270ec5da491c1bf559ad5115b6
       path: ./media_kit_video/
+  media_kit_libs_android_video:
+    git:
+      url: https://github.com/4ster1sk/media-kit.git
+      ref: 4e6ff31ab027fb270ec5da491c1bf559ad5115b6
+      path: ./libs/android/media_kit_libs_android_video
   flutter_cache_manager:
     git:
       url: https://github.com/Baseflow/flutter_cache_manager

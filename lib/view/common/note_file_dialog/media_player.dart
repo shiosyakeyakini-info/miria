@@ -98,7 +98,7 @@ class MediaPlayerState extends State<MediaPlayer> {
       }
       await player.dispose();
     });
-    VolumeController().removeListener();
+    VolumeController.instance.removeListener();
     super.dispose();
   }
 
