@@ -226,7 +226,9 @@ class UserChatPage extends HookConsumerWidget implements AutoRouteWrapper {
           ),
         ],
       ),
-      body: Center(child: UserChatTimeline(user: user)),
+      body: SafeArea(
+        child: Center(child: UserChatTimeline(user: user)),
+      ),
     );
   }
 }

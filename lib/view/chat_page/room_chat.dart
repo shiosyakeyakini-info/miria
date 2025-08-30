@@ -231,8 +231,10 @@ class RoomChatPage extends HookConsumerWidget implements AutoRouteWrapper {
           ),
         ],
       ),
-      body: Center(child: ChatTimeline(roomId: room.id)),
-      endDrawer: ChatRoomInfo(room: room),
+      body: SafeArea(
+        child: Center(child: ChatTimeline(roomId: room.id)),
+      ),
+      endDrawer: SafeArea(child: ChatRoomInfo(room: room)),
     );
   }
 }
