@@ -227,6 +227,17 @@ class MediaPlayerState extends State<MediaPlayer> {
                             onEnterFullscreen: () async {
                               isFullscreen = true;
                               await defaultEnterNativeFullscreen();
+                              // iOSでフルスクリーン切替時に再生が止まるため、とりあえずな対策
+                              if (Platform.isIOS && player.state.playing) {
+                                Future.delayed(
+                                  const Duration(milliseconds: 100),
+                                  () async {
+                                    await controller.player.pause();
+                                    await controller.player.play();
+                                  },
+                                );
+                              }
+
                               videoKey.currentState?.update(fill: Colors.black);
                             },
                             onExitFullscreen: () async {
