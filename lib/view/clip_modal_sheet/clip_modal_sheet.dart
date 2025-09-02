@@ -1,4 +1,5 @@
 import "package:auto_route/auto_route.dart";
+import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/experimental/mutation.dart";
@@ -129,7 +130,18 @@ class ClipModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
     final state = ref.watch(_clipModalSheetNotifierProvider(noteId));
     final notifier = _clipModalSheetNotifierProvider(noteId).notifier;
     final loadClips = ref.watch(loadClipsMutation);
-    final isFinalPage = useState(false);
+    final isFinalPage = useState<bool?>(null);
+
+    // ソートされていない場合、ページネーションに対応していないとみなす。
+    ref.listen(_clipModalSheetNotifierProvider(noteId), (_, next) {
+      if (isFinalPage.value == null) {
+        if (next case AsyncData(:final value)) {
+          isFinalPage.value =
+              value.isEmpty ||
+              !value.isSorted((a, b) => b.$1.id.compareTo(a.$1.id));
+        }
+      }
+    });
 
     final create = useAsync(() async {
       final settings = await context.pushRoute<ClipSettings>(
@@ -161,7 +173,7 @@ class ClipModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
               subtitle: Text(clip.description ?? ""),
             );
           } else if (index == value.length) {
-            if (isFinalPage.value) {
+            if (isFinalPage.value ?? false) {
               return SizedBox.shrink();
             }
 
