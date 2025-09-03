@@ -1,20 +1,18 @@
 import "dart:async";
-import "dart:io";
+import "dart:ffi";
 import "dart:math";
 
 import "package:flutter/material.dart";
-import "package:media_kit/media_kit.dart";
-import "package:media_kit_video/media_kit_video.dart";
-import "package:media_kit_video/media_kit_video_controls/src/controls/extensions/duration.dart";
+import "package:flutter/services.dart";
 import "package:miria/l10n/app_localizations.dart";
+
 import "package:url_launcher/url_launcher_string.dart";
-import "package:volume_controller/volume_controller.dart";
+import "package:video_player/video_player.dart";
 
 class MediaPlayer extends StatefulWidget {
   final String url;
   final String fileType;
   final String? thumbnailUrl;
-
   const MediaPlayer({
     required this.url,
     required this.fileType,
@@ -27,27 +25,19 @@ class MediaPlayer extends StatefulWidget {
 }
 
 class MediaPlayerState extends State<MediaPlayer> {
-  late final videoKey = GlobalKey<VideoState>();
-  late final player = Player();
-  late final controller = VideoController(player);
+  //late final videoKey = GlobalKey<VideoState>();
+  late final VideoPlayerController controller;
   late final bool isAudioFile;
-  final List<StreamSubscription> subscriptions = [];
 
-  double aspectRatio = 1;
+  MediaPlayerState() {
+    _listener = () {
+      // 検知したタイミングで再描画する
+      setState(() {});
+    };
+  }
 
-  bool isVisibleControlBar = false;
-  bool isEnabledButton = false;
-  bool isFullscreen = false;
-  Timer? timer;
-
-  Duration position = const Duration();
-  Duration bufferPosition = const Duration();
-  Duration duration = const Duration();
-  final double iconSize = 30.0;
   bool isSeeking = false;
-
-  bool get isDesktop =>
-      Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+  bool isMute = false;
 
   @override
   void initState() {
@@ -58,52 +48,38 @@ class MediaPlayerState extends State<MediaPlayer> {
       isEnabledButton = true;
     }
 
-    player.open(Media(widget.url));
-    controller.rect.addListener(() {
-      final rect = controller.rect.value;
-      if (rect == null || rect.width == 0 || rect.height == 0) {
-        return;
-      }
-      setState(() {
-        aspectRatio = rect.width / rect.height;
+    controller = VideoPlayerController.networkUrl(Uri.parse(widget.url))
+      ..initialize().then((_) {
+        setState(() {
+          aspectRatio = controller.value.aspectRatio;
+          controller.play();
+        });
       });
-    });
-
-    subscriptions.addAll([
-      controller.player.stream.position.listen((event) {
-        setState(() {
-          if (!isSeeking) {
-            position = event;
-          }
-        });
-      }),
-      controller.player.stream.buffer.listen((event) {
-        setState(() {
-          bufferPosition = event;
-        });
-      }),
-      controller.player.stream.duration.listen((event) {
-        setState(() {
-          duration = event;
-        });
-      }),
-    ]);
+    controller.addListener(_listener);
   }
 
   @override
   void dispose() {
-    Future.microtask(() async {
-      for (final subscription in subscriptions) {
-        await subscription.cancel();
-      }
-      await player.dispose();
-    });
-    VolumeController().removeListener();
+    controller.removeListener(_listener);
+    controller.dispose();
     super.dispose();
   }
 
-  Future<void> _showMenu() {
-    return showModalBottomSheet(
+  double aspectRatio = 1;
+
+  int lastTapTime = 0;
+  bool isVisibleControlBar = false;
+  bool isEnabledButton = false;
+  bool isFullScreen = false;
+  Timer? timer;
+
+  late final VoidCallback _listener;
+
+  Duration position = const Duration(seconds: 0);
+  final double iconSize = 30.0;
+
+  Future<void> showMenu() async {
+    await showModalBottomSheet<void>(
       context: context,
       builder: (innerContext) {
         return ListView(
@@ -114,9 +90,11 @@ class MediaPlayerState extends State<MediaPlayer> {
               onTap: () async {
                 Navigator.of(innerContext).pop();
                 Navigator.of(context).pop();
-                await launchUrlString(
-                  widget.url,
-                  mode: LaunchMode.externalApplication,
+                unawaited(
+                  launchUrlString(
+                    widget.url,
+                    mode: LaunchMode.externalApplication,
+                  ),
                 );
               },
             ),
@@ -126,7 +104,8 @@ class MediaPlayerState extends State<MediaPlayer> {
                 title: Text(S.of(context).changeFullScreen),
                 onTap: () async {
                   Navigator.of(innerContext).pop();
-                  await videoKey.currentState?.enterFullscreen();
+                  /*(videoKey.currentState
+                                                      ?.enterFullscreen();*/
                 },
               ),
           ],
@@ -135,60 +114,51 @@ class MediaPlayerState extends State<MediaPlayer> {
     );
   }
 
+  String formatDuration(Duration duration, {required Duration reference}) {
+    // ignore: parameter_assignments
+    duration = duration.abs();
+    // ignore: parameter_assignments
+    reference = reference.abs();
+
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    final hours = twoDigits(duration.inHours);
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+
+    return (duration.inHours > 0 || reference.inHours > 0)
+        ? "$hours:$minutes:$seconds"
+        : "$minutes:$seconds";
+  }
+
+  void startHideTimer() {
+    if (isAudioFile) return;
+    timer?.cancel();
+    timer = Timer(const Duration(seconds: 2), () {
+      if (!mounted) return;
+      setState(() {
+        isVisibleControlBar = false;
+      });
+    });
+  }
+
+  void cancelHideTimer() {
+    if (isAudioFile) return;
+    timer?.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final themeData = MaterialVideoControlsThemeData(
-      seekBarPositionColor: Theme.of(context).primaryColor,
-      seekBarThumbColor: Theme.of(context).primaryColor,
-      backdropColor: Colors.transparent,
-      volumeGesture: false,
-      brightnessGesture: false,
-      displaySeekBar: false,
-      seekOnDoubleTap: false,
-      automaticallyImplySkipNextButton: false,
-      automaticallyImplySkipPreviousButton: false,
-      primaryButtonBar: [],
-      bottomButtonBar: [],
-    );
-
-    final themeDataFull = MaterialVideoControlsThemeData(
-      seekBarPositionColor: Theme.of(context).primaryColor,
-      seekBarThumbColor: Theme.of(context).primaryColor,
-      volumeGesture: false,
-      brightnessGesture: false,
-      displaySeekBar: true,
-      seekOnDoubleTap: true,
-      automaticallyImplySkipNextButton: false,
-      automaticallyImplySkipPreviousButton: false,
-      bottomButtonBarMargin: const EdgeInsets.only(
-        left: 16.0,
-        right: 8.0,
-        bottom: 16.0,
-      ),
-      seekBarMargin: const EdgeInsets.only(bottom: 16.0),
-    );
-
-    final themeDataDesktop = MaterialDesktopVideoControlsThemeData(
-      seekBarPositionColor: Theme.of(context).primaryColor,
-      seekBarThumbColor: Theme.of(context).primaryColor,
-      modifyVolumeOnScroll: false,
-      displaySeekBar: false,
-      automaticallyImplySkipNextButton: false,
-      automaticallyImplySkipPreviousButton: false,
-      primaryButtonBar: [],
-      bottomButtonBar: [],
-      playAndPauseOnTap: false,
-    );
-
-    final themeDataDesktopFull = MaterialDesktopVideoControlsThemeData(
-      seekBarPositionColor: Theme.of(context).primaryColor,
-      seekBarThumbColor: Theme.of(context).primaryColor,
-      modifyVolumeOnScroll: false,
-      automaticallyImplySkipNextButton: false,
-      automaticallyImplySkipPreviousButton: false,
-      playAndPauseOnTap: false,
-    );
-
+    if (!isSeeking) {
+      position = controller.value.position;
+    }
+    final duration = controller.value.duration;
+    var maxBuffering = 0;
+    for (final range in controller.value.buffered) {
+      final end = range.end.inMilliseconds;
+      if (end > maxBuffering) {
+        maxBuffering = end;
+      }
+    }
     return Stack(
       children: [
         Listener(
@@ -213,39 +183,15 @@ class MediaPlayerState extends State<MediaPlayer> {
                   Align(
                     child: AspectRatio(
                       aspectRatio: aspectRatio,
-                      child: MaterialVideoControlsTheme(
-                        normal: themeData,
-                        fullscreen: themeDataFull,
-                        child: MaterialDesktopVideoControlsTheme(
-                          normal: themeDataDesktop,
-                          fullscreen: themeDataDesktopFull,
-                          child: Video(
-                            key: videoKey,
-                            controller: controller,
-                            controls: AdaptiveVideoControls,
-                            fill: Colors.transparent,
-                            onEnterFullscreen: () async {
-                              isFullscreen = true;
-                              await defaultEnterNativeFullscreen();
-                              videoKey.currentState?.update(fill: Colors.black);
-                            },
-                            onExitFullscreen: () async {
-                              await defaultExitNativeFullscreen();
-                              isFullscreen = false;
-                              videoKey.currentState?.update(
-                                fill: Colors.transparent,
-                              );
-                            },
-                          ),
-                        ),
-                      ),
+                      child: VideoPlayer(controller),
                     ),
                   ),
-                  if (!isDesktop)
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                      child: Container(color: Colors.transparent),
+                  if (controller.value.isBuffering)
+                    const Center(
+                      child: SizedBox.square(
+                        dimension: 32,
+                        child: CircularProgressIndicator(),
+                      ),
                     ),
                 ],
               ),
@@ -267,167 +213,151 @@ class MediaPlayerState extends State<MediaPlayer> {
             maintainState: true,
             maintainAnimation: true,
             visible: isEnabledButton,
-            child: Stack(
-              children: [
-                Positioned(
-                  bottom: 0,
-                  child: Container(
-                    padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
-                    width: MediaQuery.of(context).size.width,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      border: Border(
-                        top: BorderSide(color: Theme.of(context).primaryColor),
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: 0,
-                            right: 0,
-                            bottom: 10,
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: IconButton(
-                                        iconSize: iconSize,
-                                        onPressed: () async {
-                                          cancelHideTimer();
-                                          await controller.player.playOrPause();
-                                          startHideTimer();
-                                        },
-                                        icon: StreamBuilder(
-                                          stream:
-                                              controller.player.stream.playing,
-                                          builder: (context, playing) => Icon(
-                                            playing.data == true
-                                                ? Icons.pause
-                                                : Icons.play_arrow,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Text(
-                                      "${position.label(reference: duration)} / ${duration.label(reference: duration)}",
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              IconButton(
-                                iconSize: iconSize,
-                                onPressed: () async {
-                                  cancelHideTimer();
-                                  final isMute =
-                                      controller.player.state.volume == 0;
-                                  await controller.player.setVolume(
-                                    isMute ? 100 : 0,
-                                  );
-                                  startHideTimer();
-                                },
-                                icon: StreamBuilder(
-                                  stream: controller.player.stream.volume,
-                                  builder: (context, playing) => Icon(
-                                    playing.data == 0
-                                        ? Icons.volume_off
-                                        : Icons.volume_up,
-                                  ),
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () async {
-                                  cancelHideTimer();
-                                  await _showMenu();
-                                  startHideTimer();
-                                },
-                                icon: const Icon(Icons.more_horiz),
-                                iconSize: iconSize,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: SliderTheme(
-                                data: SliderThemeData(
-                                  overlayShape: SliderComponentShape.noOverlay,
-                                  trackHeight: 5.0,
-                                  thumbShape: const RoundSliderThumbShape(
-                                    enabledThumbRadius: 10.0,
-                                  ),
-                                ),
-                                child: Slider(
-                                  thumbColor: Theme.of(context).primaryColor,
-                                  activeColor: Theme.of(context).primaryColor,
-                                  value: min(
-                                    position.inMilliseconds,
-                                    duration.inMilliseconds,
-                                  ).toDouble(),
-                                  secondaryTrackValue: bufferPosition
-                                      .inMilliseconds
-                                      .toDouble(),
-                                  min: 0,
-                                  max: duration.inMilliseconds.toDouble(),
-                                  onChangeStart: (value) {
-                                    cancelHideTimer();
-                                    isSeeking = true;
-                                  },
-                                  onChanged: (value) {
-                                    setState(() {
-                                      position = Duration(
-                                        milliseconds: value.toInt(),
-                                      );
-                                    });
-                                  },
-                                  onChangeEnd: (value) async {
-                                    await controller.player.seek(position);
-                                    isSeeking = false;
-                                    startHideTimer();
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            child: _buildControlBar(duration, maxBuffering),
           ),
         ),
       ],
     );
   }
 
-  void startHideTimer() {
-    if (isAudioFile) return;
-    timer?.cancel();
-    timer = Timer(const Duration(seconds: 2), () {
-      if (!mounted) return;
-      setState(() {
-        isVisibleControlBar = false;
-      });
-    });
-  }
-
-  void cancelHideTimer() {
-    if (isAudioFile) return;
-    timer?.cancel();
+  Widget _buildControlBar(Duration duration, int maxBuffering) {
+    return Stack(
+      children: [
+        Positioned(
+          bottom: 0,
+          child: Container(
+            padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
+            width: MediaQuery.of(context).size.width,
+            height: 100,
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              border: Border(
+                top: BorderSide(color: Theme.of(context).primaryColor),
+              ),
+            ),
+            child: Listener(
+              behavior: HitTestBehavior.opaque,
+              onPointerDown: (event) {
+                cancelHideTimer();
+              },
+              onPointerUp: (event) {
+                startHideTimer();
+              },
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 0,
+                      right: 0,
+                      bottom: 10,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: IconButton(
+                                  iconSize: iconSize,
+                                  onPressed: () async {
+                                    if (controller.value.isPlaying) {
+                                      await controller.pause();
+                                    } else {
+                                      await controller.play();
+                                    }
+                                  },
+                                  icon: Icon(
+                                    controller.value.isPlaying
+                                        ? Icons.pause
+                                        : Icons.play_arrow,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                formatDuration(position, reference: duration),
+                                textAlign: TextAlign.center,
+                              ),
+                              const Text(" / "),
+                              Text(
+                                formatDuration(duration, reference: position),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Padding(padding: EdgeInsets.only(right: 5)),
+                        IconButton(
+                          iconSize: iconSize,
+                          onPressed: () {
+                            unawaited(controller.setVolume(isMute ? 100 : 0));
+                            isMute = !isMute;
+                          },
+                          icon: Icon(
+                            isMute ? Icons.volume_off : Icons.volume_up,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            await showMenu();
+                          },
+                          icon: const Icon(Icons.more_horiz),
+                          iconSize: iconSize,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: SliderTheme(
+                          data: SliderThemeData(
+                            overlayShape: SliderComponentShape.noOverlay,
+                            trackHeight: 5.0,
+                            thumbShape: const RoundSliderThumbShape(
+                              enabledThumbRadius: 10.0,
+                            ),
+                          ),
+                          child: Slider(
+                            thumbColor: Theme.of(context).primaryColor,
+                            activeColor: Theme.of(context).primaryColor,
+                            value: position.abs().inMilliseconds.toDouble(),
+                            secondaryTrackValue: maxBuffering.toDouble(),
+                            min: 0,
+                            max: duration.abs().inMilliseconds.toDouble(),
+                            onChangeStart: (value) {
+                              cancelHideTimer();
+                              isSeeking = true;
+                            },
+                            onChanged: (value) {
+                              setState(() {
+                                position = Duration(
+                                  milliseconds: value.toInt(),
+                                );
+                              });
+                            },
+                            onChangeEnd: (value) {
+                              controller.seekTo(position);
+                              isSeeking = false;
+                              startHideTimer();
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

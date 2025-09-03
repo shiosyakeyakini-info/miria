@@ -104,7 +104,7 @@ jobs:
           run: |
             docker exec debian bash -c '
                 apt update
-                apt install -y curl git unzip ninja-build libgtk-3-dev libsecret-1-dev libstdc++-12-dev nasm cmake libmpv-dev clang
+                apt install -y curl git unzip ninja-build libgtk-3-dev libsecret-1-dev libstdc++-12-dev nasm cmake clang
                 rm -rf /var/lib/apt/lists/*
             '
 
