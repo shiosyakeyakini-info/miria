@@ -3318,6 +3318,12 @@ abstract class S {
   /// **'ファイルの保存に失敗したみたいや'**
   String get failedFileSave;
 
+  /// No description provided for @loopPlayback.
+  ///
+  /// In ja, this message translates to:
+  /// **'ループ再生'**
+  String get loopPlayback;
+
   /// No description provided for @misskeyGames.
   ///
   /// In ja, this message translates to:

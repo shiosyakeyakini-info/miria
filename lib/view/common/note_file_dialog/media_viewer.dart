@@ -34,6 +34,7 @@ class MediaViewer extends HookConsumerWidget {
               url: file.thumbnailUrl.toString(),
               type: ImageType.imageThumbnail,
               fit: BoxFit.contain,
+              errorBuilder: null,
             ),
           Icon(
             Icons.play_circle,

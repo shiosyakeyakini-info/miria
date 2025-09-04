@@ -1919,6 +1919,9 @@ class SJa extends S {
   String get failedFileSave => 'ファイルの保存に失敗したみたいや';
 
   @override
+  String get loopPlayback => 'ループ再生';
+
+  @override
   String get misskeyGames => 'Misskey Games';
 
   @override
