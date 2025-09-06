@@ -765,7 +765,7 @@ class _FullScreenMediaPlayerState extends State<_FullScreenMediaPlayer>
 
                             IconButton(
                               onPressed: () {
-                                Navigator.of(context).pop();
+                                Navigator.of(context).removeRoute(ModalRoute.of(context)!);
                               },
                               icon: const Icon(Icons.fullscreen_exit),
                             ),
