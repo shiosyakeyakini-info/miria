@@ -3,14 +3,15 @@ import "dart:math" as math;
 
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/const.dart";
 import "package:miria/l10n/app_localizations.dart";
-
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:url_launcher/url_launcher_string.dart";
 import "package:video_player/video_player.dart";
 import "package:window_manager/window_manager.dart";
 
-class MediaPlayer extends StatefulWidget {
+class MediaPlayer extends ConsumerStatefulWidget {
   final String url;
   final String fileType;
   final String? thumbnailUrl;
@@ -25,18 +26,21 @@ class MediaPlayer extends StatefulWidget {
   MediaPlayerState createState() => MediaPlayerState();
 }
 
-class MediaPlayerState extends State<MediaPlayer> with _MediaPlayerMixin {
+class MediaPlayerState extends ConsumerState<MediaPlayer>
+    with _MediaPlayerMixin {
   @override
   VideoPlayerController get videoController => controller;
 
   late final VideoPlayerController controller;
   late final VoidCallback _listener;
-
+  bool isErrorDialogShown = false;
   bool isFullScreen = false;
 
   MediaPlayerState() {
     _listener = () {
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     };
   }
 
@@ -49,12 +53,26 @@ class MediaPlayerState extends State<MediaPlayer> with _MediaPlayerMixin {
       isEnabledButton = true;
     }
 
-    controller = VideoPlayerController.networkUrl(Uri.parse(widget.url))
-      ..initialize().then((_) {
-        setState(() {
-          controller.play();
+    controller = VideoPlayerController.networkUrl(Uri.parse(widget.url));
+    controller
+        .initialize()
+        .then((_) {
+          if (!mounted) return;
+          setState(() {
+            controller.play();
+          });
+        })
+        .catchError((error) async {
+          if (!mounted || isErrorDialogShown) return;
+          isErrorDialogShown = true;
+          await ref
+              .read(dialogStateNotifierProvider.notifier)
+              .showSimpleDialog(
+                message: (context) => S.of(context).thrownError,
+              );
+          if (!mounted) return;
+          Navigator.of(context).pop();
         });
-      });
     controller.addListener(_listener);
   }
 
@@ -765,7 +783,9 @@ class _FullScreenMediaPlayerState extends State<_FullScreenMediaPlayer>
 
                             IconButton(
                               onPressed: () {
-                                Navigator.of(context).removeRoute(ModalRoute.of(context)!);
+                                Navigator.of(
+                                  context,
+                                ).removeRoute(ModalRoute.of(context)!);
                               },
                               icon: const Icon(Icons.fullscreen_exit),
                             ),
