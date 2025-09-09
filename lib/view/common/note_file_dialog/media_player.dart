@@ -1,14 +1,19 @@
 import "dart:async";
+import "dart:io";
 import "dart:math" as math;
 
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
+import "package:fvp/fvp.dart" as fvp;
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/const.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:url_launcher/url_launcher_string.dart";
 import "package:video_player/video_player.dart";
+import "package:video_player_android/video_player_android.dart";
+import "package:video_player_avfoundation/video_player_avfoundation.dart";
+import "package:video_player_platform_interface/video_player_platform_interface.dart";
 import "package:window_manager/window_manager.dart";
 
 class MediaPlayer extends ConsumerStatefulWidget {
@@ -51,6 +56,29 @@ class MediaPlayerState extends ConsumerState<MediaPlayer>
     if (isAudioFile) {
       isVisibleControlBar = true;
       isEnabledButton = true;
+    }
+
+    // movファイル等でバッファリング問題が起きやすいため
+    // iOS/Androidではオーディオファイル以外にAVPlayer/ExoPlayerを使用する
+    if (!isDesktop && !isAudioFile) {
+      if (Platform.isAndroid &&
+          VideoPlayerPlatform.instance is! AndroidVideoPlayer) {
+        VideoPlayerPlatform.instance = AndroidVideoPlayer();
+      } else if (Platform.isIOS &&
+          VideoPlayerPlatform.instance is! AVFoundationVideoPlayer) {
+        VideoPlayerPlatform.instance = AVFoundationVideoPlayer();
+      }
+    } else {
+      fvp.registerWith(
+        options: {
+          //"global": {"ffmpeg.log": "debug"},
+          "player": {
+            "demux.buffer.ranges": "8", // ループ再生時のバッファリング緩和
+            //"avformat.probesize": "10M", // 解析上限容量
+            //"avformat.analyzeduration": "5M", // 解析上限時間(10M = 10s)
+          },
+        },
+      );
     }
 
     controller = VideoPlayerController.networkUrl(Uri.parse(widget.url));

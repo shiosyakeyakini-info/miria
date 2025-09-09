@@ -1866,7 +1866,7 @@ packages:
     source: hosted
     version: "2.10.0"
   video_player_android:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: video_player_android
       sha256: "59e5a457ddcc1688f39e9aef0efb62aa845cf0cbbac47e44ac9730dc079a2385"
@@ -1874,7 +1874,7 @@ packages:
     source: hosted
     version: "2.8.13"
   video_player_avfoundation:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: video_player_avfoundation
       sha256: f9a780aac57802b2892f93787e5ea53b5f43cc57dc107bee9436458365be71cd
@@ -1882,7 +1882,7 @@ packages:
     source: hosted
     version: "2.8.4"
   video_player_platform_interface:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: video_player_platform_interface
       sha256: cf2a1d29a284db648fd66cbd18aacc157f9862d77d2cc790f6f9678a46c1db5a

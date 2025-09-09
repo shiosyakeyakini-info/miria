@@ -81,6 +81,9 @@ dependencies:
   mime: ^2.0.0
   fvp: ^0.34.0
   video_player: ^2.10.0
+  video_player_avfoundation: ^2.8.4
+  video_player_android: ^2.8.13
+  video_player_platform_interface: ^6.4.0
 
 dependency_overrides:
   image_editor:
