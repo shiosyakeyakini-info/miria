@@ -45,6 +45,10 @@ PODS:
     - Flutter
   - flutter_secure_storage (6.0.0):
     - Flutter
+  - fvp (0.34.0):
+    - Flutter
+    - FlutterMacOS
+    - mdk (~> 0.34.0)
   - image_editor_common (1.0.0):
     - Flutter
   - image_gallery_saver (2.0.2):
@@ -64,10 +68,7 @@ PODS:
   - Mantle (2.2.0):
     - Mantle/extobjc (= 2.2.0)
   - Mantle/extobjc (2.2.0)
-  - media_kit_libs_ios_video (1.0.4):
-    - Flutter
-  - media_kit_video (0.0.1):
-    - Flutter
+  - mdk (0.34.0)
   - package_info_plus (0.4.5):
     - Flutter
   - path_provider_foundation (0.0.1):
@@ -96,10 +97,9 @@ PODS:
   - SwiftyGif (5.4.5)
   - url_launcher_ios (0.0.1):
     - Flutter
-  - volume_controller (0.0.1):
+  - video_player_avfoundation (0.0.1):
     - Flutter
-  - wakelock_plus (0.0.1):
-    - Flutter
+    - FlutterMacOS
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -111,10 +111,9 @@ DEPENDENCIES:
   - flutter_image_compress_common (from `.symlinks/plugins/flutter_image_compress_common/ios`)
   - flutter_image_gallery_saver (from `.symlinks/plugins/flutter_image_gallery_saver/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
+  - fvp (from `.symlinks/plugins/fvp/darwin`)
   - image_editor_common (from `.symlinks/plugins/image_editor_common/ios`)
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
-  - media_kit_libs_ios_video (from `.symlinks/plugins/media_kit_libs_ios_video/ios`)
-  - media_kit_video (from `.symlinks/plugins/media_kit_video/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
@@ -124,8 +123,7 @@ DEPENDENCIES:
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
-  - volume_controller (from `.symlinks/plugins/volume_controller/ios`)
-  - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
+  - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/darwin`)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/darwin`)
 
 SPEC REPOS:
@@ -134,6 +132,7 @@ SPEC REPOS:
     - DKPhotoGallery
     - libwebp
     - Mantle
+    - mdk
     - SDWebImage
     - SDWebImageWebPCoder
     - SwiftyGif
@@ -151,14 +150,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_image_gallery_saver/ios"
   flutter_secure_storage:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
+  fvp:
+    :path: ".symlinks/plugins/fvp/darwin"
   image_editor_common:
     :path: ".symlinks/plugins/image_editor_common/ios"
   image_gallery_saver:
     :path: ".symlinks/plugins/image_gallery_saver/ios"
-  media_kit_libs_ios_video:
-    :path: ".symlinks/plugins/media_kit_libs_ios_video/ios"
-  media_kit_video:
-    :path: ".symlinks/plugins/media_kit_video/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
@@ -177,43 +174,40 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite_darwin/darwin"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
-  volume_controller:
-    :path: ".symlinks/plugins/volume_controller/ios"
-  wakelock_plus:
-    :path: ".symlinks/plugins/wakelock_plus/ios"
+  video_player_avfoundation:
+    :path: ".symlinks/plugins/video_player_avfoundation/darwin"
   webview_flutter_wkwebview:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
 
 SPEC CHECKSUMS:
-  device_info_plus: 21fcca2080fbcd348be798aa36c3e5ed849eefbe
+  device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
   DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
   DKPhotoGallery: b3834fecb755ee09a593d7c9e389d8b5d6deed60
-  file_picker: a0560bc09d61de87f12d246fc47d2119e6ef37be
+  file_picker: b159e0c068aef54932bb15dc9fd1571818edaf49
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_image_compress_common: 1697a328fd72bfb335507c6bca1a65fa5ad87df1
-  flutter_image_gallery_saver: 0453c83412e9691abef94c04c8d180724f5083a8
-  flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
-  image_editor_common: 3de87e7c4804f4ae24c8f8a998362b98c105cac1
-  image_gallery_saver: 14711d79da40581063e8842a11acf1969d781ed7
+  flutter_image_compress_common: ec1d45c362c9d30a3f6a0426c297f47c52007e3e
+  flutter_image_gallery_saver: f356b5f265ba4e36f38b2fe96d0468e0712a6b37
+  flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
+  fvp: 0ba1ba9d2adfbb9baea21009d94b561330910027
+  image_editor_common: d6f6644ae4a6de80481e89fe6d0a8c49e30b4b43
+  image_gallery_saver: cb43cc43141711190510e92c460eb1655cd343cb
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   Mantle: c5aa8794a29a022dfbbfc9799af95f477a69b62d
-  media_kit_libs_ios_video: 5a18affdb97d1f5d466dc79988b13eff6c5e2854
-  media_kit_video: 1746e198cb697d1ffb734b1d05ec429d1fcd1474
-  package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
-  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
-  permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
-  receive_sharing_intent: 222384f00ffe7e952bbfabaa9e3967cb87e5fe00
+  mdk: c54ab482a3457f754b2bf6b4b615c117379f5885
+  package_info_plus: c0502532a26c7662a62a356cebe2692ec5fe4ec4
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
+  receive_sharing_intent: 79c848f5b045674ad60b9fea3bafea59962ad2c1
   SDWebImage: 8a6b7b160b4d710e2a22b6900e25301075c34cb3
   SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380
-  share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a
-  shared_preference_app_group: 7422922a188e05cf680a656e18e2786dcb5c58b3
-  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
-  sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
+  share_plus: 8b6f8b3447e494cca5317c8c3073de39b3600d1f
+  shared_preference_app_group: 46aee3873e1da581d4904bece9876596d7f66725
+  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
+  sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
   SwiftyGif: 706c60cf65fa2bc5ee0313beece843c8eb8194d4
-  url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
-  volume_controller: ca1cde542ee70fad77d388f82e9616488110942b
-  wakelock_plus: e29112ab3ef0b318e58cfa5c32326458be66b556
-  webview_flutter_wkwebview: 1821ceac936eba6f7984d89a9f3bcb4dea99ebb2
+  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
+  video_player_avfoundation: 7c6c11d8470e1675df7397027218274b6d2360b3
+  webview_flutter_wkwebview: a4af96a051138e28e29f60101d094683b9f82188
 
 PODFILE CHECKSUM: fc9f5883117ffc5dbdfedd53e44b13710e7871f2
 
