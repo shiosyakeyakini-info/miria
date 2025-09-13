@@ -44,9 +44,7 @@ class MediaViewer extends HookConsumerWidget {
         ],
       ),
     );
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
+    return SizedBox.expand(
       child:
           (enabledAutoPlay.value ||
               (!enabledAutoPlay.value && !isThumbnailVisible.value))

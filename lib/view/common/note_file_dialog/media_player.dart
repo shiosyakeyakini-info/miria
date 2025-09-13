@@ -183,9 +183,7 @@ class MediaPlayerState extends ConsumerState<MediaPlayer>
             startHideTimer();
           },
           child: Center(
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
+            child: SizedBox.expand(
               child: Stack(
                 children: [
                   Align(
@@ -228,7 +226,7 @@ class MediaPlayerState extends ConsumerState<MediaPlayer>
             maintainState: true,
             maintainAnimation: true,
             visible: isEnabledButton,
-            child: _buildControlBar(),
+            child: SafeArea(child: _buildControlBar()),
           ),
         ),
       ],
@@ -252,12 +250,14 @@ class MediaPlayerState extends ConsumerState<MediaPlayer>
     return IconTheme(
       data: IconThemeData(size: 30.0, color: IconTheme.of(context).color),
       child: Stack(
+        fit: StackFit.expand,
         children: [
           Positioned(
             bottom: 0,
+            left: 0,
+            right: 0,
             child: Container(
               padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
-              width: MediaQuery.of(context).size.width,
               height: 100,
               decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
@@ -588,67 +588,67 @@ class _FullScreenMediaPlayerState extends State<_FullScreenMediaPlayer>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          Listener(
-            behavior: HitTestBehavior.translucent,
-            onPointerDown: (event) {
-              cancelHideTimer();
-              setState(() {
-                isEnabledButton = true;
-                isVisibleControlBar = !isVisibleControlBar;
-              });
-            },
-            onPointerUp: (event) {
-              startHideTimer();
-            },
-            child: Center(
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: Stack(
-                  children: [
-                    Align(
-                      child: AspectRatio(
-                        aspectRatio: widget.controller.value.aspectRatio,
-                        child: _VideoPlayer(
-                          controller: widget.controller,
-                          isFullscreen: true,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Listener(
+              behavior: HitTestBehavior.translucent,
+              onPointerDown: (event) {
+                cancelHideTimer();
+                setState(() {
+                  isEnabledButton = true;
+                  isVisibleControlBar = !isVisibleControlBar;
+                });
+              },
+              onPointerUp: (event) {
+                startHideTimer();
+              },
+              child: Center(
+                child: SizedBox.expand(
+                  child: Stack(
+                    children: [
+                      Align(
+                        child: AspectRatio(
+                          aspectRatio: widget.controller.value.aspectRatio,
+                          child: _VideoPlayer(
+                            controller: widget.controller,
+                            isFullscreen: true,
+                          ),
                         ),
                       ),
-                    ),
-                    if (!widget.controller.value.isInitialized ||
-                        widget.controller.value.isBuffering)
-                      const Center(
-                        child: SizedBox.square(
-                          dimension: 32,
-                          child: CircularProgressIndicator(),
+                      if (!widget.controller.value.isInitialized ||
+                          widget.controller.value.isBuffering)
+                        const Center(
+                          child: SizedBox.square(
+                            dimension: 32,
+                            child: CircularProgressIndicator(),
+                          ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          AnimatedOpacity(
-            curve: Curves.easeInOut,
-            opacity: isVisibleControlBar ? 1.0 : 0.0,
-            duration: const Duration(milliseconds: 500),
-            onEnd: () {
-              if (mounted && !isVisibleControlBar) {
-                setState(() {
-                  isEnabledButton = false;
-                });
-              }
-            },
-            child: Visibility(
-              maintainState: true,
-              maintainAnimation: true,
-              visible: isEnabledButton,
-              child: _buildControlBar(),
+            AnimatedOpacity(
+              curve: Curves.easeInOut,
+              opacity: isVisibleControlBar ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 500),
+              onEnd: () {
+                if (mounted && !isVisibleControlBar) {
+                  setState(() {
+                    isEnabledButton = false;
+                  });
+                }
+              },
+              child: Visibility(
+                maintainState: true,
+                maintainAnimation: true,
+                visible: isEnabledButton,
+                child: SafeArea(child: _buildControlBar()),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -671,12 +671,14 @@ class _FullScreenMediaPlayerState extends State<_FullScreenMediaPlayer>
       child: DefaultTextStyle(
         style: TextStyle(color: Colors.white),
         child: Stack(
+          fit: StackFit.expand,
           children: [
             Positioned(
               bottom: 0,
+              left: 0,
+              right: 0,
               child: Container(
                 padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
-                width: MediaQuery.of(context).size.width,
                 height: 90,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
