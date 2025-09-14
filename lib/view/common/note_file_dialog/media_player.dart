@@ -418,6 +418,9 @@ class _VideoPlayerState extends State<_VideoPlayer> {
 
   KeyEventResult handleKey(FocusNode node, KeyEvent event) {
     if (event is KeyUpEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.goBack) {
+        return KeyEventResult.ignored;
+      }
       pressedKeys.remove(event.logicalKey);
       return KeyEventResult.handled;
     }
