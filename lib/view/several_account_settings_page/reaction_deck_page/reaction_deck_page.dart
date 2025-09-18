@@ -169,7 +169,9 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
     final domain = endpoints.contains("i/registry/scopes-with-domain")
         ? "@"
         : "system";
-    final useEmojiPalette = endpoints.contains("chat/history");
+    final useEmojiPalette =
+        endpoints.contains("chat/history") ||
+        !endpoints.contains("i/read-all-unread-notes");
     if (!context.mounted) return;
     final emojiNames = await showDialog<List<String>>(
       context: context,
