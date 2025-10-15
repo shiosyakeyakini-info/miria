@@ -101,6 +101,11 @@ dependency_overrides:
       url: https://github.com/Baseflow/flutter_cache_manager
       ref: 54904e499a06d0364a2b3f4ca9789e5f829f1879
       path: ./flutter_cache_manager
+  permission_handler_windows:
+    git:
+      url: https://github.com/MSOB7YY/flutter-permission-handler
+      ref: 32ffba1b3b62a881b2208297fd20bfb2776000bd
+      path: ./permission_handler_windows
 
 dev_dependencies:
   flutter_test:
