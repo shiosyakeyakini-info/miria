@@ -999,5 +999,7 @@
     "drafts": "草稿",
     "noDrafts": "没有草稿",
     "confirmDeleteDraft": "要删除这个草稿吗？",
-    "emptyNote": "空笔记"
+    "emptyNote": "空笔记",
+    "scheduledAt": "定时发布时间",
+    "schedulePost": "定时发布"
 }

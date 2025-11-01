@@ -1131,7 +1131,9 @@
     "emptyNote": "空っぽのノート",
     "poll": "アンケート",
     "continueEditing": "もうちょっと編集を続ける",
-    "saveAndClose": "保存して閉じる", 
-    "discardAndReturn": "保存せずに戻る"
+    "saveAndClose": "保存して閉じる",
+    "discardAndReturn": "保存せずに戻る",
+    "scheduledAt": "予約投稿日時",
+    "schedulePost": "予約投稿"
 
 }

@@ -66,6 +66,9 @@ class NoteCreateSettingTop extends ConsumerWidget {
     final isLocal = ref.watch(
       noteCreateNotifierProvider.select((value) => value.localOnly),
     );
+    final scheduledAt = ref.watch(
+      noteCreateNotifierProvider.select((value) => value.scheduledAt),
+    );
     return Row(
       children: [
         const Padding(padding: EdgeInsets.only(left: 5)),
@@ -113,6 +116,51 @@ class NoteCreateSettingTop extends ConsumerWidget {
               notifier.setReactionAcceptance(result);
             },
             icon: AcceptanceIcon(acceptance: reactionAcceptance),
+          ),
+        ),
+        Builder(
+          builder: (context2) => IconButton(
+            onPressed: () async {
+              final now = DateTime.now();
+              final date = await showDatePicker(
+                context: context2,
+                initialDate: scheduledAt ?? now.add(const Duration(hours: 1)),
+                firstDate: now,
+                lastDate: now.add(const Duration(days: 365)),
+              );
+              if (date == null) return;
+
+              if (!context2.mounted) return;
+              final time = await showTimePicker(
+                context: context2,
+                initialTime: TimeOfDay.fromDateTime(
+                  scheduledAt ?? now.add(const Duration(hours: 1)),
+                ),
+              );
+              if (time == null) return;
+
+              final scheduledDateTime = DateTime(
+                date.year,
+                date.month,
+                date.day,
+                time.hour,
+                time.minute,
+              );
+
+              if (scheduledDateTime.isBefore(now)) {
+                return;
+              }
+
+              notifier.setScheduledAt(scheduledDateTime);
+            },
+            icon: Icon(
+              scheduledAt != null
+                  ? Icons.schedule
+                  : Icons.schedule_outlined,
+              color: scheduledAt != null
+                  ? Theme.of(context).colorScheme.primary
+                  : null,
+            ),
           ),
         ),
       ],

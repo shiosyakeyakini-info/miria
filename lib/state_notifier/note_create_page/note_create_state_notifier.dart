@@ -87,6 +87,7 @@ abstract class NoteCreate with _$NoteCreate {
     NoteCreationMode? noteCreationMode,
     String? noteId,
     String? selectedDraftId,
+    DateTime? scheduledAt,
   }) = _NoteCreate;
 }
 
@@ -1106,5 +1107,13 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
 
   void setVoteDurationType(VoteExpireDurationType type) {
     state = state.copyWith(voteDurationType: type);
+  }
+
+  void setScheduledAt(DateTime dateTime) {
+    state = state.copyWith(scheduledAt: dateTime);
+  }
+
+  void clearScheduledAt() {
+    state = state.copyWith(scheduledAt: null);
   }
 }

@@ -262,6 +262,62 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
                         const NoteCreateSettingTop()
                       else
                         const Padding(padding: EdgeInsets.only(top: 30)),
+                      Consumer(
+                        builder: (context, ref, _) {
+                          final scheduledAt = ref.watch(
+                            noteCreateNotifierProvider
+                                .select((value) => value.scheduledAt),
+                          );
+                          if (scheduledAt == null) return const SizedBox.shrink();
+                          return Container(
+                            margin: const EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 4,
+                            ),
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.schedule,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    "${S.of(context).scheduledAt}: ${scheduledAt.toString()}",
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimaryContainer,
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.close,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimaryContainer,
+                                  ),
+                                  onPressed: () {
+                                    ref
+                                        .read(noteCreateNotifierProvider.notifier)
+                                        .clearScheduledAt();
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                       const ChannelArea(),
                       const ReplyArea(),
                       const ReplyToArea(),
