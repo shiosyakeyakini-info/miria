@@ -6,6 +6,9 @@ part of 'server_detail_dialog.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(_onlineCounts)
 const _onlineCountsProvider = _OnlineCountsProvider._();
 
@@ -125,6 +128,3 @@ final class _PingProvider
 }
 
 String _$_pingHash() => r'3e002e48252dd1158c3ecdf4c6c4a635c5bc80fa';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

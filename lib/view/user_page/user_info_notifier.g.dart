@@ -6,6 +6,9 @@ part of 'user_info_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(userInfoNotifierProxy)
 const userInfoNotifierProxyProvider = UserInfoNotifierProxyFamily._();
 
@@ -182,7 +185,7 @@ final class UserInfoProxyFamily extends $Family
 }
 
 @ProviderFor(UserInfoNotifier)
-const userInfoNotifierProvider = UserInfoNotifierFamily._();
+const userInfoProvider = UserInfoNotifierFamily._();
 
 final class UserInfoNotifierProvider
     extends $AsyncNotifierProvider<UserInfoNotifier, UserInfo> {
@@ -191,7 +194,7 @@ final class UserInfoNotifierProvider
     required ({String userId, AccountContext context}) super.argument,
   }) : super(
          retry: null,
-         name: r'userInfoNotifierProvider',
+         name: r'userInfoProvider',
          isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
@@ -202,7 +205,7 @@ final class UserInfoNotifierProvider
 
   @override
   String toString() {
-    return r'userInfoNotifierProvider'
+    return r'userInfoProvider'
         ''
         '$argument';
   }
@@ -236,7 +239,7 @@ final class UserInfoNotifierFamily extends $Family
   const UserInfoNotifierFamily._()
     : super(
         retry: null,
-        name: r'userInfoNotifierProvider',
+        name: r'userInfoProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
         isAutoDispose: true,
@@ -251,7 +254,7 @@ final class UserInfoNotifierFamily extends $Family
   );
 
   @override
-  String toString() => r'userInfoNotifierProvider';
+  String toString() => r'userInfoProvider';
 }
 
 abstract class _$UserInfoNotifier extends $AsyncNotifier<UserInfo> {
@@ -279,6 +282,3 @@ abstract class _$UserInfoNotifier extends $AsyncNotifier<UserInfo> {
     element.handleValue(ref, created);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

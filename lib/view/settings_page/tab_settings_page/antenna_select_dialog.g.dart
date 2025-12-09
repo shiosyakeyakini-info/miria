@@ -6,6 +6,9 @@ part of 'antenna_select_dialog.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(_antennas)
 const _antennasProvider = _AntennasProvider._();
 
@@ -51,6 +54,3 @@ final class _AntennasProvider
 }
 
 String _$_antennasHash() => r'789e8f8a722a66e9c9270594c9307d9257a14936';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

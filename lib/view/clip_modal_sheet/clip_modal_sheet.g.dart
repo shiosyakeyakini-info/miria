@@ -6,8 +6,11 @@ part of 'clip_modal_sheet.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(_NotesClipsNotifier)
-const _notesClipsNotifierProvider = _NotesClipsNotifierFamily._();
+const _notesClipsProvider = _NotesClipsNotifierFamily._();
 
 final class _NotesClipsNotifierProvider
     extends $AsyncNotifierProvider<_NotesClipsNotifier, List<Clip>> {
@@ -16,7 +19,7 @@ final class _NotesClipsNotifierProvider
     required String super.argument,
   }) : super(
          retry: null,
-         name: r'_notesClipsNotifierProvider',
+         name: r'_notesClipsProvider',
          isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
@@ -31,7 +34,7 @@ final class _NotesClipsNotifierProvider
 
   @override
   String toString() {
-    return r'_notesClipsNotifierProvider'
+    return r'_notesClipsProvider'
         ''
         '($argument)';
   }
@@ -66,7 +69,7 @@ final class _NotesClipsNotifierFamily extends $Family
   const _NotesClipsNotifierFamily._()
     : super(
         retry: null,
-        name: r'_notesClipsNotifierProvider',
+        name: r'_notesClipsProvider',
         dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>[
           _NotesClipsNotifierProvider.$allTransitiveDependencies0,
@@ -79,7 +82,7 @@ final class _NotesClipsNotifierFamily extends $Family
       _NotesClipsNotifierProvider._(argument: noteId, from: this);
 
   @override
-  String toString() => r'_notesClipsNotifierProvider';
+  String toString() => r'_notesClipsProvider';
 }
 
 abstract class _$NotesClipsNotifier extends $AsyncNotifier<List<Clip>> {
@@ -105,7 +108,7 @@ abstract class _$NotesClipsNotifier extends $AsyncNotifier<List<Clip>> {
 }
 
 @ProviderFor(_ClipModalSheetNotifier)
-const _clipModalSheetNotifierProvider = _ClipModalSheetNotifierFamily._();
+const _clipModalSheetProvider = _ClipModalSheetNotifierFamily._();
 
 final class _ClipModalSheetNotifierProvider
     extends
@@ -115,25 +118,25 @@ final class _ClipModalSheetNotifierProvider
     required String super.argument,
   }) : super(
          retry: null,
-         name: r'_clipModalSheetNotifierProvider',
+         name: r'_clipModalSheetProvider',
          isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = clipsNotifierProvider;
+  static const $allTransitiveDependencies0 = clipsProvider;
   static const $allTransitiveDependencies1 =
       ClipsNotifierProvider.$allTransitiveDependencies0;
   static const $allTransitiveDependencies2 =
       ClipsNotifierProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies3 = _notesClipsNotifierProvider;
+  static const $allTransitiveDependencies3 = _notesClipsProvider;
 
   @override
   String debugGetCreateSourceHash() => _$_clipModalSheetNotifierHash();
 
   @override
   String toString() {
-    return r'_clipModalSheetNotifierProvider'
+    return r'_clipModalSheetProvider'
         ''
         '($argument)';
   }
@@ -169,10 +172,10 @@ final class _ClipModalSheetNotifierFamily extends $Family
   const _ClipModalSheetNotifierFamily._()
     : super(
         retry: null,
-        name: r'_clipModalSheetNotifierProvider',
+        name: r'_clipModalSheetProvider',
         dependencies: const <ProviderOrFamily>[
-          clipsNotifierProvider,
-          _notesClipsNotifierProvider,
+          clipsProvider,
+          _notesClipsProvider,
           misskeyPostContextProvider,
         ],
         $allTransitiveDependencies: const <ProviderOrFamily>{
@@ -188,7 +191,7 @@ final class _ClipModalSheetNotifierFamily extends $Family
       _ClipModalSheetNotifierProvider._(argument: noteId, from: this);
 
   @override
-  String toString() => r'_clipModalSheetNotifierProvider';
+  String toString() => r'_clipModalSheetProvider';
 }
 
 abstract class _$ClipModalSheetNotifier
@@ -214,6 +217,3 @@ abstract class _$ClipModalSheetNotifier
     element.handleValue(ref, created);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

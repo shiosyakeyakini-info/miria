@@ -2007,7 +2007,10 @@ class FolderSelectRouteArgs {
     if (identical(this, other)) return true;
     if (other is! FolderSelectRouteArgs) return false;
     return account == other.account &&
-        const ListEquality().equals(fileShowTarget, other.fileShowTarget) &&
+        const ListEquality<String>().equals(
+          fileShowTarget,
+          other.fileShowTarget,
+        ) &&
         confirmationText == other.confirmationText &&
         key == other.key;
   }
@@ -2015,7 +2018,7 @@ class FolderSelectRouteArgs {
   @override
   int get hashCode =>
       account.hashCode ^
-      const ListEquality().hash(fileShowTarget) ^
+      const ListEquality<String>().hash(fileShowTarget) ^
       confirmationText.hashCode ^
       key.hashCode;
 }
@@ -2538,7 +2541,7 @@ class NoteCreateRouteArgs {
     return initialAccount == other.initialAccount &&
         key == other.key &&
         initialText == other.initialText &&
-        const ListEquality().equals(
+        const ListEquality<String>().equals(
           initialMediaFiles,
           other.initialMediaFiles,
         ) &&
@@ -2556,7 +2559,7 @@ class NoteCreateRouteArgs {
       initialAccount.hashCode ^
       key.hashCode ^
       initialText.hashCode ^
-      const ListEquality().hash(initialMediaFiles) ^
+      const ListEquality<String>().hash(initialMediaFiles) ^
       exitOnNoted.hashCode ^
       channel.hashCode ^
       reply.hashCode ^
@@ -3751,12 +3754,14 @@ class SharingAccountSelectRouteArgs {
     if (other is! SharingAccountSelectRouteArgs) return false;
     return key == other.key &&
         sharingText == other.sharingText &&
-        const ListEquality().equals(filePath, other.filePath);
+        const ListEquality<String>().equals(filePath, other.filePath);
   }
 
   @override
   int get hashCode =>
-      key.hashCode ^ sharingText.hashCode ^ const ListEquality().hash(filePath);
+      key.hashCode ^
+      sharingText.hashCode ^
+      const ListEquality<String>().hash(filePath);
 }
 
 /// generated route for

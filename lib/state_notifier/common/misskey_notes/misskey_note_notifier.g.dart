@@ -6,8 +6,11 @@ part of 'misskey_note_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(MisskeyNoteNotifier)
-const misskeyNoteNotifierProvider = MisskeyNoteNotifierProvider._();
+const misskeyNoteProvider = MisskeyNoteNotifierProvider._();
 
 final class MisskeyNoteNotifierProvider
     extends $NotifierProvider<MisskeyNoteNotifier, void> {
@@ -16,7 +19,7 @@ final class MisskeyNoteNotifierProvider
         from: null,
         argument: null,
         retry: null,
-        name: r'misskeyNoteNotifierProvider',
+        name: r'misskeyNoteProvider',
         isAutoDispose: false,
         dependencies: const <ProviderOrFamily>[
           accountContextProvider,
@@ -68,6 +71,3 @@ abstract class _$MisskeyNoteNotifier extends $Notifier<void> {
     element.handleValue(ref, null);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

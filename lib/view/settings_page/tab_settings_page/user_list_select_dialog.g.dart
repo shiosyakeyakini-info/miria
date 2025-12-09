@@ -6,6 +6,9 @@ part of 'user_list_select_dialog.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(_usersList)
 const _usersListProvider = _UsersListProvider._();
 
@@ -51,6 +54,3 @@ final class _UsersListProvider
 }
 
 String _$_usersListHash() => r'd7fab580bf6bc18fc282743de3d482f5d1d62a49';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

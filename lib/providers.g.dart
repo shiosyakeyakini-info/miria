@@ -6,6 +6,9 @@ part of 'providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(dio)
 const dioProvider = DioProvider._();
 
@@ -89,10 +92,13 @@ String _$fileSystemHash() => r'9b96bb59d396159330bbfc15f1c8ea184af0a9b7';
 
 @ProviderFor(misskey)
 @Deprecated(
-  "Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain",
+  'Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain',
 )
 const misskeyProvider = MisskeyFamily._();
 
+@Deprecated(
+  'Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain',
+)
 final class MisskeyProvider
     extends $FunctionalProvider<Misskey, Misskey, Misskey>
     with $Provider<Misskey> {
@@ -149,6 +155,9 @@ final class MisskeyProvider
 
 String _$misskeyHash() => r'c1dede29fabcc1bbff0c065f1ad6fc5f395efb63';
 
+@Deprecated(
+  'Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain',
+)
 final class MisskeyFamily extends $Family
     with $FunctionalFamilyOverride<Misskey, Account> {
   const MisskeyFamily._()
@@ -160,6 +169,9 @@ final class MisskeyFamily extends $Family
         isAutoDispose: false,
       );
 
+  @Deprecated(
+    'Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain',
+  )
   MisskeyProvider call(Account account) =>
       MisskeyProvider._(argument: account, from: this);
 
@@ -827,6 +839,3 @@ final class MisskeyPostContextProvider
 
 String _$misskeyPostContextHash() =>
     r'2132cf565692af187c7efa17b3350e53c8c4d6fa';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

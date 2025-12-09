@@ -6,8 +6,11 @@ part of 'renote_modal_sheet.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(RenoteNotifier)
-const renoteNotifierProvider = RenoteNotifierFamily._();
+const renoteProvider = RenoteNotifierFamily._();
 
 final class RenoteNotifierProvider
     extends $NotifierProvider<RenoteNotifier, AsyncValue<void>?> {
@@ -16,7 +19,7 @@ final class RenoteNotifierProvider
     required (Account, Note) super.argument,
   }) : super(
          retry: null,
-         name: r'renoteNotifierProvider',
+         name: r'renoteProvider',
          isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
@@ -27,7 +30,7 @@ final class RenoteNotifierProvider
 
   @override
   String toString() {
-    return r'renoteNotifierProvider'
+    return r'renoteProvider'
         ''
         '$argument';
   }
@@ -69,7 +72,7 @@ final class RenoteNotifierFamily extends $Family
   const RenoteNotifierFamily._()
     : super(
         retry: null,
-        name: r'renoteNotifierProvider',
+        name: r'renoteProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
         isAutoDispose: true,
@@ -79,7 +82,7 @@ final class RenoteNotifierFamily extends $Family
       RenoteNotifierProvider._(argument: (account, note), from: this);
 
   @override
-  String toString() => r'renoteNotifierProvider';
+  String toString() => r'renoteProvider';
 }
 
 abstract class _$RenoteNotifier extends $Notifier<AsyncValue<void>?> {
@@ -106,7 +109,7 @@ abstract class _$RenoteNotifier extends $Notifier<AsyncValue<void>?> {
 }
 
 @ProviderFor(RenoteChannelNotifier)
-const renoteChannelNotifierProvider = RenoteChannelNotifierFamily._();
+const renoteChannelProvider = RenoteChannelNotifierFamily._();
 
 final class RenoteChannelNotifierProvider
     extends
@@ -119,7 +122,7 @@ final class RenoteChannelNotifierProvider
     required Account super.argument,
   }) : super(
          retry: null,
-         name: r'renoteChannelNotifierProvider',
+         name: r'renoteChannelProvider',
          isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
@@ -130,7 +133,7 @@ final class RenoteChannelNotifierProvider
 
   @override
   String toString() {
-    return r'renoteChannelNotifierProvider'
+    return r'renoteChannelProvider'
         ''
         '($argument)';
   }
@@ -175,7 +178,7 @@ final class RenoteChannelNotifierFamily extends $Family
   const RenoteChannelNotifierFamily._()
     : super(
         retry: null,
-        name: r'renoteChannelNotifierProvider',
+        name: r'renoteChannelProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
         isAutoDispose: true,
@@ -185,7 +188,7 @@ final class RenoteChannelNotifierFamily extends $Family
       RenoteChannelNotifierProvider._(argument: account, from: this);
 
   @override
-  String toString() => r'renoteChannelNotifierProvider';
+  String toString() => r'renoteChannelProvider';
 }
 
 abstract class _$RenoteChannelNotifier
@@ -220,7 +223,7 @@ abstract class _$RenoteChannelNotifier
 }
 
 @ProviderFor(RenoteOtherAccountNotifier)
-const renoteOtherAccountNotifierProvider = RenoteOtherAccountNotifierFamily._();
+const renoteOtherAccountProvider = RenoteOtherAccountNotifierFamily._();
 
 final class RenoteOtherAccountNotifierProvider
     extends
@@ -233,7 +236,7 @@ final class RenoteOtherAccountNotifierProvider
     required (Account, Note) super.argument,
   }) : super(
          retry: null,
-         name: r'renoteOtherAccountNotifierProvider',
+         name: r'renoteOtherAccountProvider',
          isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
@@ -246,7 +249,7 @@ final class RenoteOtherAccountNotifierProvider
 
   @override
   String toString() {
-    return r'renoteOtherAccountNotifierProvider'
+    return r'renoteOtherAccountProvider'
         ''
         '$argument';
   }
@@ -290,7 +293,7 @@ final class RenoteOtherAccountNotifierFamily extends $Family
   const RenoteOtherAccountNotifierFamily._()
     : super(
         retry: null,
-        name: r'renoteOtherAccountNotifierProvider',
+        name: r'renoteOtherAccountProvider',
         dependencies: const <ProviderOrFamily>[accountContextProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>[
           RenoteOtherAccountNotifierProvider.$allTransitiveDependencies0,
@@ -305,7 +308,7 @@ final class RenoteOtherAccountNotifierFamily extends $Family
       );
 
   @override
-  String toString() => r'renoteOtherAccountNotifierProvider';
+  String toString() => r'renoteOtherAccountProvider';
 }
 
 abstract class _$RenoteOtherAccountNotifier
@@ -336,6 +339,3 @@ abstract class _$RenoteOtherAccountNotifier
     element.handleValue(ref, created);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

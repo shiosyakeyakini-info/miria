@@ -6,8 +6,11 @@ part of 'download_file_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(DownloadFileNotifier)
-const downloadFileNotifierProvider = DownloadFileNotifierProvider._();
+const downloadFileProvider = DownloadFileNotifierProvider._();
 
 final class DownloadFileNotifierProvider
     extends $NotifierProvider<DownloadFileNotifier, void> {
@@ -16,7 +19,7 @@ final class DownloadFileNotifierProvider
         from: null,
         argument: null,
         retry: null,
-        name: r'downloadFileNotifierProvider',
+        name: r'downloadFileProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -39,7 +42,7 @@ final class DownloadFileNotifierProvider
 }
 
 String _$downloadFileNotifierHash() =>
-    r'570a3519348813c4ebee6976af9634c1350258f3';
+    r'e8165329f9e2c6712e895cb1579d7346cbc7ccaf';
 
 abstract class _$DownloadFileNotifier extends $Notifier<void> {
   void build();
@@ -59,6 +62,3 @@ abstract class _$DownloadFileNotifier extends $Notifier<void> {
     element.handleValue(ref, null);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

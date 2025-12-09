@@ -6,6 +6,9 @@ part of 'note_detail_page.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(_notesShow)
 const _notesShowProvider = _NotesShowFamily._();
 
@@ -172,6 +175,3 @@ final class _ConversationFamily extends $Family
   @override
   String toString() => r'_conversationProvider';
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

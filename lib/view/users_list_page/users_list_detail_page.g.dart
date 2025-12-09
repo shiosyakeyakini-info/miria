@@ -6,8 +6,11 @@ part of 'users_list_detail_page.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(_UsersListNotifier)
-const _usersListNotifierProvider = _UsersListNotifierFamily._();
+const _usersListProvider = _UsersListNotifierFamily._();
 
 final class _UsersListNotifierProvider
     extends $AsyncNotifierProvider<_UsersListNotifier, UsersList> {
@@ -16,7 +19,7 @@ final class _UsersListNotifierProvider
     required (Misskey, String) super.argument,
   }) : super(
          retry: null,
-         name: r'_usersListNotifierProvider',
+         name: r'_usersListProvider',
          isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
@@ -27,7 +30,7 @@ final class _UsersListNotifierProvider
 
   @override
   String toString() {
-    return r'_usersListNotifierProvider'
+    return r'_usersListProvider'
         ''
         '$argument';
   }
@@ -62,7 +65,7 @@ final class _UsersListNotifierFamily extends $Family
   const _UsersListNotifierFamily._()
     : super(
         retry: null,
-        name: r'_usersListNotifierProvider',
+        name: r'_usersListProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
         isAutoDispose: true,
@@ -72,7 +75,7 @@ final class _UsersListNotifierFamily extends $Family
       _UsersListNotifierProvider._(argument: (misskey, listId), from: this);
 
   @override
-  String toString() => r'_usersListNotifierProvider';
+  String toString() => r'_usersListProvider';
 }
 
 abstract class _$UsersListNotifier extends $AsyncNotifier<UsersList> {
@@ -188,6 +191,3 @@ abstract class _$UsersListUsers extends $AsyncNotifier<List<User>> {
     element.handleValue(ref, created);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -6,8 +6,11 @@ part of 'misskey_page_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(MisskeyPageNotifier)
-const misskeyPageNotifierProvider = MisskeyPageNotifierFamily._();
+const misskeyPageProvider = MisskeyPageNotifierFamily._();
 
 final class MisskeyPageNotifierProvider
     extends
@@ -17,7 +20,7 @@ final class MisskeyPageNotifierProvider
     required String super.argument,
   }) : super(
          retry: null,
-         name: r'misskeyPageNotifierProvider',
+         name: r'misskeyPageProvider',
          isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
@@ -32,7 +35,7 @@ final class MisskeyPageNotifierProvider
 
   @override
   String toString() {
-    return r'misskeyPageNotifierProvider'
+    return r'misskeyPageProvider'
         ''
         '($argument)';
   }
@@ -67,7 +70,7 @@ final class MisskeyPageNotifierFamily extends $Family
   const MisskeyPageNotifierFamily._()
     : super(
         retry: null,
-        name: r'misskeyPageNotifierProvider',
+        name: r'misskeyPageProvider',
         dependencies: const <ProviderOrFamily>[
           accountContextProvider,
           misskeyGetContextProvider,
@@ -85,7 +88,7 @@ final class MisskeyPageNotifierFamily extends $Family
       MisskeyPageNotifierProvider._(argument: pageId, from: this);
 
   @override
-  String toString() => r'misskeyPageNotifierProvider';
+  String toString() => r'misskeyPageProvider';
 }
 
 abstract class _$MisskeyPageNotifier
@@ -118,6 +121,3 @@ abstract class _$MisskeyPageNotifier
     element.handleValue(ref, created);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

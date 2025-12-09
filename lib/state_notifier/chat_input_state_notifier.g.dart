@@ -6,8 +6,11 @@ part of 'chat_input_state_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(ChatInputStateNotifier)
-const chatInputStateNotifierProvider = ChatInputStateNotifierProvider._();
+const chatInputStateProvider = ChatInputStateNotifierProvider._();
 
 final class ChatInputStateNotifierProvider
     extends $NotifierProvider<ChatInputStateNotifier, ChatInputState> {
@@ -16,7 +19,7 @@ final class ChatInputStateNotifierProvider
         from: null,
         argument: null,
         retry: null,
-        name: r'chatInputStateNotifierProvider',
+        name: r'chatInputStateProvider',
         isAutoDispose: false,
         dependencies: const <ProviderOrFamily>[
           accountContextProvider,
@@ -77,6 +80,3 @@ abstract class _$ChatInputStateNotifier extends $Notifier<ChatInputState> {
     element.handleValue(ref, created);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

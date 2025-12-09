@@ -6,6 +6,9 @@ part of 'clip_settings_dialog.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(_formKey)
 const _formKeyProvider = _FormKeyProvider._();
 
@@ -95,7 +98,7 @@ final class _InitialSettingsProvider
 String _$_initialSettingsHash() => r'5822fd6a8e4070e8a4da0c299a6149e49f7ef49e';
 
 @ProviderFor(_ClipSettingsNotifier)
-const _clipSettingsNotifierProvider = _ClipSettingsNotifierProvider._();
+const _clipSettingsProvider = _ClipSettingsNotifierProvider._();
 
 final class _ClipSettingsNotifierProvider
     extends $NotifierProvider<_ClipSettingsNotifier, ClipSettings> {
@@ -104,7 +107,7 @@ final class _ClipSettingsNotifierProvider
         from: null,
         argument: null,
         retry: null,
-        name: r'_clipSettingsNotifierProvider',
+        name: r'_clipSettingsProvider',
         isAutoDispose: true,
         dependencies: const <ProviderOrFamily>[_initialSettingsProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>[
@@ -151,6 +154,3 @@ abstract class _$ClipSettingsNotifier extends $Notifier<ClipSettings> {
     element.handleValue(ref, created);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

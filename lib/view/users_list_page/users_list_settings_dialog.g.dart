@@ -6,6 +6,9 @@ part of 'users_list_settings_dialog.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(_initialSettings)
 const _initialSettingsProvider = _InitialSettingsProvider._();
 
@@ -54,8 +57,7 @@ final class _InitialSettingsProvider
 String _$_initialSettingsHash() => r'3dec59c0d7a3e36d255b82bfd7ea8eda758e9cf3';
 
 @ProviderFor(_UsersListSettingsNotifier)
-const _usersListSettingsNotifierProvider =
-    _UsersListSettingsNotifierProvider._();
+const _usersListSettingsProvider = _UsersListSettingsNotifierProvider._();
 
 final class _UsersListSettingsNotifierProvider
     extends $NotifierProvider<_UsersListSettingsNotifier, UsersListSettings> {
@@ -64,7 +66,7 @@ final class _UsersListSettingsNotifierProvider
         from: null,
         argument: null,
         retry: null,
-        name: r'_usersListSettingsNotifierProvider',
+        name: r'_usersListSettingsProvider',
         isAutoDispose: true,
         dependencies: const <ProviderOrFamily>[_initialSettingsProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>[
@@ -112,6 +114,3 @@ abstract class _$UsersListSettingsNotifier
     element.handleValue(ref, created);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -6,8 +6,11 @@ part of 'note_modal_sheet.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(NoteModalSheetNotifier)
-const noteModalSheetNotifierProvider = NoteModalSheetNotifierFamily._();
+const noteModalSheetProvider = NoteModalSheetNotifierFamily._();
 
 final class NoteModalSheetNotifierProvider
     extends $NotifierProvider<NoteModalSheetNotifier, NoteModalSheetState> {
@@ -16,7 +19,7 @@ final class NoteModalSheetNotifierProvider
     required Note super.argument,
   }) : super(
          retry: null,
-         name: r'noteModalSheetNotifierProvider',
+         name: r'noteModalSheetProvider',
          isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
@@ -33,7 +36,7 @@ final class NoteModalSheetNotifierProvider
 
   @override
   String toString() {
-    return r'noteModalSheetNotifierProvider'
+    return r'noteModalSheetProvider'
         ''
         '($argument)';
   }
@@ -77,7 +80,7 @@ final class NoteModalSheetNotifierFamily extends $Family
   const NoteModalSheetNotifierFamily._()
     : super(
         retry: null,
-        name: r'noteModalSheetNotifierProvider',
+        name: r'noteModalSheetProvider',
         dependencies: const <ProviderOrFamily>[
           misskeyPostContextProvider,
           misskeyGetContextProvider,
@@ -97,7 +100,7 @@ final class NoteModalSheetNotifierFamily extends $Family
       NoteModalSheetNotifierProvider._(argument: note, from: this);
 
   @override
-  String toString() => r'noteModalSheetNotifierProvider';
+  String toString() => r'noteModalSheetProvider';
 }
 
 abstract class _$NoteModalSheetNotifier extends $Notifier<NoteModalSheetState> {
@@ -121,6 +124,3 @@ abstract class _$NoteModalSheetNotifier extends $Notifier<NoteModalSheetState> {
     element.handleValue(ref, created);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
