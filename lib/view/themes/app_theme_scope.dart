@@ -265,7 +265,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
             : theme.primary,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      bottomAppBarTheme: BottomAppBarTheme(color: theme.primary),
+      bottomAppBarTheme: BottomAppBarThemeData(color: theme.primary),
       drawerTheme: DrawerThemeData(backgroundColor: theme.panel),
       listTileTheme: ListTileThemeData(iconColor: theme.foreground),
       scaffoldBackgroundColor: theme.panel,
