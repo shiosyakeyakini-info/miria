@@ -51,7 +51,7 @@ final class MisskeyNoteNotifierProvider
 }
 
 String _$misskeyNoteNotifierHash() =>
-    r'2498b99dd118b71f706d8d830b41047aa7ee3ded';
+    r'2eaa2dab6ead93c01dd98132fc90e47d34b78dce';
 
 abstract class _$MisskeyNoteNotifier extends $Notifier<void> {
   void build();

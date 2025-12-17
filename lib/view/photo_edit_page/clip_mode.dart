@@ -21,25 +21,25 @@ class ClipModeState extends ConsumerState<ClipMode> {
   @override
   Widget build(BuildContext context) {
     final clipMode = ref.watch(
-      photoEditStateNotifierProvider.select((value) => value.clipMode),
+      photoEditStateProvider.select((value) => value.clipMode),
     );
     final defaultSize = ref.watch(
-      photoEditStateNotifierProvider.select((value) => value.defaultSize),
+      photoEditStateProvider.select((value) => value.defaultSize),
     );
     final cropOffset = ref.watch(
-      photoEditStateNotifierProvider.select((value) => value.cropOffset),
+      photoEditStateProvider.select((value) => value.cropOffset),
     );
     final actualSize = ref.watch(
-      photoEditStateNotifierProvider.select((value) => value.actualSize),
+      photoEditStateProvider.select((value) => value.actualSize),
     );
     final cropSize = ref.watch(
-      photoEditStateNotifierProvider.select((value) => value.cropSize),
+      photoEditStateProvider.select((value) => value.cropSize),
     );
     final reactions = ref.watch(
-      photoEditStateNotifierProvider.select((value) => value.emojis),
+      photoEditStateProvider.select((value) => value.emojis),
     );
     final selectedReaction = ref.watch(
-      photoEditStateNotifierProvider.select(
+      photoEditStateProvider.select(
         (value) => value.selectedEmojiIndex,
       ),
     );
@@ -53,19 +53,19 @@ class ClipModeState extends ConsumerState<ClipMode> {
         onPointerMove: selectedReaction == null
             ? null
             : (detail) => ref
-                  .read(photoEditStateNotifierProvider.notifier)
+                  .read(photoEditStateProvider.notifier)
                   .reactionMove(detail),
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onScaleStart: selectedReaction == null
               ? null
               : (detail) => ref
-                    .read(photoEditStateNotifierProvider.notifier)
+                    .read(photoEditStateProvider.notifier)
                     .reactionScaleStart(detail),
           onScaleUpdate: selectedReaction == null
               ? null
               : (detail) => ref
-                    .read(photoEditStateNotifierProvider.notifier)
+                    .read(photoEditStateProvider.notifier)
                     .reactionScaleUpdate(detail),
           child: RepaintBoundary(
             key: widget.renderingGlobalKey,
@@ -149,7 +149,7 @@ class ClipModeState extends ConsumerState<ClipMode> {
                     child: Listener(
                       behavior: HitTestBehavior.translucent,
                       onPointerMove: (detail) => ref
-                          .read(photoEditStateNotifierProvider.notifier)
+                          .read(photoEditStateProvider.notifier)
                           .cropMoveLeftTop(detail),
                       child: Icon(Icons.add, size: iconSize * ratio),
                     ),
@@ -163,7 +163,7 @@ class ClipModeState extends ConsumerState<ClipMode> {
                     child: Listener(
                       behavior: HitTestBehavior.translucent,
                       onPointerMove: (detail) => ref
-                          .read(photoEditStateNotifierProvider.notifier)
+                          .read(photoEditStateProvider.notifier)
                           .cropMoveRightTop(detail),
                       child: Icon(Icons.add, size: 40 * ratio),
                     ),
@@ -177,7 +177,7 @@ class ClipModeState extends ConsumerState<ClipMode> {
                     child: Listener(
                       behavior: HitTestBehavior.translucent,
                       onPointerMove: (detail) => ref
-                          .read(photoEditStateNotifierProvider.notifier)
+                          .read(photoEditStateProvider.notifier)
                           .cropMoveLeftBottom(detail),
                       child: Icon(Icons.add, size: 40 * ratio),
                     ),
@@ -194,7 +194,7 @@ class ClipModeState extends ConsumerState<ClipMode> {
                     child: Listener(
                       behavior: HitTestBehavior.translucent,
                       onPointerMove: (detail) => ref
-                          .read(photoEditStateNotifierProvider.notifier)
+                          .read(photoEditStateProvider.notifier)
                           .cropMoveRightBottom(detail),
                       child: Icon(Icons.add, size: 40 * ratio),
                     ),
@@ -224,7 +224,7 @@ class ClipModeState extends ConsumerState<ClipMode> {
                     height: reaction.$2.scale,
                     child: GestureDetector(
                       onTap: () => ref
-                          .read(photoEditStateNotifierProvider.notifier)
+                          .read(photoEditStateProvider.notifier)
                           .selectReaction(reaction.$1),
                       child: DecoratedBox(
                         decoration: BoxDecoration(

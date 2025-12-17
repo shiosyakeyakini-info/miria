@@ -10,7 +10,7 @@ class FilePreview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final files = ref.watch(
-      noteCreateNotifierProvider.select((value) => value.files),
+      noteCreateProvider.select((value) => value.files),
     );
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,

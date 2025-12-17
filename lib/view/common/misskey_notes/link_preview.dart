@@ -192,7 +192,7 @@ class LinkPreviewTile extends ConsumerWidget {
       padding: const EdgeInsets.all(5),
       child: InkWell(
         onTap: () async => await ref
-            .read(dialogStateNotifierProvider.notifier)
+            .read(dialogStateProvider.notifier)
             .guard(() async {
               await const LinkNavigator().onTapLink(context, ref, link, host);
             }),

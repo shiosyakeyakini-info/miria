@@ -63,7 +63,7 @@ final class NoteVoteNotifierProvider
   }
 }
 
-String _$noteVoteNotifierHash() => r'421dc72908e2fd868f90df56516d266c6a1de281';
+String _$noteVoteNotifierHash() => r'73c0131ce935ff5e7f444be691e90233184685d1';
 
 final class NoteVoteNotifierFamily extends $Family
     with

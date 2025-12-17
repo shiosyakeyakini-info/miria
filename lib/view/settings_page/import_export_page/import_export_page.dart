@@ -74,7 +74,7 @@ class ImportExportPageState extends ConsumerState<ImportExportPage> {
                         return;
                       }
                       await ref
-                          .read(dialogStateNotifierProvider.notifier)
+                          .read(dialogStateProvider.notifier)
                           .guard(() async {
                             await ref
                                 .read(importExportRepositoryProvider)
@@ -122,7 +122,7 @@ class ImportExportPageState extends ConsumerState<ImportExportPage> {
                         return;
                       }
                       await ref
-                          .read(dialogStateNotifierProvider.notifier)
+                          .read(dialogStateProvider.notifier)
                           .guard(() async {
                             await ref
                                 .read(importExportRepositoryProvider)

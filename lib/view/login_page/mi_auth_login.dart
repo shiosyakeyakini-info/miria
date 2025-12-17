@@ -98,7 +98,7 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
                     ElevatedButton(
                       onPressed: () async {
                         await ref
-                            .read(dialogStateNotifierProvider.notifier)
+                            .read(dialogStateProvider.notifier)
                             .guard(() async {
                               await ref
                                   .read(accountRepositoryProvider.notifier)
@@ -130,7 +130,7 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
                       Container(),
                       ElevatedButton(
                         onPressed: () async => ref
-                            .read(dialogStateNotifierProvider.notifier)
+                            .read(dialogStateProvider.notifier)
                             .guard(() => login()),
                         child: Text(S.of(context).didAuthorize),
                       ),

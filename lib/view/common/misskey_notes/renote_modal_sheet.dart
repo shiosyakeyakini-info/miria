@@ -28,7 +28,7 @@ class RenoteNotifier extends _$RenoteNotifier {
   /// チャンネル内にRenote
   Future<void> renoteInSpecificChannel() async {
     state = const AsyncLoading();
-    state = await ref.read(dialogStateNotifierProvider.notifier).guard(
+    state = await ref.read(dialogStateProvider.notifier).guard(
       () async {
         await ref
             .read(misskeyProvider(this.account))
@@ -47,7 +47,7 @@ class RenoteNotifier extends _$RenoteNotifier {
   /// チャンネルにRenote
   Future<void> renoteInChannel(CommunityChannel channel) async {
     state = const AsyncLoading();
-    state = await ref.read(dialogStateNotifierProvider.notifier).guard(
+    state = await ref.read(dialogStateProvider.notifier).guard(
       () async {
         await ref
             .read(misskeyProvider(this.account))
@@ -66,7 +66,7 @@ class RenoteNotifier extends _$RenoteNotifier {
   /// 普通に引用Renote
   Future<void> renote(bool isLocalOnly, NoteVisibility visibility) async {
     state = const AsyncLoading();
-    state = await ref.read(dialogStateNotifierProvider.notifier).guard(
+    state = await ref.read(dialogStateProvider.notifier).guard(
       () async {
         await ref
             .read(misskeyProvider(this.account))
@@ -92,7 +92,7 @@ class RenoteChannelNotifier extends _$RenoteChannelNotifier {
   Future<void> findChannel(String channelId) async {
     state = const AsyncLoading();
     state = await ref
-        .read(dialogStateNotifierProvider.notifier)
+        .read(dialogStateProvider.notifier)
         .guard(
           () async => await ref
               .read(misskeyProvider(this.account))
@@ -121,7 +121,7 @@ class RenoteOtherAccountNotifier extends _$RenoteOtherAccountNotifier {
           ),
         );
     if (selectedAccount == null) return;
-    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+    await ref.read(dialogStateProvider.notifier).guard(() async {
       final accountContext = AccountContext(
         getAccount: selectedAccount,
         postAccount: selectedAccount.isDemoAccount
@@ -134,7 +134,7 @@ class RenoteOtherAccountNotifier extends _$RenoteOtherAccountNotifier {
               note.uri?.host == accountContext.getAccount.host
           ? note
           : await ref
-                .read(misskeyNoteNotifierProvider.notifier)
+                .read(misskeyNoteProvider.notifier)
                 .lookupNote(note: note, accountContext: accountContext);
       if (foundNote == null) {
         state = null;
@@ -164,10 +164,10 @@ class RenoteModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final channel = note.channel;
-    final notifier = renoteNotifierProvider(account, note).notifier;
+    final notifier = renoteProvider(account, note).notifier;
 
     ref
-      ..listen(renoteNotifierProvider(account, note), (_, next) {
+      ..listen(renoteProvider(account, note), (_, next) {
         if (next is! AsyncData) return;
         unawaited(context.maybePop());
         ScaffoldMessenger.of(context).showSnackBar(
@@ -177,7 +177,7 @@ class RenoteModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
           ),
         );
       })
-      ..listen(renoteChannelNotifierProvider(account), (_, next) async {
+      ..listen(renoteChannelProvider(account), (_, next) async {
         if (next is! AsyncData || next == null) return;
         unawaited(context.maybePop());
         await context.pushRoute(
@@ -188,7 +188,7 @@ class RenoteModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
           ),
         );
       })
-      ..listen(renoteOtherAccountNotifierProvider(account, note), (
+      ..listen(renoteOtherAccountProvider(account, note), (
         _,
         next,
       ) async {
@@ -199,13 +199,13 @@ class RenoteModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
         );
       });
 
-    final renoteState = ref.watch(renoteNotifierProvider(account, note));
+    final renoteState = ref.watch(renoteProvider(account, note));
     final renoteChannelState = ref.watch(
-      renoteChannelNotifierProvider(account),
+      renoteChannelProvider(account),
     );
 
     final renoteOtherAccountState = ref.watch(
-      renoteOtherAccountNotifierProvider(account, note),
+      renoteOtherAccountProvider(account, note),
     );
 
     final isLocalOnly = useState(false);
@@ -245,7 +245,7 @@ class RenoteModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
           trailing: IconButton(
             onPressed: () async => await ref
                 .read(
-                  renoteOtherAccountNotifierProvider(account, note).notifier,
+                  renoteOtherAccountProvider(account, note).notifier,
                 )
                 .renoteOtherAccount(),
             icon: const Icon(Icons.keyboard_arrow_down),
@@ -280,7 +280,7 @@ class RenoteModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
           ListTile(
             onTap: () async {
               await ref
-                  .read(renoteChannelNotifierProvider(account).notifier)
+                  .read(renoteChannelProvider(account).notifier)
                   .findChannel(channel.id);
             },
             leading: const SizedBox(

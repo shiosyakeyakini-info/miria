@@ -52,7 +52,7 @@ class _UsersListUsers extends _$UsersListUsers {
   @override
   Future<List<User>> build(Misskey misskey, String listId) async {
     final list = await ref.watch(
-      _usersListNotifierProvider(misskey, listId).future,
+      _usersListProvider(misskey, listId).future,
     );
     final response = await misskey.users.showByIds(
       UsersShowByIdsRequest(userIds: list.userIds),
@@ -95,7 +95,7 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final misskey = ref.watch(misskeyGetContextProvider);
-    final list = ref.watch(_usersListNotifierProvider(misskey, listId));
+    final list = ref.watch(_usersListProvider(misskey, listId));
     final users = ref.watch(_usersListUsersProvider(misskey, listId));
 
     return Scaffold(
@@ -115,11 +115,11 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
                 if (!context.mounted) return;
                 if (settings == null) return;
 
-                await ref.read(dialogStateNotifierProvider.notifier).guard(
+                await ref.read(dialogStateProvider.notifier).guard(
                   () async {
                     await ref
                         .read(
-                          _usersListNotifierProvider(misskey, listId).notifier,
+                          _usersListProvider(misskey, listId).notifier,
                         )
                         .updateList(settings, misskey, listId);
                   },
@@ -159,7 +159,7 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
                       if (user == null) return;
                       if (!context.mounted) return;
                       await ref
-                          .read(dialogStateNotifierProvider.notifier)
+                          .read(dialogStateProvider.notifier)
                           .guard(() async {
                             await ref
                                 .read(
@@ -194,7 +194,7 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
                               if (!context.mounted) return;
                               if (result ?? false) {
                                 await ref
-                                    .read(dialogStateNotifierProvider.notifier)
+                                    .read(dialogStateProvider.notifier)
                                     .guard(() async {
                                       await ref
                                           .read(

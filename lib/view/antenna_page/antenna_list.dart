@@ -13,7 +13,7 @@ class AntennaList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final antennas = ref.watch(antennasNotifierProvider);
+    final antennas = ref.watch(antennasProvider);
 
     return switch (antennas) {
       AsyncData(value: final antennas) => ListView.builder(
@@ -34,7 +34,7 @@ class AntennaList extends ConsumerWidget {
                 if (!context.mounted) return;
                 if (result ?? false) {
                   await ref
-                      .read(antennasNotifierProvider.notifier)
+                      .read(antennasProvider.notifier)
                       .delete(antenna.id);
                 }
               },

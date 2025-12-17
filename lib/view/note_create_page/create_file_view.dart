@@ -24,7 +24,7 @@ class CreateFileView extends ConsumerWidget {
           file: file,
           onSubmit: (result) {
             ref
-                .read(noteCreateNotifierProvider.notifier)
+                .read(noteCreateProvider.notifier)
                 .setFileContent(file, result);
           },
         ),
@@ -40,12 +40,12 @@ class CreateFileView extends ConsumerWidget {
     if (result == null) return;
 
     ref
-        .read(noteCreateNotifierProvider.notifier)
+        .read(noteCreateProvider.notifier)
         .setFileMetaData(index, result);
   }
 
   void delete(BuildContext context, WidgetRef ref) {
-    ref.read(noteCreateNotifierProvider.notifier).deleteFile(index);
+    ref.read(noteCreateProvider.notifier).deleteFile(index);
   }
 
   @override

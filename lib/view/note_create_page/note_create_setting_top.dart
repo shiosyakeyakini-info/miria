@@ -55,16 +55,16 @@ class NoteCreateSettingTop extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notifier = ref.read(noteCreateNotifierProvider.notifier);
+    final notifier = ref.read(noteCreateProvider.notifier);
 
     final noteVisibility = ref.watch(
-      noteCreateNotifierProvider.select((value) => value.noteVisibility),
+      noteCreateProvider.select((value) => value.noteVisibility),
     );
     final reactionAcceptance = ref.watch(
-      noteCreateNotifierProvider.select((value) => value.reactionAcceptance),
+      noteCreateProvider.select((value) => value.reactionAcceptance),
     );
     final isLocal = ref.watch(
-      noteCreateNotifierProvider.select((value) => value.localOnly),
+      noteCreateProvider.select((value) => value.localOnly),
     );
     return Row(
       children: [
@@ -88,7 +88,7 @@ class NoteCreateSettingTop extends ConsumerWidget {
               if (result != null) {
                 if (result == NoteVisibility.public &&
                     !await ref
-                        .read(noteCreateNotifierProvider.notifier)
+                        .read(noteCreateProvider.notifier)
                         .validateNoteVisibility(NoteVisibility.public)) {
                   return;
                 }

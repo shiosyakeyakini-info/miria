@@ -31,7 +31,7 @@ class NoteFileDialog extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imageViewInfo = ref.watch(imageViewerInfoNotifierProvider);
+    final imageViewInfo = ref.watch(imageViewerInfoProvider);
     final isAutoPlay = useState(true);
     final isEnabledSaveButton = useState(true);
 
@@ -63,14 +63,14 @@ class NoteFileDialog extends HookConsumerWidget {
           child: CallbackShortcuts(
             bindings: {
               const SingleActivator(LogicalKeyboardKey.arrowLeft): () async {
-                ref.read(imageViewerInfoNotifierProvider.notifier).reset();
+                ref.read(imageViewerInfoProvider.notifier).reset();
                 await pageController.previousPage(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.ease,
                 );
               },
               const SingleActivator(LogicalKeyboardKey.arrowRight): () async {
-                ref.read(imageViewerInfoNotifierProvider.notifier).reset();
+                ref.read(imageViewerInfoProvider.notifier).reset();
                 await pageController.nextPage(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.ease,
@@ -161,7 +161,7 @@ class NoteFileDialog extends HookConsumerWidget {
                             if (page == null) return;
                             final driveFile = driveFiles[page];
                             final f = await ref
-                                .read(downloadFileNotifierProvider.notifier)
+                                .read(downloadFileProvider.notifier)
                                 .downloadFile(driveFile);
                             if (!context.mounted) return;
                             if (f != DownloadFileResult.succeeded) {

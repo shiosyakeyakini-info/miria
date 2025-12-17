@@ -24,7 +24,7 @@ class BlockedUsersPage extends HookConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final blocking = ref.watch(blockedUsersNotifierProvider);
+    final blocking = ref.watch(blockedUsersProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).blockedUsers)),
@@ -43,7 +43,7 @@ class BlockedUsersPage extends HookConsumerWidget implements AutoRouteWrapper {
               builder: (context) {
                 final unblock = useAsync(
                   () async => ref
-                      .read(blockedUsersNotifierProvider.notifier)
+                      .read(blockedUsersProvider.notifier)
                       .delete(block.blockeeId),
                 );
                 return ListTile(

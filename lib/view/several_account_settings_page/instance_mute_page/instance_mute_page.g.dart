@@ -45,7 +45,7 @@ final class InstanceMutePageNotifierProvider
 }
 
 String _$instanceMutePageNotifierHash() =>
-    r'66d63bb0c86f7bec0da2078bfcaff5f43a86d50f';
+    r'16ed1bcb95f9877f14966297f66239086ace23a1';
 
 abstract class _$InstanceMutePageNotifier
     extends $AsyncNotifier<(List<String>, AsyncValue<void>?)> {

@@ -16,7 +16,7 @@ class ImageViewer extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.watch(imageViewerInfoNotifierProvider);
+    final provider = ref.watch(imageViewerInfoProvider);
 
     final transformationController = useTransformationController();
 
@@ -24,25 +24,25 @@ class ImageViewer extends HookConsumerWidget {
 
     final resetScale = useCallback(() {
       transformationController.value = Matrix4.identity();
-      ref.read(imageViewerInfoNotifierProvider.notifier).reset();
+      ref.read(imageViewerInfoProvider.notifier).reset();
     }, [transformationController, 1.0]);
     return Stack(
       children: [
         Positioned.fill(
           child: Listener(
             onPointerDown: (event) {
-              ref.read(imageViewerInfoNotifierProvider.notifier).addPointer();
+              ref.read(imageViewerInfoProvider.notifier).addPointer();
             },
             onPointerUp: (event) {
               if (provider.scale == 1.0 && provider.lastScale != 1.0) {
                 resetScale();
               }
               ref
-                  .read(imageViewerInfoNotifierProvider.notifier)
+                  .read(imageViewerInfoProvider.notifier)
                   .removePointer();
             },
             onPointerMove: (event) {
-              final prov = ref.read(imageViewerInfoNotifierProvider);
+              final prov = ref.read(imageViewerInfoProvider);
               if (prov.isDoubleTap && prov.pointersCount == 1) {
                 final position = prov.lastTapLocalPosition;
                 final delta = event.localPosition - position!;
@@ -52,7 +52,7 @@ class ImageViewer extends HookConsumerWidget {
                   1.0,
                 );
                 ref
-                    .read(imageViewerInfoNotifierProvider.notifier)
+                    .read(imageViewerInfoProvider.notifier)
                     .updateScale(s);
                 final v = transformationController.toScene(position);
 
@@ -72,10 +72,10 @@ class ImageViewer extends HookConsumerWidget {
             child: GestureDetector(
               onDoubleTapDown: (details) {
                 ref
-                    .read(imageViewerInfoNotifierProvider.notifier)
+                    .read(imageViewerInfoProvider.notifier)
                     .update(
                       ref
-                          .read(imageViewerInfoNotifierProvider)
+                          .read(imageViewerInfoProvider)
                           .copyWith(
                             lastScale: provider.scale,
                             isDoubleTap: true,
@@ -99,17 +99,17 @@ class ImageViewer extends HookConsumerWidget {
                   }
                 } else {
                   final position = ref
-                      .read(imageViewerInfoNotifierProvider)
+                      .read(imageViewerInfoProvider)
                       .lastTapLocalPosition;
                   if (position == null) return;
                   transformationController.value = Matrix4.identity()
                     ..translate(-position.dx * 2, -position.dy * 2)
                     ..scale(3.0);
                   ref
-                      .read(imageViewerInfoNotifierProvider.notifier)
+                      .read(imageViewerInfoProvider.notifier)
                       .update(
                         ref
-                            .read(imageViewerInfoNotifierProvider)
+                            .read(imageViewerInfoProvider)
                             .copyWith(
                               scale: 3.0,
                               isDoubleTap: false,
@@ -126,7 +126,7 @@ class ImageViewer extends HookConsumerWidget {
                 controller: transformationController,
                 onScaleChanged: (scaleUpdated) {
                   ref
-                      .read(imageViewerInfoNotifierProvider.notifier)
+                      .read(imageViewerInfoProvider.notifier)
                       .updateScale(scaleUpdated);
                 },
                 maxScale: maxScale,

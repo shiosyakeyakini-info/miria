@@ -133,7 +133,7 @@ class MisskeyNote extends HookConsumerWidget {
         return;
       }
 
-      await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      await ref.read(dialogStateProvider.notifier).guard(() async {
         final notesRepository = ref.read(notesProvider(account));
         await ref
             .read(misskeyPostContextProvider)
@@ -175,7 +175,7 @@ class MisskeyNote extends HookConsumerWidget {
       selectedEmoji = requestEmoji;
     }
 
-    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+    await ref.read(dialogStateProvider.notifier).guard(() async {
       await misskey.notes.reactions.create(
         NotesReactionsCreateRequest(
           noteId: displayNote.id,
@@ -347,7 +347,7 @@ class MisskeyNote extends HookConsumerWidget {
           // すでにリアクション済みで、リアクション取り消し
           if (displayNote.myReaction != null) {
             final dialogValue = await ref
-                .read(dialogStateNotifierProvider.notifier)
+                .read(dialogStateProvider.notifier)
                 .showDialog(
                   message: (context) => S.of(context).confirmDeleteReaction,
                   actions: (context) => [
@@ -357,7 +357,7 @@ class MisskeyNote extends HookConsumerWidget {
                 );
             if (dialogValue != 0) return;
 
-            await ref.read(dialogStateNotifierProvider.notifier).guard(
+            await ref.read(dialogStateProvider.notifier).guard(
               () async {
                 final notesRepository = ref.read(notesWithProvider);
                 await ref
@@ -558,7 +558,7 @@ class MisskeyNote extends HookConsumerWidget {
                   AvatarIcon(
                     user: displayNote.user,
                     onTap: () async => ref
-                        .read(misskeyNoteNotifierProvider.notifier)
+                        .read(misskeyNoteProvider.notifier)
                         .navigateToUserPage(displayNote.user),
                   ),
                   const Padding(padding: EdgeInsets.only(left: 10)),
@@ -898,7 +898,7 @@ class NoteHeader1 extends ConsumerWidget {
           ),
         GestureDetector(
           onTap: () async => ref
-              .read(misskeyNoteNotifierProvider.notifier)
+              .read(misskeyNoteProvider.notifier)
               .navigateToNoteDetailPage(displayNote),
           child: Text(
             displayNote.createdAt.differenceNow(context),
@@ -946,7 +946,7 @@ class RenoteHeader extends ConsumerWidget {
         Expanded(
           child: GestureDetector(
             onTap: () async => ref
-                .read(misskeyNoteNotifierProvider.notifier)
+                .read(misskeyNoteProvider.notifier)
                 .navigateToUserPage(note.user),
             child: SimpleMfmText(
               note.user.name ?? note.user.username,

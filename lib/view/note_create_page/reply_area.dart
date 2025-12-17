@@ -9,7 +9,7 @@ class ReplyArea extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final reply = ref.watch(
-      noteCreateNotifierProvider.select((value) => value.reply),
+      noteCreateProvider.select((value) => value.reply),
     );
 
     if (reply != null) {

@@ -94,9 +94,9 @@ void main() {
     group("初期状態", () {
       test("初期状態でファイルが空であること", () {
         final notifier = container.read(
-          chatInputStateNotifierProvider.notifier,
+          chatInputStateProvider.notifier,
         );
-        final state = container.read(chatInputStateNotifierProvider);
+        final state = container.read(chatInputStateProvider);
 
         expect(state.files, isEmpty);
       });
@@ -105,7 +105,7 @@ void main() {
     group("ファイル追加", () {
       test("画像ファイルを追加できること", () async {
         final notifier = container.read(
-          chatInputStateNotifierProvider.notifier,
+          chatInputStateProvider.notifier,
         );
 
         final binaryData = await TestData.binaryImage;
@@ -116,7 +116,7 @@ void main() {
 
         await notifier.addFile(imageFile);
 
-        final state = container.read(chatInputStateNotifierProvider);
+        final state = container.read(chatInputStateProvider);
         expect(state.files.length, 1);
         expect(state.files.first, isA<ImageFile>());
         expect(state.files.first.fileName, "test_image.jpg");
@@ -124,7 +124,7 @@ void main() {
 
       test("その他ファイルを追加できること", () async {
         final notifier = container.read(
-          chatInputStateNotifierProvider.notifier,
+          chatInputStateProvider.notifier,
         );
 
         final unknownFile = UnknownFile(
@@ -134,7 +134,7 @@ void main() {
 
         await notifier.addFile(unknownFile);
 
-        final state = container.read(chatInputStateNotifierProvider);
+        final state = container.read(chatInputStateProvider);
         expect(state.files.length, 1);
         expect(state.files.first, isA<UnknownFile>());
         expect(state.files.first.fileName, "test_document.pdf");
@@ -144,7 +144,7 @@ void main() {
     group("ファイル削除", () {
       test("ファイルを削除できること", () async {
         final notifier = container.read(
-          chatInputStateNotifierProvider.notifier,
+          chatInputStateProvider.notifier,
         );
 
         // ファイルを追加
@@ -158,13 +158,13 @@ void main() {
         // 削除
         notifier.removeFile(0);
 
-        final state = container.read(chatInputStateNotifierProvider);
+        final state = container.read(chatInputStateProvider);
         expect(state.files, isEmpty);
       });
 
       test("範囲外のインデックスでも例外が発生しないこと", () {
         final notifier = container.read(
-          chatInputStateNotifierProvider.notifier,
+          chatInputStateProvider.notifier,
         );
 
         expect(() => notifier.removeFile(0), returnsNormally);
@@ -175,7 +175,7 @@ void main() {
     group("ファイル選択", () {
       test("JPEGファイルを選択できること", () async {
         final notifier = container.read(
-          chatInputStateNotifierProvider.notifier,
+          chatInputStateProvider.notifier,
         );
 
         // ドライブモーダルのモック（アップロードを選択）
@@ -204,7 +204,7 @@ void main() {
 
         await notifier.chooseFile();
 
-        final state = container.read(chatInputStateNotifierProvider);
+        final state = container.read(chatInputStateProvider);
         expect(state.files.length, 1);
         expect(state.files.first, isA<ImageFile>());
         expect(state.files.first.fileName, "test_image.jpg");
@@ -212,7 +212,7 @@ void main() {
 
       test("HEICファイルをJPEGに変換して選択できること", () async {
         final notifier = container.read(
-          chatInputStateNotifierProvider.notifier,
+          chatInputStateProvider.notifier,
         );
 
         // ドライブモーダルのモック（アップロードを選択）
@@ -245,7 +245,7 @@ void main() {
 
         await notifier.chooseFile();
 
-        final state = container.read(chatInputStateNotifierProvider);
+        final state = container.read(chatInputStateProvider);
         expect(state.files.length, 1);
         expect(state.files.first, isA<ImageFile>());
         expect(p.extension(state.files.first.fileName), ".jpg");
@@ -253,7 +253,7 @@ void main() {
 
       test("その他ファイルを選択できること", () async {
         final notifier = container.read(
-          chatInputStateNotifierProvider.notifier,
+          chatInputStateProvider.notifier,
         );
 
         // ドライブモーダルのモック（アップロードを選択）
@@ -281,7 +281,7 @@ void main() {
 
         await notifier.chooseFile();
 
-        final state = container.read(chatInputStateNotifierProvider);
+        final state = container.read(chatInputStateProvider);
         expect(state.files.length, 1);
         expect(state.files.first, isA<UnknownFile>());
         expect(state.files.first.fileName, "document.pdf");
@@ -289,7 +289,7 @@ void main() {
 
       test("ファイル選択がキャンセルされた場合は何も追加されないこと", () async {
         final notifier = container.read(
-          chatInputStateNotifierProvider.notifier,
+          chatInputStateProvider.notifier,
         );
 
         // ドライブモーダルのモック（アップロードを選択）
@@ -305,13 +305,13 @@ void main() {
 
         await notifier.chooseFile();
 
-        final state = container.read(chatInputStateNotifierProvider);
+        final state = container.read(chatInputStateProvider);
         expect(state.files, isEmpty);
       });
 
       test("ドライブから画像ファイルを選択できること", () async {
         final notifier = container.read(
-          chatInputStateNotifierProvider.notifier,
+          chatInputStateProvider.notifier,
         );
 
         // ドライブモーダルのモック（ドライブを選択）
@@ -337,7 +337,7 @@ void main() {
 
         await notifier.chooseFile();
 
-        final state = container.read(chatInputStateNotifierProvider);
+        final state = container.read(chatInputStateProvider);
         expect(state.files.length, 1);
         expect(state.files.first, isA<ImageFileAlreadyPostedFile>());
         expect(state.files.first.fileName, TestData.drive1.name);
@@ -345,7 +345,7 @@ void main() {
 
       test("ドライブからその他ファイルを選択できること", () async {
         final notifier = container.read(
-          chatInputStateNotifierProvider.notifier,
+          chatInputStateProvider.notifier,
         );
 
         // ドライブモーダルのモック（ドライブを選択）
@@ -356,7 +356,7 @@ void main() {
 
         await notifier.chooseFile();
 
-        final state = container.read(chatInputStateNotifierProvider);
+        final state = container.read(chatInputStateProvider);
         expect(state.files.length, 1);
         expect(state.files.first, isA<UnknownAlreadyPostedFile>());
         expect(state.files.first.fileName, TestData.drive2AsVideo.name);
@@ -364,7 +364,7 @@ void main() {
 
       test("ドライブファイル選択がキャンセルされた場合は何も追加されないこと", () async {
         final notifier = container.read(
-          chatInputStateNotifierProvider.notifier,
+          chatInputStateProvider.notifier,
         );
 
         // ドライブモーダルのモック（ドライブを選択）
@@ -375,7 +375,7 @@ void main() {
 
         await notifier.chooseFile();
 
-        final state = container.read(chatInputStateNotifierProvider);
+        final state = container.read(chatInputStateProvider);
         expect(state.files, isEmpty);
       });
     });
@@ -383,7 +383,7 @@ void main() {
     group("ファイルアップロード", () {
       test("画像ファイルをアップロードしてファイルIDを取得できること", () async {
         final notifier = container.read(
-          chatInputStateNotifierProvider.notifier,
+          chatInputStateProvider.notifier,
         );
 
         // ドライブファイル作成のモック
@@ -406,13 +406,13 @@ void main() {
         verify(mockDriveFiles.createAsBinary(any, any)).called(1);
 
         // ファイルがクリアされることを確認
-        final state = container.read(chatInputStateNotifierProvider);
+        final state = container.read(chatInputStateProvider);
         expect(state.files, isEmpty);
       });
 
       test("その他ファイルをアップロードしてファイルIDを取得できること", () async {
         final notifier = container.read(
-          chatInputStateNotifierProvider.notifier,
+          chatInputStateProvider.notifier,
         );
 
         // ドライブファイル作成のモック
@@ -434,13 +434,13 @@ void main() {
         verify(mockDriveFiles.createAsBinary(any, any)).called(1);
 
         // ファイルがクリアされることを確認
-        final state = container.read(chatInputStateNotifierProvider);
+        final state = container.read(chatInputStateProvider);
         expect(state.files, isEmpty);
       });
 
       test("ファイルがない場合はnullを返すこと", () async {
         final notifier = container.read(
-          chatInputStateNotifierProvider.notifier,
+          chatInputStateProvider.notifier,
         );
 
         final fileId = await notifier.uploadAndGetFileId();
@@ -451,7 +451,7 @@ void main() {
 
       test("既存のファイルIDがある場合はそのままIDを返すこと", () async {
         final notifier = container.read(
-          chatInputStateNotifierProvider.notifier,
+          chatInputStateProvider.notifier,
         );
 
         // 既存ファイルを追加
@@ -470,7 +470,7 @@ void main() {
         verifyNever(mockDriveFiles.createAsBinary(any, any));
 
         // ファイルがクリアされることを確認
-        final state = container.read(chatInputStateNotifierProvider);
+        final state = container.read(chatInputStateProvider);
         expect(state.files, isEmpty);
       });
     });
@@ -478,7 +478,7 @@ void main() {
     group("ファイルクリア", () {
       test("すべてのファイルをクリアできること", () async {
         final notifier = container.read(
-          chatInputStateNotifierProvider.notifier,
+          chatInputStateProvider.notifier,
         );
 
         // 複数ファイルを追加
@@ -494,14 +494,14 @@ void main() {
         );
 
         // クリア前の確認
-        var state = container.read(chatInputStateNotifierProvider);
+        var state = container.read(chatInputStateProvider);
         expect(state.files.length, 2);
 
         // クリア実行
         notifier.clearFiles();
 
         // クリア後の確認
-        state = container.read(chatInputStateNotifierProvider);
+        state = container.read(chatInputStateProvider);
         expect(state.files, isEmpty);
       });
     });

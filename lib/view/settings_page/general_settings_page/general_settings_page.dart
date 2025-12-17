@@ -52,7 +52,7 @@ class GeneralSettingsPage extends HookConsumerWidget {
     final darkNoteBgHome = useState(settings.darkNoteBackgroundHome);
     final darkNoteBgFollowers = useState(settings.darkNoteBackgroundFollowers);
     final darkNoteBgDirect = useState(settings.darkNoteBackgroundDirect);
-    final cacheSize = ref.watch(cacheSizeNotifierProvider);
+    final cacheSize = ref.watch(cacheSizeProvider);
 
     useMemoized(() {
       if (lightModeTheme.value.isEmpty) {
@@ -849,7 +849,7 @@ class GeneralSettingsPage extends HookConsumerWidget {
                                           onPressed: () async {
                                             await ref
                                                 .read(
-                                                  cacheSizeNotifierProvider
+                                                  cacheSizeProvider
                                                       .notifier,
                                                 )
                                                 .updateCacheSize();
@@ -872,7 +872,7 @@ class GeneralSettingsPage extends HookConsumerWidget {
                             child: ElevatedButton(
                               onPressed: () async {
                                 await ref
-                                    .read(cacheSizeNotifierProvider.notifier)
+                                    .read(cacheSizeProvider.notifier)
                                     .clear();
                               },
                               child: Text(S.of(context).clearCache),

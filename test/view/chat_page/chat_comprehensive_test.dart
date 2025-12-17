@@ -252,7 +252,7 @@ void main() {
         );
 
         container
-            .read(chatInputStateNotifierProvider.notifier)
+            .read(chatInputStateProvider.notifier)
             .addFile(imageFile);
 
         await tester.pumpWidget(
@@ -294,7 +294,7 @@ void main() {
         );
 
         container
-            .read(chatInputStateNotifierProvider.notifier)
+            .read(chatInputStateProvider.notifier)
             .addFile(nsfwFile);
 
         await tester.pumpWidget(
@@ -330,7 +330,7 @@ void main() {
         );
 
         container
-            .read(chatInputStateNotifierProvider.notifier)
+            .read(chatInputStateProvider.notifier)
             .addFile(unknownFile);
 
         await tester.pumpWidget(
@@ -368,7 +368,7 @@ void main() {
         );
 
         container
-            .read(chatInputStateNotifierProvider.notifier)
+            .read(chatInputStateProvider.notifier)
             .addFile(imageFile);
 
         await tester.pumpWidget(
@@ -451,11 +451,11 @@ void main() {
           fileName: "test_image.jpg",
         );
         await container
-            .read(chatInputStateNotifierProvider.notifier)
+            .read(chatInputStateProvider.notifier)
             .addFile(imageFile);
 
         // ファイルが追加されたことを確認
-        final state = container.read(chatInputStateNotifierProvider);
+        final state = container.read(chatInputStateProvider);
         expect(state.files.length, 1);
         expect(state.files.first, isA<ImageFile>());
         expect(state.files.first.fileName, "test_image.jpg");
@@ -491,11 +491,11 @@ void main() {
           fileName: "converted_image.jpg", // .heicから.jpgに変換された名前
         );
         await container
-            .read(chatInputStateNotifierProvider.notifier)
+            .read(chatInputStateProvider.notifier)
             .addFile(jpegFile);
 
         // ファイルが追加され、JPEGに変換されたことを確認
-        final state = container.read(chatInputStateNotifierProvider);
+        final state = container.read(chatInputStateProvider);
         expect(state.files.length, 1);
         expect(state.files.first, isA<ImageFile>());
         expect(state.files.first.fileName.endsWith(".jpg"), isTrue);
@@ -529,11 +529,11 @@ void main() {
           fileName: "document.pdf",
         );
         await container
-            .read(chatInputStateNotifierProvider.notifier)
+            .read(chatInputStateProvider.notifier)
             .addFile(unknownFile);
 
         // ファイルが追加されたことを確認
-        final state = container.read(chatInputStateNotifierProvider);
+        final state = container.read(chatInputStateProvider);
         expect(state.files.length, 1);
         expect(state.files.first, isA<UnknownFile>());
         expect(state.files.first.fileName, "document.pdf");
@@ -563,7 +563,7 @@ void main() {
 
         // ファイル選択がキャンセルされた場合をシミュレート（何もしない）
         // 初期状態を確認
-        final state = container.read(chatInputStateNotifierProvider);
+        final state = container.read(chatInputStateProvider);
         expect(state.files.isEmpty, isTrue);
       });
     });
@@ -639,19 +639,19 @@ void main() {
         );
 
         container
-            .read(chatInputStateNotifierProvider.notifier)
+            .read(chatInputStateProvider.notifier)
             .addFile(imageFile);
 
         // アップロードを実行
         final fileId = await container
-            .read(chatInputStateNotifierProvider.notifier)
+            .read(chatInputStateProvider.notifier)
             .uploadAndGetFileId();
 
         expect(fileId, TestData.drive1.id);
         verify(mockDriveFiles.createAsBinary(any, any)).called(1);
 
         // ファイルがクリアされることを確認
-        final state = container.read(chatInputStateNotifierProvider);
+        final state = container.read(chatInputStateProvider);
         expect(state.files.isEmpty, isTrue);
       });
 
@@ -676,19 +676,19 @@ void main() {
         );
 
         container
-            .read(chatInputStateNotifierProvider.notifier)
+            .read(chatInputStateProvider.notifier)
             .addFile(unknownFile);
 
         // アップロードを実行
         final fileId = await container
-            .read(chatInputStateNotifierProvider.notifier)
+            .read(chatInputStateProvider.notifier)
             .uploadAndGetFileId();
 
         expect(fileId, TestData.drive2AsVideo.id);
         verify(mockDriveFiles.createAsBinary(any, any)).called(1);
 
         // ファイルがクリアされることを確認
-        final state = container.read(chatInputStateNotifierProvider);
+        final state = container.read(chatInputStateProvider);
         expect(state.files.isEmpty, isTrue);
       });
 
@@ -703,7 +703,7 @@ void main() {
 
         // アップロードを実行（ファイルなし）
         final fileId = await container
-            .read(chatInputStateNotifierProvider.notifier)
+            .read(chatInputStateProvider.notifier)
             .uploadAndGetFileId();
 
         expect(fileId, isNull);

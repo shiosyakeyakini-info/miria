@@ -49,7 +49,7 @@ void main() {
       final imageFile = ImageFile(data: binaryData, fileName: "test_image.jpg");
 
       container
-          .read(chatInputStateNotifierProvider.notifier)
+          .read(chatInputStateProvider.notifier)
           .addFile(imageFile);
 
       await tester.pumpWidget(
@@ -79,7 +79,7 @@ void main() {
       final imageFile = ImageFile(data: binaryData, fileName: "test_image.jpg");
 
       container
-          .read(chatInputStateNotifierProvider.notifier)
+          .read(chatInputStateProvider.notifier)
           .addFile(imageFile);
 
       await tester.pumpWidget(

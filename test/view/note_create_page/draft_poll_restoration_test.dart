@@ -78,12 +78,12 @@ void main() {
         ),
       );
 
-      final notifier = container.read(noteCreateNotifierProvider.notifier);
+      final notifier = container.read(noteCreateProvider.notifier);
 
       // 下書きから初期化
       await notifier.initializeFromDraft(pollDraft);
 
-      final state = container.read(noteCreateNotifierProvider);
+      final state = container.read(noteCreateProvider);
 
       // 投票が有効になっていることを確認
       expect(state.isVote, isTrue);
@@ -135,12 +135,12 @@ void main() {
         ),
       );
 
-      final notifier = container.read(noteCreateNotifierProvider.notifier);
+      final notifier = container.read(noteCreateProvider.notifier);
 
       // 下書きから初期化
       await notifier.initializeFromDraft(pollDraft);
 
-      final state = container.read(noteCreateNotifierProvider);
+      final state = container.read(noteCreateProvider);
 
       // 投票が有効で複数選択が有効になっていることを確認
       expect(state.isVote, isTrue);
@@ -197,12 +197,12 @@ void main() {
         ),
       );
 
-      final notifier = container.read(noteCreateNotifierProvider.notifier);
+      final notifier = container.read(noteCreateProvider.notifier);
 
       // 下書きから初期化
       await notifier.initializeFromDraft(pollDraft);
 
-      final state = container.read(noteCreateNotifierProvider);
+      final state = container.read(noteCreateProvider);
 
       // 投票が有効になっていることを確認
       expect(state.isVote, isTrue);
@@ -248,12 +248,12 @@ void main() {
         poll: null,
       );
 
-      final notifier = container.read(noteCreateNotifierProvider.notifier);
+      final notifier = container.read(noteCreateProvider.notifier);
 
       // 下書きから初期化
       await notifier.initializeFromDraft(normalDraft);
 
-      final state = container.read(noteCreateNotifierProvider);
+      final state = container.read(noteCreateProvider);
 
       // 投票が無効になっていることを確認
       expect(state.isVote, isFalse);
@@ -303,9 +303,9 @@ void main() {
         ),
       );
 
-      final notifier = container.read(noteCreateNotifierProvider.notifier);
+      final notifier = container.read(noteCreateProvider.notifier);
       await notifier.initializeFromDraft(pollDraftMinutes);
-      final state = container.read(noteCreateNotifierProvider);
+      final state = container.read(noteCreateProvider);
 
       expect(state.voteExpireType, equals(VoteExpireType.duration));
       expect(state.voteDuration, equals(30));
@@ -357,9 +357,9 @@ void main() {
         ),
       );
 
-      final notifier = container.read(noteCreateNotifierProvider.notifier);
+      final notifier = container.read(noteCreateProvider.notifier);
       await notifier.initializeFromDraft(pollDraftMany);
-      final state = container.read(noteCreateNotifierProvider);
+      final state = container.read(noteCreateProvider);
 
       expect(state.isVote, isTrue);
       expect(state.isVoteMultiple, isTrue);
@@ -415,9 +415,9 @@ void main() {
         ),
       );
 
-      final notifier = container.read(noteCreateNotifierProvider.notifier);
+      final notifier = container.read(noteCreateProvider.notifier);
       await notifier.initializeFromDraft(pollDraftEmpty);
-      final state = container.read(noteCreateNotifierProvider);
+      final state = container.read(noteCreateProvider);
 
       expect(state.isVote, isTrue);
       expect(state.voteContent, equals(["選択肢1", "", "選択肢3"]));

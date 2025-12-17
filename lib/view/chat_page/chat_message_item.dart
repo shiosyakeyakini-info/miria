@@ -176,7 +176,7 @@ class ChatMessageItem extends ConsumerWidget {
         if (emoji != null) {
           final reactionString = _getReactionString(emoji);
 
-          await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+          await ref.read(dialogStateProvider.notifier).guard(() async {
             await ref
                 .read(misskeyPostContextProvider)
                 .chat
@@ -200,7 +200,7 @@ class ChatMessageItem extends ConsumerWidget {
 
       case ChatMessageMenuAction.delete:
         final isConfirm = await ref
-            .read(dialogStateNotifierProvider.notifier)
+            .read(dialogStateProvider.notifier)
             .showDialog(
               message: (context) => S.of(context).confirmDelete,
               actions: (context) => [
@@ -210,7 +210,7 @@ class ChatMessageItem extends ConsumerWidget {
             );
         if (isConfirm == 1) return;
 
-        await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+        await ref.read(dialogStateProvider.notifier).guard(() async {
           await ref
               .read(misskeyPostContextProvider)
               .chat

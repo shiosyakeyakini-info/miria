@@ -27,7 +27,7 @@ class UsersListModalSheet extends ConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final lists = ref.watch(usersListsNotifierProvider);
+    final lists = ref.watch(usersListsProvider);
 
     return lists.when(
       data: (lists) {
@@ -44,11 +44,11 @@ class UsersListModalSheet extends ConsumerWidget implements AutoRouteWrapper {
                   }
                   if (value) {
                     await ref
-                        .read(usersListsNotifierProvider.notifier)
+                        .read(usersListsProvider.notifier)
                         .push(list.id, user);
                   } else {
                     await ref
-                        .read(usersListsNotifierProvider.notifier)
+                        .read(usersListsProvider.notifier)
                         .pull(list.id, user);
                   }
                 },
@@ -65,7 +65,7 @@ class UsersListModalSheet extends ConsumerWidget implements AutoRouteWrapper {
                   if (!context.mounted) return;
                   if (settings == null) return;
                   await ref
-                      .read(usersListsNotifierProvider.notifier)
+                      .read(usersListsProvider.notifier)
                       .create(settings);
                 },
               );

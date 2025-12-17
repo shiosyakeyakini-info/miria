@@ -56,7 +56,7 @@ final class MisskeyPageNotifierProvider
 }
 
 String _$misskeyPageNotifierHash() =>
-    r'ee6d060c8b5eddfefb89f6062692fdfa8b0e4d47';
+    r'5be4cec382dc016a6579e72585c7fb918480e941';
 
 final class MisskeyPageNotifierFamily extends $Family
     with

@@ -19,7 +19,7 @@ class MisskeyServerList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final servers = ref.watch(misskeyServerListNotifierProvider);
+    final servers = ref.watch(misskeyServerListProvider);
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 800),
       child: Column(
@@ -29,7 +29,7 @@ class MisskeyServerList extends ConsumerWidget {
             child: TextField(
               decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
               onChanged: ref
-                  .read(misskeyServerListNotifierProvider.notifier)
+                  .read(misskeyServerListProvider.notifier)
                   .setQuery,
             ),
           ),

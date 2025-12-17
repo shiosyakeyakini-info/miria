@@ -28,7 +28,7 @@ class ClipDetailPage extends HookConsumerWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final clip = ref.watch(
-      clipsNotifierProvider.select(
+      clipsProvider.select(
         (clips) => clips.value?.firstWhereOrNull((e) => e.id == id),
       ),
     );
@@ -43,7 +43,7 @@ class ClipDetailPage extends HookConsumerWidget implements AutoRouteWrapper {
       );
       if (settings == null) return;
       await ref
-          .read(clipsNotifierProvider.notifier)
+          .read(clipsProvider.notifier)
           .updateClip(target.id, settings);
     });
 

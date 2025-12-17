@@ -28,7 +28,7 @@ class AntennaModalSheet extends ConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final antennas = ref.watch(antennasNotifierProvider);
+    final antennas = ref.watch(antennasProvider);
 
     return antennas.when(
       data: (antennas) {
@@ -48,7 +48,7 @@ class AntennaModalSheet extends ConsumerWidget implements AutoRouteWrapper {
                   }
                   if (value) {
                     await ref
-                        .read(antennasNotifierProvider.notifier)
+                        .read(antennasProvider.notifier)
                         .updateAntenna(
                           antenna.id,
                           AntennaSettings.fromAntenna(
@@ -57,7 +57,7 @@ class AntennaModalSheet extends ConsumerWidget implements AutoRouteWrapper {
                         );
                   } else {
                     await ref
-                        .read(antennasNotifierProvider.notifier)
+                        .read(antennasProvider.notifier)
                         .updateAntenna(
                           antenna.id,
                           AntennaSettings.fromAntenna(antenna).copyWith(
@@ -87,7 +87,7 @@ class AntennaModalSheet extends ConsumerWidget implements AutoRouteWrapper {
                   if (!context.mounted) return;
                   if (settings == null) return;
                   await ref
-                      .read(antennasNotifierProvider.notifier)
+                      .read(antennasProvider.notifier)
                       .create(settings);
                 },
               );

@@ -76,7 +76,7 @@ class UsersListSettingsForm extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = ref.watch(_formKeyProvider);
     final initialSettings = ref.watch(_initialSettingsProvider);
-    final settings = ref.watch(_clipSettingsNotifierProvider);
+    final settings = ref.watch(_clipSettingsProvider);
 
     return Form(
       key: formKey,
@@ -97,7 +97,7 @@ class UsersListSettingsForm extends ConsumerWidget {
               return null;
             },
             onSaved: ref
-                .read(_clipSettingsNotifierProvider.notifier)
+                .read(_clipSettingsProvider.notifier)
                 .updateName,
           ),
           const SizedBox(height: 10),
@@ -110,14 +110,14 @@ class UsersListSettingsForm extends ConsumerWidget {
               contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
             ),
             onSaved: ref
-                .read(_clipSettingsNotifierProvider.notifier)
+                .read(_clipSettingsProvider.notifier)
                 .updateDescription,
           ),
           CheckboxListTile(
             title: Text(S.of(context).public),
             value: settings.isPublic,
             onChanged: ref
-                .read(_clipSettingsNotifierProvider.notifier)
+                .read(_clipSettingsProvider.notifier)
                 .updateIsPublic,
           ),
           ElevatedButton(
@@ -125,7 +125,7 @@ class UsersListSettingsForm extends ConsumerWidget {
             onPressed: () {
               if (formKey.currentState!.validate()) {
                 formKey.currentState!.save();
-                final settings = ref.read(_clipSettingsNotifierProvider);
+                final settings = ref.read(_clipSettingsProvider);
                 if (settings == initialSettings) {
                   Navigator.of(context).pop();
                 } else {

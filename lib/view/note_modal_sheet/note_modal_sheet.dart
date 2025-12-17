@@ -73,7 +73,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
   Future<void> _status() async {
     state = state.copyWith(
       noteState: await ref
-          .read(dialogStateNotifierProvider.notifier)
+          .read(dialogStateProvider.notifier)
           .guard(
             () async => ref
                 .read(misskeyPostContextProvider)
@@ -87,7 +87,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
     state = state.copyWith(user: const AsyncLoading());
     state = state.copyWith(
       user: await ref
-          .read(dialogStateNotifierProvider.notifier)
+          .read(dialogStateProvider.notifier)
           .guard(
             () async => await ref
                 .read(misskeyGetContextProvider)
@@ -102,7 +102,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
     if (isFavorited == null) return;
     state = state.copyWith(favorite: const AsyncLoading());
     state = state.copyWith(
-      favorite: await ref.read(dialogStateNotifierProvider.notifier).guard(
+      favorite: await ref.read(dialogStateProvider.notifier).guard(
         () async {
           if (isFavorited) {
             await ref
@@ -154,7 +154,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
     if (note.renoteId == null) return;
     state = state.copyWith(delete: const AsyncLoading());
     state = state.copyWith(
-      delete: await ref.read(dialogStateNotifierProvider.notifier).guard(
+      delete: await ref.read(dialogStateProvider.notifier).guard(
         () async {
           await ref
               .read(misskeyPostContextProvider)
@@ -168,7 +168,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
 
   Future<void> delete() async {
     final confirm = await ref
-        .read(dialogStateNotifierProvider.notifier)
+        .read(dialogStateProvider.notifier)
         .showDialog(
           message: (context) => S.of(context).confirmDelete,
           actions: (context) => [
@@ -179,7 +179,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
     if (confirm != 0) return;
     state = state.copyWith(delete: const AsyncLoading());
     state = state.copyWith(
-      delete: await ref.read(dialogStateNotifierProvider.notifier).guard(
+      delete: await ref.read(dialogStateProvider.notifier).guard(
         () async {
           await ref
               .read(misskeyPostContextProvider)
@@ -193,7 +193,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
 
   Future<bool> deleteRecreate() async {
     final confirm = await ref
-        .read(dialogStateNotifierProvider.notifier)
+        .read(dialogStateProvider.notifier)
         .showDialog(
           message: (context) => S.of(context).confirmDeletedRecreate,
           actions: (context) => [
@@ -205,7 +205,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
     state = state.copyWith(deleteRecreate: const AsyncLoading());
     state = state.copyWith(
       deleteRecreate: await ref
-          .read(dialogStateNotifierProvider.notifier)
+          .read(dialogStateProvider.notifier)
           .guard(() async {
             await ref
                 .read(misskeyPostContextProvider)
@@ -240,10 +240,10 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final accounts = ref.watch(accountRepositoryProvider);
-    final targetNoteNotifierProvider = noteModalSheetNotifierProvider(
+    final targetNoteNotifierProvider = noteModalSheetProvider(
       targetNote,
     );
-    final baseNoteNotiferProvider = noteModalSheetNotifierProvider(baseNote);
+    final baseNoteNotiferProvider = noteModalSheetProvider(baseNote);
 
     ref.listen(targetNoteNotifierProvider.select((value) => value.user), (
       _,
@@ -378,7 +378,7 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
             leading: const Icon(Icons.open_in_new),
             title: Text(S.of(context).openInAnotherAccount),
             onTap: () async => ref
-                .read(misskeyNoteNotifierProvider.notifier)
+                .read(misskeyNoteProvider.notifier)
                 .openNoteInOtherAccount(targetNote),
           ),
         if (defaultTargetPlatform != TargetPlatform.linux)

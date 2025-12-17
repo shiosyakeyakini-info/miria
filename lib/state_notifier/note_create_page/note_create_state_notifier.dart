@@ -109,7 +109,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
   late final _dio = ref.read(dioProvider);
   late final _misskey = ref.read(misskeyPostContextProvider);
   late final _noteRepository = ref.read(notesWithProvider);
-  late final _dialogNotifier = ref.read(dialogStateNotifierProvider.notifier);
+  late final _dialogNotifier = ref.read(dialogStateProvider.notifier);
 
   @override
   NoteCreate build() {
@@ -522,7 +522,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       );
       return;
     }
-    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+    await ref.read(dialogStateProvider.notifier).guard(() async {
       try {
         state = state.copyWith(isNoteSending: NoteSendStatus.sending);
 
@@ -1010,7 +1010,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
     // チャンネルのノートは強制ローカルから変えられない
     if (state.channel != null) {
       await ref
-          .read(dialogStateNotifierProvider.notifier)
+          .read(dialogStateProvider.notifier)
           .showSimpleDialog(
             message: (context) => S.of(context).cannotFederateNoteToChannel,
           );
@@ -1018,7 +1018,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
     }
     if (state.reply?.localOnly == true) {
       await ref
-          .read(dialogStateNotifierProvider.notifier)
+          .read(dialogStateProvider.notifier)
           .showSimpleDialog(
             message: (context) =>
                 S.of(context).cannotFederateReplyToLocalOnlyNote,
@@ -1027,7 +1027,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
     }
     if (state.renote?.localOnly == true) {
       await ref
-          .read(dialogStateNotifierProvider.notifier)
+          .read(dialogStateProvider.notifier)
           .showSimpleDialog(
             message: (context) =>
                 S.of(context).cannotFederateRenoteToLocalOnlyNote,

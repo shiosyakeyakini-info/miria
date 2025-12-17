@@ -41,7 +41,7 @@ final class UsersListsNotifierProvider
 }
 
 String _$usersListsNotifierHash() =>
-    r'd8f28e45536ef11dd70dce5cd805d58fa8baf02c';
+    r'b91fce466402982f81c4c6c22727bae1ed3c7d28';
 
 abstract class _$UsersListsNotifier extends $AsyncNotifier<List<UsersList>> {
   FutureOr<List<UsersList>> build();

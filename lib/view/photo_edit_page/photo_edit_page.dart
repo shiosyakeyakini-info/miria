@@ -36,7 +36,7 @@ class PhotoEditPage extends ConsumerStatefulWidget implements AutoRouteWrapper {
 
 class PhotoEditPageState extends ConsumerState<PhotoEditPage> {
   PhotoEditStateNotifier get photoEdit =>
-      ref.read(photoEditStateNotifierProvider.notifier);
+      ref.read(photoEditStateProvider.notifier);
 
   final renderingAreaKey = GlobalKey();
 

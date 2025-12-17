@@ -56,7 +56,7 @@ class ReactionButton extends HookConsumerWidget {
       final account = accountContext.postAccount;
       if (isMyReaction) {
         final dialogValue = await ref
-            .read(dialogStateNotifierProvider.notifier)
+            .read(dialogStateProvider.notifier)
             .showDialog(
               message: (context) => S.of(context).confirmDeleteReaction,
               actions: (context) => [
@@ -66,7 +66,7 @@ class ReactionButton extends HookConsumerWidget {
             );
         if (dialogValue != 0) return;
 
-        await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+        await ref.read(dialogStateProvider.notifier).guard(() async {
           final notesRepository = ref.read(notesWithProvider);
           await ref
               .read(misskeyPostContextProvider)
@@ -100,7 +100,7 @@ class ReactionButton extends HookConsumerWidget {
         case MutedEmojiData():
           return;
       }
-      await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      await ref.read(dialogStateProvider.notifier).guard(() async {
         final notesRepository = ref.read(notesWithProvider);
         await ref
             .read(misskeyPostContextProvider)

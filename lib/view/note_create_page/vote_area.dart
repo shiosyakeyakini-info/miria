@@ -12,10 +12,10 @@ class VoteArea extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final expireType = ref.watch(
-      noteCreateNotifierProvider.select((value) => value.voteExpireType),
+      noteCreateProvider.select((value) => value.voteExpireType),
     );
     final isVote = ref.watch(
-      noteCreateNotifierProvider.select((value) => value.isVote),
+      noteCreateProvider.select((value) => value.isVote),
     );
 
     if (!isVote) {
@@ -29,7 +29,7 @@ class VoteArea extends ConsumerWidget {
         const VoteContentList(),
         ElevatedButton(
           onPressed: () {
-            ref.read(noteCreateNotifierProvider.notifier).addVoteContent();
+            ref.read(noteCreateProvider.notifier).addVoteContent();
           },
           child: Text(S.of(context).addChoice),
         ),
@@ -48,7 +48,7 @@ class VoteContentList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final contentCount = ref.watch(
-      noteCreateNotifierProvider.select((value) => value.voteContentCount),
+      noteCreateProvider.select((value) => value.voteContentCount),
     );
     return ListView(
       shrinkWrap: true,
@@ -68,13 +68,13 @@ class VoteContentListItem extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final onVoteContentChange = ref.watch(
-      noteCreateNotifierProvider.select(
+      noteCreateProvider.select(
         (notifier) => notifier.voteContentCount,
       ),
     );
 
     final initial = useMemoized(
-      () => ref.read(noteCreateNotifierProvider).voteContent[index],
+      () => ref.read(noteCreateProvider).voteContent[index],
       [onVoteContentChange],
     );
     final controller = useTextEditingController(text: initial);
@@ -82,13 +82,13 @@ class VoteContentListItem extends HookConsumerWidget {
       controller
         ..text = initial
         ..addListener(() {
-          final voteContent = ref.read(noteCreateNotifierProvider).voteContent;
+          final voteContent = ref.read(noteCreateProvider).voteContent;
           if (voteContent.length <= index ||
               voteContent[index] == controller.text) {
             return;
           }
           ref
-              .read(noteCreateNotifierProvider.notifier)
+              .read(noteCreateProvider.notifier)
               .setVoteContent(index, controller.text);
         });
       return null;
@@ -108,7 +108,7 @@ class VoteContentListItem extends HookConsumerWidget {
           IconButton(
             onPressed: () {
               ref
-                  .read(noteCreateNotifierProvider.notifier)
+                  .read(noteCreateProvider.notifier)
                   .deleteVoteContent(index);
             },
             icon: const Icon(Icons.close),
@@ -128,10 +128,10 @@ class MultipleVoteRadioButton extends ConsumerWidget {
       children: [
         Switch(
           value: ref.watch(
-            noteCreateNotifierProvider.select((value) => value.isVoteMultiple),
+            noteCreateProvider.select((value) => value.isVoteMultiple),
           ),
           onChanged: (value) {
-            ref.read(noteCreateNotifierProvider.notifier).toggleVoteMultiple();
+            ref.read(noteCreateProvider.notifier).toggleVoteMultiple();
           },
         ),
         Expanded(child: Text(S.of(context).canMultipleChoice)),
@@ -147,7 +147,7 @@ class VoteDuration extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return DropdownButton(
       value: ref.watch(
-        noteCreateNotifierProvider.select((value) => value.voteExpireType),
+        noteCreateProvider.select((value) => value.voteExpireType),
       ),
       items: [
         for (final item in VoteExpireType.values)
@@ -155,7 +155,7 @@ class VoteDuration extends ConsumerWidget {
       ],
       onChanged: (item) {
         if (item == null) return;
-        ref.read(noteCreateNotifierProvider.notifier).setVoteExpireType(item);
+        ref.read(noteCreateProvider.notifier).setVoteExpireType(item);
       },
     );
   }
@@ -167,7 +167,7 @@ class VoteUntilDate extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final date = ref.watch(
-      noteCreateNotifierProvider.select((value) => value.voteDate),
+      noteCreateProvider.select((value) => value.voteDate),
     );
 
     return Padding(
@@ -192,7 +192,7 @@ class VoteUntilDate extends ConsumerWidget {
           if (resultTime == null) return;
 
           ref
-              .read(noteCreateNotifierProvider.notifier)
+              .read(noteCreateProvider.notifier)
               .setVoteExpireDate(
                 DateTime(
                   resultDate.year,
@@ -233,12 +233,12 @@ class VoteUntilDuration extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = useTextEditingController(
-      text: ref.read(noteCreateNotifierProvider).voteDuration?.toString() ?? "",
+      text: ref.read(noteCreateProvider).voteDuration?.toString() ?? "",
     );
     controller.addListener(() {
       final value = int.tryParse(controller.text);
       if (value == null) return;
-      ref.read(noteCreateNotifierProvider.notifier).setVoteDuration(value);
+      ref.read(noteCreateProvider.notifier).setVoteDuration(value);
     });
 
     return Row(
@@ -261,14 +261,14 @@ class VoteUntilDuration extends HookConsumerWidget {
               ),
           ],
           value: ref.watch(
-            noteCreateNotifierProvider.select(
+            noteCreateProvider.select(
               (value) => value.voteDurationType,
             ),
           ),
           onChanged: (value) {
             if (value == null) return;
             ref
-                .read(noteCreateNotifierProvider.notifier)
+                .read(noteCreateProvider.notifier)
                 .setVoteDurationType(value);
           },
         ),

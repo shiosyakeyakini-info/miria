@@ -75,7 +75,7 @@ final class UserInfoNotifierProxyProvider
 }
 
 String _$userInfoNotifierProxyHash() =>
-    r'6793ee9dbda64a646583409d4986f1766aa82c81';
+    r'589b031eee730ce6b5f1b9786d11718e2cb3d141';
 
 final class UserInfoNotifierProxyFamily extends $Family
     with $FunctionalFamilyOverride<Raw<UserInfoNotifier>, String> {
@@ -162,7 +162,7 @@ final class UserInfoProxyProvider
   }
 }
 
-String _$userInfoProxyHash() => r'1f984a6f339e55d8959f256b52d14dbc48e87ab8';
+String _$userInfoProxyHash() => r'e01002b185d729d1d1cc737bc0fc570ea087aa22';
 
 final class UserInfoProxyFamily extends $Family
     with $FunctionalFamilyOverride<AsyncValue<UserInfo>, String> {
@@ -225,7 +225,7 @@ final class UserInfoNotifierProvider
   }
 }
 
-String _$userInfoNotifierHash() => r'b4b78145b2cb531abe6da2fb840c4b01bb12f4dd';
+String _$userInfoNotifierHash() => r'a853c04c23d05d863c6b6c78287f5058bf31d690';
 
 final class UserInfoNotifierFamily extends $Family
     with

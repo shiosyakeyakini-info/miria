@@ -40,7 +40,7 @@ final class AntennasNotifierProvider
   AntennasNotifier create() => AntennasNotifier();
 }
 
-String _$antennasNotifierHash() => r'4881a49f432581ebccd22e4988c71d30f11d7dbd';
+String _$antennasNotifierHash() => r'1747a52298a4d5e8dfdf31bedbdd1e703e9f119c';
 
 abstract class _$AntennasNotifier extends $AsyncNotifier<List<Antenna>> {
   FutureOr<List<Antenna>> build();

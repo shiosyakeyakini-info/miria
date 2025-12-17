@@ -34,7 +34,7 @@ class MisskeyPageNotifier extends _$MisskeyPageNotifier {
     if (ref.read(accountContextProvider).postAccount.i.id ==
         before.page.userId) {
       await ref
-          .read(dialogStateNotifierProvider.notifier)
+          .read(dialogStateProvider.notifier)
           .showSimpleDialog(
             message: (context) => S.of(context).canNotFavoriteMyPage,
           );
@@ -42,7 +42,7 @@ class MisskeyPageNotifier extends _$MisskeyPageNotifier {
     }
     state = AsyncData(before.copyWith(likeOr: const AsyncLoading()));
     final likeOrResult = await ref
-        .read(dialogStateNotifierProvider.notifier)
+        .read(dialogStateProvider.notifier)
         .guard(() async {
           if (before.page.isLiked ?? false) {
             await ref

@@ -94,7 +94,7 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final focusNode = ref.watch(noteFocusProvider);
-    final notifier = ref.read(noteCreateNotifierProvider.notifier);
+    final notifier = ref.read(noteCreateProvider.notifier);
     final controller = ref.watch(noteInputTextProvider);
 
     useEffect(() {
@@ -132,7 +132,7 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
     }, const []);
 
     ref
-      ..listen(noteCreateNotifierProvider.select((value) => value.text), (
+      ..listen(noteCreateProvider.select((value) => value.text), (
         _,
         next,
       ) {
@@ -141,7 +141,7 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
         }
       })
       ..listen(
-        noteCreateNotifierProvider.select((value) => value.isNoteSending),
+        noteCreateProvider.select((value) => value.isNoteSending),
         (_, next) async {
           switch (next) {
             case NoteSendStatus.sending:
@@ -174,7 +174,7 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
 
-        final state = ref.read(noteCreateNotifierProvider);
+        final state = ref.read(noteCreateProvider);
         final hasContent = _hasDraftContent(state);
         final draftLimitPolicy =
             ref
@@ -187,7 +187,7 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
 
         if (hasContent && draftLimitPolicy > 0) {
           // Show save to draft dialog only if drafts are supported
-          final dialogNotifier = ref.read(dialogStateNotifierProvider.notifier);
+          final dialogNotifier = ref.read(dialogStateProvider.notifier);
           final choice = await dialogNotifier.showDialog(
             message: (context) => S.of(context).saveToDrafts,
             actions: (context) => [
@@ -299,7 +299,7 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
                               IconButton(
                                 onPressed: () {
                                   ref
-                                      .read(noteCreateNotifierProvider.notifier)
+                                      .read(noteCreateProvider.notifier)
                                       .toggleVote();
                                 },
                                 icon: const Icon(Icons.how_to_vote),
@@ -374,7 +374,7 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
 
   /// 現在の状態を下書きとして保存
   Future<void> _saveDraft(WidgetRef ref, NoteCreate state) async {
-    final notifier = ref.read(noteCreateNotifierProvider.notifier);
+    final notifier = ref.read(noteCreateProvider.notifier);
     final draftRepository = ref.read(noteDraftRepositoryProvider.notifier);
 
     NotesCreatePollRequest? poll;

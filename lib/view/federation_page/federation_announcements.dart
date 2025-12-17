@@ -106,7 +106,7 @@ class Announcement extends HookConsumerWidget {
     final confirm = useAsync(() async {
       if (data.value.needConfirmationToRead == true) {
         final isConfirmed = await ref
-            .read(dialogStateNotifierProvider.notifier)
+            .read(dialogStateProvider.notifier)
             .showDialog(
               message: (context) =>
                   S.of(context).confirmAnnouncementsRead(data.value.title),
@@ -117,7 +117,7 @@ class Announcement extends HookConsumerWidget {
             );
         if (isConfirmed != 0) return;
       }
-      await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      await ref.read(dialogStateProvider.notifier).guard(() async {
         await ref
             .read(misskeyPostContextProvider)
             .i

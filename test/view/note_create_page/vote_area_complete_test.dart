@@ -50,7 +50,7 @@ void main() {
                     return ElevatedButton(
                       onPressed: () {
                         ref
-                            .read(noteCreateNotifierProvider.notifier)
+                            .read(noteCreateProvider.notifier)
                             .toggleVote();
                       },
                       child: Text("Toggle Vote"),

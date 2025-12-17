@@ -28,7 +28,7 @@ class ChatRoomInfo extends HookConsumerWidget {
     final isMuted = useState(room.isMuted ?? false);
 
     final update = useAsync(() async {
-      await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      await ref.read(dialogStateProvider.notifier).guard(() async {
         await ref
             .read(misskeyGetContextProvider)
             .chat
@@ -51,7 +51,7 @@ class ChatRoomInfo extends HookConsumerWidget {
         UserSelectRoute(accountContext: accountContext, isLocalOnly: true),
       );
       if (result == null) return;
-      await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      await ref.read(dialogStateProvider.notifier).guard(() async {
         await ref
             .read(misskeyPostContextProvider)
             .chat
@@ -64,13 +64,13 @@ class ChatRoomInfo extends HookConsumerWidget {
               ),
             );
         await ref
-            .read(dialogStateNotifierProvider.notifier)
+            .read(dialogStateProvider.notifier)
             .showSimpleDialog(message: (context) => S.of(context).chatInvited);
       });
     });
 
     final mute = useAsync(() async {
-      await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      await ref.read(dialogStateProvider.notifier).guard(() async {
         if (isMuted.value) {
           await ref
               .read(misskeyGetContextProvider)
@@ -132,7 +132,7 @@ class ChatRoomInfo extends HookConsumerWidget {
                 OutlinedButton(
                   onPressed: () async {
                     final isConfirm = await ref
-                        .read(dialogStateNotifierProvider.notifier)
+                        .read(dialogStateProvider.notifier)
                         .showDialog(
                           message: (context) => S.of(context).confirmDelete,
                           actions: (context) => [
@@ -141,7 +141,7 @@ class ChatRoomInfo extends HookConsumerWidget {
                           ],
                         );
                     if (isConfirm == 1) return;
-                    await ref.read(dialogStateNotifierProvider.notifier).guard(
+                    await ref.read(dialogStateProvider.notifier).guard(
                       () async {
                         await ref
                             .read(misskeyGetContextProvider)
@@ -149,7 +149,7 @@ class ChatRoomInfo extends HookConsumerWidget {
                             .rooms
                             .delete(ChatRoomsDeleteRequest(roomId: room.id));
                         await ref
-                            .read(dialogStateNotifierProvider.notifier)
+                            .read(dialogStateProvider.notifier)
                             .showSimpleDialog(
                               message: (context) => S.of(context).delete,
                             );
@@ -259,7 +259,7 @@ class ChatRoomInfo extends HookConsumerWidget {
                 OutlinedButton(
                   onPressed: () async {
                     final isConfirm = await ref
-                        .read(dialogStateNotifierProvider.notifier)
+                        .read(dialogStateProvider.notifier)
                         .showDialog(
                           message: (context) => S.of(context).chatLeave,
                           actions: (context) => [
@@ -268,7 +268,7 @@ class ChatRoomInfo extends HookConsumerWidget {
                           ],
                         );
                     if (isConfirm == 1) return;
-                    await ref.read(dialogStateNotifierProvider.notifier).guard(
+                    await ref.read(dialogStateProvider.notifier).guard(
                       () async {
                         await ref
                             .read(misskeyGetContextProvider)
@@ -276,7 +276,7 @@ class ChatRoomInfo extends HookConsumerWidget {
                             .rooms
                             .leave(ChatRoomsLeaveRequest(roomId: room.id));
                         await ref
-                            .read(dialogStateNotifierProvider.notifier)
+                            .read(dialogStateProvider.notifier)
                             .showSimpleDialog(
                               message: (context) => S.of(context).chatLeftRoom,
                             );

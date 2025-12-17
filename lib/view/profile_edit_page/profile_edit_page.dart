@@ -29,8 +29,8 @@ class ProfileEditPage extends HookConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(editProfileStateNotifierProvider);
-    final notifier = ref.read(editProfileStateNotifierProvider.notifier);
+    final state = ref.watch(editProfileStateProvider);
+    final notifier = ref.read(editProfileStateProvider.notifier);
     final s = S.of(context);
 
     final update = useAsync(() async {
