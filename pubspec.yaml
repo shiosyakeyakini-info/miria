@@ -15,7 +15,7 @@ dependencies:
     sdk: flutter
   flutter_html: ^3.0.0-beta.2
   misskey_dart:
-    git: 
+    git:
       url: https://github.com/shiosyakeyakini-info/misskey_dart.git
       ref: master
   mfm: ^1.0.9
@@ -67,10 +67,9 @@ dependencies:
   webview_flutter_android: ^4.7.0
   webview_flutter_wkwebview: ^3.9.0
   media_kit: ^1.1.11
-  media_kit_video: ^1.2.5
+  media_kit_video: ^2.0.1
   media_kit_libs_video: ^1.0.5
   flutter_colorpicker: ^1.1.0
-  volume_controller: ^2.0.7
   window_manager: ^0.5.0
   shared_preference_app_group: ^1.0.0+1
   stack_trace: ^1.11.1
@@ -101,16 +100,6 @@ dependency_overrides:
     git:
       url: https://github.com/knottx/image_gallery_saver.git
       ref: knottx-latest
-  media_kit:
-    git:
-      url: https://github.com/4ster1sk/media-kit.git
-      ref: 28292926cfd1e75611f7dcf39248124197d131cf
-      path: ./media_kit/
-  media_kit_video:
-    git:
-      url: https://github.com/4ster1sk/media-kit.git
-      ref: 28292926cfd1e75611f7dcf39248124197d131cf
-      path: ./media_kit_video/
   flutter_cache_manager:
     git:
       url: https://github.com/Baseflow/flutter_cache_manager

@@ -886,10 +886,10 @@ packages:
     dependency: transitive
     description:
       name: js
-      sha256: f2c445dce49627136094980615a031419f7f3eb393237e4ecd97ac15dea343f3
+      sha256: "53385261521cc4a0c4658fd0ad07a7d14591cf8fc33abbceae306ddb974888dc"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.7"
+    version: "0.7.2"
   json5:
     dependency: "direct main"
     description:
@@ -1021,12 +1021,11 @@ packages:
   media_kit:
     dependency: "direct main"
     description:
-      path: media_kit
-      ref: "28292926cfd1e75611f7dcf39248124197d131cf"
-      resolved-ref: "28292926cfd1e75611f7dcf39248124197d131cf"
-      url: "https://github.com/4ster1sk/media-kit.git"
-    source: git
-    version: "1.1.11"
+      name: media_kit
+      sha256: ae9e79597500c7ad6083a3c7b7b7544ddabfceacce7ae5c9709b0ec16a5d6643
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.6"
   media_kit_libs_android_video:
     dependency: transitive
     description:
@@ -1078,12 +1077,11 @@ packages:
   media_kit_video:
     dependency: "direct main"
     description:
-      path: media_kit_video
-      ref: "28292926cfd1e75611f7dcf39248124197d131cf"
-      resolved-ref: "28292926cfd1e75611f7dcf39248124197d131cf"
-      url: "https://github.com/4ster1sk/media-kit.git"
-    source: git
-    version: "1.2.5"
+      name: media_kit_video
+      sha256: afaa509e7b7e0bf247557a3a740cde903a52c34ace9810f94500e127bd7b043d
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   meta:
     dependency: transitive
     description:
@@ -1947,14 +1945,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "15.0.2"
-  volume_controller:
-    dependency: "direct main"
-    description:
-      name: volume_controller
-      sha256: c71d4c62631305df63b72da79089e078af2659649301807fa746088f365cb48e
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.8"
   wakelock_plus:
     dependency: transitive
     description:
