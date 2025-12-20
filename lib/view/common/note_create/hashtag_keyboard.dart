@@ -29,30 +29,35 @@ class _HashtagsSearch extends _$HashtagsSearch {
 }
 
 final _filteredHashtagsProvider = NotifierProvider.autoDispose
-    .family<_FilteredHashtags, List<String>, Account>(_FilteredHashtags.new);
+    .family<_FilteredHashtags, List<String>, Account>(
+      _FilteredHashtags.new,
+    );
 
-class _FilteredHashtags extends FamilyNotifier<List<String>, Account> {
+class _FilteredHashtags extends Notifier<List<String>> {
+  final Account _account;
+
+  _FilteredHashtags(this._account);
+
   @override
-  List<String> build(Account arg) {
+  List<String> build() {
     ref.listen(
       inputCompletionTypeProvider,
-      (_, type) async => await _updateHashtags(arg, type),
+      (_, type) async => await _updateHashtags(type),
       fireImmediately: true,
     );
     return [];
   }
 
   Future<void> _updateHashtags(
-    Account account,
     InputCompletionType type,
   ) async {
     if (type is Hashtag) {
       final query = type.query;
       if (query.isEmpty) {
-        final response = await ref.read(misskeyProvider(arg)).hashtags.trend();
+        final response = await ref.read(misskeyProvider(_account)).hashtags.trend();
         state = response.map((hashtag) => hashtag.tag).toList();
       } else {
-        state = await ref.read(_hashtagsSearchProvider(query, account).future);
+        state = await ref.read(_hashtagsSearchProvider(query, _account).future);
       }
     }
   }

@@ -193,7 +193,7 @@ class AntennaSettingsForm extends HookConsumerWidget {
                   ),
                 )
                 .toList(),
-            value: settings.src,
+            initialValue: settings.src,
             hint: Text(S.of(context).selectAntennaSource),
             onChanged: ref
                 .read(_antennaSettingsProvider.notifier)
@@ -216,7 +216,7 @@ class AntennaSettingsForm extends HookConsumerWidget {
                 }
                 return null;
               },
-              value: list.value?.firstWhereOrNull(
+              initialValue: list.value?.firstWhereOrNull(
                 (e) => e.id == settings.userListId,
               ),
               hint: Text(S.of(context).selectList),
