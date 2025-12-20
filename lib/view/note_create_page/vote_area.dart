@@ -68,9 +68,7 @@ class VoteContentListItem extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final onVoteContentChange = ref.watch(
-      noteCreateProvider.select(
-        (notifier) => notifier.voteContentCount,
-      ),
+      noteCreateProvider.select((notifier) => notifier.voteContentCount),
     );
 
     final initial = useMemoized(
@@ -107,9 +105,7 @@ class VoteContentListItem extends HookConsumerWidget {
           ),
           IconButton(
             onPressed: () {
-              ref
-                  .read(noteCreateProvider.notifier)
-                  .deleteVoteContent(index);
+              ref.read(noteCreateProvider.notifier).deleteVoteContent(index);
             },
             icon: const Icon(Icons.close),
           ),
@@ -261,15 +257,11 @@ class VoteUntilDuration extends HookConsumerWidget {
               ),
           ],
           value: ref.watch(
-            noteCreateProvider.select(
-              (value) => value.voteDurationType,
-            ),
+            noteCreateProvider.select((value) => value.voteDurationType),
           ),
           onChanged: (value) {
             if (value == null) return;
-            ref
-                .read(noteCreateProvider.notifier)
-                .setVoteDurationType(value);
+            ref.read(noteCreateProvider.notifier).setVoteDurationType(value);
           },
         ),
       ],

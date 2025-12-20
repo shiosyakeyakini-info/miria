@@ -60,13 +60,13 @@ class InstanceMutePage extends HookConsumerWidget implements AutoRouteWrapper {
     final controller = useTextEditingController();
     final state = ref.watch(instanceMutePageProvider);
 
-    ref.listen(
-      instanceMutePageProvider.select((value) => value.value?.$1),
-      (_, next) {
-        if (next == null) return;
-        controller.text = next.join("\n");
-      },
-    );
+    ref.listen(instanceMutePageProvider.select((value) => value.value?.$1), (
+      _,
+      next,
+    ) {
+      if (next == null) return;
+      controller.text = next.join("\n");
+    });
 
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).instanceMute)),

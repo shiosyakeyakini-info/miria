@@ -93,9 +93,7 @@ void main() {
 
     group("初期状態", () {
       test("初期状態でファイルが空であること", () {
-        final notifier = container.read(
-          chatInputStateProvider.notifier,
-        );
+        final notifier = container.read(chatInputStateProvider.notifier);
         final state = container.read(chatInputStateProvider);
 
         expect(state.files, isEmpty);
@@ -104,9 +102,7 @@ void main() {
 
     group("ファイル追加", () {
       test("画像ファイルを追加できること", () async {
-        final notifier = container.read(
-          chatInputStateProvider.notifier,
-        );
+        final notifier = container.read(chatInputStateProvider.notifier);
 
         final binaryData = await TestData.binaryImage;
         final imageFile = ImageFile(
@@ -123,9 +119,7 @@ void main() {
       });
 
       test("その他ファイルを追加できること", () async {
-        final notifier = container.read(
-          chatInputStateProvider.notifier,
-        );
+        final notifier = container.read(chatInputStateProvider.notifier);
 
         final unknownFile = UnknownFile(
           data: Uint8List.fromList([1, 2, 3, 4]),
@@ -143,9 +137,7 @@ void main() {
 
     group("ファイル削除", () {
       test("ファイルを削除できること", () async {
-        final notifier = container.read(
-          chatInputStateProvider.notifier,
-        );
+        final notifier = container.read(chatInputStateProvider.notifier);
 
         // ファイルを追加
         final binaryData = await TestData.binaryImage;
@@ -163,9 +155,7 @@ void main() {
       });
 
       test("範囲外のインデックスでも例外が発生しないこと", () {
-        final notifier = container.read(
-          chatInputStateProvider.notifier,
-        );
+        final notifier = container.read(chatInputStateProvider.notifier);
 
         expect(() => notifier.removeFile(0), returnsNormally);
         expect(() => notifier.removeFile(99), returnsNormally);
@@ -174,9 +164,7 @@ void main() {
 
     group("ファイル選択", () {
       test("JPEGファイルを選択できること", () async {
-        final notifier = container.read(
-          chatInputStateProvider.notifier,
-        );
+        final notifier = container.read(chatInputStateProvider.notifier);
 
         // ドライブモーダルのモック（アップロードを選択）
         testRouter.driveModalReturnValue = DriveModalSheetReturnValue.upload;
@@ -211,9 +199,7 @@ void main() {
       });
 
       test("HEICファイルをJPEGに変換して選択できること", () async {
-        final notifier = container.read(
-          chatInputStateProvider.notifier,
-        );
+        final notifier = container.read(chatInputStateProvider.notifier);
 
         // ドライブモーダルのモック（アップロードを選択）
         testRouter.driveModalReturnValue = DriveModalSheetReturnValue.upload;
@@ -252,9 +238,7 @@ void main() {
       });
 
       test("その他ファイルを選択できること", () async {
-        final notifier = container.read(
-          chatInputStateProvider.notifier,
-        );
+        final notifier = container.read(chatInputStateProvider.notifier);
 
         // ドライブモーダルのモック（アップロードを選択）
         testRouter.driveModalReturnValue = DriveModalSheetReturnValue.upload;
@@ -288,9 +272,7 @@ void main() {
       });
 
       test("ファイル選択がキャンセルされた場合は何も追加されないこと", () async {
-        final notifier = container.read(
-          chatInputStateProvider.notifier,
-        );
+        final notifier = container.read(chatInputStateProvider.notifier);
 
         // ドライブモーダルのモック（アップロードを選択）
         testRouter.driveModalReturnValue = DriveModalSheetReturnValue.upload;
@@ -310,9 +292,7 @@ void main() {
       });
 
       test("ドライブから画像ファイルを選択できること", () async {
-        final notifier = container.read(
-          chatInputStateProvider.notifier,
-        );
+        final notifier = container.read(chatInputStateProvider.notifier);
 
         // ドライブモーダルのモック（ドライブを選択）
         testRouter.driveModalReturnValue = DriveModalSheetReturnValue.drive;
@@ -344,9 +324,7 @@ void main() {
       });
 
       test("ドライブからその他ファイルを選択できること", () async {
-        final notifier = container.read(
-          chatInputStateProvider.notifier,
-        );
+        final notifier = container.read(chatInputStateProvider.notifier);
 
         // ドライブモーダルのモック（ドライブを選択）
         testRouter.driveModalReturnValue = DriveModalSheetReturnValue.drive;
@@ -363,9 +341,7 @@ void main() {
       });
 
       test("ドライブファイル選択がキャンセルされた場合は何も追加されないこと", () async {
-        final notifier = container.read(
-          chatInputStateProvider.notifier,
-        );
+        final notifier = container.read(chatInputStateProvider.notifier);
 
         // ドライブモーダルのモック（ドライブを選択）
         testRouter.driveModalReturnValue = DriveModalSheetReturnValue.drive;
@@ -382,9 +358,7 @@ void main() {
 
     group("ファイルアップロード", () {
       test("画像ファイルをアップロードしてファイルIDを取得できること", () async {
-        final notifier = container.read(
-          chatInputStateProvider.notifier,
-        );
+        final notifier = container.read(chatInputStateProvider.notifier);
 
         // ドライブファイル作成のモック
         when(
@@ -411,9 +385,7 @@ void main() {
       });
 
       test("その他ファイルをアップロードしてファイルIDを取得できること", () async {
-        final notifier = container.read(
-          chatInputStateProvider.notifier,
-        );
+        final notifier = container.read(chatInputStateProvider.notifier);
 
         // ドライブファイル作成のモック
         when(
@@ -439,9 +411,7 @@ void main() {
       });
 
       test("ファイルがない場合はnullを返すこと", () async {
-        final notifier = container.read(
-          chatInputStateProvider.notifier,
-        );
+        final notifier = container.read(chatInputStateProvider.notifier);
 
         final fileId = await notifier.uploadAndGetFileId();
 
@@ -450,9 +420,7 @@ void main() {
       });
 
       test("既存のファイルIDがある場合はそのままIDを返すこと", () async {
-        final notifier = container.read(
-          chatInputStateProvider.notifier,
-        );
+        final notifier = container.read(chatInputStateProvider.notifier);
 
         // 既存ファイルを追加
         final binaryData = await TestData.binaryImage;
@@ -477,9 +445,7 @@ void main() {
 
     group("ファイルクリア", () {
       test("すべてのファイルをクリアできること", () async {
-        final notifier = container.read(
-          chatInputStateProvider.notifier,
-        );
+        final notifier = container.read(chatInputStateProvider.notifier);
 
         // 複数ファイルを追加
         final binaryData = await TestData.binaryImage;

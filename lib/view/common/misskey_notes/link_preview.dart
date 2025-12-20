@@ -16,32 +16,30 @@ import "package:miria/view/common/misskey_notes/twitter_embed.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:webview_flutter/webview_flutter.dart";
 
-final _summalyProvider =
-    FutureProvider.autoDispose.family<SummalyResult, (String, String)>(
-      (ref, arg) async {
-        final (host, link) = arg;
-        final dio = ref.read(dioProvider);
-        final url = Uri.parse(link);
-        // https://github.com/misskey-dev/misskey/blob/2023.9.3/packages/frontend/src/components/MkUrlPreview.vue#L141-L145
-        final replacedUrl = url
-            .replace(
-              host:
-                  url.host == "music.youtube.com" &&
-                      ["watch", "channel"].contains(url.pathSegments.firstOrNull)
-                  ? "www.youtube.com"
-                  : null,
-            )
-            .removeFragment();
-        final response = await dio.getUri<Map<String, dynamic>>(
-          Uri.https(host, "url", {
-            "url": replacedUrl.toString(),
-            // TODO: l10n
-            "lang": "ja-JP",
-          }),
-        );
-        return SummalyResult.fromJson(response.data!);
-      },
-    );
+final _summalyProvider = FutureProvider.autoDispose
+    .family<SummalyResult, (String, String)>((ref, arg) async {
+      final (host, link) = arg;
+      final dio = ref.read(dioProvider);
+      final url = Uri.parse(link);
+      // https://github.com/misskey-dev/misskey/blob/2023.9.3/packages/frontend/src/components/MkUrlPreview.vue#L141-L145
+      final replacedUrl = url
+          .replace(
+            host:
+                url.host == "music.youtube.com" &&
+                    ["watch", "channel"].contains(url.pathSegments.firstOrNull)
+                ? "www.youtube.com"
+                : null,
+          )
+          .removeFragment();
+      final response = await dio.getUri<Map<String, dynamic>>(
+        Uri.https(host, "url", {
+          "url": replacedUrl.toString(),
+          // TODO: l10n
+          "lang": "ja-JP",
+        }),
+      );
+      return SummalyResult.fromJson(response.data!);
+    });
 
 class LinkPreview extends ConsumerWidget {
   const LinkPreview({
@@ -186,9 +184,8 @@ class LinkPreviewTile extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.all(5),
       child: InkWell(
-        onTap: () async => await ref
-            .read(dialogStateProvider.notifier)
-            .guard(() async {
+        onTap: () async =>
+            await ref.read(dialogStateProvider.notifier).guard(() async {
               await const LinkNavigator().onTapLink(context, ref, link, host);
             }),
         onLongPress: () async {

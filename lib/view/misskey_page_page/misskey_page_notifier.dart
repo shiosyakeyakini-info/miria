@@ -41,37 +41,37 @@ class MisskeyPageNotifier extends _$MisskeyPageNotifier {
       return;
     }
     state = AsyncData(before.copyWith(likeOr: const AsyncLoading()));
-    final likeOrResult = await ref
-        .read(dialogStateProvider.notifier)
-        .guard(() async {
-          if (before.page.isLiked ?? false) {
-            await ref
-                .read(misskeyPostContextProvider)
-                .pages
-                .unlike(PagesUnlikeRequest(pageId: pageId));
-            state = AsyncData(
-              before.copyWith(
-                page: before.page.copyWith(
-                  isLiked: false,
-                  likedCount: before.page.likedCount - 1,
-                ),
+    final likeOrResult = await ref.read(dialogStateProvider.notifier).guard(
+      () async {
+        if (before.page.isLiked ?? false) {
+          await ref
+              .read(misskeyPostContextProvider)
+              .pages
+              .unlike(PagesUnlikeRequest(pageId: pageId));
+          state = AsyncData(
+            before.copyWith(
+              page: before.page.copyWith(
+                isLiked: false,
+                likedCount: before.page.likedCount - 1,
               ),
-            );
-          } else {
-            await ref
-                .read(misskeyPostContextProvider)
-                .pages
-                .like(PagesLikeRequest(pageId: pageId));
-            state = AsyncData(
-              before.copyWith(
-                page: before.page.copyWith(
-                  isLiked: true,
-                  likedCount: before.page.likedCount + 1,
-                ),
+            ),
+          );
+        } else {
+          await ref
+              .read(misskeyPostContextProvider)
+              .pages
+              .like(PagesLikeRequest(pageId: pageId));
+          state = AsyncData(
+            before.copyWith(
+              page: before.page.copyWith(
+                isLiked: true,
+                likedCount: before.page.likedCount + 1,
               ),
-            );
-          }
-        });
+            ),
+          );
+        }
+      },
+    );
     state = AsyncData((await future).copyWith(likeOr: likeOrResult));
   }
 }

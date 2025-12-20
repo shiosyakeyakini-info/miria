@@ -97,15 +97,15 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
                     Container(),
                     ElevatedButton(
                       onPressed: () async {
-                        await ref
-                            .read(dialogStateProvider.notifier)
-                            .guard(() async {
-                              await ref
-                                  .read(accountRepositoryProvider.notifier)
-                                  .openMiAuth(
-                                    normalizeServer(serverController.text),
-                                  );
-                            });
+                        await ref.read(dialogStateProvider.notifier).guard(
+                          () async {
+                            await ref
+                                .read(accountRepositoryProvider.notifier)
+                                .openMiAuth(
+                                  normalizeServer(serverController.text),
+                                );
+                          },
+                        );
                         setState(() {
                           isAuthed = true;
                         });

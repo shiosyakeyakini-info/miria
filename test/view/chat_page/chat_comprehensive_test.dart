@@ -251,9 +251,7 @@ void main() {
           fileName: "test_image.jpg",
         );
 
-        container
-            .read(chatInputStateProvider.notifier)
-            .addFile(imageFile);
+        container.read(chatInputStateProvider.notifier).addFile(imageFile);
 
         await tester.pumpWidget(
           UncontrolledProviderScope(
@@ -293,9 +291,7 @@ void main() {
           isNsfw: true,
         );
 
-        container
-            .read(chatInputStateProvider.notifier)
-            .addFile(nsfwFile);
+        container.read(chatInputStateProvider.notifier).addFile(nsfwFile);
 
         await tester.pumpWidget(
           UncontrolledProviderScope(
@@ -329,9 +325,7 @@ void main() {
           fileName: "document.pdf",
         );
 
-        container
-            .read(chatInputStateProvider.notifier)
-            .addFile(unknownFile);
+        container.read(chatInputStateProvider.notifier).addFile(unknownFile);
 
         await tester.pumpWidget(
           UncontrolledProviderScope(
@@ -367,9 +361,7 @@ void main() {
           fileName: "test_image.jpg",
         );
 
-        container
-            .read(chatInputStateProvider.notifier)
-            .addFile(imageFile);
+        container.read(chatInputStateProvider.notifier).addFile(imageFile);
 
         await tester.pumpWidget(
           UncontrolledProviderScope(
@@ -490,9 +482,7 @@ void main() {
           data: binaryData,
           fileName: "converted_image.jpg", // .heicから.jpgに変換された名前
         );
-        await container
-            .read(chatInputStateProvider.notifier)
-            .addFile(jpegFile);
+        await container.read(chatInputStateProvider.notifier).addFile(jpegFile);
 
         // ファイルが追加され、JPEGに変換されたことを確認
         final state = container.read(chatInputStateProvider);
@@ -638,9 +628,7 @@ void main() {
           fileName: "test_image.jpg",
         );
 
-        container
-            .read(chatInputStateProvider.notifier)
-            .addFile(imageFile);
+        container.read(chatInputStateProvider.notifier).addFile(imageFile);
 
         // アップロードを実行
         final fileId = await container
@@ -675,9 +663,7 @@ void main() {
           fileName: "document.pdf",
         );
 
-        container
-            .read(chatInputStateProvider.notifier)
-            .addFile(unknownFile);
+        container.read(chatInputStateProvider.notifier).addFile(unknownFile);
 
         // アップロードを実行
         final fileId = await container

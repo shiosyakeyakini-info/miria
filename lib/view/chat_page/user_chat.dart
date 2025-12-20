@@ -527,9 +527,7 @@ class UserChatTextField extends HookConsumerWidget {
           children: [
             IconButton(
               onPressed: () async {
-                await ref
-                    .read(chatInputStateProvider.notifier)
-                    .chooseFile();
+                await ref.read(chatInputStateProvider.notifier).chooseFile();
               },
               icon: const Icon(Icons.attach_file),
             ),

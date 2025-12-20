@@ -298,9 +298,7 @@ void main() {
           )
           .container;
 
-      final notifier = container.read(
-        editProfileStateProvider.notifier,
-      );
+      final notifier = container.read(editProfileStateProvider.notifier);
 
       // TestData.binaryImageを使用
       final testImageData = await TestData.binaryImage;
@@ -343,9 +341,7 @@ void main() {
             find.byType(UncontrolledProviderScope).first,
           )
           .container;
-      final notifier = container.read(
-        editProfileStateProvider.notifier,
-      );
+      final notifier = container.read(editProfileStateProvider.notifier);
 
       // 初期状態を確認（TestEditProfileStateNotifierを使用しているため即座にAsyncData）
       final beforeState = container.read(editProfileStateProvider);
@@ -389,9 +385,7 @@ void main() {
             find.byType(UncontrolledProviderScope).first,
           )
           .container;
-      final notifier = container.read(
-        editProfileStateProvider.notifier,
-      );
+      final notifier = container.read(editProfileStateProvider.notifier);
 
       // TestData.binaryImageを使用
       final testImageData = await TestData.binaryImage;
@@ -455,9 +449,7 @@ void main() {
             find.byType(UncontrolledProviderScope).first,
           )
           .container;
-      final notifier = container.read(
-        editProfileStateProvider.notifier,
-      );
+      final notifier = container.read(editProfileStateProvider.notifier);
 
       // 初期状態を確認
       final beforeState = container.read(editProfileStateProvider);

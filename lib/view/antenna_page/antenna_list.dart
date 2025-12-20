@@ -33,9 +33,7 @@ class AntennaList extends ConsumerWidget {
                 );
                 if (!context.mounted) return;
                 if (result ?? false) {
-                  await ref
-                      .read(antennasProvider.notifier)
-                      .delete(antenna.id);
+                  await ref.read(antennasProvider.notifier).delete(antenna.id);
                 }
               },
             ),

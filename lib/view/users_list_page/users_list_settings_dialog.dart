@@ -75,9 +75,7 @@ class UsersListSettingsDialog extends HookConsumerWidget
                 }
                 return null;
               },
-              onSaved: ref
-                  .read(_usersListSettingsProvider.notifier)
-                  .updateName,
+              onSaved: ref.read(_usersListSettingsProvider.notifier).updateName,
             ),
             CheckboxListTile(
               title: Text(S.of(context).public),

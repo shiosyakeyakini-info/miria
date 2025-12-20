@@ -100,9 +100,7 @@ class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
           .read(misskeyPostContextProvider)
           .clips
           .removeNote(ClipsRemoveNoteRequest(clipId: clip.id, noteId: noteId));
-      ref
-          .read(_notesClipsProvider(noteId).notifier)
-          .removeClip(clip.id);
+      ref.read(_notesClipsProvider(noteId).notifier).removeClip(clip.id);
     });
   }
 }

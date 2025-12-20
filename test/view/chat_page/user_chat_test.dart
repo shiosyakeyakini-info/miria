@@ -48,9 +48,7 @@ void main() {
       final binaryData = await TestData.binaryImage;
       final imageFile = ImageFile(data: binaryData, fileName: "test_image.jpg");
 
-      container
-          .read(chatInputStateProvider.notifier)
-          .addFile(imageFile);
+      container.read(chatInputStateProvider.notifier).addFile(imageFile);
 
       await tester.pumpWidget(
         UncontrolledProviderScope(
@@ -78,9 +76,7 @@ void main() {
       final binaryData = await TestData.binaryImage;
       final imageFile = ImageFile(data: binaryData, fileName: "test_image.jpg");
 
-      container
-          .read(chatInputStateProvider.notifier)
-          .addFile(imageFile);
+      container.read(chatInputStateProvider.notifier).addFile(imageFile);
 
       await tester.pumpWidget(
         UncontrolledProviderScope(

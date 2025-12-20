@@ -42,17 +42,13 @@ Raw<UserInfoNotifier> userInfoNotifierProxy(Ref ref, String userId) {
 @Riverpod(dependencies: [accountContext])
 AsyncValue<UserInfo> userInfoProxy(Ref ref, String userId) {
   return ref.watch(
-    userInfoProvider(
-      userId: userId,
-      context: ref.read(accountContextProvider),
-    ),
+    userInfoProvider(userId: userId, context: ref.read(accountContextProvider)),
   );
 }
 
 @Riverpod()
 class UserInfoNotifier extends _$UserInfoNotifier {
-  DialogStateNotifier get _dialog =>
-      ref.read(dialogStateProvider.notifier);
+  DialogStateNotifier get _dialog => ref.read(dialogStateProvider.notifier);
 
   Misskey get _getMisskey => ref.read(misskeyProvider(context.getAccount));
   Misskey get _postMisskey => ref.read(misskeyProvider(context.postAccount));

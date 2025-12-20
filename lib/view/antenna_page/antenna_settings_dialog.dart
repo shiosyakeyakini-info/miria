@@ -171,9 +171,7 @@ class AntennaSettingsForm extends HookConsumerWidget {
               }
               return null;
             },
-            onSaved: ref
-                .read(_antennaSettingsProvider.notifier)
-                .updateName,
+            onSaved: ref.read(_antennaSettingsProvider.notifier).updateName,
           ),
           const SizedBox(height: 10),
           Text(S.of(context).antennaSource),
@@ -195,9 +193,7 @@ class AntennaSettingsForm extends HookConsumerWidget {
                 .toList(),
             initialValue: settings.src,
             hint: Text(S.of(context).selectAntennaSource),
-            onChanged: ref
-                .read(_antennaSettingsProvider.notifier)
-                .updateSrc,
+            onChanged: ref.read(_antennaSettingsProvider.notifier).updateSrc,
           ),
           const SizedBox(height: 10),
           if (settings.src == AntennaSource.list)
@@ -235,9 +231,7 @@ class AntennaSettingsForm extends HookConsumerWidget {
                 hintText: S.of(context).antennaSourceUserHintText,
                 contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
               ),
-              onSaved: ref
-                  .read(_antennaSettingsProvider.notifier)
-                  .updateUsers,
+              onSaved: ref.read(_antennaSettingsProvider.notifier).updateUsers,
             ),
             TextButton(
               onPressed: () async {
@@ -271,9 +265,7 @@ class AntennaSettingsForm extends HookConsumerWidget {
             ),
             // Misskey 2023.9.0 で条件が変更されるためバリデーションを行わない
             // https://github.com/misskey-dev/misskey/pull/11469
-            onSaved: ref
-                .read(_antennaSettingsProvider.notifier)
-                .updateKeywords,
+            onSaved: ref.read(_antennaSettingsProvider.notifier).updateKeywords,
           ),
           const SizedBox(height: 10),
           TextFormField(

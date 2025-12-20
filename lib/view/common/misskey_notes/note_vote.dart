@@ -33,16 +33,14 @@ class NoteVoteNotifier extends _$NoteVoteNotifier {
     if (dialogValue != 0) return false;
     state = const AsyncLoading();
 
-    state = await ref.read(dialogStateProvider.notifier).guard(
-      () async {
-        await ref
-            .read(misskeyPostContextProvider)
-            .notes
-            .polls
-            .vote(NotesPollsVoteRequest(noteId: note.id, choice: index));
-        await ref.read(notesWithProvider).refresh(note.id);
-      },
-    );
+    state = await ref.read(dialogStateProvider.notifier).guard(() async {
+      await ref
+          .read(misskeyPostContextProvider)
+          .notes
+          .polls
+          .vote(NotesPollsVoteRequest(noteId: note.id, choice: index));
+      await ref.read(notesWithProvider).refresh(note.id);
+    });
     return true;
   }
 }

@@ -28,9 +28,7 @@ class MisskeyServerList extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: TextField(
               decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
-              onChanged: ref
-                  .read(misskeyServerListProvider.notifier)
-                  .setQuery,
+              onChanged: ref.read(misskeyServerListProvider.notifier).setQuery,
             ),
           ),
           Expanded(

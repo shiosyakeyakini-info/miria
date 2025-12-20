@@ -54,10 +54,7 @@ class LinkNavigator {
               mode: LaunchMode.externalNonBrowserApplication,
             );
           } catch (e) {
-            await launchUrl(
-              uri,
-              mode: LaunchMode.externalApplication,
-            );
+            await launchUrl(uri, mode: LaunchMode.externalApplication);
           }
           return;
         }

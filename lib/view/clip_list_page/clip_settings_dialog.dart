@@ -96,9 +96,7 @@ class UsersListSettingsForm extends ConsumerWidget {
               }
               return null;
             },
-            onSaved: ref
-                .read(_clipSettingsProvider.notifier)
-                .updateName,
+            onSaved: ref.read(_clipSettingsProvider.notifier).updateName,
           ),
           const SizedBox(height: 10),
           TextFormField(
@@ -109,16 +107,12 @@ class UsersListSettingsForm extends ConsumerWidget {
               labelText: S.of(context).clipDescription,
               contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
             ),
-            onSaved: ref
-                .read(_clipSettingsProvider.notifier)
-                .updateDescription,
+            onSaved: ref.read(_clipSettingsProvider.notifier).updateDescription,
           ),
           CheckboxListTile(
             title: Text(S.of(context).public),
             value: settings.isPublic,
-            onChanged: ref
-                .read(_clipSettingsProvider.notifier)
-                .updateIsPublic,
+            onChanged: ref.read(_clipSettingsProvider.notifier).updateIsPublic,
           ),
           ElevatedButton(
             child: Text(S.of(context).done),

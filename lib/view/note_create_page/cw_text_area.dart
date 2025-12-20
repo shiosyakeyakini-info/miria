@@ -16,25 +16,18 @@ class CwTextArea extends HookConsumerWidget {
 
     useEffect(() {
       void listener() {
-        ref
-            .read(noteCreateProvider.notifier)
-            .setCwText(cwController.text);
+        ref.read(noteCreateProvider.notifier).setCwText(cwController.text);
       }
 
       cwController.addListener(listener);
       return () => cwController.removeListener(listener);
     }, [cwController]);
 
-    ref.listen(noteCreateProvider.select((value) => value.cwText), (
-      _,
-      next,
-    ) {
+    ref.listen(noteCreateProvider.select((value) => value.cwText), (_, next) {
       if (next != cwController.text) cwController.text = next;
     });
 
-    final cw = ref.watch(
-      noteCreateProvider.select((value) => value.isCw),
-    );
+    final cw = ref.watch(noteCreateProvider.select((value) => value.isCw));
 
     if (!cw) return const SizedBox.shrink();
     return Padding(

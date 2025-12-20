@@ -357,26 +357,22 @@ class MisskeyNote extends HookConsumerWidget {
                 );
             if (dialogValue != 0) return;
 
-            await ref.read(dialogStateProvider.notifier).guard(
-              () async {
-                final notesRepository = ref.read(notesWithProvider);
-                await ref
-                    .read(misskeyPostContextProvider)
-                    .notes
-                    .reactions
-                    .delete(
-                      NotesReactionsDeleteRequest(noteId: displayNote.id),
-                    );
-                if (account.host == "misskey.io" ||
-                    account.host == "nijimiss.moe") {
-                  await Future.delayed(
-                    const Duration(milliseconds: misskeyHQReactionDelay),
-                  );
-                }
+            await ref.read(dialogStateProvider.notifier).guard(() async {
+              final notesRepository = ref.read(notesWithProvider);
+              await ref
+                  .read(misskeyPostContextProvider)
+                  .notes
+                  .reactions
+                  .delete(NotesReactionsDeleteRequest(noteId: displayNote.id));
+              if (account.host == "misskey.io" ||
+                  account.host == "nijimiss.moe") {
+                await Future.delayed(
+                  const Duration(milliseconds: misskeyHQReactionDelay),
+                );
+              }
 
-                await notesRepository.refresh(displayNote.id);
-              },
-            );
+              await notesRepository.refresh(displayNote.id);
+            });
 
             return;
           }

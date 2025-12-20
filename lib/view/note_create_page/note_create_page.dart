@@ -132,35 +132,32 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
     }, const []);
 
     ref
-      ..listen(noteCreateProvider.select((value) => value.text), (
-        _,
-        next,
-      ) {
+      ..listen(noteCreateProvider.select((value) => value.text), (_, next) {
         if (next != ref.read(noteInputTextProvider).text) {
           ref.read(noteInputTextProvider).text = next;
         }
       })
-      ..listen(
-        noteCreateProvider.select((value) => value.isNoteSending),
-        (_, next) async {
-          switch (next) {
-            case NoteSendStatus.sending:
-              IndicatorView.showIndicator(context);
-            case NoteSendStatus.finished:
-              IndicatorView.hideIndicator(context);
-              if (exitOnNoted) {
-                await shareExtensionMethodChannel.invokeMethod("exit");
-              } else {
-                Navigator.of(context).pop();
-              }
+      ..listen(noteCreateProvider.select((value) => value.isNoteSending), (
+        _,
+        next,
+      ) async {
+        switch (next) {
+          case NoteSendStatus.sending:
+            IndicatorView.showIndicator(context);
+          case NoteSendStatus.finished:
+            IndicatorView.hideIndicator(context);
+            if (exitOnNoted) {
+              await shareExtensionMethodChannel.invokeMethod("exit");
+            } else {
+              Navigator.of(context).pop();
+            }
 
-            case NoteSendStatus.error:
-              IndicatorView.hideIndicator(context);
-            case null:
-              break;
-          }
-        },
-      );
+          case NoteSendStatus.error:
+            IndicatorView.hideIndicator(context);
+          case null:
+            break;
+        }
+      });
 
     final noteDecoration = AppTheme.of(context).noteTextStyle.copyWith(
       hintText: (renote != null || reply != null)

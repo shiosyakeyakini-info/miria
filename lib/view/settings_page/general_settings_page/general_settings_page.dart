@@ -849,8 +849,7 @@ class GeneralSettingsPage extends HookConsumerWidget {
                                           onPressed: () async {
                                             await ref
                                                 .read(
-                                                  cacheSizeProvider
-                                                      .notifier,
+                                                  cacheSizeProvider.notifier,
                                                 )
                                                 .updateCacheSize();
                                           },

@@ -42,9 +42,7 @@ class ClipDetailPage extends HookConsumerWidget implements AutoRouteWrapper {
         ),
       );
       if (settings == null) return;
-      await ref
-          .read(clipsProvider.notifier)
-          .updateClip(target.id, settings);
+      await ref.read(clipsProvider.notifier).updateClip(target.id, settings);
     });
 
     return Scaffold(

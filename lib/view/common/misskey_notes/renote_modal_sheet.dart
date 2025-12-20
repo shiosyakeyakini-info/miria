@@ -28,58 +28,52 @@ class RenoteNotifier extends _$RenoteNotifier {
   /// チャンネル内にRenote
   Future<void> renoteInSpecificChannel() async {
     state = const AsyncLoading();
-    state = await ref.read(dialogStateProvider.notifier).guard(
-      () async {
-        await ref
-            .read(misskeyProvider(this.account))
-            .notes
-            .create(
-              NotesCreateRequest(
-                renoteId: note.id,
-                localOnly: true,
-                channelId: note.channel!.id,
-              ),
-            );
-      },
-    );
+    state = await ref.read(dialogStateProvider.notifier).guard(() async {
+      await ref
+          .read(misskeyProvider(this.account))
+          .notes
+          .create(
+            NotesCreateRequest(
+              renoteId: note.id,
+              localOnly: true,
+              channelId: note.channel!.id,
+            ),
+          );
+    });
   }
 
   /// チャンネルにRenote
   Future<void> renoteInChannel(CommunityChannel channel) async {
     state = const AsyncLoading();
-    state = await ref.read(dialogStateProvider.notifier).guard(
-      () async {
-        await ref
-            .read(misskeyProvider(this.account))
-            .notes
-            .create(
-              NotesCreateRequest(
-                renoteId: note.id,
-                channelId: channel.id,
-                localOnly: true,
-              ),
-            );
-      },
-    );
+    state = await ref.read(dialogStateProvider.notifier).guard(() async {
+      await ref
+          .read(misskeyProvider(this.account))
+          .notes
+          .create(
+            NotesCreateRequest(
+              renoteId: note.id,
+              channelId: channel.id,
+              localOnly: true,
+            ),
+          );
+    });
   }
 
   /// 普通に引用Renote
   Future<void> renote(bool isLocalOnly, NoteVisibility visibility) async {
     state = const AsyncLoading();
-    state = await ref.read(dialogStateProvider.notifier).guard(
-      () async {
-        await ref
-            .read(misskeyProvider(this.account))
-            .notes
-            .create(
-              NotesCreateRequest(
-                renoteId: note.id,
-                localOnly: isLocalOnly,
-                visibility: visibility,
-              ),
-            );
-      },
-    );
+    state = await ref.read(dialogStateProvider.notifier).guard(() async {
+      await ref
+          .read(misskeyProvider(this.account))
+          .notes
+          .create(
+            NotesCreateRequest(
+              renoteId: note.id,
+              localOnly: isLocalOnly,
+              visibility: visibility,
+            ),
+          );
+    });
   }
 }
 
@@ -188,10 +182,7 @@ class RenoteModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
           ),
         );
       })
-      ..listen(renoteOtherAccountProvider(account, note), (
-        _,
-        next,
-      ) async {
+      ..listen(renoteOtherAccountProvider(account, note), (_, next) async {
         if (next is! AsyncData<(Account, Note)>) return;
         unawaited(context.maybePop());
         await context.pushRoute(
@@ -200,9 +191,7 @@ class RenoteModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
       });
 
     final renoteState = ref.watch(renoteProvider(account, note));
-    final renoteChannelState = ref.watch(
-      renoteChannelProvider(account),
-    );
+    final renoteChannelState = ref.watch(renoteChannelProvider(account));
 
     final renoteOtherAccountState = ref.watch(
       renoteOtherAccountProvider(account, note),
@@ -244,9 +233,7 @@ class RenoteModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
           ),
           trailing: IconButton(
             onPressed: () async => await ref
-                .read(
-                  renoteOtherAccountProvider(account, note).notifier,
-                )
+                .read(renoteOtherAccountProvider(account, note).notifier)
                 .renoteOtherAccount(),
             icon: const Icon(Icons.keyboard_arrow_down),
           ),

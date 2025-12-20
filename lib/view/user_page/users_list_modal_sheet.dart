@@ -64,9 +64,7 @@ class UsersListModalSheet extends ConsumerWidget implements AutoRouteWrapper {
                   );
                   if (!context.mounted) return;
                   if (settings == null) return;
-                  await ref
-                      .read(usersListsProvider.notifier)
-                      .create(settings);
+                  await ref.read(usersListsProvider.notifier).create(settings);
                 },
               );
             }

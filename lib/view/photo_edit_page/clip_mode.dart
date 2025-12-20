@@ -39,9 +39,7 @@ class ClipModeState extends ConsumerState<ClipMode> {
       photoEditStateProvider.select((value) => value.emojis),
     );
     final selectedReaction = ref.watch(
-      photoEditStateProvider.select(
-        (value) => value.selectedEmojiIndex,
-      ),
+      photoEditStateProvider.select((value) => value.selectedEmojiIndex),
     );
 
     final ratio = defaultSize.width / actualSize.width;

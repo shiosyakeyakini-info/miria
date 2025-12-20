@@ -37,9 +37,7 @@ class ImageViewer extends HookConsumerWidget {
               if (provider.scale == 1.0 && provider.lastScale != 1.0) {
                 resetScale();
               }
-              ref
-                  .read(imageViewerInfoProvider.notifier)
-                  .removePointer();
+              ref.read(imageViewerInfoProvider.notifier).removePointer();
             },
             onPointerMove: (event) {
               final prov = ref.read(imageViewerInfoProvider);
@@ -51,9 +49,7 @@ class ImageViewer extends HookConsumerWidget {
                   min(prov.lastScale + (delta.dy / 75.0), maxScale),
                   1.0,
                 );
-                ref
-                    .read(imageViewerInfoProvider.notifier)
-                    .updateScale(s);
+                ref.read(imageViewerInfoProvider.notifier).updateScale(s);
                 final v = transformationController.toScene(position);
 
                 transformationController.value = Matrix4.identity()

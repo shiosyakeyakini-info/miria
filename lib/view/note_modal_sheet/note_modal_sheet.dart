@@ -102,23 +102,21 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
     if (isFavorited == null) return;
     state = state.copyWith(favorite: const AsyncLoading());
     state = state.copyWith(
-      favorite: await ref.read(dialogStateProvider.notifier).guard(
-        () async {
-          if (isFavorited) {
-            await ref
-                .read(misskeyPostContextProvider)
-                .notes
-                .favorites
-                .delete(NotesFavoritesDeleteRequest(noteId: note.id));
-          } else {
-            await ref
-                .read(misskeyPostContextProvider)
-                .notes
-                .favorites
-                .create(NotesFavoritesCreateRequest(noteId: note.id));
-          }
-        },
-      ),
+      favorite: await ref.read(dialogStateProvider.notifier).guard(() async {
+        if (isFavorited) {
+          await ref
+              .read(misskeyPostContextProvider)
+              .notes
+              .favorites
+              .delete(NotesFavoritesDeleteRequest(noteId: note.id));
+        } else {
+          await ref
+              .read(misskeyPostContextProvider)
+              .notes
+              .favorites
+              .create(NotesFavoritesCreateRequest(noteId: note.id));
+        }
+      }),
     );
   }
 
@@ -154,15 +152,13 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
     if (note.renoteId == null) return;
     state = state.copyWith(delete: const AsyncLoading());
     state = state.copyWith(
-      delete: await ref.read(dialogStateProvider.notifier).guard(
-        () async {
-          await ref
-              .read(misskeyPostContextProvider)
-              .notes
-              .delete(NotesDeleteRequest(noteId: note.id));
-          ref.read(notesWithProvider).delete(note.id);
-        },
-      ),
+      delete: await ref.read(dialogStateProvider.notifier).guard(() async {
+        await ref
+            .read(misskeyPostContextProvider)
+            .notes
+            .delete(NotesDeleteRequest(noteId: note.id));
+        ref.read(notesWithProvider).delete(note.id);
+      }),
     );
   }
 
@@ -179,15 +175,13 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
     if (confirm != 0) return;
     state = state.copyWith(delete: const AsyncLoading());
     state = state.copyWith(
-      delete: await ref.read(dialogStateProvider.notifier).guard(
-        () async {
-          await ref
-              .read(misskeyPostContextProvider)
-              .notes
-              .delete(NotesDeleteRequest(noteId: note.id));
-          ref.read(notesWithProvider).delete(note.id);
-        },
-      ),
+      delete: await ref.read(dialogStateProvider.notifier).guard(() async {
+        await ref
+            .read(misskeyPostContextProvider)
+            .notes
+            .delete(NotesDeleteRequest(noteId: note.id));
+        ref.read(notesWithProvider).delete(note.id);
+      }),
     );
   }
 
@@ -204,15 +198,15 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
     if (confirm != 0) return false;
     state = state.copyWith(deleteRecreate: const AsyncLoading());
     state = state.copyWith(
-      deleteRecreate: await ref
-          .read(dialogStateProvider.notifier)
-          .guard(() async {
-            await ref
-                .read(misskeyPostContextProvider)
-                .notes
-                .delete(NotesDeleteRequest(noteId: note.id));
-            ref.read(notesWithProvider).delete(note.id);
-          }),
+      deleteRecreate: await ref.read(dialogStateProvider.notifier).guard(
+        () async {
+          await ref
+              .read(misskeyPostContextProvider)
+              .notes
+              .delete(NotesDeleteRequest(noteId: note.id));
+          ref.read(notesWithProvider).delete(note.id);
+        },
+      ),
     );
     return true;
   }
@@ -240,9 +234,7 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final accounts = ref.watch(accountRepositoryProvider);
-    final targetNoteNotifierProvider = noteModalSheetProvider(
-      targetNote,
-    );
+    final targetNoteNotifierProvider = noteModalSheetProvider(targetNote);
     final baseNoteNotiferProvider = noteModalSheetProvider(baseNote);
 
     ref.listen(targetNoteNotifierProvider.select((value) => value.user), (
