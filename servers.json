@@ -12,6 +12,13 @@
     ], 
     "particularTimelinePresets": [
         {
+            "host": "misskey.io",
+            "name": "ローカルタイムライン（1次元）",
+            "endpoint": "notes/local-timeline",
+            "websocketChannelName": "localTimeline",
+            "parameters": "{\"dimension\": 1}"
+        },
+        {
             "host": "mi.taichan.site",
             "name": "ホームタイムライン（ローカルのみ）",
             "endpoint": "notes/timeline",
