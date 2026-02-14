@@ -10,7 +10,7 @@ part of 'chat_home_page.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(history)
-const historyProvider = HistoryProvider._();
+final historyProvider = HistoryProvider._();
 
 final class HistoryProvider
     extends
@@ -22,22 +22,22 @@ final class HistoryProvider
     with
         $FutureModifier<List<ChatMessage>>,
         $FutureProvider<List<ChatMessage>> {
-  const HistoryProvider._()
+  HistoryProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'historyProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           HistoryProvider.$allTransitiveDependencies0,
           HistoryProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
 
   @override

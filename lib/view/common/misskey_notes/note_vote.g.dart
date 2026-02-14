@@ -10,11 +10,11 @@ part of 'note_vote.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(NoteVoteNotifier)
-const noteVoteProvider = NoteVoteNotifierFamily._();
+final noteVoteProvider = NoteVoteNotifierFamily._();
 
 final class NoteVoteNotifierProvider
     extends $NotifierProvider<NoteVoteNotifier, AsyncValue<dynamic>?> {
-  const NoteVoteNotifierProvider._({
+  NoteVoteNotifierProvider._({
     required NoteVoteNotifierFamily super.from,
     required Note super.argument,
   }) : super(
@@ -25,10 +25,10 @@ final class NoteVoteNotifierProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 = notesWithProvider;
+  static final $allTransitiveDependencies2 = notesWithProvider;
 
   @override
   String debugGetCreateSourceHash() => _$noteVoteNotifierHash();
@@ -74,15 +74,15 @@ final class NoteVoteNotifierFamily extends $Family
           AsyncValue<dynamic>?,
           Note
         > {
-  const NoteVoteNotifierFamily._()
+  NoteVoteNotifierFamily._()
     : super(
         retry: null,
         name: r'noteVoteProvider',
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           misskeyPostContextProvider,
           notesWithProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>[
           NoteVoteNotifierProvider.$allTransitiveDependencies0,
           NoteVoteNotifierProvider.$allTransitiveDependencies1,
           NoteVoteNotifierProvider.$allTransitiveDependencies2,
@@ -105,7 +105,6 @@ abstract class _$NoteVoteNotifier extends $Notifier<AsyncValue<dynamic>?> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<AsyncValue<dynamic>?, AsyncValue<dynamic>?>;
     final element =
         ref.element
@@ -115,6 +114,6 @@ abstract class _$NoteVoteNotifier extends $Notifier<AsyncValue<dynamic>?> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

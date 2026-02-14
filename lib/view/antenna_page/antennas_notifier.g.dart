@@ -10,26 +10,26 @@ part of 'antennas_notifier.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(AntennasNotifier)
-const antennasProvider = AntennasNotifierProvider._();
+final antennasProvider = AntennasNotifierProvider._();
 
 final class AntennasNotifierProvider
     extends $AsyncNotifierProvider<AntennasNotifier, List<Antenna>> {
-  const AntennasNotifierProvider._()
+  AntennasNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'antennasProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           AntennasNotifierProvider.$allTransitiveDependencies0,
           AntennasNotifierProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
 
   @override
@@ -47,7 +47,6 @@ abstract class _$AntennasNotifier extends $AsyncNotifier<List<Antenna>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AsyncValue<List<Antenna>>, List<Antenna>>;
     final element =
         ref.element
@@ -57,6 +56,6 @@ abstract class _$AntennasNotifier extends $AsyncNotifier<List<Antenna>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

@@ -10,7 +10,7 @@ part of 'federation_custom_emojis.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(fetchEmoji)
-const fetchEmojiProvider = FetchEmojiFamily._();
+final fetchEmojiProvider = FetchEmojiFamily._();
 
 final class FetchEmojiProvider
     extends
@@ -22,7 +22,7 @@ final class FetchEmojiProvider
     with
         $FutureModifier<Map<String, List<Emoji>>>,
         $FutureProvider<Map<String, List<Emoji>>> {
-  const FetchEmojiProvider._({
+  FetchEmojiProvider._({
     required FetchEmojiFamily super.from,
     required (String, MetaResponse) super.argument,
   }) : super(
@@ -33,8 +33,8 @@ final class FetchEmojiProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = misskeyGetContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyGetContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyGetContextProvider.$allTransitiveDependencies0;
 
   @override
@@ -78,12 +78,12 @@ final class FetchEmojiFamily extends $Family
           FutureOr<Map<String, List<Emoji>>>,
           (String, MetaResponse)
         > {
-  const FetchEmojiFamily._()
+  FetchEmojiFamily._()
     : super(
         retry: null,
         name: r'fetchEmojiProvider',
-        dependencies: const <ProviderOrFamily>[misskeyGetContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyGetContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           FetchEmojiProvider.$allTransitiveDependencies0,
           FetchEmojiProvider.$allTransitiveDependencies1,
         ],

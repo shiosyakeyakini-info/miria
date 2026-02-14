@@ -10,24 +10,24 @@ part of 'note_create_state_notifier.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(NoteCreateNotifier)
-const noteCreateProvider = NoteCreateNotifierProvider._();
+final noteCreateProvider = NoteCreateNotifierProvider._();
 
 final class NoteCreateNotifierProvider
     extends $NotifierProvider<NoteCreateNotifier, NoteCreate> {
-  const NoteCreateNotifierProvider._()
+  NoteCreateNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'noteCreateProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           misskeyPostContextProvider,
           notesWithProvider,
           accountContextProvider,
           noteDraftRepositoryProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        $allTransitiveDependencies: <ProviderOrFamily>{
           NoteCreateNotifierProvider.$allTransitiveDependencies0,
           NoteCreateNotifierProvider.$allTransitiveDependencies1,
           NoteCreateNotifierProvider.$allTransitiveDependencies2,
@@ -35,11 +35,11 @@ final class NoteCreateNotifierProvider
         },
       );
 
-  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 = notesWithProvider;
-  static const $allTransitiveDependencies3 = noteDraftRepositoryProvider;
+  static final $allTransitiveDependencies2 = notesWithProvider;
+  static final $allTransitiveDependencies3 = noteDraftRepositoryProvider;
 
   @override
   String debugGetCreateSourceHash() => _$noteCreateNotifierHash();
@@ -65,7 +65,6 @@ abstract class _$NoteCreateNotifier extends $Notifier<NoteCreate> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<NoteCreate, NoteCreate>;
     final element =
         ref.element
@@ -75,6 +74,6 @@ abstract class _$NoteCreateNotifier extends $Notifier<NoteCreate> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

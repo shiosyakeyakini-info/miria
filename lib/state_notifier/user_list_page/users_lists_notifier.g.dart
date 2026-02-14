@@ -10,26 +10,26 @@ part of 'users_lists_notifier.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(UsersListsNotifier)
-const usersListsProvider = UsersListsNotifierProvider._();
+final usersListsProvider = UsersListsNotifierProvider._();
 
 final class UsersListsNotifierProvider
     extends $AsyncNotifierProvider<UsersListsNotifier, List<UsersList>> {
-  const UsersListsNotifierProvider._()
+  UsersListsNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'usersListsProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           UsersListsNotifierProvider.$allTransitiveDependencies0,
           UsersListsNotifierProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
 
   @override
@@ -48,7 +48,6 @@ abstract class _$UsersListsNotifier extends $AsyncNotifier<List<UsersList>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AsyncValue<List<UsersList>>, List<UsersList>>;
     final element =
         ref.element
@@ -58,6 +57,6 @@ abstract class _$UsersListsNotifier extends $AsyncNotifier<List<UsersList>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

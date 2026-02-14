@@ -10,7 +10,7 @@ part of 'server_preset_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(serverPresets)
-const serverPresetsProvider = ServerPresetsProvider._();
+final serverPresetsProvider = ServerPresetsProvider._();
 
 final class ServerPresetsProvider
     extends
@@ -20,7 +20,7 @@ final class ServerPresetsProvider
           FutureOr<ServerPresets>
         >
     with $FutureModifier<ServerPresets>, $FutureProvider<ServerPresets> {
-  const ServerPresetsProvider._()
+  ServerPresetsProvider._()
     : super(
         from: null,
         argument: null,

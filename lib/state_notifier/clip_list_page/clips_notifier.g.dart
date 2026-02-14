@@ -10,26 +10,26 @@ part of 'clips_notifier.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(ClipsNotifier)
-const clipsProvider = ClipsNotifierProvider._();
+final clipsProvider = ClipsNotifierProvider._();
 
 final class ClipsNotifierProvider
     extends $AsyncNotifierProvider<ClipsNotifier, List<Clip>> {
-  const ClipsNotifierProvider._()
+  ClipsNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'clipsProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           ClipsNotifierProvider.$allTransitiveDependencies0,
           ClipsNotifierProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
 
   @override
@@ -47,7 +47,6 @@ abstract class _$ClipsNotifier extends $AsyncNotifier<List<Clip>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AsyncValue<List<Clip>>, List<Clip>>;
     final element =
         ref.element
@@ -57,6 +56,6 @@ abstract class _$ClipsNotifier extends $AsyncNotifier<List<Clip>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

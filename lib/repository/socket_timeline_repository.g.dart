@@ -10,7 +10,7 @@ part of 'socket_timeline_repository.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(misskeyStreaming)
-const misskeyStreamingProvider = MisskeyStreamingFamily._();
+final misskeyStreamingProvider = MisskeyStreamingFamily._();
 
 final class MisskeyStreamingProvider
     extends
@@ -22,7 +22,7 @@ final class MisskeyStreamingProvider
     with
         $FutureModifier<StreamingController>,
         $FutureProvider<StreamingController> {
-  const MisskeyStreamingProvider._({
+  MisskeyStreamingProvider._({
     required MisskeyStreamingFamily super.from,
     required Misskey super.argument,
   }) : super(
@@ -70,7 +70,7 @@ String _$misskeyStreamingHash() => r'b639ff4b308b410ee3f8b9c702097451dfe4fc02';
 
 final class MisskeyStreamingFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<StreamingController>, Misskey> {
-  const MisskeyStreamingFamily._()
+  MisskeyStreamingFamily._()
     : super(
         retry: null,
         name: r'misskeyStreamingProvider',

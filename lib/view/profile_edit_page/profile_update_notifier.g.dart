@@ -10,29 +10,29 @@ part of 'profile_update_notifier.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(ProfileUpdateNotifier)
-const profileUpdateProvider = ProfileUpdateNotifierProvider._();
+final profileUpdateProvider = ProfileUpdateNotifierProvider._();
 
 final class ProfileUpdateNotifierProvider
     extends $AsyncNotifierProvider<ProfileUpdateNotifier, void> {
-  const ProfileUpdateNotifierProvider._()
+  ProfileUpdateNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'profileUpdateProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           accountContextProvider,
           profileEditRequestProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>[
           ProfileUpdateNotifierProvider.$allTransitiveDependencies0,
           ProfileUpdateNotifierProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = accountContextProvider;
-  static const $allTransitiveDependencies1 = profileEditRequestProvider;
+  static final $allTransitiveDependencies0 = accountContextProvider;
+  static final $allTransitiveDependencies1 = profileEditRequestProvider;
 
   @override
   String debugGetCreateSourceHash() => _$profileUpdateNotifierHash();
@@ -50,7 +50,6 @@ abstract class _$ProfileUpdateNotifier extends $AsyncNotifier<void> {
   @$mustCallSuper
   @override
   void runBuild() {
-    build();
     final ref = this.ref as $Ref<AsyncValue<void>, void>;
     final element =
         ref.element
@@ -60,6 +59,6 @@ abstract class _$ProfileUpdateNotifier extends $AsyncNotifier<void> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, null);
+    element.handleCreate(ref, build);
   }
 }

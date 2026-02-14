@@ -10,11 +10,11 @@ part of 'dialog_state.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(DialogStateNotifier)
-const dialogStateProvider = DialogStateNotifierProvider._();
+final dialogStateProvider = DialogStateNotifierProvider._();
 
 final class DialogStateNotifierProvider
     extends $NotifierProvider<DialogStateNotifier, DialogsState> {
-  const DialogStateNotifierProvider._()
+  DialogStateNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -49,7 +49,6 @@ abstract class _$DialogStateNotifier extends $Notifier<DialogsState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<DialogsState, DialogsState>;
     final element =
         ref.element
@@ -59,6 +58,6 @@ abstract class _$DialogStateNotifier extends $Notifier<DialogsState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

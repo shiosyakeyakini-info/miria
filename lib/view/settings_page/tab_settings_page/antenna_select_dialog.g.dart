@@ -10,7 +10,7 @@ part of 'antenna_select_dialog.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(_antennas)
-const _antennasProvider = _AntennasProvider._();
+final _antennasProvider = _AntennasProvider._();
 
 final class _AntennasProvider
     extends
@@ -20,22 +20,22 @@ final class _AntennasProvider
           FutureOr<List<Antenna>>
         >
     with $FutureModifier<List<Antenna>>, $FutureProvider<List<Antenna>> {
-  const _AntennasProvider._()
+  _AntennasProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'_antennasProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[misskeyGetContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyGetContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           _AntennasProvider.$allTransitiveDependencies0,
           _AntennasProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = misskeyGetContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyGetContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyGetContextProvider.$allTransitiveDependencies0;
 
   @override

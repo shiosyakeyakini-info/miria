@@ -10,7 +10,7 @@ part of 'instance_mute_page.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(InstanceMutePageNotifier)
-const instanceMutePageProvider = InstanceMutePageNotifierProvider._();
+final instanceMutePageProvider = InstanceMutePageNotifierProvider._();
 
 final class InstanceMutePageNotifierProvider
     extends
@@ -18,22 +18,22 @@ final class InstanceMutePageNotifierProvider
           InstanceMutePageNotifier,
           (List<String>, AsyncValue<void>?)
         > {
-  const InstanceMutePageNotifierProvider._()
+  InstanceMutePageNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'instanceMutePageProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           InstanceMutePageNotifierProvider.$allTransitiveDependencies0,
           InstanceMutePageNotifierProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
 
   @override
@@ -53,7 +53,6 @@ abstract class _$InstanceMutePageNotifier
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref =
         this.ref
             as $Ref<
@@ -71,6 +70,6 @@ abstract class _$InstanceMutePageNotifier
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

@@ -10,24 +10,24 @@ part of 'photo_edit_state_notifier.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(PhotoEditStateNotifier)
-const photoEditStateProvider = PhotoEditStateNotifierProvider._();
+final photoEditStateProvider = PhotoEditStateNotifierProvider._();
 
 final class PhotoEditStateNotifierProvider
     extends $NotifierProvider<PhotoEditStateNotifier, PhotoEdit> {
-  const PhotoEditStateNotifierProvider._()
+  PhotoEditStateNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'photoEditStateProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[accountContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[accountContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           PhotoEditStateNotifierProvider.$allTransitiveDependencies0,
         ],
       );
 
-  static const $allTransitiveDependencies0 = accountContextProvider;
+  static final $allTransitiveDependencies0 = accountContextProvider;
 
   @override
   String debugGetCreateSourceHash() => _$photoEditStateNotifierHash();
@@ -53,7 +53,6 @@ abstract class _$PhotoEditStateNotifier extends $Notifier<PhotoEdit> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<PhotoEdit, PhotoEdit>;
     final element =
         ref.element
@@ -63,6 +62,6 @@ abstract class _$PhotoEditStateNotifier extends $Notifier<PhotoEdit> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

@@ -10,11 +10,11 @@ part of 'hashtag_keyboard.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(_HashtagsSearch)
-const _hashtagsSearchProvider = _HashtagsSearchFamily._();
+final _hashtagsSearchProvider = _HashtagsSearchFamily._();
 
 final class _HashtagsSearchProvider
     extends $AsyncNotifierProvider<_HashtagsSearch, List<String>> {
-  const _HashtagsSearchProvider._({
+  _HashtagsSearchProvider._({
     required _HashtagsSearchFamily super.from,
     required (String, Account) super.argument,
   }) : super(
@@ -61,7 +61,7 @@ final class _HashtagsSearchFamily extends $Family
           FutureOr<List<String>>,
           (String, Account)
         > {
-  const _HashtagsSearchFamily._()
+  _HashtagsSearchFamily._()
     : super(
         retry: null,
         name: r'_hashtagsSearchProvider',
@@ -86,7 +86,6 @@ abstract class _$HashtagsSearch extends $AsyncNotifier<List<String>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args.$1, _$args.$2);
     final ref = this.ref as $Ref<AsyncValue<List<String>>, List<String>>;
     final element =
         ref.element
@@ -96,6 +95,6 @@ abstract class _$HashtagsSearch extends $AsyncNotifier<List<String>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args.$1, _$args.$2));
   }
 }

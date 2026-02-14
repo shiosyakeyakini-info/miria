@@ -10,11 +10,11 @@ part of 'users_list_detail_page.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(_UsersListNotifier)
-const _usersListProvider = _UsersListNotifierFamily._();
+final _usersListProvider = _UsersListNotifierFamily._();
 
 final class _UsersListNotifierProvider
     extends $AsyncNotifierProvider<_UsersListNotifier, UsersList> {
-  const _UsersListNotifierProvider._({
+  _UsersListNotifierProvider._({
     required _UsersListNotifierFamily super.from,
     required (Misskey, String) super.argument,
   }) : super(
@@ -62,7 +62,7 @@ final class _UsersListNotifierFamily extends $Family
           FutureOr<UsersList>,
           (Misskey, String)
         > {
-  const _UsersListNotifierFamily._()
+  _UsersListNotifierFamily._()
     : super(
         retry: null,
         name: r'_usersListProvider',
@@ -87,7 +87,6 @@ abstract class _$UsersListNotifier extends $AsyncNotifier<UsersList> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args.$1, _$args.$2);
     final ref = this.ref as $Ref<AsyncValue<UsersList>, UsersList>;
     final element =
         ref.element
@@ -97,16 +96,16 @@ abstract class _$UsersListNotifier extends $AsyncNotifier<UsersList> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args.$1, _$args.$2));
   }
 }
 
 @ProviderFor(_UsersListUsers)
-const _usersListUsersProvider = _UsersListUsersFamily._();
+final _usersListUsersProvider = _UsersListUsersFamily._();
 
 final class _UsersListUsersProvider
     extends $AsyncNotifierProvider<_UsersListUsers, List<User>> {
-  const _UsersListUsersProvider._({
+  _UsersListUsersProvider._({
     required _UsersListUsersFamily super.from,
     required (Misskey, String) super.argument,
   }) : super(
@@ -153,7 +152,7 @@ final class _UsersListUsersFamily extends $Family
           FutureOr<List<User>>,
           (Misskey, String)
         > {
-  const _UsersListUsersFamily._()
+  _UsersListUsersFamily._()
     : super(
         retry: null,
         name: r'_usersListUsersProvider',
@@ -178,7 +177,6 @@ abstract class _$UsersListUsers extends $AsyncNotifier<List<User>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args.$1, _$args.$2);
     final ref = this.ref as $Ref<AsyncValue<List<User>>, List<User>>;
     final element =
         ref.element
@@ -188,6 +186,6 @@ abstract class _$UsersListUsers extends $AsyncNotifier<List<User>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args.$1, _$args.$2));
   }
 }

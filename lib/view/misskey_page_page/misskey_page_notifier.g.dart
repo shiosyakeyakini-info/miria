@@ -10,12 +10,12 @@ part of 'misskey_page_notifier.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(MisskeyPageNotifier)
-const misskeyPageProvider = MisskeyPageNotifierFamily._();
+final misskeyPageProvider = MisskeyPageNotifierFamily._();
 
 final class MisskeyPageNotifierProvider
     extends
         $AsyncNotifierProvider<MisskeyPageNotifier, MisskeyPageNotifierState> {
-  const MisskeyPageNotifierProvider._({
+  MisskeyPageNotifierProvider._({
     required MisskeyPageNotifierFamily super.from,
     required String super.argument,
   }) : super(
@@ -26,9 +26,9 @@ final class MisskeyPageNotifierProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = accountContextProvider;
-  static const $allTransitiveDependencies1 = misskeyGetContextProvider;
-  static const $allTransitiveDependencies2 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies0 = accountContextProvider;
+  static final $allTransitiveDependencies1 = misskeyGetContextProvider;
+  static final $allTransitiveDependencies2 = misskeyPostContextProvider;
 
   @override
   String debugGetCreateSourceHash() => _$misskeyPageNotifierHash();
@@ -67,16 +67,16 @@ final class MisskeyPageNotifierFamily extends $Family
           FutureOr<MisskeyPageNotifierState>,
           String
         > {
-  const MisskeyPageNotifierFamily._()
+  MisskeyPageNotifierFamily._()
     : super(
         retry: null,
         name: r'misskeyPageProvider',
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           accountContextProvider,
           misskeyGetContextProvider,
           misskeyPostContextProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>[
           MisskeyPageNotifierProvider.$allTransitiveDependencies0,
           MisskeyPageNotifierProvider.$allTransitiveDependencies1,
           MisskeyPageNotifierProvider.$allTransitiveDependencies2,
@@ -100,7 +100,6 @@ abstract class _$MisskeyPageNotifier
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref =
         this.ref
             as $Ref<
@@ -118,6 +117,6 @@ abstract class _$MisskeyPageNotifier
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

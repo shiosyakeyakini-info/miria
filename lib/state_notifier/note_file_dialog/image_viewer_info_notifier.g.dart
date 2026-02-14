@@ -10,11 +10,11 @@ part of 'image_viewer_info_notifier.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(ImageViewerInfoNotifier)
-const imageViewerInfoProvider = ImageViewerInfoNotifierProvider._();
+final imageViewerInfoProvider = ImageViewerInfoNotifierProvider._();
 
 final class ImageViewerInfoNotifierProvider
     extends $NotifierProvider<ImageViewerInfoNotifier, ImageViewerInfo> {
-  const ImageViewerInfoNotifierProvider._()
+  ImageViewerInfoNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -49,7 +49,6 @@ abstract class _$ImageViewerInfoNotifier extends $Notifier<ImageViewerInfo> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<ImageViewerInfo, ImageViewerInfo>;
     final element =
         ref.element
@@ -59,6 +58,6 @@ abstract class _$ImageViewerInfoNotifier extends $Notifier<ImageViewerInfo> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

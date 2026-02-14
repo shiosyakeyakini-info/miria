@@ -10,26 +10,26 @@ part of 'muted_users_notifier.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(MutedUsersNotifier)
-const mutedUsersProvider = MutedUsersNotifierProvider._();
+final mutedUsersProvider = MutedUsersNotifierProvider._();
 
 final class MutedUsersNotifierProvider
     extends $AsyncNotifierProvider<MutedUsersNotifier, List<Muting>> {
-  const MutedUsersNotifierProvider._()
+  MutedUsersNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'mutedUsersProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           MutedUsersNotifierProvider.$allTransitiveDependencies0,
           MutedUsersNotifierProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
 
   @override
@@ -48,7 +48,6 @@ abstract class _$MutedUsersNotifier extends $AsyncNotifier<List<Muting>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AsyncValue<List<Muting>>, List<Muting>>;
     final element =
         ref.element
@@ -58,6 +57,6 @@ abstract class _$MutedUsersNotifier extends $AsyncNotifier<List<Muting>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

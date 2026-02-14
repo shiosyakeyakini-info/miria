@@ -10,11 +10,11 @@ part of 'download_file_notifier.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(DownloadFileNotifier)
-const downloadFileProvider = DownloadFileNotifierProvider._();
+final downloadFileProvider = DownloadFileNotifierProvider._();
 
 final class DownloadFileNotifierProvider
     extends $NotifierProvider<DownloadFileNotifier, void> {
-  const DownloadFileNotifierProvider._()
+  DownloadFileNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -49,7 +49,6 @@ abstract class _$DownloadFileNotifier extends $Notifier<void> {
   @$mustCallSuper
   @override
   void runBuild() {
-    build();
     final ref = this.ref as $Ref<void, void>;
     final element =
         ref.element
@@ -59,6 +58,6 @@ abstract class _$DownloadFileNotifier extends $Notifier<void> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, null);
+    element.handleCreate(ref, build);
   }
 }

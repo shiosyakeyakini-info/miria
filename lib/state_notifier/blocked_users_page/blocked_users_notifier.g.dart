@@ -10,26 +10,26 @@ part of 'blocked_users_notifier.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(BlockedUsersNotifier)
-const blockedUsersProvider = BlockedUsersNotifierProvider._();
+final blockedUsersProvider = BlockedUsersNotifierProvider._();
 
 final class BlockedUsersNotifierProvider
     extends $AsyncNotifierProvider<BlockedUsersNotifier, List<Blocking>> {
-  const BlockedUsersNotifierProvider._()
+  BlockedUsersNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'blockedUsersProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           BlockedUsersNotifierProvider.$allTransitiveDependencies0,
           BlockedUsersNotifierProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
 
   @override
@@ -48,7 +48,6 @@ abstract class _$BlockedUsersNotifier extends $AsyncNotifier<List<Blocking>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AsyncValue<List<Blocking>>, List<Blocking>>;
     final element =
         ref.element
@@ -58,6 +57,6 @@ abstract class _$BlockedUsersNotifier extends $AsyncNotifier<List<Blocking>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

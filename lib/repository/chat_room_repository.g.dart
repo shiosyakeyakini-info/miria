@@ -10,26 +10,26 @@ part of 'chat_room_repository.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(ChatRoomRepository)
-const chatRoomRepositoryProvider = ChatRoomRepositoryProvider._();
+final chatRoomRepositoryProvider = ChatRoomRepositoryProvider._();
 
 final class ChatRoomRepositoryProvider
     extends $NotifierProvider<ChatRoomRepository, void> {
-  const ChatRoomRepositoryProvider._()
+  ChatRoomRepositoryProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'chatRoomRepositoryProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           ChatRoomRepositoryProvider.$allTransitiveDependencies0,
           ChatRoomRepositoryProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
 
   @override
@@ -56,7 +56,6 @@ abstract class _$ChatRoomRepository extends $Notifier<void> {
   @$mustCallSuper
   @override
   void runBuild() {
-    build();
     final ref = this.ref as $Ref<void, void>;
     final element =
         ref.element
@@ -66,6 +65,6 @@ abstract class _$ChatRoomRepository extends $Notifier<void> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, null);
+    element.handleCreate(ref, build);
   }
 }

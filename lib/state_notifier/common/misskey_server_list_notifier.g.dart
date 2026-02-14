@@ -10,7 +10,7 @@ part of 'misskey_server_list_notifier.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(MisskeyServerListNotifier)
-const misskeyServerListProvider = MisskeyServerListNotifierProvider._();
+final misskeyServerListProvider = MisskeyServerListNotifierProvider._();
 
 final class MisskeyServerListNotifierProvider
     extends
@@ -18,7 +18,7 @@ final class MisskeyServerListNotifierProvider
           MisskeyServerListNotifier,
           List<JoinMisskeyInstanceInfo>
         > {
-  const MisskeyServerListNotifierProvider._()
+  MisskeyServerListNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -46,7 +46,6 @@ abstract class _$MisskeyServerListNotifier
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref =
         this.ref
             as $Ref<
@@ -64,6 +63,6 @@ abstract class _$MisskeyServerListNotifier
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

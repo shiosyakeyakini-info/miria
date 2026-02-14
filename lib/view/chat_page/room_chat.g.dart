@@ -10,11 +10,11 @@ part of 'room_chat.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(RoomChat)
-const roomChatProvider = RoomChatFamily._();
+final roomChatProvider = RoomChatFamily._();
 
 final class RoomChatProvider
     extends $AsyncNotifierProvider<RoomChat, RoomChatState> {
-  const RoomChatProvider._({
+  RoomChatProvider._({
     required RoomChatFamily super.from,
     required String super.argument,
   }) : super(
@@ -25,8 +25,8 @@ final class RoomChatProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = misskeyGetContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyGetContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyGetContextProvider.$allTransitiveDependencies0;
 
   @override
@@ -65,12 +65,12 @@ final class RoomChatFamily extends $Family
           FutureOr<RoomChatState>,
           String
         > {
-  const RoomChatFamily._()
+  RoomChatFamily._()
     : super(
         retry: null,
         name: r'roomChatProvider',
-        dependencies: const <ProviderOrFamily>[misskeyGetContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyGetContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           RoomChatProvider.$allTransitiveDependencies0,
           RoomChatProvider.$allTransitiveDependencies1,
         ],
@@ -92,7 +92,6 @@ abstract class _$RoomChat extends $AsyncNotifier<RoomChatState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<AsyncValue<RoomChatState>, RoomChatState>;
     final element =
         ref.element
@@ -102,6 +101,6 @@ abstract class _$RoomChat extends $AsyncNotifier<RoomChatState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

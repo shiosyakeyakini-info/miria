@@ -10,7 +10,7 @@ part of 'license_confirm_dialog.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(_emoji)
-const _emojiProvider = _EmojiFamily._();
+final _emojiProvider = _EmojiFamily._();
 
 final class _EmojiProvider
     extends
@@ -20,7 +20,7 @@ final class _EmojiProvider
           FutureOr<EmojiResponse>
         >
     with $FutureModifier<EmojiResponse>, $FutureProvider<EmojiResponse> {
-  const _EmojiProvider._({
+  _EmojiProvider._({
     required _EmojiFamily super.from,
     required String super.argument,
   }) : super(
@@ -31,8 +31,8 @@ final class _EmojiProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
 
   @override
@@ -72,12 +72,12 @@ String _$_emojiHash() => r'4d613b2d1965a683c3d159578f812609b9f6cbd1';
 
 final class _EmojiFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<EmojiResponse>, String> {
-  const _EmojiFamily._()
+  _EmojiFamily._()
     : super(
         retry: null,
         name: r'_emojiProvider',
-        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           _EmojiProvider.$allTransitiveDependencies0,
           _EmojiProvider.$allTransitiveDependencies1,
         ],

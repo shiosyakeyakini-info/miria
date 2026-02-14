@@ -10,11 +10,11 @@ part of 'renote_modal_sheet.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(RenoteNotifier)
-const renoteProvider = RenoteNotifierFamily._();
+final renoteProvider = RenoteNotifierFamily._();
 
 final class RenoteNotifierProvider
     extends $NotifierProvider<RenoteNotifier, AsyncValue<void>?> {
-  const RenoteNotifierProvider._({
+  RenoteNotifierProvider._({
     required RenoteNotifierFamily super.from,
     required (Account, Note) super.argument,
   }) : super(
@@ -69,7 +69,7 @@ final class RenoteNotifierFamily extends $Family
           AsyncValue<void>?,
           (Account, Note)
         > {
-  const RenoteNotifierFamily._()
+  RenoteNotifierFamily._()
     : super(
         retry: null,
         name: r'renoteProvider',
@@ -94,7 +94,6 @@ abstract class _$RenoteNotifier extends $Notifier<AsyncValue<void>?> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args.$1, _$args.$2);
     final ref = this.ref as $Ref<AsyncValue<void>?, AsyncValue<void>?>;
     final element =
         ref.element
@@ -104,12 +103,12 @@ abstract class _$RenoteNotifier extends $Notifier<AsyncValue<void>?> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args.$1, _$args.$2));
   }
 }
 
 @ProviderFor(RenoteChannelNotifier)
-const renoteChannelProvider = RenoteChannelNotifierFamily._();
+final renoteChannelProvider = RenoteChannelNotifierFamily._();
 
 final class RenoteChannelNotifierProvider
     extends
@@ -117,7 +116,7 @@ final class RenoteChannelNotifierProvider
           RenoteChannelNotifier,
           AsyncValue<CommunityChannel>?
         > {
-  const RenoteChannelNotifierProvider._({
+  RenoteChannelNotifierProvider._({
     required RenoteChannelNotifierFamily super.from,
     required Account super.argument,
   }) : super(
@@ -175,7 +174,7 @@ final class RenoteChannelNotifierFamily extends $Family
           AsyncValue<CommunityChannel>?,
           Account
         > {
-  const RenoteChannelNotifierFamily._()
+  RenoteChannelNotifierFamily._()
     : super(
         retry: null,
         name: r'renoteChannelProvider',
@@ -200,7 +199,6 @@ abstract class _$RenoteChannelNotifier
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref =
         this.ref
             as $Ref<
@@ -218,12 +216,12 @@ abstract class _$RenoteChannelNotifier
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }
 
 @ProviderFor(RenoteOtherAccountNotifier)
-const renoteOtherAccountProvider = RenoteOtherAccountNotifierFamily._();
+final renoteOtherAccountProvider = RenoteOtherAccountNotifierFamily._();
 
 final class RenoteOtherAccountNotifierProvider
     extends
@@ -231,7 +229,7 @@ final class RenoteOtherAccountNotifierProvider
           RenoteOtherAccountNotifier,
           AsyncValue<(Account, Note)>?
         > {
-  const RenoteOtherAccountNotifierProvider._({
+  RenoteOtherAccountNotifierProvider._({
     required RenoteOtherAccountNotifierFamily super.from,
     required (Account, Note) super.argument,
   }) : super(
@@ -242,7 +240,7 @@ final class RenoteOtherAccountNotifierProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = accountContextProvider;
+  static final $allTransitiveDependencies0 = accountContextProvider;
 
   @override
   String debugGetCreateSourceHash() => _$renoteOtherAccountNotifierHash();
@@ -290,12 +288,12 @@ final class RenoteOtherAccountNotifierFamily extends $Family
           AsyncValue<(Account, Note)>?,
           (Account, Note)
         > {
-  const RenoteOtherAccountNotifierFamily._()
+  RenoteOtherAccountNotifierFamily._()
     : super(
         retry: null,
         name: r'renoteOtherAccountProvider',
-        dependencies: const <ProviderOrFamily>[accountContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[accountContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           RenoteOtherAccountNotifierProvider.$allTransitiveDependencies0,
         ],
         isAutoDispose: true,
@@ -321,7 +319,6 @@ abstract class _$RenoteOtherAccountNotifier
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args.$1, _$args.$2);
     final ref =
         this.ref
             as $Ref<AsyncValue<(Account, Note)>?, AsyncValue<(Account, Note)>?>;
@@ -336,6 +333,6 @@ abstract class _$RenoteOtherAccountNotifier
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args.$1, _$args.$2));
   }
 }

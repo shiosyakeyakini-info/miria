@@ -10,7 +10,7 @@ part of 'misskey_games_page.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(_fetchReversiData)
-const _fetchReversiDataProvider = _FetchReversiDataProvider._();
+final _fetchReversiDataProvider = _FetchReversiDataProvider._();
 
 final class _FetchReversiDataProvider
     extends
@@ -20,22 +20,22 @@ final class _FetchReversiDataProvider
           FutureOr<List<User>>
         >
     with $FutureModifier<List<User>>, $FutureProvider<List<User>> {
-  const _FetchReversiDataProvider._()
+  _FetchReversiDataProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'_fetchReversiDataProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           _FetchReversiDataProvider.$allTransitiveDependencies0,
           _FetchReversiDataProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
 
   @override

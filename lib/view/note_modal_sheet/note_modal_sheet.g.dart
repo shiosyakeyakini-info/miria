@@ -10,11 +10,11 @@ part of 'note_modal_sheet.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(NoteModalSheetNotifier)
-const noteModalSheetProvider = NoteModalSheetNotifierFamily._();
+final noteModalSheetProvider = NoteModalSheetNotifierFamily._();
 
 final class NoteModalSheetNotifierProvider
     extends $NotifierProvider<NoteModalSheetNotifier, NoteModalSheetState> {
-  const NoteModalSheetNotifierProvider._({
+  NoteModalSheetNotifierProvider._({
     required NoteModalSheetNotifierFamily super.from,
     required Note super.argument,
   }) : super(
@@ -25,11 +25,11 @@ final class NoteModalSheetNotifierProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 = misskeyGetContextProvider;
-  static const $allTransitiveDependencies3 = notesWithProvider;
+  static final $allTransitiveDependencies2 = misskeyGetContextProvider;
+  static final $allTransitiveDependencies3 = notesWithProvider;
 
   @override
   String debugGetCreateSourceHash() => _$noteModalSheetNotifierHash();
@@ -77,17 +77,17 @@ final class NoteModalSheetNotifierFamily extends $Family
           NoteModalSheetState,
           Note
         > {
-  const NoteModalSheetNotifierFamily._()
+  NoteModalSheetNotifierFamily._()
     : super(
         retry: null,
         name: r'noteModalSheetProvider',
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           misskeyPostContextProvider,
           misskeyGetContextProvider,
           accountContextProvider,
           notesWithProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        $allTransitiveDependencies: <ProviderOrFamily>{
           NoteModalSheetNotifierProvider.$allTransitiveDependencies0,
           NoteModalSheetNotifierProvider.$allTransitiveDependencies1,
           NoteModalSheetNotifierProvider.$allTransitiveDependencies2,
@@ -111,7 +111,6 @@ abstract class _$NoteModalSheetNotifier extends $Notifier<NoteModalSheetState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<NoteModalSheetState, NoteModalSheetState>;
     final element =
         ref.element
@@ -121,6 +120,6 @@ abstract class _$NoteModalSheetNotifier extends $Notifier<NoteModalSheetState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

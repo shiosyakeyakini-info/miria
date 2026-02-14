@@ -10,7 +10,7 @@ part of 'notification_page.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(followRequests)
-const followRequestsProvider = FollowRequestsProvider._();
+final followRequestsProvider = FollowRequestsProvider._();
 
 final class FollowRequestsProvider
     extends
@@ -22,22 +22,22 @@ final class FollowRequestsProvider
     with
         $FutureModifier<List<FollowRequest>>,
         $FutureProvider<List<FollowRequest>> {
-  const FollowRequestsProvider._()
+  FollowRequestsProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'followRequestsProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           FollowRequestsProvider.$allTransitiveDependencies0,
           FollowRequestsProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
 
   @override

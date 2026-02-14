@@ -35,7 +35,7 @@ dependencies:
   badges: ^3.1.1
   bubble: ^1.2.1
   flutter_secure_storage: ^10.0.0
-  google_fonts: ^6.1.0
+  google_fonts: ^8.0.1
   uuid: ^4.4.0
   file_picker: ^10.2.0
   package_info_plus: ^9.0.0
@@ -74,7 +74,7 @@ dependencies:
   shared_preference_app_group: ^1.0.0+1
   stack_trace: ^1.11.1
   flutter_cache_manager: ^3.4.1
-  riverpod_annotation: ^3.0.0-dev.16
+  riverpod_annotation: ^4.0.2
   simple_logger: ^1.9.0+3
   hooks_riverpod: ^3.0.0-dev.16
   flutter_hooks: ^0.21.2
@@ -118,7 +118,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.1
   mockito: ^5.4.6
   cider: ^0.2.3
-  riverpod_generator: ^3.0.0-dev.16
+  riverpod_generator: ^4.0.3
   riverpod_lint: ^3.0.0-dev.16
 
 flutter:

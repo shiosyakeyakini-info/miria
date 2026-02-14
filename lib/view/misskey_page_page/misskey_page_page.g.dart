@@ -10,7 +10,7 @@ part of 'misskey_page_page.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(fetchNote)
-const fetchNoteProvider = FetchNoteFamily._();
+final fetchNoteProvider = FetchNoteFamily._();
 
 final class FetchNoteProvider
     extends
@@ -20,7 +20,7 @@ final class FetchNoteProvider
           FutureOr<misskey.Note>
         >
     with $FutureModifier<misskey.Note>, $FutureProvider<misskey.Note> {
-  const FetchNoteProvider._({
+  FetchNoteProvider._({
     required FetchNoteFamily super.from,
     required String super.argument,
   }) : super(
@@ -31,10 +31,10 @@ final class FetchNoteProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = misskeyGetContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyGetContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyGetContextProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 = notesWithProvider;
+  static final $allTransitiveDependencies2 = notesWithProvider;
 
   @override
   String debugGetCreateSourceHash() => _$fetchNoteHash();
@@ -73,15 +73,15 @@ String _$fetchNoteHash() => r'a791492c94a0fd09c655fe5a35b00405396d3b82';
 
 final class FetchNoteFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<misskey.Note>, String> {
-  const FetchNoteFamily._()
+  FetchNoteFamily._()
     : super(
         retry: null,
         name: r'fetchNoteProvider',
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           misskeyGetContextProvider,
           notesWithProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>[
           FetchNoteProvider.$allTransitiveDependencies0,
           FetchNoteProvider.$allTransitiveDependencies1,
           FetchNoteProvider.$allTransitiveDependencies2,

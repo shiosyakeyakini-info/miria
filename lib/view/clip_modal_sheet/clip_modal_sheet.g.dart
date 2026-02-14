@@ -10,11 +10,11 @@ part of 'clip_modal_sheet.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(_NotesClipsNotifier)
-const _notesClipsProvider = _NotesClipsNotifierFamily._();
+final _notesClipsProvider = _NotesClipsNotifierFamily._();
 
 final class _NotesClipsNotifierProvider
     extends $AsyncNotifierProvider<_NotesClipsNotifier, List<Clip>> {
-  const _NotesClipsNotifierProvider._({
+  _NotesClipsNotifierProvider._({
     required _NotesClipsNotifierFamily super.from,
     required String super.argument,
   }) : super(
@@ -25,8 +25,8 @@ final class _NotesClipsNotifierProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
 
   @override
@@ -66,12 +66,12 @@ final class _NotesClipsNotifierFamily extends $Family
           FutureOr<List<Clip>>,
           String
         > {
-  const _NotesClipsNotifierFamily._()
+  _NotesClipsNotifierFamily._()
     : super(
         retry: null,
         name: r'_notesClipsProvider',
-        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           _NotesClipsNotifierProvider.$allTransitiveDependencies0,
           _NotesClipsNotifierProvider.$allTransitiveDependencies1,
         ],
@@ -93,7 +93,6 @@ abstract class _$NotesClipsNotifier extends $AsyncNotifier<List<Clip>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<AsyncValue<List<Clip>>, List<Clip>>;
     final element =
         ref.element
@@ -103,17 +102,17 @@ abstract class _$NotesClipsNotifier extends $AsyncNotifier<List<Clip>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }
 
 @ProviderFor(_ClipModalSheetNotifier)
-const _clipModalSheetProvider = _ClipModalSheetNotifierFamily._();
+final _clipModalSheetProvider = _ClipModalSheetNotifierFamily._();
 
 final class _ClipModalSheetNotifierProvider
     extends
         $AsyncNotifierProvider<_ClipModalSheetNotifier, List<(Clip, bool)>> {
-  const _ClipModalSheetNotifierProvider._({
+  _ClipModalSheetNotifierProvider._({
     required _ClipModalSheetNotifierFamily super.from,
     required String super.argument,
   }) : super(
@@ -124,12 +123,12 @@ final class _ClipModalSheetNotifierProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = clipsProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = clipsProvider;
+  static final $allTransitiveDependencies1 =
       ClipsNotifierProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 =
+  static final $allTransitiveDependencies2 =
       ClipsNotifierProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies3 = _notesClipsProvider;
+  static final $allTransitiveDependencies3 = _notesClipsProvider;
 
   @override
   String debugGetCreateSourceHash() => _$_clipModalSheetNotifierHash();
@@ -169,16 +168,16 @@ final class _ClipModalSheetNotifierFamily extends $Family
           FutureOr<List<(Clip, bool)>>,
           String
         > {
-  const _ClipModalSheetNotifierFamily._()
+  _ClipModalSheetNotifierFamily._()
     : super(
         retry: null,
         name: r'_clipModalSheetProvider',
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           clipsProvider,
           _notesClipsProvider,
           misskeyPostContextProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        $allTransitiveDependencies: <ProviderOrFamily>{
           _ClipModalSheetNotifierProvider.$allTransitiveDependencies0,
           _ClipModalSheetNotifierProvider.$allTransitiveDependencies1,
           _ClipModalSheetNotifierProvider.$allTransitiveDependencies2,
@@ -203,7 +202,6 @@ abstract class _$ClipModalSheetNotifier
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref =
         this.ref as $Ref<AsyncValue<List<(Clip, bool)>>, List<(Clip, bool)>>;
     final element =
@@ -214,6 +212,6 @@ abstract class _$ClipModalSheetNotifier
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }
