@@ -107,6 +107,8 @@ jobs:
                                libmpv-dev \
                                libsecret-1-dev \
                                libstdc++-12-dev \
+                               lld-14 \
+                               llvm-14 \
                                nasm \
                                ninja-build \
                                unzip
