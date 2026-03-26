@@ -16,23 +16,8 @@ permissions:
   pull-requests: write
 
 jobs:
-  get-flutter-version:
-    runs-on: ubuntu-latest
-
-    outputs:
-      flutter-version: ${{ steps.get-flutter-version.outputs.version }}
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Get Flutter version from .fvmrc
-        id: get-flutter-version
-        run: echo "version=$(jq -r .flutter .fvmrc)" >> $GITHUB_OUTPUT
-
   format:
     runs-on: ubuntu-latest
-
-    needs: get-flutter-version
 
     steps:
       - uses: actions/checkout@v4
@@ -40,8 +25,7 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
-          flutter-version: ${{ needs.get-flutter-version.outputs.flutter-version }}
+          flutter-version-file: .fvmrc
           cache: true
 
       - name: Run flutter version
@@ -58,16 +42,13 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    needs: get-flutter-version
-
     steps:
       - uses: actions/checkout@v4
 
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
-          flutter-version: ${{ needs.get-flutter-version.outputs.flutter-version }}
+          flutter-version-file: .fvmrc
           cache: true
 
       - name: Run flutter version
@@ -82,15 +63,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    needs: get-flutter-version
-
     steps:
       - uses: actions/checkout@v4
 
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{ needs.get-flutter-version.outputs.flutter-version }}
+          flutter-version-file: .fvmrc
           cache: true
 
       - name: Run flutter version
@@ -110,16 +89,13 @@ jobs:
   check-build-diff:
     runs-on: ubuntu-latest
 
-    needs: get-flutter-version
-
     steps:
       - uses: actions/checkout@v4
 
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
-          flutter-version: ${{ needs.get-flutter-version.outputs.flutter-version }}
+          flutter-version-file: .fvmrc
           cache: true
 
       - name: Run build_runner
