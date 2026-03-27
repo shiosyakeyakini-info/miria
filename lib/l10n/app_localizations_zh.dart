@@ -231,6 +231,9 @@ class SZh extends S {
   String get sending => '送信中';
 
   @override
+  String get drive => 'ドライブ';
+
+  @override
   String get antennaName => '天线名称';
 
   @override
@@ -1909,6 +1912,111 @@ class SZh extends S {
 
   @override
   String get failedFileSave => 'ファイルの保存に失敗したみたいや';
+
+  @override
+  String get confirm => '決定';
+
+  @override
+  String get createFolder => 'フォルダを作成';
+
+  @override
+  String get folderName => 'フォルダ名';
+
+  @override
+  String get fileDownloaded => 'ファイルを保存しました';
+
+  @override
+  String get moved => '移動しました';
+
+  @override
+  String get confirmDeleteFile => 'このファイルを削除しますか？';
+
+  @override
+  String get deleted => '削除しました';
+
+  @override
+  String get editFile => 'ファイルを編集';
+
+  @override
+  String get editImage => '画像を編集';
+
+  @override
+  String get createNoteFromThisFile => 'このファイルからノートを作成';
+
+  @override
+  String get download => 'ダウンロード';
+
+  @override
+  String get move => '移動';
+
+  @override
+  String get changeFolderName => 'フォルダ名を変更';
+
+  @override
+  String get confirmDeleteFolder => 'このフォルダを削除しますか？';
+
+  @override
+  String get noFiles => 'ファイルがありません';
+
+  @override
+  String confirmDeleteFiles(int n) {
+    final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String nString = nNumberFormat.format(n);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nString個のファイルを削除しますか？',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nFiles(int n) {
+    final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String nString = nNumberFormat.format(n);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nString個のファイル',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get changeFileName => 'ファイル名を変更';
+
+  @override
+  String get changeCaption => 'キャプションを変更';
+
+  @override
+  String get none => 'なし';
+
+  @override
+  String get fileCreatedAt => '作成日時';
+
+  @override
+  String get fileType => 'ファイルタイプ';
+
+  @override
+  String get fileSize => 'ファイルサイズ';
+
+  @override
+  String get noAttachedNotes => '添付されているノートがありません';
+
+  @override
+  String get fileDetails => 'ファイルの詳細';
+
+  @override
+  String get info => '情報';
+
+  @override
+  String get attachedNotes => '添付されているノート';
 
   @override
   String get misskeyGames => 'Misskey Games';

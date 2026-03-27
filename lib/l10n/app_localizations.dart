@@ -543,6 +543,12 @@ abstract class S {
   /// **'送信中'**
   String get sending;
 
+  /// No description provided for @drive.
+  ///
+  /// In ja, this message translates to:
+  /// **'ドライブ'**
+  String get drive;
+
   /// No description provided for @antennaName.
   ///
   /// In ja, this message translates to:
@@ -3317,6 +3323,168 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'ファイルの保存に失敗したみたいや'**
   String get failedFileSave;
+
+  /// No description provided for @confirm.
+  ///
+  /// In ja, this message translates to:
+  /// **'決定'**
+  String get confirm;
+
+  /// No description provided for @createFolder.
+  ///
+  /// In ja, this message translates to:
+  /// **'フォルダを作成'**
+  String get createFolder;
+
+  /// No description provided for @folderName.
+  ///
+  /// In ja, this message translates to:
+  /// **'フォルダ名'**
+  String get folderName;
+
+  /// No description provided for @fileDownloaded.
+  ///
+  /// In ja, this message translates to:
+  /// **'ファイルを保存しました'**
+  String get fileDownloaded;
+
+  /// No description provided for @moved.
+  ///
+  /// In ja, this message translates to:
+  /// **'移動しました'**
+  String get moved;
+
+  /// No description provided for @confirmDeleteFile.
+  ///
+  /// In ja, this message translates to:
+  /// **'このファイルを削除しますか？'**
+  String get confirmDeleteFile;
+
+  /// No description provided for @deleted.
+  ///
+  /// In ja, this message translates to:
+  /// **'削除しました'**
+  String get deleted;
+
+  /// No description provided for @editFile.
+  ///
+  /// In ja, this message translates to:
+  /// **'ファイルを編集'**
+  String get editFile;
+
+  /// No description provided for @editImage.
+  ///
+  /// In ja, this message translates to:
+  /// **'画像を編集'**
+  String get editImage;
+
+  /// No description provided for @createNoteFromThisFile.
+  ///
+  /// In ja, this message translates to:
+  /// **'このファイルからノートを作成'**
+  String get createNoteFromThisFile;
+
+  /// No description provided for @download.
+  ///
+  /// In ja, this message translates to:
+  /// **'ダウンロード'**
+  String get download;
+
+  /// No description provided for @move.
+  ///
+  /// In ja, this message translates to:
+  /// **'移動'**
+  String get move;
+
+  /// No description provided for @changeFolderName.
+  ///
+  /// In ja, this message translates to:
+  /// **'フォルダ名を変更'**
+  String get changeFolderName;
+
+  /// No description provided for @confirmDeleteFolder.
+  ///
+  /// In ja, this message translates to:
+  /// **'このフォルダを削除しますか？'**
+  String get confirmDeleteFolder;
+
+  /// No description provided for @noFiles.
+  ///
+  /// In ja, this message translates to:
+  /// **'ファイルがありません'**
+  String get noFiles;
+
+  /// No description provided for @confirmDeleteFiles.
+  ///
+  /// In ja, this message translates to:
+  /// **'{n, plural, other {{n}個のファイルを削除しますか？}}'**
+  String confirmDeleteFiles(int n);
+
+  /// No description provided for @nFiles.
+  ///
+  /// In ja, this message translates to:
+  /// **'{n, plural, other {{n}個のファイル}}'**
+  String nFiles(int n);
+
+  /// No description provided for @changeFileName.
+  ///
+  /// In ja, this message translates to:
+  /// **'ファイル名を変更'**
+  String get changeFileName;
+
+  /// No description provided for @changeCaption.
+  ///
+  /// In ja, this message translates to:
+  /// **'キャプションを変更'**
+  String get changeCaption;
+
+  /// No description provided for @none.
+  ///
+  /// In ja, this message translates to:
+  /// **'なし'**
+  String get none;
+
+  /// No description provided for @fileCreatedAt.
+  ///
+  /// In ja, this message translates to:
+  /// **'作成日時'**
+  String get fileCreatedAt;
+
+  /// No description provided for @fileType.
+  ///
+  /// In ja, this message translates to:
+  /// **'ファイルタイプ'**
+  String get fileType;
+
+  /// No description provided for @fileSize.
+  ///
+  /// In ja, this message translates to:
+  /// **'ファイルサイズ'**
+  String get fileSize;
+
+  /// No description provided for @noAttachedNotes.
+  ///
+  /// In ja, this message translates to:
+  /// **'添付されているノートがありません'**
+  String get noAttachedNotes;
+
+  /// No description provided for @fileDetails.
+  ///
+  /// In ja, this message translates to:
+  /// **'ファイルの詳細'**
+  String get fileDetails;
+
+  /// No description provided for @info.
+  ///
+  /// In ja, this message translates to:
+  /// **'情報'**
+  String get info;
+
+  /// No description provided for @attachedNotes.
+  ///
+  /// In ja, this message translates to:
+  /// **'添付されているノート'**
+  String get attachedNotes;
 
   /// No description provided for @misskeyGames.
   ///

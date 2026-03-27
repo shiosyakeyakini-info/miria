@@ -1615,19 +1615,158 @@ class DraftsRouteArgs {
 }
 
 /// generated route for
+/// [DriveCreateModalSheet]
+class DriveCreateModalRoute extends PageRouteInfo<DriveCreateModalRouteArgs> {
+  DriveCreateModalRoute({
+    required DriveFolder? folder,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         DriveCreateModalRoute.name,
+         args: DriveCreateModalRouteArgs(folder: folder, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'DriveCreateModalRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DriveCreateModalRouteArgs>();
+      return DriveCreateModalSheet(folder: args.folder, key: args.key);
+    },
+  );
+}
+
+class DriveCreateModalRouteArgs {
+  const DriveCreateModalRouteArgs({required this.folder, this.key});
+
+  final DriveFolder? folder;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'DriveCreateModalRouteArgs{folder: $folder, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! DriveCreateModalRouteArgs) return false;
+    return folder == other.folder && key == other.key;
+  }
+
+  @override
+  int get hashCode => folder.hashCode ^ key.hashCode;
+}
+
+/// generated route for
+/// [DriveFileModalSheet]
+class DriveFileModalRoute extends PageRouteInfo<DriveFileModalRouteArgs> {
+  DriveFileModalRoute({
+    required DriveFile file,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         DriveFileModalRoute.name,
+         args: DriveFileModalRouteArgs(file: file, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'DriveFileModalRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DriveFileModalRouteArgs>();
+      return DriveFileModalSheet(file: args.file, key: args.key);
+    },
+  );
+}
+
+class DriveFileModalRouteArgs {
+  const DriveFileModalRouteArgs({required this.file, this.key});
+
+  final DriveFile file;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'DriveFileModalRouteArgs{file: $file, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! DriveFileModalRouteArgs) return false;
+    return file == other.file && key == other.key;
+  }
+
+  @override
+  int get hashCode => file.hashCode ^ key.hashCode;
+}
+
+/// generated route for
+/// [DriveFilePage]
+class DriveFileRoute extends PageRouteInfo<DriveFileRouteArgs> {
+  DriveFileRoute({
+    required DriveFile file,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         DriveFileRoute.name,
+         args: DriveFileRouteArgs(file: file, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'DriveFileRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DriveFileRouteArgs>();
+      return DriveFilePage(file: args.file, key: args.key);
+    },
+  );
+}
+
+class DriveFileRouteArgs {
+  const DriveFileRouteArgs({required this.file, this.key});
+
+  final DriveFile file;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'DriveFileRouteArgs{file: $file, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! DriveFileRouteArgs) return false;
+    return file == other.file && key == other.key;
+  }
+
+  @override
+  int get hashCode => file.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [DriveFileSelectDialog]
 class DriveFileSelectRoute extends PageRouteInfo<DriveFileSelectRouteArgs> {
   DriveFileSelectRoute({
-    required Account account,
+    required AccountContext accountContext,
     Key? key,
-    bool allowMultiple = false,
     List<PageRouteInfo>? children,
   }) : super(
          DriveFileSelectRoute.name,
          args: DriveFileSelectRouteArgs(
-           account: account,
+           accountContext: accountContext,
            key: key,
-           allowMultiple: allowMultiple,
          ),
          initialChildren: children,
        );
@@ -1640,9 +1779,8 @@ class DriveFileSelectRoute extends PageRouteInfo<DriveFileSelectRouteArgs> {
       final args = data.argsAs<DriveFileSelectRouteArgs>();
       return WrappedRoute(
         child: DriveFileSelectDialog(
-          account: args.account,
+          accountContext: args.accountContext,
           key: args.key,
-          allowMultiple: args.allowMultiple,
         ),
       );
     },
@@ -1650,34 +1788,120 @@ class DriveFileSelectRoute extends PageRouteInfo<DriveFileSelectRouteArgs> {
 }
 
 class DriveFileSelectRouteArgs {
-  const DriveFileSelectRouteArgs({
-    required this.account,
-    this.key,
-    this.allowMultiple = false,
-  });
+  const DriveFileSelectRouteArgs({required this.accountContext, this.key});
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Key? key;
 
-  final bool allowMultiple;
-
   @override
   String toString() {
-    return 'DriveFileSelectRouteArgs{account: $account, key: $key, allowMultiple: $allowMultiple}';
+    return 'DriveFileSelectRouteArgs{accountContext: $accountContext, key: $key}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! DriveFileSelectRouteArgs) return false;
-    return account == other.account &&
-        key == other.key &&
-        allowMultiple == other.allowMultiple;
+    return accountContext == other.accountContext && key == other.key;
   }
 
   @override
-  int get hashCode => account.hashCode ^ key.hashCode ^ allowMultiple.hashCode;
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
+}
+
+/// generated route for
+/// [DriveFilesModalSheet]
+class DriveFilesModalRoute extends PageRouteInfo<DriveFilesModalRouteArgs> {
+  DriveFilesModalRoute({
+    required List<DriveFile> files,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         DriveFilesModalRoute.name,
+         args: DriveFilesModalRouteArgs(files: files, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'DriveFilesModalRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DriveFilesModalRouteArgs>();
+      return DriveFilesModalSheet(files: args.files, key: args.key);
+    },
+  );
+}
+
+class DriveFilesModalRouteArgs {
+  const DriveFilesModalRouteArgs({required this.files, this.key});
+
+  final List<DriveFile> files;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'DriveFilesModalRouteArgs{files: $files, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! DriveFilesModalRouteArgs) return false;
+    return const ListEquality().equals(files, other.files) && key == other.key;
+  }
+
+  @override
+  int get hashCode => const ListEquality().hash(files) ^ key.hashCode;
+}
+
+/// generated route for
+/// [DriveFolderModalSheet]
+class DriveFolderModalRoute extends PageRouteInfo<DriveFolderModalRouteArgs> {
+  DriveFolderModalRoute({
+    required DriveFolder folder,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         DriveFolderModalRoute.name,
+         args: DriveFolderModalRouteArgs(folder: folder, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'DriveFolderModalRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DriveFolderModalRouteArgs>();
+      return DriveFolderModalSheet(folder: args.folder, key: args.key);
+    },
+  );
+}
+
+class DriveFolderModalRouteArgs {
+  const DriveFolderModalRouteArgs({required this.folder, this.key});
+
+  final DriveFolder folder;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'DriveFolderModalRouteArgs{folder: $folder, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! DriveFolderModalRouteArgs) return false;
+    return folder == other.folder && key == other.key;
+  }
+
+  @override
+  int get hashCode => folder.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1694,6 +1918,135 @@ class DriveModalRoute extends PageRouteInfo<void> {
       return const DriveModalSheet();
     },
   );
+}
+
+/// generated route for
+/// [DrivePage]
+class DriveRoute extends PageRouteInfo<DriveRouteArgs> {
+  DriveRoute({
+    bool selectFile = false,
+    bool selectFiles = false,
+    bool selectFolder = false,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         DriveRoute.name,
+         args: DriveRouteArgs(
+           selectFile: selectFile,
+           selectFiles: selectFiles,
+           selectFolder: selectFolder,
+           key: key,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'DriveRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DriveRouteArgs>(
+        orElse: () => const DriveRouteArgs(),
+      );
+      return DrivePage(
+        selectFile: args.selectFile,
+        selectFiles: args.selectFiles,
+        selectFolder: args.selectFolder,
+        key: args.key,
+      );
+    },
+  );
+}
+
+class DriveRouteArgs {
+  const DriveRouteArgs({
+    this.selectFile = false,
+    this.selectFiles = false,
+    this.selectFolder = false,
+    this.key,
+  });
+
+  final bool selectFile;
+
+  final bool selectFiles;
+
+  final bool selectFolder;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'DriveRouteArgs{selectFile: $selectFile, selectFiles: $selectFiles, selectFolder: $selectFolder, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! DriveRouteArgs) return false;
+    return selectFile == other.selectFile &&
+        selectFiles == other.selectFiles &&
+        selectFolder == other.selectFolder &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode =>
+      selectFile.hashCode ^
+      selectFiles.hashCode ^
+      selectFolder.hashCode ^
+      key.hashCode;
+}
+
+/// generated route for
+/// [DriveShellPage]
+class DriveShellRoute extends PageRouteInfo<DriveShellRouteArgs> {
+  DriveShellRoute({
+    required AccountContext accountContext,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         DriveShellRoute.name,
+         args: DriveShellRouteArgs(accountContext: accountContext, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'DriveShellRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DriveShellRouteArgs>();
+      return WrappedRoute(
+        child: DriveShellPage(
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
+}
+
+class DriveShellRouteArgs {
+  const DriveShellRouteArgs({required this.accountContext, this.key});
+
+  final AccountContext accountContext;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'DriveShellRouteArgs{accountContext: $accountContext, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! DriveShellRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2438,6 +2791,7 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
     Key? key,
     String? initialText,
     List<String>? initialMediaFiles,
+    List<DriveFile>? initialDriveFiles,
     bool exitOnNoted = false,
     CommunityChannel? channel,
     Note? reply,
@@ -2453,6 +2807,7 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
            key: key,
            initialText: initialText,
            initialMediaFiles: initialMediaFiles,
+           initialDriveFiles: initialDriveFiles,
            exitOnNoted: exitOnNoted,
            channel: channel,
            reply: reply,
@@ -2476,6 +2831,7 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
           key: args.key,
           initialText: args.initialText,
           initialMediaFiles: args.initialMediaFiles,
+          initialDriveFiles: args.initialDriveFiles,
           exitOnNoted: args.exitOnNoted,
           channel: args.channel,
           reply: args.reply,
@@ -2495,6 +2851,7 @@ class NoteCreateRouteArgs {
     this.key,
     this.initialText,
     this.initialMediaFiles,
+    this.initialDriveFiles,
     this.exitOnNoted = false,
     this.channel,
     this.reply,
@@ -2512,6 +2869,8 @@ class NoteCreateRouteArgs {
 
   final List<String>? initialMediaFiles;
 
+  final List<DriveFile>? initialDriveFiles;
+
   final bool exitOnNoted;
 
   final CommunityChannel? channel;
@@ -2528,7 +2887,7 @@ class NoteCreateRouteArgs {
 
   @override
   String toString() {
-    return 'NoteCreateRouteArgs{initialAccount: $initialAccount, key: $key, initialText: $initialText, initialMediaFiles: $initialMediaFiles, exitOnNoted: $exitOnNoted, channel: $channel, reply: $reply, renote: $renote, note: $note, noteCreationMode: $noteCreationMode, draftId: $draftId}';
+    return 'NoteCreateRouteArgs{initialAccount: $initialAccount, key: $key, initialText: $initialText, initialMediaFiles: $initialMediaFiles, initialDriveFiles: $initialDriveFiles, exitOnNoted: $exitOnNoted, channel: $channel, reply: $reply, renote: $renote, note: $note, noteCreationMode: $noteCreationMode, draftId: $draftId}';
   }
 
   @override
@@ -2541,6 +2900,10 @@ class NoteCreateRouteArgs {
         const ListEquality().equals(
           initialMediaFiles,
           other.initialMediaFiles,
+        ) &&
+        const ListEquality().equals(
+          initialDriveFiles,
+          other.initialDriveFiles,
         ) &&
         exitOnNoted == other.exitOnNoted &&
         channel == other.channel &&
@@ -2557,6 +2920,7 @@ class NoteCreateRouteArgs {
       key.hashCode ^
       initialText.hashCode ^
       const ListEquality().hash(initialMediaFiles) ^
+      const ListEquality().hash(initialDriveFiles) ^
       exitOnNoted.hashCode ^
       channel.hashCode ^
       reply.hashCode ^
@@ -3835,6 +4199,105 @@ class TabSettingsRouteArgs {
 
   @override
   int get hashCode => key.hashCode ^ tabIndex.hashCode;
+}
+
+/// generated route for
+/// [TextFormFieldDialog]
+class TextFormFieldRoute extends PageRouteInfo<TextFormFieldRouteArgs> {
+  TextFormFieldRoute({
+    Key? key,
+    Widget? title,
+    String? labelText,
+    String? buttonText,
+    String? initialValue,
+    int? maxLines = 1,
+    String? Function(String?)? validator,
+    List<PageRouteInfo>? children,
+  }) : super(
+         TextFormFieldRoute.name,
+         args: TextFormFieldRouteArgs(
+           key: key,
+           title: title,
+           labelText: labelText,
+           buttonText: buttonText,
+           initialValue: initialValue,
+           maxLines: maxLines,
+           validator: validator,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'TextFormFieldRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<TextFormFieldRouteArgs>(
+        orElse: () => const TextFormFieldRouteArgs(),
+      );
+      return TextFormFieldDialog(
+        key: args.key,
+        title: args.title,
+        labelText: args.labelText,
+        buttonText: args.buttonText,
+        initialValue: args.initialValue,
+        maxLines: args.maxLines,
+        validator: args.validator,
+      );
+    },
+  );
+}
+
+class TextFormFieldRouteArgs {
+  const TextFormFieldRouteArgs({
+    this.key,
+    this.title,
+    this.labelText,
+    this.buttonText,
+    this.initialValue,
+    this.maxLines = 1,
+    this.validator,
+  });
+
+  final Key? key;
+
+  final Widget? title;
+
+  final String? labelText;
+
+  final String? buttonText;
+
+  final String? initialValue;
+
+  final int? maxLines;
+
+  final String? Function(String?)? validator;
+
+  @override
+  String toString() {
+    return 'TextFormFieldRouteArgs{key: $key, title: $title, labelText: $labelText, buttonText: $buttonText, initialValue: $initialValue, maxLines: $maxLines, validator: $validator}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! TextFormFieldRouteArgs) return false;
+    return key == other.key &&
+        title == other.title &&
+        labelText == other.labelText &&
+        buttonText == other.buttonText &&
+        initialValue == other.initialValue &&
+        maxLines == other.maxLines;
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^
+      title.hashCode ^
+      labelText.hashCode ^
+      buttonText.hashCode ^
+      initialValue.hashCode ^
+      maxLines.hashCode;
 }
 
 /// generated route for

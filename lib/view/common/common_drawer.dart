@@ -75,6 +75,19 @@ class CommonDrawer extends ConsumerWidget {
                       },
                     ),
                     ListTile(
+                      leading: const Icon(Icons.cloud),
+                      title: Text(S.of(context).drive),
+                      onTap: () async {
+                        closeDrawer(context);
+                        await context.pushRoute(
+                          DriveShellRoute(
+                            accountContext: AccountContext.as(account),
+                            children: [DriveRoute()],
+                          ),
+                        );
+                      },
+                    ),
+                    ListTile(
                       leading: const Icon(Icons.list),
                       title: Text(S.of(context).list),
                       onTap: () async {

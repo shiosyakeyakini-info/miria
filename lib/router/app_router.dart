@@ -37,8 +37,16 @@ import "package:miria/view/common/color_picker_dialog.dart";
 import "package:miria/view/common/misskey_notes/reaction_user_dialog.dart";
 import "package:miria/view/common/misskey_notes/renote_modal_sheet.dart";
 import "package:miria/view/common/misskey_notes/renote_user_dialog.dart";
+import "package:miria/view/common/text_form_field_dialog.dart";
 import "package:miria/view/drafts_page/drafts_dialog.dart";
 import "package:miria/view/drafts_page/drafts_page.dart";
+import "package:miria/view/drive_page/drive_create_modal_sheet.dart";
+import "package:miria/view/drive_page/drive_file_modal_sheet.dart";
+import "package:miria/view/drive_page/drive_file_page/drive_file_page.dart";
+import "package:miria/view/drive_page/drive_files_modal_sheet.dart";
+import "package:miria/view/drive_page/drive_folder_modal_sheet.dart";
+import "package:miria/view/drive_page/drive_page.dart";
+import "package:miria/view/drive_page/drive_shell_page.dart";
 import "package:miria/view/explore_page/explore_page.dart";
 import "package:miria/view/explore_page/explore_role_users_page.dart";
 import "package:miria/view/favorited_note_page/favorited_note_page.dart";
@@ -162,6 +170,17 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: UserChatRoute.page),
     AutoRoute(page: ChatSearchRoute.page),
     AutoRoute(page: ChatMessageDetailRoute.page),
+    AutoRoute(
+      page: DriveShellRoute.page,
+      children: [
+        AutoRoute(page: DriveRoute.page),
+        AutoRoute(page: DriveFileRoute.page),
+        AutoModalRouteSheet(page: DriveCreateModalRoute.page),
+        AutoModalRouteSheet(page: DriveFileModalRoute.page),
+        AutoModalRouteSheet(page: DriveFilesModalRoute.page),
+        AutoModalRouteSheet(page: DriveFolderModalRoute.page),
+      ],
+    ),
 
     AutoRoute(path: "/share-extension", page: ShareExtensionRoute.page),
 
@@ -187,9 +206,20 @@ class AppRouter extends RootStackRouter {
     AutoDialogRoute<UsersListSettings>(page: UsersListSettingsRoute.page),
     AutoDialogRoute<AntennaSettings>(page: AntennaSettingsRoute.page),
     AutoDialogRoute<FolderResult>(page: FolderSelectRoute.page),
-    AutoDialogRoute<List<DriveFile>>(page: DriveFileSelectRoute.page),
+    AutoDialogRoute<List<DriveFile>>(
+      page: DriveFileSelectRoute.page,
+      children: [
+        AutoRoute(page: DriveRoute.page),
+        AutoRoute(page: DriveFileRoute.page),
+        AutoModalRouteSheet(page: DriveCreateModalRoute.page),
+        AutoModalRouteSheet(page: DriveFileModalRoute.page),
+        AutoModalRouteSheet(page: DriveFilesModalRoute.page),
+        AutoModalRouteSheet(page: DriveFolderModalRoute.page),
+      ],
+    ),
     AutoDialogRoute<TimelinePreset>(page: TimelinePresetRoute.page),
     AutoDialogRoute(page: DraftsModalRoute.page),
+    AutoDialogRoute<String>(page: TextFormFieldRoute.page),
 
     // モーダルシート
     AutoModalRouteSheet(page: UserControlRoute.page),
@@ -205,7 +235,7 @@ class AppRouter extends RootStackRouter {
 
 /// ダイアログ
 class AutoDialogRoute<ReturnT extends Object> extends CustomRoute {
-  AutoDialogRoute({required super.page})
+  AutoDialogRoute({required super.page, super.children})
     : super(
         transitionsBuilder: TransitionsBuilders.fadeIn,
         duration: const Duration(milliseconds: 200),
