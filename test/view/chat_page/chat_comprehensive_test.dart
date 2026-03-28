@@ -5,7 +5,7 @@ import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:miria/model/image_file.dart";
+import "package:miria/model/misskey_post_file.dart";
 import "package:miria/providers.dart";
 import "package:miria/state_notifier/chat_input_state_notifier.dart";
 import "package:miria/view/chat_page/chat_file_preview.dart";
@@ -246,10 +246,10 @@ void main() {
 
         // 画像ファイルを追加
         final binaryData = await TestData.binaryImage;
-        final imageFile = ImageFile(
-          data: binaryData,
-          fileName: "test_image.jpg",
-        );
+        final file = fileSystem.file("test_image.jpg")
+          ..writeAsBytesSync(binaryData);
+        addTearDown(file.deleteSync);
+        final imageFile = PostFile.file(file);
 
         container
             .read(chatInputStateNotifierProvider.notifier)
@@ -287,11 +287,10 @@ void main() {
 
         // NSFWファイルを追加
         final binaryData = await TestData.binaryImage;
-        final nsfwFile = ImageFile(
-          data: binaryData,
-          fileName: "nsfw_image.jpg",
-          isNsfw: true,
-        );
+        final file = fileSystem.file("nsfw_image.jpg")
+          ..writeAsBytesSync(binaryData);
+        addTearDown(file.deleteSync);
+        final nsfwFile = PostFile.file(file).copyWith(isNsfw: true);
 
         container
             .read(chatInputStateNotifierProvider.notifier)
@@ -324,10 +323,7 @@ void main() {
         );
 
         // その他ファイルを追加
-        final unknownFile = UnknownFile(
-          data: Uint8List.fromList([1, 2, 3, 4]),
-          fileName: "document.pdf",
-        );
+        final unknownFile = PostFile.file(fileSystem.file("document.pdf"));
 
         container
             .read(chatInputStateNotifierProvider.notifier)
@@ -361,11 +357,7 @@ void main() {
         );
 
         // ファイルを追加
-        final binaryData = await TestData.binaryImage;
-        final imageFile = ImageFile(
-          data: binaryData,
-          fileName: "test_image.jpg",
-        );
+        final imageFile = PostFile.file(fileSystem.file("test_image.jpg"));
 
         container
             .read(chatInputStateNotifierProvider.notifier)
@@ -445,11 +437,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // 代わりに直接ファイルを追加してテストする（workaround）
-        final binaryData2 = await TestData.binaryImage;
-        final imageFile = ImageFile(
-          data: binaryData2,
-          fileName: "test_image.jpg",
-        );
+        final imageFile = PostFile.file(fileSystem.file("test_image.jpg"));
         await container
             .read(chatInputStateNotifierProvider.notifier)
             .addFile(imageFile);
@@ -457,7 +445,7 @@ void main() {
         // ファイルが追加されたことを確認
         final state = container.read(chatInputStateNotifierProvider);
         expect(state.files.length, 1);
-        expect(state.files.first, isA<ImageFile>());
+        expect(state.files.first, isA<PostFile>());
         expect(state.files.first.fileName, "test_image.jpg");
       });
 
@@ -485,10 +473,8 @@ void main() {
 
         // HEICからJPEGへの変換ロジックをテスト
         // 直接変換されたImageFileを追加してテストする
-        final binaryData = await TestData.binaryImage;
-        final jpegFile = ImageFile(
-          data: binaryData,
-          fileName: "converted_image.jpg", // .heicから.jpgに変換された名前
+        final jpegFile = PostFile.file(
+          fileSystem.file("converted_image.jpg"), // .heicから.jpgに変換された名前
         );
         await container
             .read(chatInputStateNotifierProvider.notifier)
@@ -497,7 +483,7 @@ void main() {
         // ファイルが追加され、JPEGに変換されたことを確認
         final state = container.read(chatInputStateNotifierProvider);
         expect(state.files.length, 1);
-        expect(state.files.first, isA<ImageFile>());
+        expect(state.files.first, isA<PostFile>());
         expect(state.files.first.fileName.endsWith(".jpg"), isTrue);
       });
 
@@ -524,10 +510,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // 直接その他ファイルを追加してテストする
-        final unknownFile = UnknownFile(
-          data: Uint8List.fromList([1, 2, 3, 4]),
-          fileName: "document.pdf",
-        );
+        final unknownFile = PostFile.file(fileSystem.file("document.pdf"));
         await container
             .read(chatInputStateNotifierProvider.notifier)
             .addFile(unknownFile);
@@ -535,7 +518,7 @@ void main() {
         // ファイルが追加されたことを確認
         final state = container.read(chatInputStateNotifierProvider);
         expect(state.files.length, 1);
-        expect(state.files.first, isA<UnknownFile>());
+        expect(state.files.first, isA<PostFile>());
         expect(state.files.first.fileName, "document.pdf");
       });
 
@@ -633,10 +616,10 @@ void main() {
 
         // ファイルを追加
         final binaryData = await TestData.binaryImage;
-        final imageFile = ImageFile(
-          data: binaryData,
-          fileName: "test_image.jpg",
-        );
+        final file = fileSystem.file("test_image.jpg")
+          ..writeAsBytesSync(binaryData);
+        addTearDown(file.deleteSync);
+        final imageFile = PostFile.file(file);
 
         container
             .read(chatInputStateNotifierProvider.notifier)
@@ -670,10 +653,10 @@ void main() {
         ).thenAnswer((_) async => TestData.drive2AsVideo);
 
         // ファイルを追加
-        final unknownFile = UnknownFile(
-          data: Uint8List.fromList([1, 2, 3, 4]),
-          fileName: "document.pdf",
-        );
+        final file = fileSystem.file("document.pdf")
+          ..writeAsBytesSync(Uint8List.fromList([1, 2, 3, 4]));
+        addTearDown(file.deleteSync);
+        final unknownFile = PostFile.file(file);
 
         container
             .read(chatInputStateNotifierProvider.notifier)

@@ -8,7 +8,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/hooks/use_async.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
-import "package:miria/model/image_file.dart";
+import "package:miria/model/misskey_post_file.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -124,11 +124,12 @@ class _ProfileEditForm extends HookConsumerWidget {
                               DriveModalSheetReturnValue
                             >(
                               context: context,
-                              builder: (context) => const DriveModalSheet(),
+                              builder: (context) =>
+                                  const DriveModalSheet(fileOnly: true),
                             );
                         if (result == null) return;
 
-                        if (result == DriveModalSheetReturnValue.upload) {
+                        if (result == DriveModalSheetReturnValue.uploadFile) {
                           final pickedFile = await FilePicker.platform
                               .pickFiles(withData: true, type: FileType.image);
                           if (pickedFile != null &&
@@ -142,10 +143,7 @@ class _ProfileEditForm extends HookConsumerWidget {
                                         accountContext: ref.read(
                                           accountContextProvider,
                                         ),
-                                        file: ImageFile(
-                                          data: f.bytes!,
-                                          fileName: f.name,
-                                        ),
+                                        initialImage: f.bytes!,
                                         onSubmit: (editedData) {
                                           Navigator.of(context).pop(editedData);
                                         },

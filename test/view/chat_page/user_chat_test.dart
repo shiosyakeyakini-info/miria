@@ -1,7 +1,8 @@
+import "package:file/memory.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:miria/model/image_file.dart";
+import "package:miria/model/misskey_post_file.dart";
 import "package:miria/providers.dart";
 import "package:miria/state_notifier/chat_input_state_notifier.dart";
 import "package:miria/view/chat_page/chat_file_preview.dart";
@@ -13,9 +14,11 @@ import "../../test_util/test_datas.dart";
 void main() {
   group("UserChatTextField", () {
     late MockMisskey mockMisskey;
+    late MemoryFileSystem fileSystem;
 
     setUp(() {
       mockMisskey = MockMisskey();
+      fileSystem = MemoryFileSystem.test();
     });
 
     testWidgets("ファイル添付ボタンが表示されること", (tester) async {
@@ -46,7 +49,10 @@ void main() {
 
       // ファイルを追加
       final binaryData = await TestData.binaryImage;
-      final imageFile = ImageFile(data: binaryData, fileName: "test_image.jpg");
+      final file = fileSystem.file("test_image.jpg")
+        ..writeAsBytesSync(binaryData);
+      addTearDown(file.deleteSync);
+      final imageFile = PostFile.file(file);
 
       container
           .read(chatInputStateNotifierProvider.notifier)
@@ -75,8 +81,7 @@ void main() {
       );
 
       // ファイルを追加
-      final binaryData = await TestData.binaryImage;
-      final imageFile = ImageFile(data: binaryData, fileName: "test_image.jpg");
+      final imageFile = PostFile.file(fileSystem.file("test_image.jpg"));
 
       container
           .read(chatInputStateNotifierProvider.notifier)

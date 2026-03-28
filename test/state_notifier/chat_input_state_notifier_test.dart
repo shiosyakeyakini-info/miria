@@ -5,7 +5,7 @@ import "package:file_picker/file_picker.dart";
 import "package:flutter/services.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:miria/model/image_file.dart";
+import "package:miria/model/misskey_post_file.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/chat_input_state_notifier.dart";
@@ -108,17 +108,13 @@ void main() {
           chatInputStateNotifierProvider.notifier,
         );
 
-        final binaryData = await TestData.binaryImage;
-        final imageFile = ImageFile(
-          data: binaryData,
-          fileName: "test_image.jpg",
-        );
+        final imageFile = PostFile.file(fileSystem.file("test_image.jpg"));
 
         await notifier.addFile(imageFile);
 
         final state = container.read(chatInputStateNotifierProvider);
         expect(state.files.length, 1);
-        expect(state.files.first, isA<ImageFile>());
+        expect(state.files.first, isA<PostFile>());
         expect(state.files.first.fileName, "test_image.jpg");
       });
 
@@ -127,16 +123,13 @@ void main() {
           chatInputStateNotifierProvider.notifier,
         );
 
-        final unknownFile = UnknownFile(
-          data: Uint8List.fromList([1, 2, 3, 4]),
-          fileName: "test_document.pdf",
-        );
+        final unknownFile = PostFile.file(fileSystem.file("test_document.pdf"));
 
         await notifier.addFile(unknownFile);
 
         final state = container.read(chatInputStateNotifierProvider);
         expect(state.files.length, 1);
-        expect(state.files.first, isA<UnknownFile>());
+        expect(state.files.first, isA<PostFile>());
         expect(state.files.first.fileName, "test_document.pdf");
       });
     });
@@ -148,11 +141,7 @@ void main() {
         );
 
         // ファイルを追加
-        final binaryData = await TestData.binaryImage;
-        final imageFile = ImageFile(
-          data: binaryData,
-          fileName: "test_image.jpg",
-        );
+        final imageFile = PostFile.file(fileSystem.file("test_image.jpg"));
         await notifier.addFile(imageFile);
 
         // 削除
@@ -179,7 +168,8 @@ void main() {
         );
 
         // ドライブモーダルのモック（アップロードを選択）
-        testRouter.driveModalReturnValue = DriveModalSheetReturnValue.upload;
+        testRouter.driveModalReturnValue =
+            DriveModalSheetReturnValue.uploadFile;
 
         // モックファイルの設定
         final mockFile = PlatformFile(
@@ -189,11 +179,7 @@ void main() {
         );
 
         when(
-          mockFilePicker.pickFiles(
-            allowMultiple: false,
-            type: FileType.custom,
-            allowedExtensions: ["jpg", "jpeg", "png", "gif", "mp4", "webm"],
-          ),
+          mockFilePicker.pickFiles(type: FileType.any, allowMultiple: false),
         ).thenAnswer((_) async => FilePickerResult([mockFile]));
 
         // ファイルシステムにファイルを作成
@@ -206,7 +192,7 @@ void main() {
 
         final state = container.read(chatInputStateNotifierProvider);
         expect(state.files.length, 1);
-        expect(state.files.first, isA<ImageFile>());
+        expect(state.files.first, isA<PostFile>());
         expect(state.files.first.fileName, "test_image.jpg");
       });
 
@@ -216,7 +202,8 @@ void main() {
         );
 
         // ドライブモーダルのモック（アップロードを選択）
-        testRouter.driveModalReturnValue = DriveModalSheetReturnValue.upload;
+        testRouter.driveModalReturnValue =
+            DriveModalSheetReturnValue.uploadFile;
 
         // モックファイルの設定
         final mockFile = PlatformFile(
@@ -226,11 +213,7 @@ void main() {
         );
 
         when(
-          mockFilePicker.pickFiles(
-            allowMultiple: false,
-            type: FileType.custom,
-            allowedExtensions: ["jpg", "jpeg", "png", "gif", "mp4", "webm"],
-          ),
+          mockFilePicker.pickFiles(type: FileType.any, allowMultiple: false),
         ).thenAnswer((_) async => FilePickerResult([mockFile]));
 
         // ファイルシステムにファイルを作成
@@ -247,7 +230,7 @@ void main() {
 
         final state = container.read(chatInputStateNotifierProvider);
         expect(state.files.length, 1);
-        expect(state.files.first, isA<ImageFile>());
+        expect(state.files.first, isA<PostFile>());
         expect(p.extension(state.files.first.fileName), ".jpg");
       });
 
@@ -257,7 +240,8 @@ void main() {
         );
 
         // ドライブモーダルのモック（アップロードを選択）
-        testRouter.driveModalReturnValue = DriveModalSheetReturnValue.upload;
+        testRouter.driveModalReturnValue =
+            DriveModalSheetReturnValue.uploadFile;
 
         // モックファイルの設定
         final mockFile = PlatformFile(
@@ -267,11 +251,7 @@ void main() {
         );
 
         when(
-          mockFilePicker.pickFiles(
-            allowMultiple: false,
-            type: FileType.custom,
-            allowedExtensions: ["jpg", "jpeg", "png", "gif", "mp4", "webm"],
-          ),
+          mockFilePicker.pickFiles(type: FileType.any, allowMultiple: false),
         ).thenAnswer((_) async => FilePickerResult([mockFile]));
 
         // ファイルシステムにファイルを作成
@@ -283,7 +263,7 @@ void main() {
 
         final state = container.read(chatInputStateNotifierProvider);
         expect(state.files.length, 1);
-        expect(state.files.first, isA<UnknownFile>());
+        expect(state.files.first, isA<PostFile>());
         expect(state.files.first.fileName, "document.pdf");
       });
 
@@ -293,7 +273,8 @@ void main() {
         );
 
         // ドライブモーダルのモック（アップロードを選択）
-        testRouter.driveModalReturnValue = DriveModalSheetReturnValue.upload;
+        testRouter.driveModalReturnValue =
+            DriveModalSheetReturnValue.uploadFile;
 
         when(
           mockFilePicker.pickFiles(
@@ -339,7 +320,7 @@ void main() {
 
         final state = container.read(chatInputStateNotifierProvider);
         expect(state.files.length, 1);
-        expect(state.files.first, isA<ImageFileAlreadyPostedFile>());
+        expect(state.files.first, isA<AlreadyPostedFile>());
         expect(state.files.first.fileName, TestData.drive1.name);
       });
 
@@ -358,7 +339,7 @@ void main() {
 
         final state = container.read(chatInputStateNotifierProvider);
         expect(state.files.length, 1);
-        expect(state.files.first, isA<UnknownAlreadyPostedFile>());
+        expect(state.files.first, isA<AlreadyPostedFile>());
         expect(state.files.first.fileName, TestData.drive2AsVideo.name);
       });
 
@@ -392,11 +373,11 @@ void main() {
         ).thenAnswer((_) async => TestData.drive1);
 
         // ファイルを追加
+        final file = fileSystem.file("/test/path/test_image.jpg")
+          ..createSync(recursive: true);
         final binaryData = await TestData.binaryImage;
-        final imageFile = ImageFile(
-          data: binaryData,
-          fileName: "test_image.jpg",
-        );
+        file.writeAsBytesSync(binaryData);
+        final imageFile = PostFile.file(file);
         await notifier.addFile(imageFile);
 
         // アップロードを実行
@@ -421,10 +402,10 @@ void main() {
         ).thenAnswer((_) async => TestData.drive2AsVideo);
 
         // ファイルを追加
-        final unknownFile = UnknownFile(
-          data: Uint8List.fromList([1, 2, 3, 4]),
-          fileName: "test_document.pdf",
-        );
+        final file = fileSystem.file("/test/path/test_document.jpg")
+          ..createSync(recursive: true)
+          ..writeAsBytesSync(Uint8List.fromList([1, 2, 3, 4]));
+        final unknownFile = PostFile.file(file);
         await notifier.addFile(unknownFile);
 
         // アップロードを実行
@@ -455,11 +436,11 @@ void main() {
         );
 
         // 既存ファイルを追加
-        final binaryData = await TestData.binaryImage;
-        final existingFile = ImageFileAlreadyPostedFile(
-          data: binaryData,
-          id: "existing-file-id",
-          fileName: "existing_image.jpg",
+        final existingFile = AlreadyPostedFile.file(
+          TestData.drive1.copyWith(
+            id: "existing-file-id",
+            name: "existing_image.jpg",
+          ),
         );
         await notifier.addFile(existingFile);
 
@@ -482,16 +463,8 @@ void main() {
         );
 
         // 複数ファイルを追加
-        final binaryData = await TestData.binaryImage;
-        await notifier.addFile(
-          ImageFile(data: binaryData, fileName: "image1.jpg"),
-        );
-        await notifier.addFile(
-          UnknownFile(
-            data: Uint8List.fromList([1, 2, 3]),
-            fileName: "document.pdf",
-          ),
-        );
+        await notifier.addFile(PostFile.file(fileSystem.file("image1.jpg")));
+        await notifier.addFile(PostFile.file(fileSystem.file("document.pdf")));
 
         // クリア前の確認
         var state = container.read(chatInputStateNotifierProvider);

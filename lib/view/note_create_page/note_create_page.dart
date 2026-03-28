@@ -9,7 +9,7 @@ import "package:hooks_riverpod/legacy.dart";
 import "package:miria/extensions/text_editing_controller_extension.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
-import "package:miria/model/image_file.dart";
+import "package:miria/model/misskey_post_file.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/note_draft_repository.dart";
@@ -419,20 +419,8 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
         : null;
     final fileIds = () {
       final fileIds = state.files
-          .where(
-            (file) =>
-                file is ImageFileAlreadyPostedFile ||
-                file is UnknownAlreadyPostedFile,
-          )
-          .map(
-            (file) => switch (file) {
-              ImageFileAlreadyPostedFile(id: final id) => id,
-              UnknownAlreadyPostedFile(id: final id) => id,
-              _ => throw UnsupportedError(
-                "Unsupported file type for draft: ${file.runtimeType}",
-              ),
-            },
-          )
+          .whereType<AlreadyPostedFile>()
+          .map((file) => file.file.id)
           .toList();
       return fileIds.isEmpty ? null : fileIds;
     }();

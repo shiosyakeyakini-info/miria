@@ -1,22 +1,32 @@
 import "dart:typed_data";
 
+import "package:file/memory.dart";
 import "package:flutter/material.dart";
 import "package:flutter_localizations/flutter_localizations.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:miria/l10n/app_localizations.dart";
-import "package:miria/model/image_file.dart";
+import "package:miria/model/misskey_post_file.dart";
 import "package:miria/view/chat_page/chat_file_preview.dart";
 
 import "../../test_util/test_datas.dart";
 
 void main() {
   group("ChatFilePreview", () {
+    late MemoryFileSystem fileSystem;
+
+    setUp(() {
+      fileSystem = MemoryFileSystem.test();
+    });
+
     testWidgets("画像ファイルのプレビューが表示されること", (tester) async {
       var fileDeleted = false;
       var fileSettingChanged = false;
 
       final binaryData = await TestData.binaryImage;
-      final imageFile = ImageFile(data: binaryData, fileName: "test_image.jpg");
+      final file = fileSystem.file("test_image.jpg")
+        ..writeAsBytesSync(binaryData);
+      addTearDown(file.deleteSync);
+      final imageFile = PostFile.file(file);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -42,11 +52,10 @@ void main() {
       var fileSettingChanged = false;
 
       final binaryData = await TestData.binaryImage;
-      final nsfwImageFile = ImageFile(
-        data: binaryData,
-        fileName: "nsfw_image.jpg",
-        isNsfw: true,
-      );
+      final file = fileSystem.file("nsfw_image.jpg")
+        ..writeAsBytesSync(binaryData);
+      addTearDown(file.deleteSync);
+      final nsfwImageFile = PostFile.file(file).copyWith(isNsfw: true);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -75,10 +84,7 @@ void main() {
       var fileDeleted = false;
       var fileSettingChanged = false;
 
-      final unknownFile = UnknownFile(
-        data: Uint8List.fromList([1, 2, 3, 4]),
-        fileName: "document.pdf",
-      );
+      final unknownFile = PostFile.file(fileSystem.file("document.pdf"));
 
       await tester.pumpWidget(
         MaterialApp(
@@ -106,8 +112,7 @@ void main() {
       var fileDeleted = false;
       var fileSettingChanged = false;
 
-      final binaryData = await TestData.binaryImage;
-      final imageFile = ImageFile(data: binaryData, fileName: "test_image.jpg");
+      final imageFile = PostFile.file(fileSystem.file("test_image.jpg"));
 
       await tester.pumpWidget(
         MaterialApp(
@@ -134,11 +139,11 @@ void main() {
       var fileDeleted = false;
       var fileSettingChanged = false;
 
-      final binaryData = await TestData.binaryImage;
-      final existingFile = ImageFileAlreadyPostedFile(
-        data: binaryData,
-        id: "existing-file-id",
-        fileName: "existing_image.jpg",
+      final existingFile = AlreadyPostedFile.file(
+        TestData.drive1.copyWith(
+          id: "existing-file-id",
+          name: "existing_image.jpg",
+        ),
       );
 
       await tester.pumpWidget(
@@ -163,8 +168,7 @@ void main() {
       var fileDeleted = false;
       var fileSettingChanged = false;
 
-      final binaryData = await TestData.binaryImage;
-      final imageFile = ImageFile(data: binaryData, fileName: "test_image.jpg");
+      final imageFile = PostFile.file(fileSystem.file("test_image.jpg"));
 
       await tester.pumpWidget(
         MaterialApp(
@@ -196,9 +200,8 @@ void main() {
       var fileDeleted = false;
       var fileSettingChanged = false;
 
-      final unknownFile = UnknownFile(
-        data: Uint8List.fromList([1, 2, 3, 4]),
-        fileName: "very_long_filename_that_should_be_truncated.pdf",
+      final unknownFile = PostFile.file(
+        fileSystem.file("very_long_filename_that_should_be_truncated.pdf"),
       );
 
       await tester.pumpWidget(

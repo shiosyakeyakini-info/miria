@@ -574,7 +574,10 @@ class SJa extends S {
   String get chooseFile => 'ファイルを選択';
 
   @override
-  String get uploadFile => 'アップロード';
+  String get uploadMedia => 'メディアをアップロード';
+
+  @override
+  String get uploadFile => 'ファイルをアップロード';
 
   @override
   String get fromDrive => 'ドライブから';

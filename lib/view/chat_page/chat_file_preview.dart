@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:miria/l10n/app_localizations.dart";
-import "package:miria/model/image_file.dart";
+import "package:miria/model/misskey_post_file.dart";
 
 class ChatFilePreview extends StatelessWidget {
   final MisskeyPostFile file;
@@ -17,7 +17,8 @@ class ChatFilePreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     switch (file) {
-      case ImageFile():
+      case PostFile(:final file, :final type?, :final isNsfw)
+          when type.startsWith("image/"):
         return Stack(
           children: [
             Container(
@@ -27,8 +28,8 @@ class ChatFilePreview extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.memory(
-                  (file as ImageFile).data,
+                child: Image.file(
+                  file,
                   width: 80,
                   height: 80,
                   fit: BoxFit.cover,
@@ -54,7 +55,7 @@ class ChatFilePreview extends StatelessWidget {
                 ),
               ),
             ),
-            if (file.isNsfw)
+            if (isNsfw)
               Positioned(
                 bottom: 4,
                 left: 4,
@@ -79,7 +80,7 @@ class ChatFilePreview extends StatelessWidget {
               ),
           ],
         );
-      case UnknownFile():
+      case PostFile():
         return Stack(
           children: [
             Container(
@@ -129,8 +130,7 @@ class ChatFilePreview extends StatelessWidget {
             ),
           ],
         );
-      case ImageFileAlreadyPostedFile():
-      case UnknownAlreadyPostedFile():
+      case AlreadyPostedFile():
         return const SizedBox.shrink();
     }
   }

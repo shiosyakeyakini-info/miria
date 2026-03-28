@@ -7,7 +7,6 @@ import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:image_editor/image_editor.dart";
-import "package:miria/model/image_file.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
@@ -63,17 +62,7 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
   PhotoEdit build() => const PhotoEdit();
 
   /// 状態を初期化する
-  Future<void> initialize(MisskeyPostFile file) async {
-    if (state.isInitialized) return;
-    Uint8List initialImage;
-    switch (file) {
-      case ImageFile():
-        initialImage = file.data;
-      case ImageFileAlreadyPostedFile():
-        initialImage = file.data;
-      default:
-        throw UnsupportedError("$file is unsupported.");
-    }
+  Future<void> initialize(Uint8List initialImage) async {
     final imageData = await ImageDescriptor.encoded(
       await ImmutableBuffer.fromUint8List(initialImage),
     );

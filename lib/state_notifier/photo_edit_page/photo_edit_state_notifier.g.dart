@@ -43,7 +43,7 @@ final class PhotoEditStateNotifierProvider
 }
 
 String _$photoEditStateNotifierHash() =>
-    r'6b8f661acddd8b29461f44631faa37efd5608210';
+    r'7aa0647289073671d8110850b02a76f1a878e045';
 
 abstract class _$PhotoEditStateNotifier extends $Notifier<PhotoEdit> {
   PhotoEdit build();

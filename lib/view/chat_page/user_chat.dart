@@ -9,7 +9,7 @@ import "package:hooks_riverpod/experimental/mutation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:hooks_riverpod/legacy.dart";
 import "package:miria/l10n/app_localizations.dart";
-import "package:miria/model/image_file.dart";
+import "package:miria/model/misskey_post_file.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/socket_timeline_repository.dart";
 import "package:miria/router/app_router.dart";
@@ -496,15 +496,7 @@ class UserChatTextField extends HookConsumerWidget {
                       if (editedFile != null) {
                         // NSFWやキャプションの変更を反映
                         final updatedFile = switch (file) {
-                          ImageFile() => ImageFile(
-                            data: file.data,
-                            fileName: file.fileName,
-                            isNsfw: editedFile.isNsfw,
-                            caption: editedFile.caption,
-                          ),
-                          UnknownFile() => UnknownFile(
-                            data: file.data,
-                            fileName: file.fileName,
+                          PostFile() => file.copyWith(
                             isNsfw: editedFile.isNsfw,
                             caption: editedFile.caption,
                           ),

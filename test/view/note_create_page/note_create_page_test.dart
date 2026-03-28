@@ -3072,7 +3072,7 @@ void main() {
         await tester.tap(find.byIcon(Icons.image));
         await tester.pumpAndSettle();
 
-        await tester.tap(find.text("アップロード"));
+        await tester.tap(find.text("ファイルをアップロード"));
         await tester.pumpAndSettle();
 
         await tester.enterText(

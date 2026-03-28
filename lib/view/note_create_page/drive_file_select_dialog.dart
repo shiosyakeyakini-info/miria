@@ -6,8 +6,8 @@ import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
-import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:miria/view/common/pushable_listview.dart";
+import "package:miria/view/note_create_page/thumbnail.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
@@ -160,19 +160,14 @@ class DriveFileSelectDialog extends HookConsumerWidget
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(
-                              width: double.infinity,
-                              height: 200,
-                              child: item.thumbnailUrl == null
-                                  ? const SizedBox.shrink()
-                                  : ClipRRect(
-                                      borderRadius: BorderRadius.circular(5),
-                                      child: NetworkImageView(
-                                        fit: BoxFit.cover,
-                                        url: item.thumbnailUrl!,
-                                        type: ImageType.imageThumbnail,
-                                      ),
-                                    ),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: Thumbnail.driveFile(
+                                item,
+                                width: double.infinity,
+                                height: 200,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                             Text(item.name),
                           ],
