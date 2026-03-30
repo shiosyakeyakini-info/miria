@@ -39,7 +39,7 @@ final class DownloadFileNotifierProvider
 }
 
 String _$downloadFileNotifierHash() =>
-    r'570a3519348813c4ebee6976af9634c1350258f3';
+    r'e8165329f9e2c6712e895cb1579d7346cbc7ccaf';
 
 abstract class _$DownloadFileNotifier extends $Notifier<void> {
   void build();

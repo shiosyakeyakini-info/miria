@@ -24,8 +24,7 @@ class SharingIntentListener extends ConsumerStatefulWidget {
 }
 
 class SharingIntentListenerState extends ConsumerState<SharingIntentListener> {
-  late final StreamSubscription<List<SharedMediaFile>>
-  intentDataStreamSubscription;
+  StreamSubscription<List<SharedMediaFile>>? intentDataStreamSubscription;
   late Iterable<Account> account = [];
 
   @override
@@ -69,7 +68,7 @@ class SharingIntentListenerState extends ConsumerState<SharingIntentListener> {
 
   @override
   void dispose() {
-    intentDataStreamSubscription.cancel();
+    intentDataStreamSubscription?.cancel();
     super.dispose();
   }
 
