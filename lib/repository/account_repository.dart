@@ -275,9 +275,6 @@ class AccountRepository extends _$AccountRepository {
   }
 
   Future<void> _validateMisskey(String server) async {
-    //先にnodeInfoを取得する
-    final Response nodeInfo;
-
     final Uri serverUri;
     try {
       serverUri = serverToUri(server);
@@ -285,42 +282,54 @@ class AccountRepository extends _$AccountRepository {
       throw InvalidServerException(server);
     }
 
-    final uri = Uri(
-      scheme: serverUri.scheme,
-      host: serverUri.host,
-      port: serverUri.hasPort ? serverUri.port : null,
-      pathSegments: [".well-known", "nodeinfo"],
-    );
+    final serverUrl =
+        "${serverUri.scheme}://${serverUri.host}${serverUri.hasPort ? ':${serverUri.port}' : ''}";
 
+    String? softwareName;
+    String? softwareVersion;
+
+    // nodeInfoの取得を試みる（連合オフの場合は403で失敗する）
     try {
-      nodeInfo = await ref.read(dioProvider).getUri(uri);
-    } catch (e) {
-      // HandshakeExceptionの場合、HTTPを使用するよう促す
+      final uri = Uri(
+        scheme: serverUri.scheme,
+        host: serverUri.host,
+        port: serverUri.hasPort ? serverUri.port : null,
+        pathSegments: [".well-known", "nodeinfo"],
+      );
+      final nodeInfo = await ref.read(dioProvider).getUri(uri);
+      final nodeInfoHref = nodeInfo.data["links"][0]["href"];
+      final nodeInfoHrefResponse = await ref
+          .read(dioProvider)
+          .get(nodeInfoHref);
+      final nodeInfoResult = nodeInfoHrefResponse.data;
+
+      softwareName = nodeInfoResult["software"]["name"]?.toString();
+      softwareVersion = nodeInfoResult["software"]["version"]?.toString();
+      // these software already known as unavailable this app
+      if (softwareName == "mastodon" || softwareName == "fedibird") {
+        throw SoftwareNotSupportedException(softwareName!);
+      }
+    } on ValidateMisskeyException {
+      rethrow;
+    } on DioException catch (e) {
       if (e.toString().contains("HandshakeException") &&
           !server.startsWith("http://") &&
           !server.startsWith("https://")) {
         throw InvalidServerException(server);
       }
+      // 403の場合は連合オフのため、nodeinfoをスキップして
+      // api/endpointsで直接確認する
+      if (e.response?.statusCode == 403) {
+        // continue to endpoints check below
+      } else {
+        throw ServerIsNotMisskeyException(server);
+      }
+    } catch (e) {
       throw ServerIsNotMisskeyException(server);
     }
-    final nodeInfoHref = nodeInfo.data["links"][0]["href"];
-    final nodeInfoHrefResponse = await ref.read(dioProvider).get(nodeInfoHref);
-    final nodeInfoResult = nodeInfoHrefResponse.data;
 
-    final software = nodeInfoResult["software"]["name"];
-    // these software already known as unavailable this app
-    if (software == "mastodon" || software == "fedibird") {
-      throw SoftwareNotSupportedException(software.toString());
-    }
-
-    final version = nodeInfoResult["software"]["version"];
-
+    // api/endpointsで互換性を確認
     try {
-      final serverUrl =
-          "${serverUri.scheme}://${serverUri.host}${serverUri.hasPort ? ':${serverUri.port}' : ''}";
-      final hostWithPort = serverUri.hasPort
-          ? "${serverUri.host}:${serverUri.port}"
-          : serverUri.host;
       final meta = await ref
           .read(misskeyWithoutAccountProvider(serverUrl))
           .meta();
@@ -339,15 +348,20 @@ class AccountRepository extends _$AccountRepository {
           .endpoints();
       if (!endpoints.contains("emojis")) {
         throw SoftwareNotCompatibleException(
-          software.toString(),
-          version.toString(),
+          softwareName ?? "unknown",
+          softwareVersion ?? "unknown",
         );
       }
     } catch (e) {
-      throw SoftwareNotCompatibleException(
-        software.toString(),
-        version.toString(),
-      );
+      if (e is ValidateMisskeyException) rethrow;
+      // nodeinfoからソフトウェア情報が取得できていた場合は互換性エラー
+      if (softwareName != null) {
+        throw SoftwareNotCompatibleException(
+          softwareName,
+          softwareVersion ?? "unknown",
+        );
+      }
+      throw ServerIsNotMisskeyException(server);
     }
   }
 

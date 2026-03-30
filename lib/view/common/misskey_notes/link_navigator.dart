@@ -25,15 +25,21 @@ class LinkNavigator {
     // 他サーバーや外部サイトは別アプリで起動する
     if (uri.host != accountContext.getAccount.host) {
       try {
-        await ref
-            .read(dioProvider)
-            .getUri(
-              Uri(
-                scheme: "https",
-                host: uri.host,
-                pathSegments: [".well-known", "nodeinfo"],
-              ),
-            );
+        // nodeinfoの取得を試みるが、連合オフの場合は403で失敗するため
+        // 失敗してもapi/endpointsで直接確認する
+        try {
+          await ref
+              .read(dioProvider)
+              .getUri(
+                Uri(
+                  scheme: "https",
+                  host: uri.host,
+                  pathSegments: [".well-known", "nodeinfo"],
+                ),
+              );
+        } catch (_) {
+          // nodeinfoが取得できなくても続行
+        }
         final meta = await ref
             .read(misskeyWithoutAccountProvider(uri.host))
             .meta();
