@@ -33,7 +33,7 @@ void main() {
               MisskeyTheme.fromJson(
                 JSON5.parse(
                       File(
-                        "assets_builder/misskey/packages/frontend/src/themes/$name.json5",
+                        "misskey/packages/frontend/src/themes/$name.json5",
                       ).readAsStringSync(),
                     )
                     as Map<String, dynamic>,
