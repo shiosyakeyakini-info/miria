@@ -62,3 +62,4 @@ miria-installer*.exe
 # FVM Version Cache
 .fvm/
 coverage/*
+dump.rdb
