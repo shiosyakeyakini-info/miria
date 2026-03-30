@@ -85,7 +85,7 @@ const Map<String, List<MfmFnArg>> mfmFn = {
 };
 
 final filteredMfmFnNamesProvider = Provider.autoDispose<List<String>>((ref) {
-  final type = ref.watch(inputCompletionTypeProvider);
+  final type = ref.watch(inputCompletionTypeNotifierProvider);
   if (type is MfmFn) {
     return mfmFn.keys.where((name) => name.startsWith(type.query)).toList();
   } else {
@@ -94,7 +94,7 @@ final filteredMfmFnNamesProvider = Provider.autoDispose<List<String>>((ref) {
 });
 
 final filteredMfmFnArgsProvider = Provider.autoDispose<List<MfmFnArg>>((ref) {
-  final type = ref.watch(inputCompletionTypeProvider);
+  final type = ref.watch(inputCompletionTypeNotifierProvider);
   if (type is MfmFn) {
     if (type.query.contains(".")) {
       final firstPeriodIndex = type.query.indexOf(".");

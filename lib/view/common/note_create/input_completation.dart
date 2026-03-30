@@ -9,9 +9,16 @@ import "package:miria/view/common/note_create/basic_keyboard.dart";
 import "package:miria/view/common/note_create/emoji_keyboard.dart";
 import "package:miria/view/common/note_create/hashtag_keyboard.dart";
 import "package:miria/view/common/note_create/mfm_fn_keyboard.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-final inputCompletionTypeProvider =
-    StateProvider.autoDispose<InputCompletionType>((ref) => Basic());
+part "input_completation.g.dart";
+
+@riverpod
+class InputCompletionTypeNotifier extends _$InputCompletionTypeNotifier {
+  @override
+  InputCompletionType build() => Basic();
+  void set(InputCompletionType type) => state = type;
+}
 
 final inputComplementDelayedProvider = Provider((ref) => 300);
 
@@ -27,13 +34,13 @@ class InputComplement extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final inputCompletionType = ref.watch(inputCompletionTypeProvider);
+    final inputCompletionType = ref.watch(inputCompletionTypeNotifierProvider);
     final focusNode = ref.watch(this.focusNode);
 
     useEffect(() {
-      InputCompletionType updateType() =>
-          ref.read(inputCompletionTypeProvider.notifier).state =
-              controller.inputCompletionType;
+      void updateType() => ref
+          .read(inputCompletionTypeNotifierProvider.notifier)
+          .set(controller.inputCompletionType);
       controller.addListener(updateType);
       // 初回実行で現在の状態を反映（ビルド完了後に実行）
       Future(() => updateType());

@@ -4,7 +4,6 @@ import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:hooks_riverpod/legacy.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
@@ -41,7 +40,15 @@ class ShareExtensionPage extends ConsumerStatefulWidget {
       ShareExtensionPageState();
 }
 
-final isShareExtensionProvider = StateProvider((ref) => false);
+final isShareExtensionProvider = NotifierProvider<IsShareExtension, bool>(
+  IsShareExtension.new,
+);
+
+class IsShareExtension extends Notifier<bool> {
+  @override
+  bool build() => false;
+  void set(bool value) => state = value;
+}
 
 class ShareExtensionPageState extends ConsumerState<ShareExtensionPage> {
   var sharedPreference = "";
@@ -51,7 +58,7 @@ class ShareExtensionPageState extends ConsumerState<ShareExtensionPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     Future(() async {
-      ref.read(isShareExtensionProvider.notifier).state = true;
+      ref.read(isShareExtensionProvider.notifier).set(true);
       try {
         await ref.read(accountRepositoryProvider.notifier).load();
         final json = jsonDecode(

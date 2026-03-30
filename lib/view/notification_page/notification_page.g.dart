@@ -6,6 +6,96 @@ part of 'notification_page.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+@ProviderFor(ShowActions)
+const showActionsProvider = ShowActionsFamily._();
+
+final class ShowActionsProvider extends $NotifierProvider<ShowActions, bool> {
+  const ShowActionsProvider._({
+    required ShowActionsFamily super.from,
+    required NotificationData super.argument,
+  }) : super(
+         retry: null,
+         name: r'showActionsProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$showActionsHash();
+
+  @override
+  String toString() {
+    return r'showActionsProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  ShowActions create() => ShowActions();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<bool>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ShowActionsProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$showActionsHash() => r'eb3a172b160bbbd151168a0172ab49be5030ba53';
+
+final class ShowActionsFamily extends $Family
+    with $ClassFamilyOverride<ShowActions, bool, bool, bool, NotificationData> {
+  const ShowActionsFamily._()
+    : super(
+        retry: null,
+        name: r'showActionsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  ShowActionsProvider call(NotificationData data) =>
+      ShowActionsProvider._(argument: data, from: this);
+
+  @override
+  String toString() => r'showActionsProvider';
+}
+
+abstract class _$ShowActions extends $Notifier<bool> {
+  late final _$args = ref.$arg as NotificationData;
+  NotificationData get data => _$args;
+
+  bool build(NotificationData data);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref = this.ref as $Ref<bool, bool>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<bool, bool>,
+              bool,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
 @ProviderFor(followRequests)
 const followRequestsProvider = FollowRequestsProvider._();
 

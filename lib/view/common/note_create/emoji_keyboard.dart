@@ -20,7 +20,7 @@ class _FilteredEmojis extends FamilyNotifier<List<MisskeyEmojiData>, Account> {
   @override
   List<MisskeyEmojiData> build(Account arg) {
     ref.listen(
-      inputCompletionTypeProvider,
+      inputCompletionTypeNotifierProvider,
       (_, type) async => _updateEmojis(type),
     );
     return ref.read(emojiRepositoryProvider(arg)).defaultEmojis();

@@ -2,7 +2,6 @@ import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:hooks_riverpod/legacy.dart";
 import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/misskey_emoji_data.dart";
@@ -148,8 +147,12 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
   }
 }
 
-final showActionsProvider = StateProvider.autoDispose
-    .family<bool, NotificationData>((ref, _) => true);
+@riverpod
+class ShowActions extends _$ShowActions {
+  @override
+  bool build(NotificationData data) => true;
+  void set(bool value) => state = value;
+}
 
 @Riverpod(dependencies: [misskeyPostContext])
 Future<List<FollowRequest>> followRequests(Ref ref) async {
@@ -562,7 +565,7 @@ class NotificationItem extends ConsumerWidget {
       }
 
       ref.invalidate(followRequestsProvider);
-      ref.read(showActionsProvider(notification).notifier).state = false;
+      ref.read(showActionsProvider(notification).notifier).set(false);
     });
   }
 }

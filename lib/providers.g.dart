@@ -607,6 +607,70 @@ final class AccountFamily extends $Family
   String toString() => r'accountProvider';
 }
 
+@ProviderFor(ErrorEvent)
+const errorEventProvider = ErrorEventProvider._();
+
+final class ErrorEventProvider
+    extends
+        $NotifierProvider<ErrorEvent, (Object? error, BuildContext? context)> {
+  const ErrorEventProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'errorEventProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$errorEventHash();
+
+  @$internal
+  @override
+  ErrorEvent create() => ErrorEvent();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue((Object? error, BuildContext? context) value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride:
+          $SyncValueProvider<(Object? error, BuildContext? context)>(value),
+    );
+  }
+}
+
+String _$errorEventHash() => r'599c906f2427b5b7661dff124ce0c3e96bd29570';
+
+abstract class _$ErrorEvent
+    extends $Notifier<(Object? error, BuildContext? context)> {
+  (Object? error, BuildContext? context) build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref =
+        this.ref
+            as $Ref<
+              (Object? error, BuildContext? context),
+              (Object? error, BuildContext? context)
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                (Object? error, BuildContext? context),
+                (Object? error, BuildContext? context)
+              >,
+              (Object? error, BuildContext? context),
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
 @ProviderFor(cacheManager)
 const cacheManagerProvider = CacheManagerProvider._();
 

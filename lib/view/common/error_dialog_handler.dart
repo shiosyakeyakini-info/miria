@@ -14,7 +14,7 @@ extension FutureExtension<T> on Future<T> {
     return catchError((e) {
       final Ref = ProviderScope.containerOf(context, listen: false);
 
-      Ref.read(errorEventProvider.notifier).state = (e, context);
+      Ref.read(errorEventProvider.notifier).fire(e, context);
     });
   }
 }
@@ -25,7 +25,7 @@ extension FutureFunctionExtension<T> on Future<T> Function() {
     return () => this.call().catchError((e) {
       final Ref = ProviderScope.containerOf(context, listen: false);
 
-      Ref.read(errorEventProvider.notifier).state = (e, context);
+      Ref.read(errorEventProvider.notifier).fire(e, context);
     });
   }
 }

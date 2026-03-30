@@ -1,12 +1,19 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:hooks_riverpod/legacy.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/channels_page/community_channel_view.dart";
 import "package:miria/view/common/pushable_listview.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-final channelSearchProvider = StateProvider.autoDispose((ref) => "");
+part "channel_search.g.dart";
+
+@riverpod
+class ChannelSearchQuery extends _$ChannelSearchQuery {
+  @override
+  String build() => "";
+  void set(String value) => state = value;
+}
 
 class ChannelSearch extends ConsumerWidget {
   const ChannelSearch({super.key, this.onChannelSelected});
@@ -22,7 +29,7 @@ class ChannelSearch extends ConsumerWidget {
           decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
           textInputAction: TextInputAction.done,
           onSubmitted: (value) {
-            ref.read(channelSearchProvider.notifier).state = value;
+            ref.read(channelSearchQueryProvider.notifier).set(value);
           },
         ),
         Expanded(
@@ -43,7 +50,7 @@ class ChannelSearchList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final searchValue = ref.watch(channelSearchProvider);
+    final searchValue = ref.watch(channelSearchQueryProvider);
 
     if (searchValue.isEmpty) {
       return Container();

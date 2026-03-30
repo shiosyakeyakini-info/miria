@@ -35,7 +35,7 @@ class _FilteredHashtags extends FamilyNotifier<List<String>, Account> {
   @override
   List<String> build(Account arg) {
     ref.listen(
-      inputCompletionTypeProvider,
+      inputCompletionTypeNotifierProvider,
       (_, type) async => await _updateHashtags(arg, type),
       fireImmediately: true,
     );

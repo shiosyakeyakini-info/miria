@@ -161,10 +161,12 @@ final desktopSettingsRepositoryProvider = ChangeNotifierProvider(
   (ref) => DesktopSettingsRepository(),
 );
 
-final errorEventProvider =
-    StateProvider<(Object? error, BuildContext? context)>(
-      (ref) => (null, null),
-    );
+@Riverpod(keepAlive: true)
+class ErrorEvent extends _$ErrorEvent {
+  @override
+  (Object? error, BuildContext? context) build() => (null, null);
+  void fire(Object? error, BuildContext? context) => state = (error, context);
+}
 
 final importExportRepositoryProvider = ChangeNotifierProvider(
   (ref) => ImportExportRepository(ref),
