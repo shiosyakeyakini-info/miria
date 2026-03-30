@@ -4,6 +4,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/providers.dart";
+import "package:miria/providers/general_settings_notifier.dart";
 import "package:miria/repository/note_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -191,15 +192,11 @@ System.out.println("@ai uneune");
 
     group("長いノートの折りたたみ", () {
       testWidgets("長いノートの省略が有効な場合、500文字を超えるノートが折りたたまれること", (tester) async {
-        final generalSettingsRepository = MockGeneralSettingsRepository();
-        when(
-          generalSettingsRepository.settings,
-        ).thenReturn(const GeneralSettings(enableLongTextElipsed: true));
         await tester.pumpWidget(
           buildTestWidget(
             overrides: [
-              generalSettingsRepositoryProvider.overrideWith(
-                (ref) => generalSettingsRepository,
+              generalSettingsNotifierProvider.overrideWithValue(
+                const GeneralSettings(enableLongTextElipsed: true),
               ),
             ],
             note: TestData.note1.copyWith(
@@ -213,15 +210,11 @@ System.out.println("@ai uneune");
 
       testWidgets("長いノートの省略が有効な場合、続きを表示をタップすると全てが表示されること", (tester) async {
         final longText = Iterable.generate(2000, (index) => "あ").join("");
-        final generalSettingsRepository = MockGeneralSettingsRepository();
-        when(
-          generalSettingsRepository.settings,
-        ).thenReturn(const GeneralSettings(enableLongTextElipsed: true));
         await tester.pumpWidget(
           buildTestWidget(
             overrides: [
-              generalSettingsRepositoryProvider.overrideWith(
-                (ref) => generalSettingsRepository,
+              generalSettingsNotifierProvider.overrideWithValue(
+                const GeneralSettings(enableLongTextElipsed: true),
               ),
             ],
             note: TestData.note1.copyWith(text: longText),

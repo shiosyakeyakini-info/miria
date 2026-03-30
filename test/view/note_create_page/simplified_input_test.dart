@@ -3,6 +3,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/providers.dart";
+import "package:miria/providers/general_settings_notifier.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/note_create/input_completation.dart";
 import "package:mockito/mockito.dart";
@@ -17,19 +18,14 @@ void main() {
       final emojiRepository = MockEmojiRepository();
       when(emojiRepository.emoji).thenReturn([]);
       when(emojiRepository.defaultEmojis()).thenAnswer((_) => []);
-      final generalSettingsRepository = MockGeneralSettingsRepository();
-      when(
-        generalSettingsRepository.settings,
-      ).thenReturn(const GeneralSettings(emojiType: EmojiType.system));
-
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
             emojiRepositoryProvider.overrideWith(
               (ref, account) => emojiRepository,
             ),
-            generalSettingsRepositoryProvider.overrideWith(
-              (ref) => generalSettingsRepository,
+            generalSettingsNotifierProvider.overrideWithValue(
+              const GeneralSettings(emojiType: EmojiType.system),
             ),
             inputComplementDelayedProvider.overrideWithValue(1),
           ],
@@ -69,10 +65,6 @@ void main() {
       final emojiRepository = MockEmojiRepository();
       when(emojiRepository.emoji).thenReturn([]);
       when(emojiRepository.defaultEmojis()).thenAnswer((_) => []);
-      final generalSettingsRepository = MockGeneralSettingsRepository();
-      when(
-        generalSettingsRepository.settings,
-      ).thenReturn(const GeneralSettings(emojiType: EmojiType.system));
 
       await tester.pumpWidget(
         ProviderScope(
@@ -80,8 +72,8 @@ void main() {
             emojiRepositoryProvider.overrideWith(
               (ref, account) => emojiRepository,
             ),
-            generalSettingsRepositoryProvider.overrideWith(
-              (ref) => generalSettingsRepository,
+            generalSettingsNotifierProvider.overrideWithValue(
+              const GeneralSettings(emojiType: EmojiType.system),
             ),
             inputComplementDelayedProvider.overrideWithValue(1),
           ],

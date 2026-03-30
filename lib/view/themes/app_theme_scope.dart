@@ -6,7 +6,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/color_extension.dart";
 import "package:miria/model/color_theme.dart";
 import "package:miria/model/general_settings.dart";
-import "package:miria/providers.dart";
+import "package:miria/providers/general_settings_notifier.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:miria/view/themes/built_in_color_themes.dart";
 
@@ -397,54 +397,38 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
   @override
   Widget build(BuildContext context) {
     final colorSystem = ref.watch(
-      generalSettingsRepositoryProvider.select(
-        (value) => value.settings.themeColorSystem,
-      ),
+      generalSettingsNotifierProvider.select((value) => value.themeColorSystem),
     );
     final lightTheme = ref.watch(
-      generalSettingsRepositoryProvider.select(
-        (value) => value.settings.lightColorThemeId,
+      generalSettingsNotifierProvider.select(
+        (value) => value.lightColorThemeId,
       ),
     );
     final darkTheme = ref.watch(
-      generalSettingsRepositoryProvider.select(
-        (value) => value.settings.darkColorThemeId,
-      ),
+      generalSettingsNotifierProvider.select((value) => value.darkColorThemeId),
     );
     final textScaleFactor = ref.watch(
-      generalSettingsRepositoryProvider.select(
-        (value) => value.settings.textScaleFactor,
-      ),
+      generalSettingsNotifierProvider.select((value) => value.textScaleFactor),
     );
     final defaultFontName = ref.watch(
-      generalSettingsRepositoryProvider.select(
-        (value) => value.settings.defaultFontName,
-      ),
+      generalSettingsNotifierProvider.select((value) => value.defaultFontName),
     );
     final serifFontName = ref.watch(
-      generalSettingsRepositoryProvider.select(
-        (value) => value.settings.serifFontName,
-      ),
+      generalSettingsNotifierProvider.select((value) => value.serifFontName),
     );
     final monospaceFontName = ref.watch(
-      generalSettingsRepositoryProvider.select(
-        (value) => value.settings.monospaceFontName,
+      generalSettingsNotifierProvider.select(
+        (value) => value.monospaceFontName,
       ),
     );
     final cursiveFontName = ref.watch(
-      generalSettingsRepositoryProvider.select(
-        (value) => value.settings.cursiveFontName,
-      ),
+      generalSettingsNotifierProvider.select((value) => value.cursiveFontName),
     );
     final fantasyFontName = ref.watch(
-      generalSettingsRepositoryProvider.select(
-        (value) => value.settings.fantasyFontName,
-      ),
+      generalSettingsNotifierProvider.select((value) => value.fantasyFontName),
     );
     final languages = ref.watch(
-      generalSettingsRepositoryProvider.select(
-        (value) => value.settings.languages,
-      ),
+      generalSettingsNotifierProvider.select((value) => value.languages),
     );
 
     final bool isDark;

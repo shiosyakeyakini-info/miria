@@ -13,6 +13,7 @@ import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
+import "package:miria/providers/general_settings_notifier.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/misskey_notes/custom_emoji.dart";
 import "package:miria/view/common/misskey_notes/link_navigator.dart";
@@ -28,8 +29,7 @@ InlineSpan _unicodeEmojiBuilder(
   WidgetRef ref,
   void Function() onTap,
 ) {
-  if (ref.read(generalSettingsRepositoryProvider).settings.emojiType ==
-      EmojiType.system) {
+  if (ref.read(generalSettingsNotifierProvider).emojiType == EmojiType.system) {
     return TextSpan(
       text: emoji,
       style: style,
@@ -228,8 +228,8 @@ class EmojiInk extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isEnabled = ref.watch(
-      generalSettingsRepositoryProvider.select(
-        (value) => value.settings.enableDirectReaction,
+      generalSettingsNotifierProvider.select(
+        (value) => value.enableDirectReaction,
       ),
     );
     if (isEnabled) {

@@ -11,6 +11,7 @@ import "package:miria/model/account.dart";
 import "package:miria/model/exported_setting.dart";
 import "package:miria/model/tab_setting.dart";
 import "package:miria/providers.dart";
+import "package:miria/providers/general_settings_notifier.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 import "package:miria/view/dialogs/simple_message_dialog.dart";
@@ -90,9 +91,9 @@ class ImportExportRepository extends ChangeNotifier {
     }
 
     // 全般設定
-    await ref
-        .read(generalSettingsRepositoryProvider)
-        .update(importedSettings.generalSettings);
+    ref
+        .read(generalSettingsNotifierProvider.notifier)
+        .updateSettings(importedSettings.generalSettings);
 
     // タブ設定
     final tabSettings = <TabSetting>[];
@@ -157,7 +158,7 @@ class ImportExportRepository extends ChangeNotifier {
 
     final data = {
       ...ExportedSetting(
-        generalSettings: ref.read(generalSettingsRepositoryProvider).settings,
+        generalSettings: ref.read(generalSettingsNotifierProvider),
         tabSettings: ref
             .read(tabSettingsRepositoryProvider)
             .tabSettings

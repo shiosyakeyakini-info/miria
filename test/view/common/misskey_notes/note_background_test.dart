@@ -2,38 +2,16 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/general_settings.dart";
-import "package:miria/providers.dart";
-import "package:miria/repository/general_settings_repository.dart";
+import "package:miria/providers/general_settings_notifier.dart";
 import "package:miria/view/common/misskey_notes/note_background.dart";
 import "package:misskey_dart/misskey_dart.dart";
-
-class FakeGeneralSettingsRepository extends GeneralSettingsRepository {
-  FakeGeneralSettingsRepository(this._settings);
-
-  GeneralSettings _settings;
-
-  @override
-  GeneralSettings get settings => _settings;
-
-  @override
-  Future<void> load() async {}
-
-  @override
-  Future<void> update(GeneralSettings settings) async {
-    _settings = settings;
-  }
-}
 
 Widget buildTestWidget({
   required GeneralSettings settings,
   required Brightness brightness,
 }) {
   return ProviderScope(
-    overrides: [
-      generalSettingsRepositoryProvider.overrideWith(
-        (ref) => FakeGeneralSettingsRepository(settings),
-      ),
-    ],
+    overrides: [generalSettingsNotifierProvider.overrideWithValue(settings)],
     child: MaterialApp(
       theme: ThemeData(brightness: brightness),
       home: NoteBackground(

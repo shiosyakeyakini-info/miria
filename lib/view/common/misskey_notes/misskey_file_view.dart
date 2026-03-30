@@ -4,7 +4,7 @@ import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/general_settings.dart";
-import "package:miria/providers.dart";
+import "package:miria/providers/general_settings_notifier.dart";
 import "package:miria/view/common/misskey_notes/in_note_button.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:miria/view/common/note_file_dialog/note_file_dialog.dart";
@@ -118,9 +118,7 @@ class MisskeyImage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final initialNsfw = useMemoized(() {
       final nsfwSetting = ref.read(
-        generalSettingsRepositoryProvider.select(
-          (repository) => repository.settings.nsfwInherit,
-        ),
+        generalSettingsNotifierProvider.select((value) => value.nsfwInherit),
       );
       if (nsfwSetting == NSFWInherit.allHidden) {
         // 強制的にNSFW表示
@@ -140,9 +138,7 @@ class MisskeyImage extends HookConsumerWidget {
     final nsfwAccepted = useState(initialNsfw);
 
     final nsfwSetting = ref.watch(
-      generalSettingsRepositoryProvider.select(
-        (repository) => repository.settings.nsfwInherit,
-      ),
+      generalSettingsNotifierProvider.select((value) => value.nsfwInherit),
     );
 
     final delayed = useFuture(

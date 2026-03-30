@@ -6,7 +6,7 @@ import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/general_settings.dart";
-import "package:miria/providers.dart";
+import "package:miria/providers/general_settings_notifier.dart";
 import "package:miria/view/common/error_detail.dart";
 import "package:miria/view/common/error_notification.dart";
 import "package:miria/view/common/misskey_ad.dart";
@@ -126,8 +126,8 @@ class PushableListView<T> extends HookConsumerWidget {
             }
 
             if (ref.read(
-                      generalSettingsRepositoryProvider.select(
-                        (value) => value.settings.automaticPush,
+                      generalSettingsNotifierProvider.select(
+                        (value) => value.automaticPush,
                       ),
                     ) ==
                     AutomaticPush.automatic &&

@@ -17,6 +17,7 @@ import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
+import "package:miria/providers/general_settings_notifier.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/common/avatar_icon.dart";
@@ -111,10 +112,7 @@ class MisskeyNote extends HookConsumerWidget {
 
     // カスタム絵文字押下でのリアクション無効
     if (requestEmoji != null &&
-        !ref
-            .read(generalSettingsRepositoryProvider)
-            .settings
-            .enableDirectReaction) {
+        !ref.read(generalSettingsNotifierProvider).enableDirectReaction) {
       return;
     }
 
@@ -262,18 +260,14 @@ class MisskeyNote extends HookConsumerWidget {
           isForceVisibleLong) {
         final isReactionedRenote =
             ref
-                .read(generalSettingsRepositoryProvider)
-                .settings
+                .read(generalSettingsNotifierProvider)
                 .enableFavoritedRenoteElipsed &&
             !isForceVisibleLong &&
             !(displayNote.cw?.isNotEmpty == true) &&
             (renoteId != null && displayNote.myReaction != null);
 
         final isLongVisible =
-            !(ref
-                    .read(generalSettingsRepositoryProvider)
-                    .settings
-                    .enableLongTextElipsed &&
+            !(ref.read(generalSettingsNotifierProvider).enableLongTextElipsed &&
                 !isReactionedRenote &&
                 !isForceVisibleLong &&
                 !(displayNote.cw?.isNotEmpty == true) &&
@@ -383,10 +377,7 @@ class MisskeyNote extends HookConsumerWidget {
 
           // カスタム絵文字押下でのリアクション無効
           if (requestEmoji != null &&
-              !ref
-                  .read(generalSettingsRepositoryProvider)
-                  .settings
-                  .enableDirectReaction) {
+              !ref.read(generalSettingsNotifierProvider).enableDirectReaction) {
             return;
           }
           // いいねのみでカスタム絵文字押下
@@ -605,8 +596,7 @@ class MisskeyNote extends HookConsumerWidget {
                             host: displayNote.user.host,
                             emoji: displayNote.emojis,
                             isEnableAnimatedMFM: ref
-                                .read(generalSettingsRepositoryProvider)
-                                .settings
+                                .read(generalSettingsNotifierProvider)
                                 .enableAnimatedMFM,
                           ),
                           InNoteButton(
@@ -645,8 +635,7 @@ class MisskeyNote extends HookConsumerWidget {
                                 emoji: displayNote.emojis,
                                 isNyaize: displayNote.user.isCat,
                                 isEnableAnimatedMFM: ref
-                                    .read(generalSettingsRepositoryProvider)
-                                    .settings
+                                    .read(generalSettingsNotifierProvider)
                                     .enableAnimatedMFM,
                                 onEmojiTap: (emojiData) async =>
                                     await reactionControl(

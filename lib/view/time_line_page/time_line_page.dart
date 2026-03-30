@@ -9,6 +9,7 @@ import "package:miria/model/general_settings.dart";
 import "package:miria/model/tab_setting.dart";
 import "package:miria/model/tab_type.dart";
 import "package:miria/providers.dart";
+import "package:miria/providers/general_settings_notifier.dart";
 import "package:miria/repository/socket_timeline_repository.dart";
 import "package:miria/repository/time_line_repository.dart";
 import "package:miria/router/app_router.dart";
@@ -206,14 +207,10 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
   @override
   Widget build(BuildContext context) {
     final deckMode = ref.watch(
-      generalSettingsRepositoryProvider.select(
-        (value) => value.settings.isDeckMode,
-      ),
+      generalSettingsNotifierProvider.select((value) => value.isDeckMode),
     );
     final tabPosition = ref.watch(
-      generalSettingsRepositoryProvider.select(
-        (value) => value.settings.tabPosition,
-      ),
+      generalSettingsNotifierProvider.select((value) => value.tabPosition),
     );
 
     if (deckMode) return const TimelineTablet();

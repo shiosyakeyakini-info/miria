@@ -12,6 +12,7 @@ import "package:miria/extensions/string_extensions.dart";
 import "package:miria/model/account_settings.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/providers.dart";
+import "package:miria/providers/general_settings_notifier.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/misskey_notes/custom_emoji.dart";
 import "package:miria/view/common/misskey_notes/local_only_icon.dart";
@@ -1705,19 +1706,14 @@ void main() {
           when(
             emojiRepository.defaultEmojis(),
           ).thenAnswer((_) => [TestData.unicodeEmoji1, TestData.customEmoji1]);
-          final generalSettingsRepository = MockGeneralSettingsRepository();
-          when(
-            generalSettingsRepository.settings,
-          ).thenReturn(const GeneralSettings(emojiType: EmojiType.system));
-
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
                 emojiRepositoryProvider.overrideWith(
                   (ref, account) => emojiRepository,
                 ),
-                generalSettingsRepositoryProvider.overrideWith(
-                  (ref) => generalSettingsRepository,
+                generalSettingsNotifierProvider.overrideWithValue(
+                  const GeneralSettings(emojiType: EmojiType.system),
                 ),
               ],
               child: DefaultRootWidget(
@@ -1769,19 +1765,14 @@ void main() {
             emojiRepository.defaultEmojis(),
           ).thenAnswer((_) => [TestData.unicodeEmoji1, TestData.customEmoji1]);
 
-          final generalSettingsRepository = MockGeneralSettingsRepository();
-          when(
-            generalSettingsRepository.settings,
-          ).thenReturn(const GeneralSettings(emojiType: EmojiType.system));
-
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
                 emojiRepositoryProvider.overrideWith(
                   (ref, account) => emojiRepository,
                 ),
-                generalSettingsRepositoryProvider.overrideWith(
-                  (ref) => generalSettingsRepository,
+                generalSettingsNotifierProvider.overrideWithValue(
+                  const GeneralSettings(emojiType: EmojiType.system),
                 ),
               ],
               child: DefaultRootWidget(
@@ -1973,19 +1964,14 @@ void main() {
           when(
             emojiRepository.defaultEmojis(),
           ).thenAnswer((_) => [TestData.unicodeEmoji1, TestData.customEmoji1]);
-          final generalSettingsRepository = MockGeneralSettingsRepository();
-          when(
-            generalSettingsRepository.settings,
-          ).thenReturn(const GeneralSettings(emojiType: EmojiType.system));
-
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
                 emojiRepositoryProvider.overrideWith(
                   (ref, account) => emojiRepository,
                 ),
-                generalSettingsRepositoryProvider.overrideWith(
-                  (ref) => generalSettingsRepository,
+                generalSettingsNotifierProvider.overrideWithValue(
+                  const GeneralSettings(emojiType: EmojiType.system),
                 ),
                 inputComplementDelayedProvider.overrideWithValue(1),
               ],
@@ -2720,11 +2706,6 @@ void main() {
         when(
           emojiRepository.defaultEmojis(),
         ).thenReturn([TestData.unicodeEmoji1, TestData.customEmoji1]);
-        final generalSettingsRepository = MockGeneralSettingsRepository();
-        when(
-          generalSettingsRepository.settings,
-        ).thenReturn(const GeneralSettings(emojiType: EmojiType.system));
-
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
@@ -2732,8 +2713,8 @@ void main() {
                 (ref, account) => emojiRepository,
               ),
               inputComplementDelayedProvider.overrideWithValue(1),
-              generalSettingsRepositoryProvider.overrideWith(
-                (ref) => generalSettingsRepository,
+              generalSettingsNotifierProvider.overrideWithValue(
+                const GeneralSettings(emojiType: EmojiType.system),
               ),
             ],
             child: DefaultRootWidget(

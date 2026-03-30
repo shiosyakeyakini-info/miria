@@ -11,6 +11,7 @@ import "package:media_kit/media_kit.dart";
 import "package:miria/const.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
+import "package:miria/providers/general_settings_notifier.dart";
 import "package:miria/view/common/dialog/dialog_scope.dart";
 import "package:miria/view/common/error_dialog_listener.dart";
 import "package:miria/view/common/sharing_intent_listener.dart";
@@ -99,9 +100,7 @@ class Miria extends HookConsumerWidget with WidgetsBindingObserver {
     });
 
     final language = ref.watch(
-      generalSettingsRepositoryProvider.select(
-        (value) => value.settings.languages,
-      ),
+      generalSettingsNotifierProvider.select((value) => value.languages),
     );
     final appRouter = ref.watch(appRouterProvider);
 

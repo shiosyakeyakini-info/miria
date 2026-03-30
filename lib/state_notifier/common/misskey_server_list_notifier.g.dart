@@ -76,7 +76,7 @@ final class MisskeyServerListNotifierProvider
 }
 
 String _$misskeyServerListNotifierHash() =>
-    r'd876e4f09b2bc68aa2daab45e120f47e6f8a6557';
+    r'3f8cb7256ea2fb062e4503922695bf48fa583973';
 
 abstract class _$MisskeyServerListNotifier
     extends $AsyncNotifier<List<JoinMisskeyInstanceInfo>> {

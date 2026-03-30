@@ -8,7 +8,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/const.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/general_settings.dart";
-import "package:miria/providers.dart";
+import "package:miria/providers/general_settings_notifier.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/common/cache_size_notifier.dart";
 import "package:miria/view/themes/built_in_color_themes.dart";
@@ -19,7 +19,7 @@ class GeneralSettingsPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = ref.watch(generalSettingsRepositoryProvider).settings;
+    final settings = ref.watch(generalSettingsNotifierProvider);
 
     final lightModeTheme = useState(settings.lightColorThemeId);
     final darkModeTheme = useState(settings.darkColorThemeId);
@@ -103,9 +103,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
       darkNoteBgDirect.value,
     ];
     final save = useCallback(() async {
-      await ref
-          .read(generalSettingsRepositoryProvider)
-          .update(
+      ref
+          .read(generalSettingsNotifierProvider.notifier)
+          .updateSettings(
             GeneralSettings(
               lightColorThemeId: lightModeTheme.value,
               darkColorThemeId: darkModeTheme.value,

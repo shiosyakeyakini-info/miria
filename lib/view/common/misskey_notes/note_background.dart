@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:miria/providers.dart";
+import "package:miria/providers/general_settings_notifier.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 class NoteBackground extends ConsumerWidget {
@@ -15,7 +15,7 @@ class NoteBackground extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = ref.watch(generalSettingsRepositoryProvider).settings;
+    final settings = ref.watch(generalSettingsNotifierProvider);
     final brightness = Theme.of(context).brightness;
     Color? color;
     final isDark = brightness == Brightness.dark;
