@@ -133,9 +133,10 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   @override
   Future<void> disconnect() async {
     if (streamingController != null) {
-      for (var i = subscribedIds.length - 1; i >= 0; i--) {
-        await streamingController!.removeChannel(subscribedIds[i]);
-        subscribedIds.removeAt(i);
+      final ids = List<String>.from(subscribedIds);
+      subscribedIds.clear();
+      for (final id in ids) {
+        await streamingController!.removeChannel(id);
       }
     }
     await timelineSubscription?.cancel();
@@ -191,15 +192,16 @@ abstract class SocketTimelineRepository extends TimelineRepository {
 
   @override
   void dispose() {
-    super.dispose();
     unawaited(() async {
       if (streamingController != null) {
-        for (var i = subscribedIds.length - 1; i >= 0; i--) {
-          await streamingController!.removeChannel(subscribedIds[i]);
-          subscribedIds.removeAt(i);
+        final ids = List<String>.from(subscribedIds);
+        subscribedIds.clear();
+        for (final id in ids) {
+          await streamingController!.removeChannel(id);
         }
       }
     }());
+    super.dispose();
   }
 
   @override
