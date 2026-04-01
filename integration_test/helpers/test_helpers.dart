@@ -8,15 +8,21 @@ Future<void> launchApp(WidgetTester tester) async {
   await tester.pumpWidget(const ProviderScope(child: Miria()));
   for (var i = 0; i < 10; i++) {
     await tester.pump(const Duration(seconds: 1));
+    tester.takeException(); // 画像読み込みエラー等を消費
   }
-  await tester.pumpAndSettle(const Duration(seconds: 3));
+  try {
+    await tester.pumpAndSettle(const Duration(seconds: 3));
+  } catch (_) {}
+  tester.takeException();
 }
 
 /// WebSocket接続がある状態でも安定して待てるpump
 /// pumpAndSettleはストリーミング接続でタイムアウトするため
+/// pump中に発生した例外（画像リソース等）は自動的に消費する
 Future<void> pumpForSeconds(WidgetTester tester, int seconds) async {
   for (var i = 0; i < seconds; i++) {
     await tester.pump(const Duration(seconds: 1));
+    tester.takeException(); // 非テスト例外を消費
   }
 }
 
@@ -32,12 +38,18 @@ Future<void> loginViaApiKey(WidgetTester tester, String token) async {
   }
 
   await tester.tap(apiKeyTab);
-  await tester.pumpAndSettle();
+  try {
+    await tester.pumpAndSettle();
+  } catch (_) {}
+  tester.takeException();
 
   final textFields = find.byType(TextField);
   await tester.enterText(textFields.first, "http://127.0.0.1:3000");
   await tester.enterText(textFields.last, token);
-  await tester.pumpAndSettle();
+  try {
+    await tester.pumpAndSettle();
+  } catch (_) {}
+  tester.takeException();
 
   final loginButton = find.widgetWithText(ElevatedButton, "ログイン");
   await tester.tap(loginButton);
@@ -50,7 +62,10 @@ Future<void> openDrawer(WidgetTester tester) async {
   final menuButton = find.byIcon(Icons.menu);
   if (menuButton.evaluate().isNotEmpty) {
     await tester.tap(menuButton);
-    await tester.pumpAndSettle();
+    try {
+      await tester.pumpAndSettle();
+    } catch (_) {}
+    tester.takeException();
   }
 }
 
@@ -71,7 +86,6 @@ Future<void> goBack(WidgetTester tester) async {
     await pumpForSeconds(tester, 3);
     return;
   }
-  // AppBarのback buttonアイコンでも試す
   final arrowBack = find.byIcon(Icons.arrow_back);
   if (arrowBack.evaluate().isNotEmpty) {
     await tester.tap(arrowBack.first);

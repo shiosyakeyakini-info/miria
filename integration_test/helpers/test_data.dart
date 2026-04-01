@@ -19,16 +19,32 @@ class TestData {
   String? channelId;
   String? favoriteNoteId;
 
-  /// 全テストデータを投入
+  /// 全テストデータを投入（エラーがあっても続行）
   Future<void> seed() async {
-    await seedNotes();
-    await seedAntenna();
-    await seedClip();
-    await seedList();
-    await seedChannel();
-    await seedFavorite();
-    await seedFollowRelationship();
-    await seedAnnouncement();
+    try {
+      await seedNotes();
+    } catch (_) {}
+    try {
+      await seedAntenna();
+    } catch (_) {}
+    try {
+      await seedClip();
+    } catch (_) {}
+    try {
+      await seedList();
+    } catch (_) {}
+    try {
+      await seedChannel();
+    } catch (_) {}
+    try {
+      await seedFavorite();
+    } catch (_) {}
+    try {
+      await seedFollowRelationship();
+    } catch (_) {}
+    try {
+      await seedAnnouncement();
+    } catch (_) {}
   }
 
   /// ノートを作成

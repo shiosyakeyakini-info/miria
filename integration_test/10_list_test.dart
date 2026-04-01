@@ -6,37 +6,28 @@ import "helpers/misskey_setup.dart";
 import "helpers/test_data.dart";
 import "helpers/test_helpers.dart";
 
-late MisskeyTestSetup misskeySetup;
-late TestData testData;
-
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  late MisskeyTestSetup misskeySetup;
 
   setUpAll(() async {
     misskeySetup = MisskeyTestSetup();
     await misskeySetup.setup();
-    testData = TestData(misskeySetup);
+    final testData = TestData(misskeySetup);
     await testData.seed();
   });
 
-  testWidgets("リスト一覧が表示される", (tester) async {
-    await loginViaApiKey(tester, misskeySetup.userToken);
-    await tapDrawerItem(tester, "リスト");
-    await pumpForSeconds(tester, 5);
-
-    expect(find.text("テストリスト"), findsOneWidget);
-  });
-
-  testWidgets("リストをタップして詳細に遷移できる", (tester) async {
+  testWidgets("リスト一覧表示と詳細遷移", (tester) async {
     await loginViaApiKey(tester, misskeySetup.userToken);
     await tapDrawerItem(tester, "リスト");
     await pumpForSeconds(tester, 5);
 
     final list = find.text("テストリスト");
-    if (list.evaluate().isNotEmpty) {
-      await tester.tap(list);
-      await pumpForSeconds(tester, 5);
-      expect(find.byType(Scaffold), findsWidgets);
-    }
+    expect(list, findsWidgets);
+
+    await tester.tap(list.first);
+    await pumpForSeconds(tester, 5);
+    expect(find.byType(Scaffold), findsWidgets);
   });
 }
