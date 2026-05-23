@@ -40,76 +40,26 @@ abstract class ColorTheme with _$ColorTheme {
             (key, value) => value.startsWith('"'),
           );
 
-    // https://github.com/misskey-dev/misskey/blob/13.14.1/packages/frontend/src/scripts/theme.ts#L98-L124
-    Color getColor(String val) {
-      if (val[0] == "@") {
-        return getColor(props[val.substring(1)]!);
-      } else if (val[0] == r"$") {
-        return getColor(props[val]!);
-      } else if (val[0] == ":") {
-        final parts = val.split("<");
-        final func = parts.removeAt(0).substring(1);
-        final arg = double.parse(parts.removeAt(0));
-        final color = getColor(parts.join("<"));
-
-        return switch (func) {
-          "darken" => color.darken(arg / 100),
-          "lighten" => color.lighten(arg / 100),
-          "alpha" => color.withValues(alpha: arg),
-          "hue" => color.spin(arg),
-          "saturate" => color.saturate(arg / 100),
-          _ => color,
-        };
-      }
-
-      final input = val.trim();
-
-      if (input.startsWith("rgb(") && input.endsWith(")")) {
-        final rgb = input
-            .substring(4, input.length - 1)
-            .split(RegExp("[, ]+"))
-            .map(int.parse)
-            .toList();
-        return Color.fromRGBO(rgb[0], rgb[1], rgb[2], 1);
-      }
-
-      if (input.startsWith("rgba(") && input.endsWith(")")) {
-        final rgbo = input.substring(5, input.length - 1).split(",");
-        final rgb = rgbo.sublist(0, 3).map(int.parse).toList();
-        final opacity = double.parse(rgbo[3]);
-        return Color.fromRGBO(rgb[0], rgb[1], rgb[2], opacity);
-      }
-
-      final color = input.toColor();
-      if (color != null) {
-        return color;
-      }
-
-      throw FormatException("invalid color format", val);
-    }
-
-    final colors = props.map((key, value) => MapEntry(key, getColor(value)));
-
     return ColorTheme(
       id: theme.id,
       name: theme.name,
       isDarkTheme: isDarkTheme,
-      primary: colors["accent"]!,
-      primaryDarken: colors["accentDarken"]!,
-      primaryLighten: colors["accentLighten"]!,
-      accentedBackground: colors["accentedBg"]!,
-      background: colors["bg"]!,
-      foreground: colors["fg"]!,
-      renote: colors["renote"]!,
-      mention: colors["mention"]!,
-      hashtag: colors["hashtag"]!,
-      link: colors["link"]!,
-      divider: colors["divider"]!,
-      buttonBackground: colors["buttonBg"]!,
-      buttonGradateA: colors["buttonGradateA"]!,
-      buttonGradateB: colors["buttonGradateB"]!,
-      panel: colors["panel"]!,
-      panelBackground: colors["panelHeaderBg"]!,
+      primary: _getThemeReferenceColor(props, "accent", [], 0),
+      primaryDarken: _getThemeReferenceColor(props, "accentDarken", [], 0),
+      primaryLighten: _getThemeReferenceColor(props, "accentLighten", [], 0),
+      accentedBackground: _getThemeReferenceColor(props, "accentedBg", [], 0),
+      background: _getThemeReferenceColor(props, "bg", [], 0),
+      foreground: _getThemeReferenceColor(props, "fg", [], 0),
+      renote: _getThemeReferenceColor(props, "renote", [], 0),
+      mention: _getThemeReferenceColor(props, "mention", [], 0),
+      hashtag: _getThemeReferenceColor(props, "hashtag", [], 0),
+      link: _getThemeReferenceColor(props, "link", [], 0),
+      divider: _getThemeReferenceColor(props, "divider", [], 0),
+      buttonBackground: _getThemeReferenceColor(props, "buttonBg", [], 0),
+      buttonGradateA: _getThemeReferenceColor(props, "buttonGradateA", [], 0),
+      buttonGradateB: _getThemeReferenceColor(props, "buttonGradateB", [], 0),
+      panel: _getThemeReferenceColor(props, "panel", [], 0),
+      panelBackground: _getThemeReferenceColor(props, "panelHeaderBg", [], 0),
     );
   }
 }
@@ -295,3 +245,86 @@ const defaultDarkThemeProps = {
   "X16": ":alpha<0.7<@panel",
   "X17": ":alpha<0.8<@bg",
 };
+
+const _maxThemeReferenceDepth = 8;
+
+Color _getThemeReferenceColor(
+  Map<String, String> props,
+  String key,
+  List<String> stack,
+  int depth,
+) {
+  if (depth >= _maxThemeReferenceDepth) {
+    throw FormatException("Theme reference limit exceeded");
+  }
+
+  if (stack.contains(key)) {
+    throw FormatException("Theme contains circular references");
+  }
+
+  final nextValue = props[key];
+  if (nextValue == null) {
+    throw FormatException("Theme references missing property", key);
+  }
+
+  return _getColor(props, nextValue, [...stack, key], depth + 1);
+}
+
+Color _getColor(
+  Map<String, String> props,
+  String val,
+  List<String> stack,
+  int depth,
+) {
+  if (val[0] == "@") {
+    return _getThemeReferenceColor(props, val.substring(1), stack, depth);
+  } else if (val[0] == r"$") {
+    return _getThemeReferenceColor(props, val, stack, depth);
+  } else if (val[0] == ":") {
+    if (depth >= _maxThemeReferenceDepth) {
+      throw FormatException("Theme reference limit exceeded");
+    }
+    final parts = val.split("<");
+    final func = parts.removeAt(0).substring(1);
+    final arg = double.parse(parts.removeAt(0));
+    final color = _getColor(props, parts.join("<"), stack, depth + 1);
+
+    switch (func) {
+      case "darken":
+        return color.darken(arg / 100);
+      case "lighten":
+        return color.lighten(arg / 100);
+      case "alpha":
+        return color.withValues(alpha: arg);
+      case "hue":
+        return color.spin(arg);
+      case "saturate":
+        return color.saturate(arg / 100);
+    }
+  }
+
+  final input = val.trim();
+
+  if (input.startsWith("rgb(") && input.endsWith(")")) {
+    final rgb = input
+        .substring(4, input.length - 1)
+        .split(RegExp("[, ]+"))
+        .map(int.parse)
+        .toList();
+    return Color.fromRGBO(rgb[0], rgb[1], rgb[2], 1);
+  }
+
+  if (input.startsWith("rgba(") && input.endsWith(")")) {
+    final rgbo = input.substring(5, input.length - 1).split(",");
+    final rgb = rgbo.sublist(0, 3).map(int.parse).toList();
+    final opacity = double.parse(rgbo[3]);
+    return Color.fromRGBO(rgb[0], rgb[1], rgb[2], opacity);
+  }
+
+  final color = input.toColor();
+  if (color != null) {
+    return color;
+  }
+
+  throw FormatException("invalid color format", val);
+}
