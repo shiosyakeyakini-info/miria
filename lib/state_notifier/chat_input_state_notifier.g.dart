@@ -60,7 +60,7 @@ final class ChatInputStateNotifierProvider
 }
 
 String _$chatInputStateNotifierHash() =>
-    r'8f52c5f62fecb89536e9dfad2a94d6fae21761e6';
+    r'bef8583ad53bb6612699d48b35e362aec6e1cd10';
 
 abstract class _$ChatInputStateNotifier extends $Notifier<ChatInputState> {
   ChatInputState build();

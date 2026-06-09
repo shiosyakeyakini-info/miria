@@ -129,8 +129,10 @@ class _ProfileEditForm extends HookConsumerWidget {
                         if (result == null) return;
 
                         if (result == DriveModalSheetReturnValue.upload) {
-                          final pickedFile = await FilePicker.platform
-                              .pickFiles(withData: true, type: FileType.image);
+                          final pickedFile = await FilePicker.pickFiles(
+                            withData: true,
+                            type: FileType.image,
+                          );
                           if (pickedFile != null &&
                               pickedFile.files.isNotEmpty) {
                             final f = pickedFile.files.first;

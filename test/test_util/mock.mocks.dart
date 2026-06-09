@@ -6188,13 +6188,14 @@ class MockFilePickerPlatform extends _i1.Mock
     _i33.FileType? type = _i33.FileType.any,
     List<String>? allowedExtensions,
     dynamic Function(_i33.FilePickerStatus)? onFileLoading,
-    bool? allowCompression = false,
     int? compressionQuality = 0,
     bool? allowMultiple = false,
     bool? withData = false,
     bool? withReadStream = false,
     bool? lockParentWindow = false,
     bool? readSequential = false,
+    bool? cancelUploadOnWindowBlur = true,
+    _i33.AndroidSAFOptions? androidSafOptions,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#pickFiles, [], {
@@ -6203,13 +6204,14 @@ class MockFilePickerPlatform extends _i1.Mock
               #type: type,
               #allowedExtensions: allowedExtensions,
               #onFileLoading: onFileLoading,
-              #allowCompression: allowCompression,
               #compressionQuality: compressionQuality,
               #allowMultiple: allowMultiple,
               #withData: withData,
               #withReadStream: withReadStream,
               #lockParentWindow: lockParentWindow,
               #readSequential: readSequential,
+              #cancelUploadOnWindowBlur: cancelUploadOnWindowBlur,
+              #androidSafOptions: androidSafOptions,
             }),
             returnValue: _i17.Future<_i33.FilePickerResult?>.value(),
             returnValueForMissingStub:
@@ -6219,12 +6221,14 @@ class MockFilePickerPlatform extends _i1.Mock
 
   @override
   _i17.Future<List<String>?> pickFileAndDirectoryPaths({
+    String? dialogTitle,
     String? initialDirectory,
     _i33.FileType? type = _i33.FileType.any,
     List<String>? allowedExtensions,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#pickFileAndDirectoryPaths, [], {
+              #dialogTitle: dialogTitle,
               #initialDirectory: initialDirectory,
               #type: type,
               #allowedExtensions: allowedExtensions,
@@ -6233,6 +6237,15 @@ class MockFilePickerPlatform extends _i1.Mock
             returnValueForMissingStub: _i17.Future<List<String>?>.value(),
           )
           as _i17.Future<List<String>?>);
+
+  @override
+  _i17.Future<void> releaseSAFGrant(String? uri) =>
+      (super.noSuchMethod(
+            Invocation.method(#releaseSAFGrant, [uri]),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
+          )
+          as _i17.Future<void>);
 
   @override
   _i17.Future<bool?> clearTemporaryFiles() =>
@@ -6248,12 +6261,14 @@ class MockFilePickerPlatform extends _i1.Mock
     String? dialogTitle,
     bool? lockParentWindow = false,
     String? initialDirectory,
+    _i33.AndroidSAFOptions? androidSafOptions,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#getDirectoryPath, [], {
               #dialogTitle: dialogTitle,
               #lockParentWindow: lockParentWindow,
               #initialDirectory: initialDirectory,
+              #androidSafOptions: androidSafOptions,
             }),
             returnValue: _i17.Future<String?>.value(),
             returnValueForMissingStub: _i17.Future<String?>.value(),
@@ -6263,11 +6278,12 @@ class MockFilePickerPlatform extends _i1.Mock
   @override
   _i17.Future<String?> saveFile({
     String? dialogTitle,
-    String? fileName,
+    required String? fileName,
     String? initialDirectory,
     _i33.FileType? type = _i33.FileType.any,
     List<String>? allowedExtensions,
-    _i30.Uint8List? bytes,
+    required _i30.Uint8List? bytes,
+    dynamic Function(_i33.FilePickerStatus)? onFileLoading,
     bool? lockParentWindow = false,
   }) =>
       (super.noSuchMethod(
@@ -6278,12 +6294,22 @@ class MockFilePickerPlatform extends _i1.Mock
               #type: type,
               #allowedExtensions: allowedExtensions,
               #bytes: bytes,
+              #onFileLoading: onFileLoading,
               #lockParentWindow: lockParentWindow,
             }),
             returnValue: _i17.Future<String?>.value(),
             returnValueForMissingStub: _i17.Future<String?>.value(),
           )
           as _i17.Future<String?>);
+
+  @override
+  _i17.Future<void> skipEntitlementsChecks() =>
+      (super.noSuchMethod(
+            Invocation.method(#skipEntitlementsChecks, []),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
+          )
+          as _i17.Future<void>);
 }
 
 /// A class which mocks [$MockCacheManager].

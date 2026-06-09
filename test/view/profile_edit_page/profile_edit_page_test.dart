@@ -1,7 +1,7 @@
 import "dart:async";
 import "dart:typed_data";
 
-import "package:file_picker/file_picker.dart";
+import "package:file_picker/src/platform/file_picker_platform_interface.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
@@ -17,7 +17,7 @@ import "../../test_util/mock.mocks.dart";
 import "../../test_util/test_datas.dart";
 
 // Mock for FilePicker
-class MockFilePicker extends Mock implements FilePicker {}
+class MockFilePicker extends Mock implements FilePickerPlatform {}
 
 // Test implementation of EditProfileStateNotifier
 class TestEditProfileStateNotifier extends EditProfileStateNotifier {

@@ -2,7 +2,7 @@ import "dart:io";
 
 import "package:auto_route/auto_route.dart";
 import "package:dio/dio.dart";
-import "package:file_picker/file_picker.dart";
+import "package:file_picker/src/platform/file_picker_platform_interface.dart";
 import "package:flutter_cache_manager/flutter_cache_manager.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/repository/account_settings_repository.dart";
@@ -73,7 +73,7 @@ class $MockCacheManager extends Mock implements CacheManager {}
 
 class FakeFilePickerPlatform extends Mock
     with MockPlatformInterfaceMixin
-    implements FilePicker {}
+    implements FilePickerPlatform {}
 
 class $MockUrlLauncherPlatform extends Mock
     with MockPlatformInterfaceMixin

@@ -2,6 +2,7 @@ import "package:auto_route/auto_route.dart";
 import "package:dio/dio.dart";
 import "package:file/memory.dart";
 import "package:file_picker/file_picker.dart";
+import "package:file_picker/src/platform/file_picker_platform_interface.dart";
 import "package:flutter/services.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
@@ -73,7 +74,7 @@ void main() {
       when(mockMisskey.drive).thenReturn(mockDrive);
       when(mockDrive.files).thenReturn(mockDriveFiles);
 
-      FilePicker.platform = mockFilePicker;
+      FilePickerPlatform() = mockFilePicker;
 
       container = ProviderContainer(
         overrides: [
