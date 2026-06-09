@@ -3,8 +3,8 @@ import "dart:io";
 import "package:device_info_plus/device_info_plus.dart";
 import "package:dio/dio.dart";
 import "package:flutter/foundation.dart";
+import "package:flutter_image_gallery_saver/flutter_image_gallery_saver.dart";
 import "package:image/image.dart";
-import "package:image_gallery_saver/image_gallery_saver.dart";
 import "package:miria/providers.dart";
 import "package:misskey_dart/misskey_dart.dart" hide Permission;
 import "package:permission_handler/permission_handler.dart";
@@ -87,17 +87,8 @@ class DownloadFileNotifier extends _$DownloadFileNotifier {
       }
     }
     try {
-      final result = await ImageGallerySaver.saveFile(
-        savePath,
-        name: driveFile.name,
-      );
-      // Check if the save was successful
-      if (result is Map &&
-          (result["isSuccess"] == true || result["filePath"] != null)) {
-        return DownloadFileResult.succeeded;
-      } else {
-        return DownloadFileResult.failed;
-      }
+      await ImageGallerySaver().saveFile(savePath);
+      return DownloadFileResult.succeeded;
     } catch (e) {
       return DownloadFileResult.failed;
     }
