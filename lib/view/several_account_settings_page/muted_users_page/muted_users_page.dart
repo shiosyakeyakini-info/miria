@@ -24,7 +24,7 @@ class MutedUsersPage extends HookConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final muted = ref.watch(mutedUsersNotifierProvider);
+    final muted = ref.watch(mutedUsersProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).mutedUsers)),
@@ -43,7 +43,7 @@ class MutedUsersPage extends HookConsumerWidget implements AutoRouteWrapper {
               builder: (context) {
                 final unmute = useAsync(
                   () async => ref
-                      .read(mutedUsersNotifierProvider.notifier)
+                      .read(mutedUsersProvider.notifier)
                       .delete(muting.muteeId),
                 );
                 return ListTile(

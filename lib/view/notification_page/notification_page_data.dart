@@ -378,7 +378,8 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
             );
           }
 
-        case NotificationType.unknown:
+        // case NotificationType.unknown:
+        default:
           resultList.add(
             SimpleNotificationData(
               text: localize.unknownNotification,

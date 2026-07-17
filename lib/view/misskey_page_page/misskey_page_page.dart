@@ -309,7 +309,7 @@ class PageLikeButton extends ConsumerWidget {
   });
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = misskeyPageNotifierProvider(pageId);
+    final provider = misskeyPageProvider(pageId);
     final liked = ref.watch(
       provider.select((value) => value.value?.page.isLiked ?? false),
     );

@@ -64,6 +64,8 @@ parts:
       - ninja-build
       - unzip
       - jq
+      - lld-18
+      - llvm-18
     stage-packages:
       - libmpv2
       - libsecret-1-0

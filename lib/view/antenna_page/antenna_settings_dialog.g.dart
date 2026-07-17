@@ -6,22 +6,25 @@ part of 'antenna_settings_dialog.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(_initialSettings)
-const _initialSettingsProvider = _InitialSettingsProvider._();
+final _initialSettingsProvider = _InitialSettingsProvider._();
 
 final class _InitialSettingsProvider
     extends
         $FunctionalProvider<AntennaSettings, AntennaSettings, AntennaSettings>
     with $Provider<AntennaSettings> {
-  const _InitialSettingsProvider._()
+  _InitialSettingsProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'_initialSettingsProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[],
-        $allTransitiveDependencies: const <ProviderOrFamily>[],
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
       );
 
   @override
@@ -49,24 +52,24 @@ final class _InitialSettingsProvider
 String _$_initialSettingsHash() => r'5e44622c97f922cd7aa8410ac695fa6f5f3351b0';
 
 @ProviderFor(_AntennaSettingsNotifier)
-const _antennaSettingsNotifierProvider = _AntennaSettingsNotifierProvider._();
+final _antennaSettingsProvider = _AntennaSettingsNotifierProvider._();
 
 final class _AntennaSettingsNotifierProvider
     extends $NotifierProvider<_AntennaSettingsNotifier, AntennaSettings> {
-  const _AntennaSettingsNotifierProvider._()
+  _AntennaSettingsNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'_antennaSettingsNotifierProvider',
+        name: r'_antennaSettingsProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[_initialSettingsProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[_initialSettingsProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           _AntennaSettingsNotifierProvider.$allTransitiveDependencies0,
         ],
       );
 
-  static const $allTransitiveDependencies0 = _initialSettingsProvider;
+  static final $allTransitiveDependencies0 = _initialSettingsProvider;
 
   @override
   String debugGetCreateSourceHash() => _$_antennaSettingsNotifierHash();
@@ -92,7 +95,6 @@ abstract class _$AntennaSettingsNotifier extends $Notifier<AntennaSettings> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AntennaSettings, AntennaSettings>;
     final element =
         ref.element
@@ -102,12 +104,12 @@ abstract class _$AntennaSettingsNotifier extends $Notifier<AntennaSettings> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(_usersListList)
-const _usersListListProvider = _UsersListListProvider._();
+final _usersListListProvider = _UsersListListProvider._();
 
 final class _UsersListListProvider
     extends
@@ -117,22 +119,22 @@ final class _UsersListListProvider
           FutureOr<List<UsersList>>
         >
     with $FutureModifier<List<UsersList>>, $FutureProvider<List<UsersList>> {
-  const _UsersListListProvider._()
+  _UsersListListProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'_usersListListProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[misskeyGetContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyGetContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           _UsersListListProvider.$allTransitiveDependencies0,
           _UsersListListProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = misskeyGetContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyGetContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyGetContextProvider.$allTransitiveDependencies0;
 
   @override
@@ -151,6 +153,3 @@ final class _UsersListListProvider
 }
 
 String _$_usersListListHash() => r'038d168265d5f26396ee6dd063774e9b55055283';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

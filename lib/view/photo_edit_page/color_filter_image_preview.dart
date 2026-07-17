@@ -9,16 +9,16 @@ class ColorFilterImagePreview extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final previewImages = ref
         .watch(
-          photoEditStateNotifierProvider.select(
+          photoEditStateProvider.select(
             (value) => value.colorFilterPreviewImages,
           ),
         )
         .toList();
     final previewMode = ref.watch(
-      photoEditStateNotifierProvider.select((value) => value.colorFilterMode),
+      photoEditStateProvider.select((value) => value.colorFilterMode),
     );
     final adaptive = ref.watch(
-      photoEditStateNotifierProvider.select((value) => value.adaptivePresets),
+      photoEditStateProvider.select((value) => value.adaptivePresets),
     );
     if (!previewMode) {
       return const SizedBox.shrink();
@@ -39,7 +39,7 @@ class ColorFilterImagePreview extends ConsumerWidget {
           if (image == null) return const SizedBox.shrink();
           return GestureDetector(
             onTap: () async => ref
-                .read(photoEditStateNotifierProvider.notifier)
+                .read(photoEditStateProvider.notifier)
                 .selectColorFilter(previewImages[index].name),
             child: DecoratedBox(
               decoration: adaptive.any((e) => e == previewImages[index].name)

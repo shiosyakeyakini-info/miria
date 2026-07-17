@@ -118,7 +118,7 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
                       padding: const EdgeInsets.only(top: 10),
                       child: ElevatedButton(
                         onPressed: () async => ref
-                            .read(dialogStateNotifierProvider.notifier)
+                            .read(dialogStateProvider.notifier)
                             .guard(() => login()),
                         child: Text(S.of(context).login),
                       ),

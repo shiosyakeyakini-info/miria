@@ -7,13 +7,13 @@ class PhotoEditBottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final photoEdit = ref.read(photoEditStateNotifierProvider.notifier);
+    final photoEdit = ref.read(photoEditStateProvider.notifier);
 
     final isClipMode = ref.watch(
-      photoEditStateNotifierProvider.select((value) => value.clipMode),
+      photoEditStateProvider.select((value) => value.clipMode),
     );
     final isColorFilterMode = ref.watch(
-      photoEditStateNotifierProvider.select((value) => value.colorFilterMode),
+      photoEditStateProvider.select((value) => value.colorFilterMode),
     );
 
     return BottomAppBar(

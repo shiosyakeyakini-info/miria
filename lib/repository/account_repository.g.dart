@@ -6,12 +6,15 @@ part of 'account_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(AccountRepository)
-const accountRepositoryProvider = AccountRepositoryProvider._();
+final accountRepositoryProvider = AccountRepositoryProvider._();
 
 final class AccountRepositoryProvider
     extends $NotifierProvider<AccountRepository, List<Account>> {
-  const AccountRepositoryProvider._()
+  AccountRepositoryProvider._()
     : super(
         from: null,
         argument: null,
@@ -45,7 +48,6 @@ abstract class _$AccountRepository extends $Notifier<List<Account>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<List<Account>, List<Account>>;
     final element =
         ref.element
@@ -55,9 +57,6 @@ abstract class _$AccountRepository extends $Notifier<List<Account>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

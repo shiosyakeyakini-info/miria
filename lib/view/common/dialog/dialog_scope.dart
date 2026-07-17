@@ -12,7 +12,7 @@ class DialogScope extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dialogs = ref.watch(
-      dialogStateNotifierProvider.select((value) => value.dialogs),
+      dialogStateProvider.select((value) => value.dialogs),
     );
 
     return Stack(
@@ -28,7 +28,7 @@ class DialogScope extends ConsumerWidget {
         for (final dialog in dialogs)
           PopScope(
             onPopInvoked: (didPop) async => ref
-                .read(dialogStateNotifierProvider.notifier)
+                .read(dialogStateProvider.notifier)
                 .completeDialog(dialog, null),
             child: AlertDialog.adaptive(
               content: dialog.isMFM
@@ -41,7 +41,7 @@ class DialogScope extends ConsumerWidget {
                 for (final action in dialog.actions(context).indexed)
                   TextButton(
                     onPressed: () => ref
-                        .read(dialogStateNotifierProvider.notifier)
+                        .read(dialogStateProvider.notifier)
                         .completeDialog(dialog, action.$1),
                     child: Text(action.$2),
                   ),

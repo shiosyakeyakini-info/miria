@@ -6,17 +6,20 @@ part of 'image_viewer_info_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(ImageViewerInfoNotifier)
-const imageViewerInfoNotifierProvider = ImageViewerInfoNotifierProvider._();
+final imageViewerInfoProvider = ImageViewerInfoNotifierProvider._();
 
 final class ImageViewerInfoNotifierProvider
     extends $NotifierProvider<ImageViewerInfoNotifier, ImageViewerInfo> {
-  const ImageViewerInfoNotifierProvider._()
+  ImageViewerInfoNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'imageViewerInfoNotifierProvider',
+        name: r'imageViewerInfoProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -46,7 +49,6 @@ abstract class _$ImageViewerInfoNotifier extends $Notifier<ImageViewerInfo> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<ImageViewerInfo, ImageViewerInfo>;
     final element =
         ref.element
@@ -56,9 +58,6 @@ abstract class _$ImageViewerInfoNotifier extends $Notifier<ImageViewerInfo> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

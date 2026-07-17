@@ -40,11 +40,11 @@ class ChatReactionWidget extends ConsumerWidget {
 
     return GestureDetector(
       onTap: () async {
-        await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+        await ref.read(dialogStateProvider.notifier).guard(() async {
           if (isMyReaction) {
             // 自分のリアクションの場合は削除確認ダイアログを表示
             final dialogValue = await ref
-                .read(dialogStateNotifierProvider.notifier)
+                .read(dialogStateProvider.notifier)
                 .showDialog(
                   message: (context) => S.of(context).confirmDeleteReaction,
                   actions: (context) => [

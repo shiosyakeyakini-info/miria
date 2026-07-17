@@ -6,27 +6,30 @@ part of 'antennas_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(AntennasNotifier)
-const antennasNotifierProvider = AntennasNotifierProvider._();
+final antennasProvider = AntennasNotifierProvider._();
 
 final class AntennasNotifierProvider
     extends $AsyncNotifierProvider<AntennasNotifier, List<Antenna>> {
-  const AntennasNotifierProvider._()
+  AntennasNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'antennasNotifierProvider',
+        name: r'antennasProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           AntennasNotifierProvider.$allTransitiveDependencies0,
           AntennasNotifierProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
 
   @override
@@ -37,14 +40,13 @@ final class AntennasNotifierProvider
   AntennasNotifier create() => AntennasNotifier();
 }
 
-String _$antennasNotifierHash() => r'4881a49f432581ebccd22e4988c71d30f11d7dbd';
+String _$antennasNotifierHash() => r'1747a52298a4d5e8dfdf31bedbdd1e703e9f119c';
 
 abstract class _$AntennasNotifier extends $AsyncNotifier<List<Antenna>> {
   FutureOr<List<Antenna>> build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AsyncValue<List<Antenna>>, List<Antenna>>;
     final element =
         ref.element
@@ -54,9 +56,6 @@ abstract class _$AntennasNotifier extends $AsyncNotifier<List<Antenna>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

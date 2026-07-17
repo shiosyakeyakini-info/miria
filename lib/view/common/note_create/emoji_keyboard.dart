@@ -16,20 +16,24 @@ final _filteredEmojisProvider = NotifierProvider.autoDispose
       _FilteredEmojis.new,
     );
 
-class _FilteredEmojis extends FamilyNotifier<List<MisskeyEmojiData>, Account> {
+class _FilteredEmojis extends Notifier<List<MisskeyEmojiData>> {
+  final Account _account;
+
+  _FilteredEmojis(this._account);
+
   @override
-  List<MisskeyEmojiData> build(Account arg) {
+  List<MisskeyEmojiData> build() {
     ref.listen(
       inputCompletionTypeProvider,
       (_, type) async => _updateEmojis(type),
     );
-    return ref.read(emojiRepositoryProvider(arg)).defaultEmojis();
+    return ref.read(emojiRepositoryProvider(_account)).defaultEmojis();
   }
 
   Future<void> _updateEmojis(InputCompletionType type) async {
     if (type is Emoji) {
       state = await ref
-          .read(emojiRepositoryProvider(arg))
+          .read(emojiRepositoryProvider(_account))
           .searchEmojis(type.query);
     }
   }

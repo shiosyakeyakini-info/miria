@@ -106,7 +106,7 @@ class UserControlDialog extends HookConsumerWidget implements AutoRouteWrapper {
     });
     final openUserInOtherAccount = useAsync(
       () async => ref
-          .read(misskeyNoteNotifierProvider.notifier)
+          .read(misskeyNoteProvider.notifier)
           .openUserInOtherAccount(response, host),
     );
 

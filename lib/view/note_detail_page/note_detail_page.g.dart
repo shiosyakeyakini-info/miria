@@ -6,13 +6,16 @@ part of 'note_detail_page.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(_notesShow)
-const _notesShowProvider = _NotesShowFamily._();
+final _notesShowProvider = _NotesShowFamily._();
 
 final class _NotesShowProvider
     extends $FunctionalProvider<AsyncValue<Note>, Note, FutureOr<Note>>
     with $FutureModifier<Note>, $FutureProvider<Note> {
-  const _NotesShowProvider._({
+  _NotesShowProvider._({
     required _NotesShowFamily super.from,
     required String super.argument,
   }) : super(
@@ -23,10 +26,10 @@ final class _NotesShowProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = misskeyGetContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyGetContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyGetContextProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 = notesWithProvider;
+  static final $allTransitiveDependencies2 = notesWithProvider;
 
   @override
   String debugGetCreateSourceHash() => _$_notesShowHash();
@@ -64,15 +67,15 @@ String _$_notesShowHash() => r'69e8ff0eaa98e6a6047750a22d7fdacc566a28af';
 
 final class _NotesShowFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<Note>, String> {
-  const _NotesShowFamily._()
+  _NotesShowFamily._()
     : super(
         retry: null,
         name: r'_notesShowProvider',
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           misskeyGetContextProvider,
           notesWithProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>[
           _NotesShowProvider.$allTransitiveDependencies0,
           _NotesShowProvider.$allTransitiveDependencies1,
           _NotesShowProvider.$allTransitiveDependencies2,
@@ -88,7 +91,7 @@ final class _NotesShowFamily extends $Family
 }
 
 @ProviderFor(_conversation)
-const _conversationProvider = _ConversationFamily._();
+final _conversationProvider = _ConversationFamily._();
 
 final class _ConversationProvider
     extends
@@ -98,7 +101,7 @@ final class _ConversationProvider
           FutureOr<List<Note>>
         >
     with $FutureModifier<List<Note>>, $FutureProvider<List<Note>> {
-  const _ConversationProvider._({
+  _ConversationProvider._({
     required _ConversationFamily super.from,
     required String super.argument,
   }) : super(
@@ -109,10 +112,10 @@ final class _ConversationProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = misskeyGetContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyGetContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyGetContextProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 = notesWithProvider;
+  static final $allTransitiveDependencies2 = notesWithProvider;
 
   @override
   String debugGetCreateSourceHash() => _$_conversationHash();
@@ -150,15 +153,15 @@ String _$_conversationHash() => r'b69ce226a89b66118fb9eb993e16b802e9c6210d';
 
 final class _ConversationFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<Note>>, String> {
-  const _ConversationFamily._()
+  _ConversationFamily._()
     : super(
         retry: null,
         name: r'_conversationProvider',
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           misskeyGetContextProvider,
           notesWithProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>[
           _ConversationProvider.$allTransitiveDependencies0,
           _ConversationProvider.$allTransitiveDependencies1,
           _ConversationProvider.$allTransitiveDependencies2,
@@ -172,6 +175,3 @@ final class _ConversationFamily extends $Family
   @override
   String toString() => r'_conversationProvider';
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

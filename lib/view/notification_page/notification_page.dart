@@ -548,7 +548,7 @@ class NotificationItem extends ConsumerWidget {
     required bool accept,
     required String userId,
   }) async {
-    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+    await ref.read(dialogStateProvider.notifier).guard(() async {
       final misskey = ref.watch(misskeyPostContextProvider);
 
       if (accept) {

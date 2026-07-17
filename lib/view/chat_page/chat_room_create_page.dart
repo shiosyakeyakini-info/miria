@@ -30,7 +30,7 @@ class ChatRoomCreatePage extends HookConsumerWidget
     final createRoom = useAsync(() async {
       if (!formKey.currentState!.validate()) return;
 
-      await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      await ref.read(dialogStateProvider.notifier).guard(() async {
         final room = await ref
             .read(chatRoomRepositoryProvider.notifier)
             .createRoom(

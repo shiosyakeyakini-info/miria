@@ -76,7 +76,7 @@ class UsersListSettingsForm extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = ref.watch(_formKeyProvider);
     final initialSettings = ref.watch(_initialSettingsProvider);
-    final settings = ref.watch(_clipSettingsNotifierProvider);
+    final settings = ref.watch(_clipSettingsProvider);
 
     return Form(
       key: formKey,
@@ -96,9 +96,7 @@ class UsersListSettingsForm extends ConsumerWidget {
               }
               return null;
             },
-            onSaved: ref
-                .read(_clipSettingsNotifierProvider.notifier)
-                .updateName,
+            onSaved: ref.read(_clipSettingsProvider.notifier).updateName,
           ),
           const SizedBox(height: 10),
           TextFormField(
@@ -109,23 +107,19 @@ class UsersListSettingsForm extends ConsumerWidget {
               labelText: S.of(context).clipDescription,
               contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
             ),
-            onSaved: ref
-                .read(_clipSettingsNotifierProvider.notifier)
-                .updateDescription,
+            onSaved: ref.read(_clipSettingsProvider.notifier).updateDescription,
           ),
           CheckboxListTile(
             title: Text(S.of(context).public),
             value: settings.isPublic,
-            onChanged: ref
-                .read(_clipSettingsNotifierProvider.notifier)
-                .updateIsPublic,
+            onChanged: ref.read(_clipSettingsProvider.notifier).updateIsPublic,
           ),
           ElevatedButton(
             child: Text(S.of(context).done),
             onPressed: () {
               if (formKey.currentState!.validate()) {
                 formKey.currentState!.save();
-                final settings = ref.read(_clipSettingsNotifierProvider);
+                final settings = ref.read(_clipSettingsProvider);
                 if (settings == initialSettings) {
                   Navigator.of(context).pop();
                 } else {

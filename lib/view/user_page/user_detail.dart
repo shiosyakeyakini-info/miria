@@ -25,7 +25,7 @@ class UserDetail extends ConsumerWidget {
   Widget buildContent(BuildContext context, WidgetRef ref) {
     final response = this.response;
     // final isFollowEditing = ref.watch(
-    //   userInfoNotifierProvider(response.id)
+    //   userInfoProvider(response.id)
     //       .select((value) => value.value?.follow is AsyncLoading),
     // );
     final notifier = ref.read(userInfoNotifierProxyProvider(response.id));
