@@ -241,7 +241,7 @@ class InvitedChatItem extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final join = useAsync(() async {
-      await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      await ref.read(dialogStateProvider.notifier).guard(() async {
         await ref
             .read(misskeyPostContextProvider)
             .chat
@@ -258,7 +258,7 @@ class InvitedChatItem extends HookConsumerWidget {
       });
     });
     final ignore = useAsync(() async {
-      await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      await ref.read(dialogStateProvider.notifier).guard(() async {
         await ref
             .read(misskeyPostContextProvider)
             .chat
@@ -268,7 +268,7 @@ class InvitedChatItem extends HookConsumerWidget {
         if (!context.mounted) return;
         valueNotifier.value = DateTime.now();
         await ref
-            .read(dialogStateNotifierProvider.notifier)
+            .read(dialogStateProvider.notifier)
             .showSimpleDialog(message: (context) => S.of(context).chatIgnored);
       });
     });

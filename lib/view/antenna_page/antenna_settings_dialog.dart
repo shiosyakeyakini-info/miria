@@ -144,7 +144,7 @@ class AntennaSettingsForm extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = useState(GlobalKey<FormState>());
     final initialSettings = ref.watch(_initialSettingsProvider);
-    final settings = ref.watch(_antennaSettingsNotifierProvider);
+    final settings = ref.watch(_antennaSettingsProvider);
     final list = ref.watch(_usersListListProvider);
     final controller = useTextEditingController();
     useEffect(() {
@@ -171,9 +171,7 @@ class AntennaSettingsForm extends HookConsumerWidget {
               }
               return null;
             },
-            onSaved: ref
-                .read(_antennaSettingsNotifierProvider.notifier)
-                .updateName,
+            onSaved: ref.read(_antennaSettingsProvider.notifier).updateName,
           ),
           const SizedBox(height: 10),
           Text(S.of(context).antennaSource),
@@ -193,11 +191,9 @@ class AntennaSettingsForm extends HookConsumerWidget {
                   ),
                 )
                 .toList(),
-            value: settings.src,
+            initialValue: settings.src,
             hint: Text(S.of(context).selectAntennaSource),
-            onChanged: ref
-                .read(_antennaSettingsNotifierProvider.notifier)
-                .updateSrc,
+            onChanged: ref.read(_antennaSettingsProvider.notifier).updateSrc,
           ),
           const SizedBox(height: 10),
           if (settings.src == AntennaSource.list)
@@ -216,12 +212,12 @@ class AntennaSettingsForm extends HookConsumerWidget {
                 }
                 return null;
               },
-              value: list.value?.firstWhereOrNull(
+              initialValue: list.value?.firstWhereOrNull(
                 (e) => e.id == settings.userListId,
               ),
               hint: Text(S.of(context).selectList),
               onChanged: ref
-                  .read(_antennaSettingsNotifierProvider.notifier)
+                  .read(_antennaSettingsProvider.notifier)
                   .updateUserList,
             ),
           if (settings.src == AntennaSource.users ||
@@ -235,9 +231,7 @@ class AntennaSettingsForm extends HookConsumerWidget {
                 hintText: S.of(context).antennaSourceUserHintText,
                 contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
               ),
-              onSaved: ref
-                  .read(_antennaSettingsNotifierProvider.notifier)
-                  .updateUsers,
+              onSaved: ref.read(_antennaSettingsProvider.notifier).updateUsers,
             ),
             TextButton(
               onPressed: () async {
@@ -271,9 +265,7 @@ class AntennaSettingsForm extends HookConsumerWidget {
             ),
             // Misskey 2023.9.0 で条件が変更されるためバリデーションを行わない
             // https://github.com/misskey-dev/misskey/pull/11469
-            onSaved: ref
-                .read(_antennaSettingsNotifierProvider.notifier)
-                .updateKeywords,
+            onSaved: ref.read(_antennaSettingsProvider.notifier).updateKeywords,
           ),
           const SizedBox(height: 10),
           TextFormField(
@@ -289,7 +281,7 @@ class AntennaSettingsForm extends HookConsumerWidget {
               contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
             ),
             onSaved: ref
-                .read(_antennaSettingsNotifierProvider.notifier)
+                .read(_antennaSettingsProvider.notifier)
                 .updateExcludeKeywords,
           ),
           const SizedBox(height: 10),
@@ -297,21 +289,21 @@ class AntennaSettingsForm extends HookConsumerWidget {
             title: Text(S.of(context).discriminateUpperLower),
             value: settings.caseSensitive,
             onChanged: ref
-                .read(_antennaSettingsNotifierProvider.notifier)
+                .read(_antennaSettingsProvider.notifier)
                 .updateCaseSensitive,
           ),
           CheckboxListTile(
             title: Text(S.of(context).receiveReplies),
             value: settings.withReplies,
             onChanged: ref
-                .read(_antennaSettingsNotifierProvider.notifier)
+                .read(_antennaSettingsProvider.notifier)
                 .updateWithReplies,
           ),
           CheckboxListTile(
             title: Text(S.of(context).receiveOnlyFiles),
             value: settings.withFile,
             onChanged: ref
-                .read(_antennaSettingsNotifierProvider.notifier)
+                .read(_antennaSettingsProvider.notifier)
                 .updateWithFile,
           ),
           CheckboxListTile(
@@ -319,7 +311,7 @@ class AntennaSettingsForm extends HookConsumerWidget {
             subtitle: Text(S.of(context).receiveLocalAvailability),
             value: settings.localOnly,
             onChanged: ref
-                .read(_antennaSettingsNotifierProvider.notifier)
+                .read(_antennaSettingsProvider.notifier)
                 .updateLocalOnly,
           ),
 
@@ -331,7 +323,7 @@ class AntennaSettingsForm extends HookConsumerWidget {
                 onPressed: () {
                   if (formKey.value.currentState!.validate()) {
                     formKey.value.currentState!.save();
-                    final settings = ref.read(_antennaSettingsNotifierProvider);
+                    final settings = ref.read(_antennaSettingsProvider);
                     if (settings == initialSettings) {
                       Navigator.of(context).pop();
                     } else {

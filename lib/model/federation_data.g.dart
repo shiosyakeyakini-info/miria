@@ -6,12 +6,15 @@ part of 'federation_data.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(FederationState)
-const federationStateProvider = FederationStateFamily._();
+final federationStateProvider = FederationStateFamily._();
 
 final class FederationStateProvider
     extends $AsyncNotifierProvider<FederationState, FederationData> {
-  const FederationStateProvider._({
+  FederationStateProvider._({
     required FederationStateFamily super.from,
     required String super.argument,
   }) : super(
@@ -22,8 +25,8 @@ final class FederationStateProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = accountContextProvider;
-  static const $allTransitiveDependencies1 = misskeyGetContextProvider;
+  static final $allTransitiveDependencies0 = accountContextProvider;
+  static final $allTransitiveDependencies1 = misskeyGetContextProvider;
 
   @override
   String debugGetCreateSourceHash() => _$federationStateHash();
@@ -61,15 +64,15 @@ final class FederationStateFamily extends $Family
           FutureOr<FederationData>,
           String
         > {
-  const FederationStateFamily._()
+  FederationStateFamily._()
     : super(
         retry: null,
         name: r'federationStateProvider',
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           accountContextProvider,
           misskeyGetContextProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>[
           FederationStateProvider.$allTransitiveDependencies0,
           FederationStateProvider.$allTransitiveDependencies1,
         ],
@@ -91,7 +94,6 @@ abstract class _$FederationState extends $AsyncNotifier<FederationData> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<AsyncValue<FederationData>, FederationData>;
     final element =
         ref.element
@@ -101,9 +103,6 @@ abstract class _$FederationState extends $AsyncNotifier<FederationData> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

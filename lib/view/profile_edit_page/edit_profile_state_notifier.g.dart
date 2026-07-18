@@ -6,33 +6,36 @@ part of 'edit_profile_state_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(EditProfileStateNotifier)
-const editProfileStateNotifierProvider = EditProfileStateNotifierProvider._();
+final editProfileStateProvider = EditProfileStateNotifierProvider._();
 
 final class EditProfileStateNotifierProvider
     extends $AsyncNotifierProvider<EditProfileStateNotifier, EditProfileState> {
-  const EditProfileStateNotifierProvider._()
+  EditProfileStateNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'editProfileStateNotifierProvider',
+        name: r'editProfileStateProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           accountContextProvider,
           misskeyGetContextProvider,
           misskeyPostContextProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>[
           EditProfileStateNotifierProvider.$allTransitiveDependencies0,
           EditProfileStateNotifierProvider.$allTransitiveDependencies1,
           EditProfileStateNotifierProvider.$allTransitiveDependencies2,
         ],
       );
 
-  static const $allTransitiveDependencies0 = accountContextProvider;
-  static const $allTransitiveDependencies1 = misskeyGetContextProvider;
-  static const $allTransitiveDependencies2 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies0 = accountContextProvider;
+  static final $allTransitiveDependencies1 = misskeyGetContextProvider;
+  static final $allTransitiveDependencies2 = misskeyPostContextProvider;
 
   @override
   String debugGetCreateSourceHash() => _$editProfileStateNotifierHash();
@@ -51,7 +54,6 @@ abstract class _$EditProfileStateNotifier
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref =
         this.ref as $Ref<AsyncValue<EditProfileState>, EditProfileState>;
     final element =
@@ -62,9 +64,6 @@ abstract class _$EditProfileStateNotifier
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

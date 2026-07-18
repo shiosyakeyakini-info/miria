@@ -6,8 +6,11 @@ part of 'user_info_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(userInfoNotifierProxy)
-const userInfoNotifierProxyProvider = UserInfoNotifierProxyFamily._();
+final userInfoNotifierProxyProvider = UserInfoNotifierProxyFamily._();
 
 final class UserInfoNotifierProxyProvider
     extends
@@ -17,7 +20,7 @@ final class UserInfoNotifierProxyProvider
           Raw<UserInfoNotifier>
         >
     with $Provider<Raw<UserInfoNotifier>> {
-  const UserInfoNotifierProxyProvider._({
+  UserInfoNotifierProxyProvider._({
     required UserInfoNotifierProxyFamily super.from,
     required String super.argument,
   }) : super(
@@ -28,7 +31,7 @@ final class UserInfoNotifierProxyProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = accountContextProvider;
+  static final $allTransitiveDependencies0 = accountContextProvider;
 
   @override
   String debugGetCreateSourceHash() => _$userInfoNotifierProxyHash();
@@ -72,16 +75,16 @@ final class UserInfoNotifierProxyProvider
 }
 
 String _$userInfoNotifierProxyHash() =>
-    r'6793ee9dbda64a646583409d4986f1766aa82c81';
+    r'589b031eee730ce6b5f1b9786d11718e2cb3d141';
 
 final class UserInfoNotifierProxyFamily extends $Family
     with $FunctionalFamilyOverride<Raw<UserInfoNotifier>, String> {
-  const UserInfoNotifierProxyFamily._()
+  UserInfoNotifierProxyFamily._()
     : super(
         retry: null,
         name: r'userInfoNotifierProxyProvider',
-        dependencies: const <ProviderOrFamily>[accountContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[accountContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           UserInfoNotifierProxyProvider.$allTransitiveDependencies0,
         ],
         isAutoDispose: true,
@@ -95,7 +98,7 @@ final class UserInfoNotifierProxyFamily extends $Family
 }
 
 @ProviderFor(userInfoProxy)
-const userInfoProxyProvider = UserInfoProxyFamily._();
+final userInfoProxyProvider = UserInfoProxyFamily._();
 
 final class UserInfoProxyProvider
     extends
@@ -105,7 +108,7 @@ final class UserInfoProxyProvider
           AsyncValue<UserInfo>
         >
     with $Provider<AsyncValue<UserInfo>> {
-  const UserInfoProxyProvider._({
+  UserInfoProxyProvider._({
     required UserInfoProxyFamily super.from,
     required String super.argument,
   }) : super(
@@ -116,7 +119,7 @@ final class UserInfoProxyProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = accountContextProvider;
+  static final $allTransitiveDependencies0 = accountContextProvider;
 
   @override
   String debugGetCreateSourceHash() => _$userInfoProxyHash();
@@ -159,16 +162,16 @@ final class UserInfoProxyProvider
   }
 }
 
-String _$userInfoProxyHash() => r'1f984a6f339e55d8959f256b52d14dbc48e87ab8';
+String _$userInfoProxyHash() => r'e01002b185d729d1d1cc737bc0fc570ea087aa22';
 
 final class UserInfoProxyFamily extends $Family
     with $FunctionalFamilyOverride<AsyncValue<UserInfo>, String> {
-  const UserInfoProxyFamily._()
+  UserInfoProxyFamily._()
     : super(
         retry: null,
         name: r'userInfoProxyProvider',
-        dependencies: const <ProviderOrFamily>[accountContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[accountContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           UserInfoProxyProvider.$allTransitiveDependencies0,
         ],
         isAutoDispose: true,
@@ -182,16 +185,16 @@ final class UserInfoProxyFamily extends $Family
 }
 
 @ProviderFor(UserInfoNotifier)
-const userInfoNotifierProvider = UserInfoNotifierFamily._();
+final userInfoProvider = UserInfoNotifierFamily._();
 
 final class UserInfoNotifierProvider
     extends $AsyncNotifierProvider<UserInfoNotifier, UserInfo> {
-  const UserInfoNotifierProvider._({
+  UserInfoNotifierProvider._({
     required UserInfoNotifierFamily super.from,
     required ({String userId, AccountContext context}) super.argument,
   }) : super(
          retry: null,
-         name: r'userInfoNotifierProvider',
+         name: r'userInfoProvider',
          isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
@@ -202,7 +205,7 @@ final class UserInfoNotifierProvider
 
   @override
   String toString() {
-    return r'userInfoNotifierProvider'
+    return r'userInfoProvider'
         ''
         '$argument';
   }
@@ -222,7 +225,7 @@ final class UserInfoNotifierProvider
   }
 }
 
-String _$userInfoNotifierHash() => r'b4b78145b2cb531abe6da2fb840c4b01bb12f4dd';
+String _$userInfoNotifierHash() => r'a853c04c23d05d863c6b6c78287f5058bf31d690';
 
 final class UserInfoNotifierFamily extends $Family
     with
@@ -233,10 +236,10 @@ final class UserInfoNotifierFamily extends $Family
           FutureOr<UserInfo>,
           ({String userId, AccountContext context})
         > {
-  const UserInfoNotifierFamily._()
+  UserInfoNotifierFamily._()
     : super(
         retry: null,
-        name: r'userInfoNotifierProvider',
+        name: r'userInfoProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
         isAutoDispose: true,
@@ -251,7 +254,7 @@ final class UserInfoNotifierFamily extends $Family
   );
 
   @override
-  String toString() => r'userInfoNotifierProvider';
+  String toString() => r'userInfoProvider';
 }
 
 abstract class _$UserInfoNotifier extends $AsyncNotifier<UserInfo> {
@@ -266,7 +269,6 @@ abstract class _$UserInfoNotifier extends $AsyncNotifier<UserInfo> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(userId: _$args.userId, context: _$args.context);
     final ref = this.ref as $Ref<AsyncValue<UserInfo>, UserInfo>;
     final element =
         ref.element
@@ -276,9 +278,9 @@ abstract class _$UserInfoNotifier extends $AsyncNotifier<UserInfo> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(
+      ref,
+      () => build(userId: _$args.userId, context: _$args.context),
+    );
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

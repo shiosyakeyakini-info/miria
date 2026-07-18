@@ -18,7 +18,7 @@ class UsersListsNotifier extends _$UsersListsNotifier {
   }
 
   Future<void> create(UsersListSettings settings) async {
-    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+    await ref.read(dialogStateProvider.notifier).guard(() async {
       final list = await _misskey.users.list.create(
         UsersListsCreateRequest(name: settings.name),
       );
@@ -33,7 +33,7 @@ class UsersListsNotifier extends _$UsersListsNotifier {
 
   Future<void> delete(String listId) async {
     final result = await ref
-        .read(dialogStateNotifierProvider.notifier)
+        .read(dialogStateProvider.notifier)
         .showDialog(
           message: (context) => S.of(context).confirmDeleteList,
           actions: (context) => [
@@ -43,14 +43,14 @@ class UsersListsNotifier extends _$UsersListsNotifier {
         );
     if (result != 0) return;
 
-    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+    await ref.read(dialogStateProvider.notifier).guard(() async {
       await _misskey.users.list.delete(UsersListsDeleteRequest(listId: listId));
       state = AsyncValue.data([...?state.value?.where((e) => e.id != listId)]);
     });
   }
 
   Future<void> push(String listId, User user) async {
-    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+    await ref.read(dialogStateProvider.notifier).guard(() async {
       await _misskey.users.list.push(
         UsersListsPushRequest(listId: listId, userId: user.id),
       );
@@ -64,7 +64,7 @@ class UsersListsNotifier extends _$UsersListsNotifier {
   }
 
   Future<void> pull(String listId, User user) async {
-    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+    await ref.read(dialogStateProvider.notifier).guard(() async {
       await _misskey.users.list.pull(
         UsersListsPullRequest(listId: listId, userId: user.id),
       );

@@ -47,7 +47,7 @@ AsyncOperation<T> useHandledFuture<T>(Future<T> Function() future) {
       result
         ..value = const AsyncLoading()
         ..value = await ref
-            .read(dialogStateNotifierProvider.notifier)
+            .read(dialogStateProvider.notifier)
             .guard(() async => await future());
     },
   );

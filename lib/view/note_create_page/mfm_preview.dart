@@ -10,11 +10,11 @@ class MfmPreview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final previewText = ref.watch(
-      noteCreateNotifierProvider.select((value) => value.text),
+      noteCreateProvider.select((value) => value.text),
     );
 
     final replyTo = ref
-        .watch(noteCreateNotifierProvider.select((value) => value.replyTo))
+        .watch(noteCreateProvider.select((value) => value.replyTo))
         .map((e) => "@${e.username}${e.host == null ? " " : "@${e.host}"} ")
         .join("");
 

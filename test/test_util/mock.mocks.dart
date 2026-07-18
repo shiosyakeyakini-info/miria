@@ -54,6 +54,7 @@ import 'mock.dart' as _i32;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
+// ignore_for_file: invalid_use_of_internal_member
 
 class _FakeAccountSettings_0 extends _i1.SmartFake
     implements _i2.AccountSettings {
@@ -455,19 +456,19 @@ class _FakeBaseOptions_70 extends _i1.SmartFake implements _i9.BaseOptions {
     : super(parent, parentInvocation);
 }
 
-class _FakeHttpClientAdapter_71 extends _i1.SmartFake
+class _FakeInterceptors_71 extends _i1.SmartFake implements _i9.Interceptors {
+  _FakeInterceptors_71(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeHttpClientAdapter_72 extends _i1.SmartFake
     implements _i9.HttpClientAdapter {
-  _FakeHttpClientAdapter_71(Object parent, Invocation parentInvocation)
+  _FakeHttpClientAdapter_72(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeTransformer_72 extends _i1.SmartFake implements _i9.Transformer {
-  _FakeTransformer_72(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
-class _FakeInterceptors_73 extends _i1.SmartFake implements _i9.Interceptors {
-  _FakeInterceptors_73(Object parent, Invocation parentInvocation)
+class _FakeTransformer_73 extends _i1.SmartFake implements _i9.Transformer {
+  _FakeTransformer_73(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -885,15 +886,15 @@ class MockChatRoomRepository extends _i1.Mock
 /// See the documentation for Mockito's code generation for more information.
 class MockEmojiRepository extends _i1.Mock implements _i25.EmojiRepository {
   @override
-  set emoji(List<_i25.EmojiRepositoryData>? _emoji) => super.noSuchMethod(
-    Invocation.setter(#emoji, _emoji),
+  set emoji(List<_i25.EmojiRepositoryData>? value) => super.noSuchMethod(
+    Invocation.setter(#emoji, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set emojiMap(Map<String, _i25.EmojiRepositoryData>? _emojiMap) =>
+  set emojiMap(Map<String, _i25.EmojiRepositoryData>? value) =>
       super.noSuchMethod(
-        Invocation.setter(#emojiMap, _emojiMap),
+        Invocation.setter(#emojiMap, value),
         returnValueForMissingStub: null,
       );
 
@@ -1764,141 +1765,140 @@ class MockMisskey extends _i1.Mock implements _i3.Misskey {
           as _i8.MisskeyChat);
 
   @override
-  set apiService(_i7.ApiService? _apiService) => super.noSuchMethod(
-    Invocation.setter(#apiService, _apiService),
+  set apiService(_i7.ApiService? value) => super.noSuchMethod(
+    Invocation.setter(#apiService, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set streamingService(_i3.WebSocketController? _streamingService) =>
-      super.noSuchMethod(
-        Invocation.setter(#streamingService, _streamingService),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  set notes(_i3.MisskeyNotes? _notes) => super.noSuchMethod(
-    Invocation.setter(#notes, _notes),
+  set streamingService(_i3.WebSocketController? value) => super.noSuchMethod(
+    Invocation.setter(#streamingService, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set channels(_i3.MisskeyChannels? _channels) => super.noSuchMethod(
-    Invocation.setter(#channels, _channels),
+  set notes(_i3.MisskeyNotes? value) => super.noSuchMethod(
+    Invocation.setter(#notes, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set users(_i3.MisskeyUsers? _users) => super.noSuchMethod(
-    Invocation.setter(#users, _users),
+  set channels(_i3.MisskeyChannels? value) => super.noSuchMethod(
+    Invocation.setter(#channels, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set i(_i3.MisskeyI? _i) => super.noSuchMethod(
-    Invocation.setter(#i, _i),
+  set users(_i3.MisskeyUsers? value) => super.noSuchMethod(
+    Invocation.setter(#users, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set clips(_i3.MisskeyClips? _clips) => super.noSuchMethod(
-    Invocation.setter(#clips, _clips),
+  set i(_i3.MisskeyI? value) => super.noSuchMethod(
+    Invocation.setter(#i, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set antennas(_i3.MisskeyAntenna? _antennas) => super.noSuchMethod(
-    Invocation.setter(#antennas, _antennas),
+  set clips(_i3.MisskeyClips? value) => super.noSuchMethod(
+    Invocation.setter(#clips, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set drive(_i3.MisskeyDrive? _drive) => super.noSuchMethod(
-    Invocation.setter(#drive, _drive),
+  set antennas(_i3.MisskeyAntenna? value) => super.noSuchMethod(
+    Invocation.setter(#antennas, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set following(_i3.MisskeyFollowing? _following) => super.noSuchMethod(
-    Invocation.setter(#following, _following),
+  set drive(_i3.MisskeyDrive? value) => super.noSuchMethod(
+    Invocation.setter(#drive, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set gallery(_i3.MisskeyGallery? _gallery) => super.noSuchMethod(
-    Invocation.setter(#gallery, _gallery),
+  set following(_i3.MisskeyFollowing? value) => super.noSuchMethod(
+    Invocation.setter(#following, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set blocking(_i3.MisskeyBlocking? _blocking) => super.noSuchMethod(
-    Invocation.setter(#blocking, _blocking),
+  set gallery(_i3.MisskeyGallery? value) => super.noSuchMethod(
+    Invocation.setter(#gallery, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set mute(_i3.MisskeyMute? _mute) => super.noSuchMethod(
-    Invocation.setter(#mute, _mute),
+  set blocking(_i3.MisskeyBlocking? value) => super.noSuchMethod(
+    Invocation.setter(#blocking, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set renoteMute(_i3.MisskeyRenoteMute? _renoteMute) => super.noSuchMethod(
-    Invocation.setter(#renoteMute, _renoteMute),
+  set mute(_i3.MisskeyMute? value) => super.noSuchMethod(
+    Invocation.setter(#mute, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set federation(_i3.MisskeyFederation? _federation) => super.noSuchMethod(
-    Invocation.setter(#federation, _federation),
+  set renoteMute(_i3.MisskeyRenoteMute? value) => super.noSuchMethod(
+    Invocation.setter(#renoteMute, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set roles(_i3.MisskeyRoles? _roles) => super.noSuchMethod(
-    Invocation.setter(#roles, _roles),
+  set federation(_i3.MisskeyFederation? value) => super.noSuchMethod(
+    Invocation.setter(#federation, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set hashtags(_i3.MisskeyHashtags? _hashtags) => super.noSuchMethod(
-    Invocation.setter(#hashtags, _hashtags),
+  set roles(_i3.MisskeyRoles? value) => super.noSuchMethod(
+    Invocation.setter(#roles, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set ap(_i3.MisskeyAp? _ap) => super.noSuchMethod(
-    Invocation.setter(#ap, _ap),
+  set hashtags(_i3.MisskeyHashtags? value) => super.noSuchMethod(
+    Invocation.setter(#hashtags, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set pages(_i3.MisskeyPages? _pages) => super.noSuchMethod(
-    Invocation.setter(#pages, _pages),
+  set ap(_i3.MisskeyAp? value) => super.noSuchMethod(
+    Invocation.setter(#ap, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set flash(_i3.MisskeyFlash? _flash) => super.noSuchMethod(
-    Invocation.setter(#flash, _flash),
+  set pages(_i3.MisskeyPages? value) => super.noSuchMethod(
+    Invocation.setter(#pages, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set reversi(_i3.MisskeyReversi? _reversi) => super.noSuchMethod(
-    Invocation.setter(#reversi, _reversi),
+  set flash(_i3.MisskeyFlash? value) => super.noSuchMethod(
+    Invocation.setter(#flash, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set bubbleGame(_i3.MisskeyBubbleGame? _bubbleGame) => super.noSuchMethod(
-    Invocation.setter(#bubbleGame, _bubbleGame),
+  set reversi(_i3.MisskeyReversi? value) => super.noSuchMethod(
+    Invocation.setter(#reversi, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set chat(_i8.MisskeyChat? _chat) => super.noSuchMethod(
-    Invocation.setter(#chat, _chat),
+  set bubbleGame(_i3.MisskeyBubbleGame? value) => super.noSuchMethod(
+    Invocation.setter(#bubbleGame, value),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  set chat(_i8.MisskeyChat? value) => super.noSuchMethod(
+    Invocation.setter(#chat, value),
     returnValueForMissingStub: null,
   );
 
@@ -4438,14 +4438,29 @@ class MockDio extends _i1.Mock implements _i9.Dio {
           as _i9.BaseOptions);
 
   @override
+  _i9.Interceptors get interceptors =>
+      (super.noSuchMethod(
+            Invocation.getter(#interceptors),
+            returnValue: _FakeInterceptors_71(
+              this,
+              Invocation.getter(#interceptors),
+            ),
+            returnValueForMissingStub: _FakeInterceptors_71(
+              this,
+              Invocation.getter(#interceptors),
+            ),
+          )
+          as _i9.Interceptors);
+
+  @override
   _i9.HttpClientAdapter get httpClientAdapter =>
       (super.noSuchMethod(
             Invocation.getter(#httpClientAdapter),
-            returnValue: _FakeHttpClientAdapter_71(
+            returnValue: _FakeHttpClientAdapter_72(
               this,
               Invocation.getter(#httpClientAdapter),
             ),
-            returnValueForMissingStub: _FakeHttpClientAdapter_71(
+            returnValueForMissingStub: _FakeHttpClientAdapter_72(
               this,
               Invocation.getter(#httpClientAdapter),
             ),
@@ -4456,11 +4471,11 @@ class MockDio extends _i1.Mock implements _i9.Dio {
   _i9.Transformer get transformer =>
       (super.noSuchMethod(
             Invocation.getter(#transformer),
-            returnValue: _FakeTransformer_72(
+            returnValue: _FakeTransformer_73(
               this,
               Invocation.getter(#transformer),
             ),
-            returnValueForMissingStub: _FakeTransformer_72(
+            returnValueForMissingStub: _FakeTransformer_73(
               this,
               Invocation.getter(#transformer),
             ),
@@ -4468,36 +4483,20 @@ class MockDio extends _i1.Mock implements _i9.Dio {
           as _i9.Transformer);
 
   @override
-  _i9.Interceptors get interceptors =>
-      (super.noSuchMethod(
-            Invocation.getter(#interceptors),
-            returnValue: _FakeInterceptors_73(
-              this,
-              Invocation.getter(#interceptors),
-            ),
-            returnValueForMissingStub: _FakeInterceptors_73(
-              this,
-              Invocation.getter(#interceptors),
-            ),
-          )
-          as _i9.Interceptors);
-
-  @override
-  set options(_i9.BaseOptions? _options) => super.noSuchMethod(
-    Invocation.setter(#options, _options),
+  set options(_i9.BaseOptions? value) => super.noSuchMethod(
+    Invocation.setter(#options, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set httpClientAdapter(_i9.HttpClientAdapter? _httpClientAdapter) =>
-      super.noSuchMethod(
-        Invocation.setter(#httpClientAdapter, _httpClientAdapter),
-        returnValueForMissingStub: null,
-      );
+  set httpClientAdapter(_i9.HttpClientAdapter? value) => super.noSuchMethod(
+    Invocation.setter(#httpClientAdapter, value),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  set transformer(_i9.Transformer? _transformer) => super.noSuchMethod(
-    Invocation.setter(#transformer, _transformer),
+  set transformer(_i9.Transformer? value) => super.noSuchMethod(
+    Invocation.setter(#transformer, value),
     returnValueForMissingStub: null,
   );
 
@@ -5473,32 +5472,32 @@ class MockHttpClient extends _i1.Mock implements _i10.HttpClient {
           as bool);
 
   @override
-  set idleTimeout(Duration? _idleTimeout) => super.noSuchMethod(
-    Invocation.setter(#idleTimeout, _idleTimeout),
+  set idleTimeout(Duration? value) => super.noSuchMethod(
+    Invocation.setter(#idleTimeout, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set connectionTimeout(Duration? _connectionTimeout) => super.noSuchMethod(
-    Invocation.setter(#connectionTimeout, _connectionTimeout),
+  set connectionTimeout(Duration? value) => super.noSuchMethod(
+    Invocation.setter(#connectionTimeout, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set maxConnectionsPerHost(int? _maxConnectionsPerHost) => super.noSuchMethod(
-    Invocation.setter(#maxConnectionsPerHost, _maxConnectionsPerHost),
+  set maxConnectionsPerHost(int? value) => super.noSuchMethod(
+    Invocation.setter(#maxConnectionsPerHost, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set autoUncompress(bool? _autoUncompress) => super.noSuchMethod(
-    Invocation.setter(#autoUncompress, _autoUncompress),
+  set autoUncompress(bool? value) => super.noSuchMethod(
+    Invocation.setter(#autoUncompress, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set userAgent(String? _userAgent) => super.noSuchMethod(
-    Invocation.setter(#userAgent, _userAgent),
+  set userAgent(String? value) => super.noSuchMethod(
+    Invocation.setter(#userAgent, value),
     returnValueForMissingStub: null,
   );
 
@@ -6189,13 +6188,14 @@ class MockFilePickerPlatform extends _i1.Mock
     _i33.FileType? type = _i33.FileType.any,
     List<String>? allowedExtensions,
     dynamic Function(_i33.FilePickerStatus)? onFileLoading,
-    bool? allowCompression = false,
     int? compressionQuality = 0,
     bool? allowMultiple = false,
     bool? withData = false,
     bool? withReadStream = false,
     bool? lockParentWindow = false,
     bool? readSequential = false,
+    bool? cancelUploadOnWindowBlur = true,
+    _i33.AndroidSAFOptions? androidSafOptions,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#pickFiles, [], {
@@ -6204,13 +6204,14 @@ class MockFilePickerPlatform extends _i1.Mock
               #type: type,
               #allowedExtensions: allowedExtensions,
               #onFileLoading: onFileLoading,
-              #allowCompression: allowCompression,
               #compressionQuality: compressionQuality,
               #allowMultiple: allowMultiple,
               #withData: withData,
               #withReadStream: withReadStream,
               #lockParentWindow: lockParentWindow,
               #readSequential: readSequential,
+              #cancelUploadOnWindowBlur: cancelUploadOnWindowBlur,
+              #androidSafOptions: androidSafOptions,
             }),
             returnValue: _i17.Future<_i33.FilePickerResult?>.value(),
             returnValueForMissingStub:
@@ -6220,12 +6221,14 @@ class MockFilePickerPlatform extends _i1.Mock
 
   @override
   _i17.Future<List<String>?> pickFileAndDirectoryPaths({
+    String? dialogTitle,
     String? initialDirectory,
     _i33.FileType? type = _i33.FileType.any,
     List<String>? allowedExtensions,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#pickFileAndDirectoryPaths, [], {
+              #dialogTitle: dialogTitle,
               #initialDirectory: initialDirectory,
               #type: type,
               #allowedExtensions: allowedExtensions,
@@ -6234,6 +6237,15 @@ class MockFilePickerPlatform extends _i1.Mock
             returnValueForMissingStub: _i17.Future<List<String>?>.value(),
           )
           as _i17.Future<List<String>?>);
+
+  @override
+  _i17.Future<void> releaseSAFGrant(String? uri) =>
+      (super.noSuchMethod(
+            Invocation.method(#releaseSAFGrant, [uri]),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
+          )
+          as _i17.Future<void>);
 
   @override
   _i17.Future<bool?> clearTemporaryFiles() =>
@@ -6249,12 +6261,14 @@ class MockFilePickerPlatform extends _i1.Mock
     String? dialogTitle,
     bool? lockParentWindow = false,
     String? initialDirectory,
+    _i33.AndroidSAFOptions? androidSafOptions,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#getDirectoryPath, [], {
               #dialogTitle: dialogTitle,
               #lockParentWindow: lockParentWindow,
               #initialDirectory: initialDirectory,
+              #androidSafOptions: androidSafOptions,
             }),
             returnValue: _i17.Future<String?>.value(),
             returnValueForMissingStub: _i17.Future<String?>.value(),
@@ -6264,11 +6278,12 @@ class MockFilePickerPlatform extends _i1.Mock
   @override
   _i17.Future<String?> saveFile({
     String? dialogTitle,
-    String? fileName,
+    required String? fileName,
     String? initialDirectory,
     _i33.FileType? type = _i33.FileType.any,
     List<String>? allowedExtensions,
-    _i30.Uint8List? bytes,
+    required _i30.Uint8List? bytes,
+    dynamic Function(_i33.FilePickerStatus)? onFileLoading,
     bool? lockParentWindow = false,
   }) =>
       (super.noSuchMethod(
@@ -6279,12 +6294,22 @@ class MockFilePickerPlatform extends _i1.Mock
               #type: type,
               #allowedExtensions: allowedExtensions,
               #bytes: bytes,
+              #onFileLoading: onFileLoading,
               #lockParentWindow: lockParentWindow,
             }),
             returnValue: _i17.Future<String?>.value(),
             returnValueForMissingStub: _i17.Future<String?>.value(),
           )
           as _i17.Future<String?>);
+
+  @override
+  _i17.Future<void> skipEntitlementsChecks() =>
+      (super.noSuchMethod(
+            Invocation.method(#skipEntitlementsChecks, []),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
+          )
+          as _i17.Future<void>);
 }
 
 /// A class which mocks [$MockCacheManager].

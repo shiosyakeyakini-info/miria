@@ -48,10 +48,12 @@ class LinkNavigator {
         await ref.read(emojiRepositoryProvider(account)).loadFromSourceIfNeed();
       } catch (e) {
         if (await canLaunchUrl(uri)) {
-          if (!await launchUrl(
-            uri,
-            mode: LaunchMode.externalNonBrowserApplication,
-          )) {
+          try {
+            await launchUrl(
+              uri,
+              mode: LaunchMode.externalNonBrowserApplication,
+            );
+          } catch (e) {
             await launchUrl(uri, mode: LaunchMode.externalApplication);
           }
           return;

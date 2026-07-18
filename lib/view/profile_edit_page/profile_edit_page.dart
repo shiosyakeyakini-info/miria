@@ -29,8 +29,8 @@ class ProfileEditPage extends HookConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(editProfileStateNotifierProvider);
-    final notifier = ref.read(editProfileStateNotifierProvider.notifier);
+    final state = ref.watch(editProfileStateProvider);
+    final notifier = ref.read(editProfileStateProvider.notifier);
     final s = S.of(context);
 
     final update = useAsync(() async {
@@ -129,8 +129,10 @@ class _ProfileEditForm extends HookConsumerWidget {
                         if (result == null) return;
 
                         if (result == DriveModalSheetReturnValue.upload) {
-                          final pickedFile = await FilePicker.platform
-                              .pickFiles(withData: true, type: FileType.image);
+                          final pickedFile = await FilePicker.pickFiles(
+                            withData: true,
+                            type: FileType.image,
+                          );
                           if (pickedFile != null &&
                               pickedFile.files.isNotEmpty) {
                             final f = pickedFile.files.first;

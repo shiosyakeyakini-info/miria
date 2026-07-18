@@ -73,13 +73,13 @@ class ImportExportPageState extends ConsumerState<ImportExportPage> {
                         );
                         return;
                       }
-                      await ref
-                          .read(dialogStateNotifierProvider.notifier)
-                          .guard(() async {
-                            await ref
-                                .read(importExportRepositoryProvider)
-                                .import(context, account);
-                          });
+                      await ref.read(dialogStateProvider.notifier).guard(
+                        () async {
+                          await ref
+                              .read(importExportRepositoryProvider)
+                              .import(context, account);
+                        },
+                      );
                     },
                     child: Text(S.of(context).select),
                   ),
@@ -121,13 +121,13 @@ class ImportExportPageState extends ConsumerState<ImportExportPage> {
                         );
                         return;
                       }
-                      await ref
-                          .read(dialogStateNotifierProvider.notifier)
-                          .guard(() async {
-                            await ref
-                                .read(importExportRepositoryProvider)
-                                .export(context, account);
-                          });
+                      await ref.read(dialogStateProvider.notifier).guard(
+                        () async {
+                          await ref
+                              .read(importExportRepositoryProvider)
+                              .export(context, account);
+                        },
+                      );
                     },
                     child: Text(S.of(context).save),
                   ),

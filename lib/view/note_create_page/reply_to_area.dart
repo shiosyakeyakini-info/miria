@@ -11,7 +11,7 @@ class ReplyToArea extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final repliesTo = ref.watch(
-      noteCreateNotifierProvider.select((value) => value.replyTo),
+      noteCreateProvider.select((value) => value.replyTo),
     );
 
     if (repliesTo.isEmpty) {
@@ -47,7 +47,7 @@ class ReplyToArea extends ConsumerWidget {
                 ),
                 IconButton(
                   onPressed: () async => ref
-                      .read(noteCreateNotifierProvider.notifier)
+                      .read(noteCreateProvider.notifier)
                       .deleteReplyUser(replyTo),
                   icon: Icon(
                     Icons.remove,
@@ -68,7 +68,7 @@ class ReplyToArea extends ConsumerWidget {
             ),
           IconButton(
             onPressed: () async =>
-                ref.read(noteCreateNotifierProvider.notifier).addReplyUser(),
+                ref.read(noteCreateProvider.notifier).addReplyUser(),
             constraints: const BoxConstraints(),
             padding: EdgeInsets.zero,
             style: const ButtonStyle(

@@ -21,7 +21,7 @@ class UsersListPage extends ConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final list = ref.watch(usersListsNotifierProvider);
+    final list = ref.watch(usersListsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -34,9 +34,7 @@ class UsersListPage extends ConsumerWidget implements AutoRouteWrapper {
                 UsersListSettingsRoute(title: Text(S.of(context).create)),
               );
               if (settings == null) return;
-              await ref
-                  .read(usersListsNotifierProvider.notifier)
-                  .create(settings);
+              await ref.read(usersListsProvider.notifier).create(settings);
             },
           ),
         ],
@@ -53,9 +51,8 @@ class UsersListPage extends ConsumerWidget implements AutoRouteWrapper {
                   title: Text(list.name ?? ""),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete),
-                    onPressed: () async => ref
-                        .read(usersListsNotifierProvider.notifier)
-                        .delete(list.id),
+                    onPressed: () async =>
+                        ref.read(usersListsProvider.notifier).delete(list.id),
                   ),
                   onTap: () async => context.pushRoute(
                     UsersListTimelineRoute(

@@ -34,7 +34,7 @@ class InstanceMutePageNotifier extends _$InstanceMutePageNotifier {
         .toList();
     state = AsyncData((
       beforeState.$1,
-      await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      await ref.read(dialogStateProvider.notifier).guard(() async {
         await ref
             .read(misskeyPostContextProvider)
             .i
@@ -58,15 +58,15 @@ class InstanceMutePage extends HookConsumerWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = useTextEditingController();
-    final state = ref.watch(instanceMutePageNotifierProvider);
+    final state = ref.watch(instanceMutePageProvider);
 
-    ref.listen(
-      instanceMutePageNotifierProvider.select((value) => value.value?.$1),
-      (_, next) {
-        if (next == null) return;
-        controller.text = next.join("\n");
-      },
-    );
+    ref.listen(instanceMutePageProvider.select((value) => value.value?.$1), (
+      _,
+      next,
+    ) {
+      if (next == null) return;
+      controller.text = next.join("\n");
+    });
 
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).instanceMute)),
@@ -108,7 +108,7 @@ class InstanceMutePage extends HookConsumerWidget implements AutoRouteWrapper {
                 ),
                 ElevatedButton.icon(
                   onPressed: () async => ref
-                      .read(instanceMutePageNotifierProvider.notifier)
+                      .read(instanceMutePageProvider.notifier)
                       .save(controller.text),
                   icon: const Icon(Icons.save),
                   label: Text(S.of(context).save),

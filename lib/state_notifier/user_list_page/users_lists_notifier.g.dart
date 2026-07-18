@@ -6,27 +6,30 @@ part of 'users_lists_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(UsersListsNotifier)
-const usersListsNotifierProvider = UsersListsNotifierProvider._();
+final usersListsProvider = UsersListsNotifierProvider._();
 
 final class UsersListsNotifierProvider
     extends $AsyncNotifierProvider<UsersListsNotifier, List<UsersList>> {
-  const UsersListsNotifierProvider._()
+  UsersListsNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'usersListsNotifierProvider',
+        name: r'usersListsProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           UsersListsNotifierProvider.$allTransitiveDependencies0,
           UsersListsNotifierProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
 
   @override
@@ -38,14 +41,13 @@ final class UsersListsNotifierProvider
 }
 
 String _$usersListsNotifierHash() =>
-    r'd8f28e45536ef11dd70dce5cd805d58fa8baf02c';
+    r'b91fce466402982f81c4c6c22727bae1ed3c7d28';
 
 abstract class _$UsersListsNotifier extends $AsyncNotifier<List<UsersList>> {
   FutureOr<List<UsersList>> build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AsyncValue<List<UsersList>>, List<UsersList>>;
     final element =
         ref.element
@@ -55,9 +57,6 @@ abstract class _$UsersListsNotifier extends $AsyncNotifier<List<UsersList>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

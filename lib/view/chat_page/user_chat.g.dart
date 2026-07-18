@@ -6,12 +6,15 @@ part of 'user_chat.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(UserChat)
-const userChatProvider = UserChatFamily._();
+final userChatProvider = UserChatFamily._();
 
 final class UserChatProvider
     extends $AsyncNotifierProvider<UserChat, UserChatState> {
-  const UserChatProvider._({
+  UserChatProvider._({
     required UserChatFamily super.from,
     required String super.argument,
   }) : super(
@@ -22,8 +25,8 @@ final class UserChatProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = misskeyGetContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyGetContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyGetContextProvider.$allTransitiveDependencies0;
 
   @override
@@ -62,12 +65,12 @@ final class UserChatFamily extends $Family
           FutureOr<UserChatState>,
           String
         > {
-  const UserChatFamily._()
+  UserChatFamily._()
     : super(
         retry: null,
         name: r'userChatProvider',
-        dependencies: const <ProviderOrFamily>[misskeyGetContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyGetContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           UserChatProvider.$allTransitiveDependencies0,
           UserChatProvider.$allTransitiveDependencies1,
         ],
@@ -89,7 +92,6 @@ abstract class _$UserChat extends $AsyncNotifier<UserChatState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<AsyncValue<UserChatState>, UserChatState>;
     final element =
         ref.element
@@ -99,9 +101,6 @@ abstract class _$UserChat extends $AsyncNotifier<UserChatState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

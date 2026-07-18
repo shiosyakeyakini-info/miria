@@ -18,13 +18,13 @@ class BlockedUsersNotifier extends _$BlockedUsersNotifier {
   }
 
   Future<void> delete(String userId) async {
-    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+    await ref.read(dialogStateProvider.notifier).guard(() async {
       // ユーザー名を取得
       final user = state.value?.firstWhere((e) => e.blockeeId == userId);
       final userName = user?.blockee.name ?? user?.blockee.username ?? "";
 
       final result = await ref
-          .read(dialogStateNotifierProvider.notifier)
+          .read(dialogStateProvider.notifier)
           .showDialog(
             message: (context) => S.of(context).confirmUnblockUser(userName),
             actions: (context) => [S.of(context).unblock, S.of(context).cancel],

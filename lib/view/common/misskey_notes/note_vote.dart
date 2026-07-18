@@ -23,7 +23,7 @@ class NoteVoteNotifier extends _$NoteVoteNotifier {
     final poll = note.poll!;
 
     final dialogValue = await ref
-        .read(dialogStateNotifierProvider.notifier)
+        .read(dialogStateProvider.notifier)
         .showDialog(
           message: (context) =>
               S.of(context).confirmPoll(poll.choices[index].text),
@@ -33,16 +33,14 @@ class NoteVoteNotifier extends _$NoteVoteNotifier {
     if (dialogValue != 0) return false;
     state = const AsyncLoading();
 
-    state = await ref.read(dialogStateNotifierProvider.notifier).guard(
-      () async {
-        await ref
-            .read(misskeyPostContextProvider)
-            .notes
-            .polls
-            .vote(NotesPollsVoteRequest(noteId: note.id, choice: index));
-        await ref.read(notesWithProvider).refresh(note.id);
-      },
-    );
+    state = await ref.read(dialogStateProvider.notifier).guard(() async {
+      await ref
+          .read(misskeyPostContextProvider)
+          .notes
+          .polls
+          .vote(NotesPollsVoteRequest(noteId: note.id, choice: index));
+      await ref.read(notesWithProvider).refresh(note.id);
+    });
     return true;
   }
 }
@@ -78,7 +76,7 @@ class NoteVote extends HookConsumerWidget {
 
     final isOpened = useState(useMemoized(() => !isAnyVotable(ref)));
 
-    ref.watch(noteVoteNotifierProvider(displayNote));
+    ref.watch(noteVoteProvider(displayNote));
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -125,7 +123,7 @@ class NoteVote extends HookConsumerWidget {
                     return;
                   }
                   isOpened.value = await ref
-                      .read(noteVoteNotifierProvider(displayNote).notifier)
+                      .read(noteVoteProvider(displayNote).notifier)
                       .vote(choice.index);
                 },
                 child: Padding(
