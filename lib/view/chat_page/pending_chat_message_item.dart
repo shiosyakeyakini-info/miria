@@ -38,13 +38,12 @@ class PendingChatMessageItem extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               color: isMyMessage
-                  ? Theme.of(context).primaryColor.withOpacity(0.3)
-                  : Theme.of(
-                      context,
-                    ).colorScheme.surfaceContainerHighest.withOpacity(0.3),
+                  ? Theme.of(context).primaryColor.withValues(alpha: 0.3)
+                  : Theme.of(context).colorScheme.surfaceContainerHighest
+                        .withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: Theme.of(context).dividerColor.withOpacity(0.5),
+                color: Theme.of(context).dividerColor.withValues(alpha: 0.5),
                 width: 1,
               ),
             ),
@@ -71,9 +70,8 @@ class PendingChatMessageItem extends StatelessWidget {
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
                           valueColor: AlwaysStoppedAnimation<Color>(
-                            Theme.of(
-                              context,
-                            ).textTheme.bodySmall!.color!.withOpacity(0.6),
+                            Theme.of(context).textTheme.bodySmall!.color!
+                                .withValues(alpha: 0.6),
                           ),
                         ),
                       ),
@@ -83,7 +81,7 @@ class PendingChatMessageItem extends StatelessWidget {
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(
                             context,
-                          ).textTheme.bodySmall!.color!.withOpacity(0.6),
+                          ).textTheme.bodySmall!.color!.withValues(alpha: 0.6),
                         ),
                       ),
                     ],

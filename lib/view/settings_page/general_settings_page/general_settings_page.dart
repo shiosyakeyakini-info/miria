@@ -841,7 +841,7 @@ class GeneralSettingsPage extends HookConsumerWidget {
                                   child: cacheSize.when(
                                     loading: () =>
                                         const CircularProgressIndicator(),
-                                    error: (_, __) =>
+                                    error: (_, _) =>
                                         Text(S.of(context).cacheSizeError),
                                     data: (cacheSize) {
                                       if (cacheSize.isEmpty) {
