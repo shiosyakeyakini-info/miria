@@ -58,7 +58,8 @@ void main() {
     expect(find.byType(ColoredBox), findsOneWidget);
 
     // 色がアルファ 0 の黒色（透明）であることを確認
-    final coloredBox = find.byType(ColoredBox).evaluate().first.widget as ColoredBox;
+    final coloredBox =
+        find.byType(ColoredBox).evaluate().first.widget as ColoredBox;
     expect(coloredBox.color.a, equals(0.0));
   });
 
