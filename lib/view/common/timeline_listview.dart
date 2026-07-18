@@ -185,22 +185,27 @@ class _TimelineListViewState extends State<TimelineListView> {
               negativeOffset._forceNegativePixels(offset.pixels);
             });
 
+            final cacheExtent = widget.cacheExtent;
+            final scrollCacheExtent = cacheExtent == null
+                ? null
+                : ScrollCacheExtent.pixels(cacheExtent);
+
             /// Stack the two [Viewport]s on top of each other so they move in sync.
             return Stack(
               children: <Widget>[
                 Viewport(
+                  scrollCacheExtent: scrollCacheExtent,
                   axisDirection: flipAxisDirection(axisDirection),
                   anchor: 1.0 - widget.anchor,
                   offset: negativeOffset,
                   slivers: negativeSlivers,
-                  cacheExtent: widget.cacheExtent,
                 ),
                 Viewport(
+                  scrollCacheExtent: scrollCacheExtent,
                   axisDirection: axisDirection,
                   anchor: widget.anchor,
                   offset: offset,
                   slivers: slivers,
-                  cacheExtent: widget.cacheExtent,
                 ),
               ],
             );

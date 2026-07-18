@@ -1,4 +1,5 @@
 import "package:auto_route/auto_route.dart";
+import "package:collection/collection.dart";
 import "package:flutter/material.dart" hide Clip;
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/hooks/use_async.dart";
@@ -49,6 +50,13 @@ class ClipListPage extends ConsumerWidget implements AutoRouteWrapper {
           return await ref.read(clipsProvider.future);
         },
         nextFuture: (lastItem, _) async {
+          final clips = await ref.read(clipsProvider.future);
+          // Misskey 2025.8.0以前では `clips/list` のページネーションが実装されておらず、
+          // クリップがソートされずに返ってくる。そのような場合は次のページを読み込まない。
+          final isSorted = clips.isSorted((a, b) => b.id.compareTo(a.id));
+          if (!isSorted) {
+            return [];
+          }
           return await ref
               .read(clipsProvider.notifier)
               .loadClips(untilId: lastItem.id);

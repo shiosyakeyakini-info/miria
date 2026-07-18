@@ -7,9 +7,9 @@ name: Flutter Testを実行する
 
 on:
   push:
-    branches: [ "master", "develop" ]
+    branches: [ "master", "develop", "miria_v4" ]
   pull_request:
-    branches: [ "master", "develop" ]
+    branches: [ "master", "develop", "miria_v4" ]
 
 permissions:
   contents: read

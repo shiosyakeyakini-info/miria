@@ -8,5 +8,5 @@ class ColorConverter extends JsonConverter<Color?, int?> {
   Color? fromJson(int? json) => json == null ? null : Color(json);
 
   @override
-  int? toJson(Color? object) => object?.value;
+  int? toJson(Color? object) => object?.toARGB32();
 }

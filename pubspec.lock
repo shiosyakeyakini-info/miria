@@ -1061,10 +1061,10 @@ packages:
     dependency: "direct main"
     description:
       name: mfm_parser
-      sha256: "733a69d14f75c8c15c5b961f2428bd42c7118bbe0b271c03666a7941435fb691"
+      sha256: e5e71bc5d2e67b28cc5b9196505db22e6597aab8b1868cdf937489a9958c0bcc
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.6"
+    version: "1.0.7"
   mime:
     dependency: "direct main"
     description:
@@ -1078,7 +1078,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: "1d935ea15276e593ec2d507343b0de7086090031"
+      resolved-ref: "9325a89f27a0fd4cbb4c0e1e0f9d144963574e37"
       url: "https://github.com/shiosyakeyakini-info/misskey_dart.git"
     source: git
     version: "1.0.0"
@@ -1251,12 +1251,13 @@ packages:
     source: hosted
     version: "4.3.0"
   permission_handler_windows:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: permission_handler_windows
-      sha256: "1a790728016f79a41216d88672dbc5df30e686e811ad4e698bfc51f76ad91f1e"
-      url: "https://pub.dev"
-    source: hosted
+      path: permission_handler_windows
+      ref: "32ffba1b3b62a881b2208297fd20bfb2776000bd"
+      resolved-ref: "32ffba1b3b62a881b2208297fd20bfb2776000bd"
+      url: "https://github.com/MSOB7YY/flutter-permission-handler"
+    source: git
     version: "0.2.1"
   petitparser:
     dependency: transitive

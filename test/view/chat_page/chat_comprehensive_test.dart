@@ -38,7 +38,7 @@ void main() {
       when(mockMisskey.drive).thenReturn(mockDrive);
       when(mockDrive.files).thenReturn(mockDriveFiles);
 
-      FilePickerPlatform() = mockFilePicker;
+      FilePickerPlatform.instance = mockFilePicker;
     });
 
     group("チャットメッセージ表示機能", () {

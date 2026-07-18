@@ -3029,7 +3029,7 @@ void main() {
 
         final binaryImage = await TestData.binaryImage;
         final filePicker = MockFilePickerPlatform();
-        FilePickerPlatform() = filePicker;
+        FilePickerPlatform.instance = filePicker;
         when(
           filePicker.pickFiles(
             dialogTitle: anyNamed("dialogTitle"),
@@ -3125,7 +3125,7 @@ void main() {
         when(mockMisskey.notes).thenReturn(mockNote);
 
         final filePicker = MockFilePickerPlatform();
-        FilePickerPlatform() = filePicker;
+        FilePickerPlatform.instance = filePicker;
         when(
           filePicker.pickFiles(
             dialogTitle: anyNamed("dialogTitle"),
