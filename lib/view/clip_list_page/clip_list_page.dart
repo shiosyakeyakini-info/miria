@@ -50,7 +50,7 @@ class ClipListPage extends ConsumerWidget implements AutoRouteWrapper {
           return await ref.read(clipsProvider.future);
         },
         nextFuture: (lastItem, _) async {
-          final clips = await ref.read(clipsNotifierProvider.future);
+          final clips = await ref.read(clipsProvider.future);
           // Misskey 2025.8.0以前では `clips/list` のページネーションが実装されておらず、
           // クリップがソートされずに返ってくる。そのような場合は次のページを読み込まない。
           final isSorted = clips.isSorted((a, b) => b.id.compareTo(a.id));
