@@ -1061,10 +1061,10 @@ packages:
     dependency: "direct main"
     description:
       name: mfm_parser
-      sha256: "733a69d14f75c8c15c5b961f2428bd42c7118bbe0b271c03666a7941435fb691"
+      sha256: e5e71bc5d2e67b28cc5b9196505db22e6597aab8b1868cdf937489a9958c0bcc
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.6"
+    version: "1.0.7"
   mime:
     dependency: "direct main"
     description:
@@ -1078,7 +1078,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: "1d935ea15276e593ec2d507343b0de7086090031"
+      resolved-ref: "9325a89f27a0fd4cbb4c0e1e0f9d144963574e37"
       url: "https://github.com/shiosyakeyakini-info/misskey_dart.git"
     source: git
     version: "1.0.0"
