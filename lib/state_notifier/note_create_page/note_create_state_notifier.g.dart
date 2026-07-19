@@ -58,7 +58,7 @@ final class NoteCreateNotifierProvider
 }
 
 String _$noteCreateNotifierHash() =>
-    r'c579b767931a88e49f21f444730a5ede1bdf6c26';
+    r'8f02313d01678db05b62133639831006e442b38a';
 
 abstract class _$NoteCreateNotifier extends $Notifier<NoteCreate> {
   NoteCreate build();
