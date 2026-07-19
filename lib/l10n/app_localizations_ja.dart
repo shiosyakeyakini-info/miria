@@ -634,6 +634,12 @@ class SJa extends S {
   String get finishedVotedNotification => '投票が終わったみたいや';
 
   @override
+  String get scheduledNotePostedNotification => '予約投稿がノートされたで';
+
+  @override
+  String get scheduledNotePostFailedNotification => '予約投稿がしくじったみたいや';
+
+  @override
   String renoteAndReactionsNotification(
     String? reactionUser,
     String? renotedUser,
@@ -2310,6 +2316,12 @@ class SJaOj extends SJa {
 
   @override
   String get finishedVotedNotification => '投票結果が出たそうですわよ';
+
+  @override
+  String get scheduledNotePostedNotification => '予約投稿がノートされましてよ';
+
+  @override
+  String get scheduledNotePostFailedNotification => '予約投稿が失敗したそうですわ';
 
   @override
   String renoteAndReactionsNotification(

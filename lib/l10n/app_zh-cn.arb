@@ -321,6 +321,8 @@
     "renotedUsersInNotification": "转发的人",
     "reactionUsersInNotification": "回应的人",
     "finishedVotedNotification": "投票已经结束了",
+    "scheduledNotePostedNotification": "预约发布的帖子已发布",
+    "scheduledNotePostFailedNotification": "预约发布失败了",
     "renoteAndReactionsNotification": "{reactionUser}回应了，{renotedUser}转发了",
     "@renoteAndReactionsNotification": {
         "placeholders": {

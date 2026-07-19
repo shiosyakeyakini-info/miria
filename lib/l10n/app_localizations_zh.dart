@@ -632,6 +632,12 @@ class SZh extends S {
   String get finishedVotedNotification => '投票已经结束了';
 
   @override
+  String get scheduledNotePostedNotification => '预约发布的帖子已发布';
+
+  @override
+  String get scheduledNotePostFailedNotification => '预约发布失败了';
+
+  @override
   String renoteAndReactionsNotification(
     String? reactionUser,
     String? renotedUser,
@@ -2730,6 +2736,12 @@ class SZhCn extends SZh {
 
   @override
   String get finishedVotedNotification => '投票已经结束了';
+
+  @override
+  String get scheduledNotePostedNotification => '预约发布的帖子已发布';
+
+  @override
+  String get scheduledNotePostFailedNotification => '预约发布失败了';
 
   @override
   String renoteAndReactionsNotification(
