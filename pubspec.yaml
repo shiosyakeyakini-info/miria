@@ -20,8 +20,8 @@ dependencies:
       ref: master
   mfm: ^1.0.9
   tuple: ^2.0.1
-  path_provider: ^2.0.14
-  dio: ^5.1.1
+  path_provider: ^2.1.6
+  dio: ^5.10.0
   path: ^1.8.2
   auto_route: ^11.1.0
   freezed_annotation: ^3.0.0
@@ -35,10 +35,10 @@ dependencies:
   badges: ^3.1.1
   bubble: ^1.2.1
   flutter_secure_storage: ^10.0.0
-  google_fonts: ^8.0.1
-  uuid: ^4.4.0
-  file_picker: ^12.0.0-beta.5
-  package_info_plus: ^10.1.0
+  google_fonts: ^8.2.0
+  uuid: ^4.6.0
+  file_picker: ^12.0.0-beta.7
+  package_info_plus: ^10.2.1
   reorderables: ^0.6.0
   confetti: ^0.8.0
   flutter_highlighting: ^0.9.0+11.8.0
@@ -51,7 +51,7 @@ dependencies:
     git:
       url: https://github.com/KasemJaffer/receive_sharing_intent
       ref: 2cea396843cd3ab1b5ec4334be4233864637874e
-  share_plus: ^13.1.0
+  share_plus: ^13.2.1
   mfm_parser: ^1.0.7
   flutter_svg: ^2.0.6
   image_editor: ^1.3.0
@@ -59,18 +59,18 @@ dependencies:
   file: ^7.0.0
   flutter_image_gallery_saver: ^2.0.0
   permission_handler: ^12.0.0+1
-  device_info_plus: ^13.1.0
+  device_info_plus: ^13.2.0
   colorfilter_generator: ^0.0.8
   matrix2d: ^1.0.4
-  flutter_image_compress: ^2.0.4
-  webview_flutter: ^4.3.0
+  flutter_image_compress: ^2.5.0
+  webview_flutter: ^4.14.1
   webview_flutter_android: ^4.7.0
   webview_flutter_wkwebview: ^3.9.0
   media_kit: ^1.1.11
   media_kit_video: ^2.0.1
   media_kit_libs_video: ^1.0.5
   flutter_colorpicker: ^1.1.0
-  window_manager: ^0.5.0
+  window_manager: ^0.5.2
   shared_preference_app_group: ^2.1.0
   stack_trace: ^1.11.1
   flutter_cache_manager: ^3.4.1
@@ -79,7 +79,7 @@ dependencies:
   hooks_riverpod: ^3.0.0-dev.16
   flutter_hooks: ^0.21.2
   punycode: ^1.0.0
-  image: ^4.3.0
+  image: ^4.9.1
   flutter_twemoji: ^1.0.1
   mime: ^2.0.0
 
