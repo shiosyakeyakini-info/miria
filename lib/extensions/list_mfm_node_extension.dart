@@ -25,7 +25,9 @@ extension ListMfmNodeExtension on List<MfmNode> {
         links.addAll(children.extractLinks());
       }
       if (node is MfmURL) {
-        links.add(node.value);
+        if (!node.silent) {
+          links.add(node.value);
+        }
       } else if (node is MfmLink) {
         if (!node.silent) {
           links.add(node.url);
