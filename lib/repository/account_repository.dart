@@ -2,7 +2,6 @@
 
 import "dart:convert";
 
-import "package:dio/dio.dart";
 import "package:flutter/foundation.dart";
 import "package:miria/log.dart";
 import "package:miria/model/account.dart";
@@ -274,10 +273,13 @@ class AccountRepository extends _$AccountRepository {
     await _save();
   }
 
+  /// サーバーが Miria と互換性のある Misskey かどうかを検証する。
+  ///
+  /// まず Misskey の API を素直に叩き、読めなければそのときだけ nodeinfo で
+  /// サーバー種別を調べる。nodeinfo を入口にすると、連合をオフにしたサーバーが
+  /// `.well-known/nodeinfo` を含む連合系エンドポイントを一律 403 で返すため
+  /// ログインできない (#770)。
   Future<void> _validateMisskey(String server) async {
-    //先にnodeInfoを取得する
-    final Response nodeInfo;
-
     final Uri serverUri;
     try {
       serverUri = serverToUri(server);
@@ -285,15 +287,16 @@ class AccountRepository extends _$AccountRepository {
       throw InvalidServerException(server);
     }
 
-    final uri = Uri(
-      scheme: serverUri.scheme,
-      host: serverUri.host,
-      port: serverUri.hasPort ? serverUri.port : null,
-      pathSegments: [".well-known", "nodeinfo"],
+    final hostWithPort = serverUri.hasPort
+        ? "${serverUri.host}:${serverUri.port}"
+        : serverUri.host;
+    final misskey = ref.read(
+      misskeyWithoutAccountProvider("${serverUri.scheme}://$hostWithPort"),
     );
 
+    final List<String> endpoints;
     try {
-      nodeInfo = await ref.read(dioProvider).getUri(uri);
+      endpoints = await misskey.endpoints();
     } catch (e) {
       // HandshakeExceptionの場合、HTTPを使用するよう促す
       if (e.toString().contains("HandshakeException") &&
@@ -301,53 +304,51 @@ class AccountRepository extends _$AccountRepository {
           !server.startsWith("https://")) {
         throw InvalidServerException(server);
       }
+
+      // Misskey として読めなかったので、ここで初めてサーバー種別を調べる。
+      final software = await _fetchSoftware(serverUri);
+      // these software already known as unavailable this app
+      if (software?.name == "mastodon" || software?.name == "fedibird") {
+        throw SoftwareNotSupportedException(software!.name);
+      }
       throw ServerIsNotMisskeyException(server);
     }
-    final nodeInfoHref = nodeInfo.data["links"][0]["href"];
-    final nodeInfoHrefResponse = await ref.read(dioProvider).get(nodeInfoHref);
-    final nodeInfoResult = nodeInfoHrefResponse.data;
 
-    final software = nodeInfoResult["software"]["name"];
-    // these software already known as unavailable this app
-    if (software == "mastodon" || software == "fedibird") {
-      throw SoftwareNotSupportedException(software.toString());
-    }
-
-    final version = nodeInfoResult["software"]["version"];
-
-    try {
-      final serverUrl =
-          "${serverUri.scheme}://${serverUri.host}${serverUri.hasPort ? ':${serverUri.port}' : ''}";
-      final hostWithPort = serverUri.hasPort
-          ? "${serverUri.host}:${serverUri.port}"
-          : serverUri.host;
-      final meta = await ref
-          .read(misskeyWithoutAccountProvider(serverUrl))
-          .meta();
-
-      final endpoints = await ref
-          .read(
-            misskeyProvider(
-              Account.demoAccount(
-                serverUri.host,
-                meta,
-                scheme: serverUri.scheme == "http" ? "http" : null,
-                port: serverUri.hasPort ? serverUri.port : null,
-              ),
-            ),
-          )
-          .endpoints();
-      if (!endpoints.contains("emojis")) {
-        throw SoftwareNotCompatibleException(
-          software.toString(),
-          version.toString(),
-        );
-      }
-    } catch (e) {
+    // Misskey ではあるが、Miria が前提とするエンドポイントを持たない場合。
+    if (!endpoints.contains("emojis")) {
+      final software = await _fetchSoftware(serverUri);
       throw SoftwareNotCompatibleException(
-        software.toString(),
-        version.toString(),
+        software?.name ?? hostWithPort,
+        software?.version ?? "",
       );
+    }
+  }
+
+  /// nodeinfo からソフトウェア名とバージョンを取得する。
+  ///
+  /// 取得できなければ `null`。連合をオフにしたサーバーは nodeinfo を 403 で
+  /// 返すため、取れないこと自体は異常ではない。エラーメッセージを具体的に
+  /// するためだけの情報なので、失敗しても呼び出し側の判定は変えない。
+  Future<({String name, String version})?> _fetchSoftware(Uri serverUri) async {
+    try {
+      final dio = ref.read(dioProvider);
+      final nodeInfo = await dio.getUri(
+        Uri(
+          scheme: serverUri.scheme,
+          host: serverUri.host,
+          port: serverUri.hasPort ? serverUri.port : null,
+          pathSegments: [".well-known", "nodeinfo"],
+        ),
+      );
+      final href = nodeInfo.data["links"][0]["href"];
+      final software = (await dio.get(href.toString())).data["software"];
+      return (
+        name: software["name"].toString(),
+        version: software["version"].toString(),
+      );
+    } catch (e) {
+      logger.warning(e);
+      return null;
     }
   }
 
