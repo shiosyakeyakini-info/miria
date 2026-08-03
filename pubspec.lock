@@ -937,6 +937,23 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"
+  marionette_flutter:
+    dependency: "direct main"
+    description:
+      name: marionette_flutter
+      sha256: "9bf6aa531157edeb3d94f7c4972367240a1d704bbe9f4ac558ef1a125c4d1a6d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.0"
+  marionette_riverpod_plugin:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: main
+      resolved-ref: "29ab3075aa152f52eac9922b057fbc9829c446b2"
+      url: "https://github.com/shiosyakeyakini-info/marionette_riverpod_plugin.git"
+    source: git
+    version: "0.1.0"
   markdown:
     dependency: transitive
     description:
@@ -1818,7 +1835,7 @@ packages:
     source: hosted
     version: "3.2.5"
   url_launcher_platform_interface:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: url_launcher_platform_interface
       sha256: "552f8a1e663569be95a8190206a38187b531910283c3e982193e4f2733f01029"
