@@ -111,6 +111,39 @@ def cmd_text(app, args):
     print(app.marionette("enterText", input=args.input, **_matcher(args))["message"])
 
 
+def cmd_submit(app, args):
+    """Confirm the focused field, the way a keyboard's done/search key does.
+
+    `enterText` only rewrites the value and `pressKey enter` never reaches
+    `TextInputClient`, so anything wired to `onSubmitted` — note search, for
+    one — needs this. Registered by lib/marionette_debug.dart.
+    """
+    print(app.call("ext.flutter.text.submit", action=args.action)["message"])
+
+
+def cmd_swipe(app, args):
+    """Drag between two points.
+
+    Use this rather than `scroll_to` on the timeline: `scroll_to` sizes its
+    attempt budget from the current `maxScrollExtent`, which a lazily loaded
+    list understates, so it gives up early. Note the coordinate matcher used
+    by `tap` is not accepted here — swipe wants an explicit start and end.
+    """
+    print(
+        app.marionette(
+            "swipe",
+            startX=str(args.start[0]),
+            startY=str(args.start[1]),
+            endX=str(args.end[0]),
+            endY=str(args.end[1]),
+        )["message"]
+    )
+
+
+def cmd_back(app, args):
+    print(app.marionette("pressBackButton")["message"])
+
+
 def cmd_shot(app, args):
     shots = app.marionette("takeScreenshots")["screenshots"]
     first = shots[0]
@@ -165,6 +198,18 @@ def main():
     t = with_matcher(sub.add_parser("text"))
     t.add_argument("--input", required=True)
     t.set_defaults(fn=cmd_text)
+    sb = sub.add_parser("submit")
+    sb.add_argument(
+        "--action",
+        default="done",
+        choices=["done", "go", "search", "send", "next", "previous", "newline"],
+    )
+    sb.set_defaults(fn=cmd_submit)
+    sw = sub.add_parser("swipe")
+    sw.add_argument("--start", type=float, nargs=2, required=True, metavar=("X", "Y"))
+    sw.add_argument("--end", type=float, nargs=2, required=True, metavar=("X", "Y"))
+    sw.set_defaults(fn=cmd_swipe)
+    sub.add_parser("back").set_defaults(fn=cmd_back)
     s = sub.add_parser("shot")
     s.add_argument("path")
     s.set_defaults(fn=cmd_shot)
