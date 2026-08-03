@@ -10,6 +10,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:media_kit/media_kit.dart";
 import "package:miria/const.dart";
 import "package:miria/l10n/app_localizations.dart";
+import "package:miria/marionette_debug.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/dialog/dialog_scope.dart";
 import "package:miria/view/common/error_dialog_listener.dart";
@@ -19,7 +20,9 @@ import "package:stack_trace/stack_trace.dart" as stack_trace;
 import "package:window_manager/window_manager.dart";
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  // debug ビルドでは marionette の binding が立ち上がる。
+  // release では通常の WidgetsFlutterBinding と同じ。
+  initializeMarionetteBinding();
   MediaKit.ensureInitialized();
   if (!kIsWeb && (Platform.isWindows || Platform.isMacOS || Platform.isLinux)) {
     await windowManager.ensureInitialized();
@@ -30,7 +33,7 @@ Future<void> main() async {
     return stack;
   };
 
-  runApp(const ProviderScope(child: Miria()));
+  runApp(ProviderScope(observers: marionetteObservers, child: const Miria()));
 }
 
 class Miria extends HookConsumerWidget with WidgetsBindingObserver {

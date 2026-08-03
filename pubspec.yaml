@@ -83,6 +83,16 @@ dependencies:
   flutter_twemoji: ^1.0.1
   mime: ^2.0.0
 
+  # AI エージェントから実行中アプリを操作・観測するための開発用依存
+  # (marionette_mcp)。Dart には debug 限定の依存指定がないため通常の
+  # dependencies に置くが、lib/marionette_debug.dart の kDebugMode ガードにより
+  # release ビルドではツリーシェイクで落ちる。
+  marionette_flutter: ^0.6.0
+  marionette_riverpod_plugin:
+    git:
+      url: https://github.com/shiosyakeyakini-info/marionette_riverpod_plugin.git
+      ref: main
+
 dependency_overrides:
   image_editor:
     git:
@@ -121,6 +131,8 @@ dev_dependencies:
   cider: ^0.2.3
   riverpod_generator: ^4.0.3
   riverpod_lint: ^3.0.0-dev.16
+  # テストで UrlLauncherPlatform.instance を差し替えるために直接参照する
+  url_launcher_platform_interface: ^2.3.2
 
 flutter:
   uses-material-design: true

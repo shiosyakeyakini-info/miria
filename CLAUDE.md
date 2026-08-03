@@ -56,6 +56,42 @@ fvm flutter pub run cider bump build --bump-build
 fvm flutter pub run cider version
 ```
 
+### 実行中アプリの観測・操作（marionette MCP）
+
+debug ビルドには [marionette_mcp](https://github.com/leancodepl/marionette_mcp)
+の binding が組み込まれており、AI エージェントから実行中のアプリを直接
+操作・観測できる。実装は `lib/marionette_debug.dart`（release では
+`kDebugMode` ガードで丸ごと無効化される）。
+
+```bash
+dart pub global activate marionette_mcp   # 初回のみ
+fvm flutter run                           # コンソールの VM Service URI を控える
+```
+
+`.mcp.json` に `marionette` サーバーを定義済み。エージェントに上記 URI を
+渡して接続させると、以下が使えるようになる。
+
+| ツール | 用途 |
+|---|---|
+| `get_interactive_elements` | ウィジェットツリー（トークン節約版） |
+| `tap` / `enter_text` / `scroll_to` | 画面操作 |
+| `take_screenshots` | スクリーンショット |
+| `get_logs` | `lib/log.dart` の `logger` 出力 |
+| `riverpod_snapshot` | 生きている Provider と値の一覧 |
+| `riverpod_read` | Provider 1 個の値を深く見る |
+
+`riverpod_snapshot` / `riverpod_read` は
+[marionette_riverpod_plugin](https://github.com/shiosyakeyakini-info/marionette_riverpod_plugin)
+が提供する。まだ一度も read されていない
+Provider は Riverpod の遅延生成の仕様上スナップショットに現れない。
+まず `includeValues=false` で一覧を取り、目的の Provider を `riverpod_read`
+で掘るのが効率的。詳細はプラグインの README を参照。
+
+実際に操作する手順（ログイン、ノート投稿、要素の探し方、Windows ビルドの
+ツールセット固定など）は `.claude/skills/drive-miria/` にスキルとしてまとめて
+ある。MCP サーバーを立てずに済ませたい場合の
+`scripts/marionette.py` も同梱している。
+
 ## アーキテクチャ
 
 ### 状態管理
