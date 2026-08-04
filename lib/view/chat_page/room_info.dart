@@ -40,6 +40,13 @@ class ChatRoomInfo extends HookConsumerWidget {
                 description: descriptionEditingController.text,
               ),
             );
+
+        if (!context.mounted) return;
+        await ref
+            .read(dialogStateProvider.notifier)
+            .showSimpleDialog(
+              message: (context) => S.of(context).chatUpdateCompleted,
+            );
       });
     });
 
@@ -148,11 +155,6 @@ class ChatRoomInfo extends HookConsumerWidget {
                             .chat
                             .rooms
                             .delete(ChatRoomsDeleteRequest(roomId: room.id));
-                        await ref
-                            .read(dialogStateProvider.notifier)
-                            .showSimpleDialog(
-                              message: (context) => S.of(context).delete,
-                            );
                         if (!context.mounted) return;
                         // ルーム削除後は現在のルームチャット画面を削除して前の画面に戻る
                         // まずDrawerを閉じてからナビゲーションを実行
@@ -261,7 +263,7 @@ class ChatRoomInfo extends HookConsumerWidget {
                     final isConfirm = await ref
                         .read(dialogStateProvider.notifier)
                         .showDialog(
-                          message: (context) => S.of(context).chatLeave,
+                          message: (context) => S.of(context).confirmChatLeave,
                           actions: (context) => [
                             S.of(context).chatLeave,
                             S.of(context).cancel,

@@ -161,6 +161,9 @@
     "noteBackgroundColor": "ノート背景色",
     
     "goToChat": "参りましょう",
+    "chatCreator": "チャットを立てた方",
+    "confirmChatLeave": "本当にこのチャットから退出いたしてもよろしくて？",
+    "chatUpdateCompleted": "更新できたようですわ",
     "chatRoomInvitation": "チャットルーム【{roomName}】にお招きいただきましたの",
     "@chatRoomInvitation": {
         "placeholders": {

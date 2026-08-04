@@ -2008,6 +2008,9 @@ class SJa extends S {
   String get chatOwnRooms => '自分で作ったやつ';
 
   @override
+  String get chatJoining => '入ってるルーム';
+
+  @override
   String get chatNewChat => '新しいチャットを開始';
 
   @override
@@ -2041,7 +2044,10 @@ class SJa extends S {
   String get chatDelete => '削除する';
 
   @override
-  String get chatCreator => 'チャット立てた人';
+  String get chatCreator => 'チャットを立てた人';
+
+  @override
+  String get confirmChatLeave => 'ほんまにチャットから退出してええな？';
 
   @override
   String get chatLeave => 'チャットから退出';
@@ -2084,6 +2090,9 @@ class SJa extends S {
 
   @override
   String get chatNsfw => 'NSFW';
+
+  @override
+  String get chatUpdateCompleted => '更新できたみたいや';
 
   @override
   String chatRoomInvitation(String roomName) {
@@ -2525,6 +2534,15 @@ class SJaOj extends SJa {
 
   @override
   String get profileFollowedMessage => 'フォローされたときのメッセージ';
+
+  @override
+  String get chatCreator => 'チャットを立てた方';
+
+  @override
+  String get confirmChatLeave => '本当にこのチャットから退出いたしてもよろしくて？';
+
+  @override
+  String get chatUpdateCompleted => '更新できたようですわ';
 
   @override
   String chatRoomInvitation(String roomName) {

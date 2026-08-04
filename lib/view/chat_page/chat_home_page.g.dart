@@ -55,4 +55,4 @@ final class HistoryProvider
   }
 }
 
-String _$historyHash() => r'cb9e7c0825ef6f68d2b46eea4a992376349bf480';
+String _$historyHash() => r'ae1373b3117e2e676062c1ec82522950a6a76cfa';

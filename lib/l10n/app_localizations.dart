@@ -3492,6 +3492,12 @@ abstract class S {
   /// **'自分で作ったやつ'**
   String get chatOwnRooms;
 
+  /// No description provided for @chatJoining.
+  ///
+  /// In ja, this message translates to:
+  /// **'入ってるルーム'**
+  String get chatJoining;
+
   /// No description provided for @chatNewChat.
   ///
   /// In ja, this message translates to:
@@ -3561,8 +3567,14 @@ abstract class S {
   /// No description provided for @chatCreator.
   ///
   /// In ja, this message translates to:
-  /// **'チャット立てた人'**
+  /// **'チャットを立てた人'**
   String get chatCreator;
+
+  /// No description provided for @confirmChatLeave.
+  ///
+  /// In ja, this message translates to:
+  /// **'ほんまにチャットから退出してええな？'**
+  String get confirmChatLeave;
 
   /// No description provided for @chatLeave.
   ///
@@ -3647,6 +3659,12 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'NSFW'**
   String get chatNsfw;
+
+  /// No description provided for @chatUpdateCompleted.
+  ///
+  /// In ja, this message translates to:
+  /// **'更新できたみたいや'**
+  String get chatUpdateCompleted;
 
   /// No description provided for @chatRoomInvitation.
   ///
