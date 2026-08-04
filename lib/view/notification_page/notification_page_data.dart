@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:miria/l10n/app_localizations.dart";
+import "package:miria/model/achievement.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 sealed class NotificationData {
@@ -164,7 +165,10 @@ class InvitedChatRoomNotification extends NotificationData {
 }
 
 extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
-  List<NotificationData> toNotificationData(S localize) {
+  List<NotificationData> toNotificationData(
+    S localize,
+    Achievements achievements,
+  ) {
     final resultList = <NotificationData>[];
 
     for (final element in this) {
@@ -281,10 +285,12 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
           );
 
         case NotificationType.achievementEarned:
+          final achievement = element.achievement ?? "";
           resultList.add(
             SimpleNotificationData(
               text:
-                  "${localize.achievementEarnedNotification}[${element.achievement}]",
+                  "${localize.achievementEarnedNotification}"
+                  "[${achievements[achievement]?.title ?? achievement}]",
               createdAt: element.createdAt,
               id: element.id,
             ),
