@@ -949,8 +949,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: main
-      resolved-ref: "29ab3075aa152f52eac9922b057fbc9829c446b2"
+      ref: "feature/nested-provider-scope"
+      resolved-ref: "8938ac92984a1902433cab596bff8474dee63699"
       url: "https://github.com/shiosyakeyakini-info/marionette_riverpod_plugin.git"
     source: git
     version: "0.1.0"
@@ -1094,8 +1094,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: master
-      resolved-ref: "9325a89f27a0fd4cbb4c0e1e0f9d144963574e37"
+      ref: "feature/reversi"
+      resolved-ref: "6365db70fd08492bc01ce0328729b99b0c6642b8"
       url: "https://github.com/shiosyakeyakini-info/misskey_dart.git"
     source: git
     version: "1.0.0"

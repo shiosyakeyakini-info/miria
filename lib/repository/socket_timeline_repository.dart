@@ -325,6 +325,16 @@ abstract class SocketTimelineRepository extends TimelineRepository {
           case DriveFileCreatedChannelEvent():
           case ReadAntennaChannelEvent():
           case ReceiveFollowRequestChannelEvent():
+          // リバーシは専用の Notifier が別チャンネルで受けるので、
+          // ここに流れてくることはない。
+          case ReversiInvitedChannelEvent():
+          case ReversiMatchedChannelEvent():
+          case ReversiStartedChannelEvent():
+          case ReversiEndedChannelEvent():
+          case ReversiLogChannelEvent():
+          case ReversiChangeReadyStatesChannelEvent():
+          case ReversiUpdateSettingsChannelEvent():
+          case ReversiCanceledChannelEvent():
           case FallbackChannelEvent():
           case ReactedChannelEvent():
           case UnreactedChannelEvent():
@@ -391,6 +401,16 @@ abstract class SocketTimelineRepository extends TimelineRepository {
           case DriveFileCreatedChannelEvent():
           case ReadAntennaChannelEvent():
           case ReceiveFollowRequestChannelEvent():
+          // リバーシは専用の Notifier が別チャンネルで受けるので、
+          // ここに流れてくることはない。
+          case ReversiInvitedChannelEvent():
+          case ReversiMatchedChannelEvent():
+          case ReversiStartedChannelEvent():
+          case ReversiEndedChannelEvent():
+          case ReversiLogChannelEvent():
+          case ReversiChangeReadyStatesChannelEvent():
+          case ReversiUpdateSettingsChannelEvent():
+          case ReversiCanceledChannelEvent():
           case FallbackChannelEvent():
             break;
           case NewChatMessageEvent():

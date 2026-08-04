@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
@@ -40,13 +41,21 @@ class MisskeyGamesPage extends ConsumerWidget implements AutoRouteWrapper {
               mode: LaunchMode.externalApplication,
             ),
           ),
+          // リバーシだけはアプリ内で遊べる。ルールエンジンを Dart に移植して
+          // あるので、盤面はブラウザに頼らず自前で再現している。
           ListTile(
             title: Text(S.of(context).reversi),
             subtitle: const ReversiInvite(),
-            onTap: () async => launchUrlString(
-              "https://${accountContext.postAccount.host}/reversi",
-              mode: LaunchMode.externalApplication,
+            trailing: IconButton(
+              icon: const Icon(Icons.open_in_browser),
+              tooltip: S.of(context).reversiOpenInBrowser,
+              onPressed: () async => launchUrlString(
+                "https://${accountContext.postAccount.host}/reversi",
+                mode: LaunchMode.externalApplication,
+              ),
             ),
+            onTap: () async =>
+                context.pushRoute(ReversiRoute(accountContext: accountContext)),
           ),
         ],
       ),

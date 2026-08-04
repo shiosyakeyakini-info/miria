@@ -179,7 +179,14 @@ Success looks like the ホームタイムライン screen.
 m snapshot                        # names and types only — start here
 m snapshot --filter account --values
 m read accountRepositoryProvider
+m read --id 'reversiGameProvider(<gameId>)#scope8'
 ```
+
+Most screens sit under `AccountContextScope`, which is a nested
+`ProviderScope`, so their providers live in a child container and their ids
+carry a `#scopeN` suffix. `snapshot` reports `scopes`; anything above 1 means
+scoping is in play. `read <name>` still works when the name is unique — when
+it is not, it lists the ids and `read --id` picks one.
 
 Providers that were never read are absent — Riverpod builds state lazily.
 Repositories serialize to `{"runtimeType": ...}` only, so the timeline's notes

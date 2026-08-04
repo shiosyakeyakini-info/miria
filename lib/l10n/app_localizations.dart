@@ -3360,6 +3360,330 @@ abstract class S {
   /// **'招待はされとらへんみたいや'**
   String get nonInvitedReversi;
 
+  /// No description provided for @reversiPlay.
+  ///
+  /// In ja, this message translates to:
+  /// **'アプリで遊ぶ'**
+  String get reversiPlay;
+
+  /// No description provided for @reversiOpenInBrowser.
+  ///
+  /// In ja, this message translates to:
+  /// **'ブラウザで開く'**
+  String get reversiOpenInBrowser;
+
+  /// No description provided for @reversiMatchAnyone.
+  ///
+  /// In ja, this message translates to:
+  /// **'誰かと対戦する'**
+  String get reversiMatchAnyone;
+
+  /// No description provided for @reversiCancelMatching.
+  ///
+  /// In ja, this message translates to:
+  /// **'さがすのをやめる'**
+  String get reversiCancelMatching;
+
+  /// No description provided for @reversiMatching.
+  ///
+  /// In ja, this message translates to:
+  /// **'対戦相手をさがしとるで...'**
+  String get reversiMatching;
+
+  /// No description provided for @reversiInvitations.
+  ///
+  /// In ja, this message translates to:
+  /// **'招待されとる対局'**
+  String get reversiInvitations;
+
+  /// No description provided for @reversiMyGames.
+  ///
+  /// In ja, this message translates to:
+  /// **'自分の対局'**
+  String get reversiMyGames;
+
+  /// No description provided for @reversiNoGames.
+  ///
+  /// In ja, this message translates to:
+  /// **'対局はまだあらへん'**
+  String get reversiNoGames;
+
+  /// No description provided for @reversiPlaying.
+  ///
+  /// In ja, this message translates to:
+  /// **'対局中'**
+  String get reversiPlaying;
+
+  /// No description provided for @reversiFinished.
+  ///
+  /// In ja, this message translates to:
+  /// **'終わっとる'**
+  String get reversiFinished;
+
+  /// No description provided for @reversiKifu.
+  ///
+  /// In ja, this message translates to:
+  /// **'棋譜'**
+  String get reversiKifu;
+
+  /// No description provided for @reversiKifuFirst.
+  ///
+  /// In ja, this message translates to:
+  /// **'最初から'**
+  String get reversiKifuFirst;
+
+  /// No description provided for @reversiKifuPrevious.
+  ///
+  /// In ja, this message translates to:
+  /// **'1手戻す'**
+  String get reversiKifuPrevious;
+
+  /// No description provided for @reversiKifuNext.
+  ///
+  /// In ja, this message translates to:
+  /// **'1手進める'**
+  String get reversiKifuNext;
+
+  /// No description provided for @reversiKifuLast.
+  ///
+  /// In ja, this message translates to:
+  /// **'最後まで'**
+  String get reversiKifuLast;
+
+  /// No description provided for @reversiKifuLatest.
+  ///
+  /// In ja, this message translates to:
+  /// **'最新の盤面に戻す'**
+  String get reversiKifuLatest;
+
+  /// No description provided for @reversiKifuStart.
+  ///
+  /// In ja, this message translates to:
+  /// **'開始'**
+  String get reversiKifuStart;
+
+  /// No description provided for @reversiKifuProgress.
+  ///
+  /// In ja, this message translates to:
+  /// **'{index} / {total} 手'**
+  String reversiKifuProgress(int index, int total);
+
+  /// No description provided for @reversiReady.
+  ///
+  /// In ja, this message translates to:
+  /// **'準備完了'**
+  String get reversiReady;
+
+  /// No description provided for @reversiCancelReady.
+  ///
+  /// In ja, this message translates to:
+  /// **'やっぱ待って'**
+  String get reversiCancelReady;
+
+  /// No description provided for @reversiWaitingOpponent.
+  ///
+  /// In ja, this message translates to:
+  /// **'相手の準備待ちや'**
+  String get reversiWaitingOpponent;
+
+  /// No description provided for @reversiStarting.
+  ///
+  /// In ja, this message translates to:
+  /// **'もうすぐ始まるで'**
+  String get reversiStarting;
+
+  /// No description provided for @reversiSurrender.
+  ///
+  /// In ja, this message translates to:
+  /// **'投了する'**
+  String get reversiSurrender;
+
+  /// No description provided for @reversiYourTurn.
+  ///
+  /// In ja, this message translates to:
+  /// **'あんたの番やで'**
+  String get reversiYourTurn;
+
+  /// No description provided for @reversiOpponentTurn.
+  ///
+  /// In ja, this message translates to:
+  /// **'相手の番や'**
+  String get reversiOpponentTurn;
+
+  /// No description provided for @reversiWin.
+  ///
+  /// In ja, this message translates to:
+  /// **'あんたの勝ちや'**
+  String get reversiWin;
+
+  /// No description provided for @reversiLose.
+  ///
+  /// In ja, this message translates to:
+  /// **'あんたの負けや'**
+  String get reversiLose;
+
+  /// No description provided for @reversiDraw.
+  ///
+  /// In ja, this message translates to:
+  /// **'引き分けや'**
+  String get reversiDraw;
+
+  /// No description provided for @reversiDesynced.
+  ///
+  /// In ja, this message translates to:
+  /// **'盤面がサーバーとずれとる'**
+  String get reversiDesynced;
+
+  /// No description provided for @reversiVersus.
+  ///
+  /// In ja, this message translates to:
+  /// **'{opponent} と対戦中'**
+  String reversiVersus(String opponent);
+
+  /// No description provided for @reversiInvite.
+  ///
+  /// In ja, this message translates to:
+  /// **'誘って対戦する'**
+  String get reversiInvite;
+
+  /// No description provided for @reversiWaitingFor.
+  ///
+  /// In ja, this message translates to:
+  /// **'{user} の返事待ちや'**
+  String reversiWaitingFor(String user);
+
+  /// No description provided for @reversiInvitationExpired.
+  ///
+  /// In ja, this message translates to:
+  /// **'招待の期限が切れとったわ'**
+  String get reversiInvitationExpired;
+
+  /// No description provided for @reversiAllowIrregularRules.
+  ///
+  /// In ja, this message translates to:
+  /// **'変則ルールもあり'**
+  String get reversiAllowIrregularRules;
+
+  /// No description provided for @reversiDisallowIrregularRules.
+  ///
+  /// In ja, this message translates to:
+  /// **'ふつうのルールだけ'**
+  String get reversiDisallowIrregularRules;
+
+  /// No description provided for @reversiGameCanceled.
+  ///
+  /// In ja, this message translates to:
+  /// **'対局が取り消されたで'**
+  String get reversiGameCanceled;
+
+  /// No description provided for @reversiCancelGame.
+  ///
+  /// In ja, this message translates to:
+  /// **'対局をやめる'**
+  String get reversiCancelGame;
+
+  /// No description provided for @reversiConfirmCancelGame.
+  ///
+  /// In ja, this message translates to:
+  /// **'この対局やめてええか？'**
+  String get reversiConfirmCancelGame;
+
+  /// No description provided for @reversiConfirmSurrender.
+  ///
+  /// In ja, this message translates to:
+  /// **'投了してええか？'**
+  String get reversiConfirmSurrender;
+
+  /// No description provided for @reversiOpponentChangedSettings.
+  ///
+  /// In ja, this message translates to:
+  /// **'相手が設定を変えたから準備完了を外したで'**
+  String get reversiOpponentChangedSettings;
+
+  /// No description provided for @reversiGameSettings.
+  ///
+  /// In ja, this message translates to:
+  /// **'対局の設定'**
+  String get reversiGameSettings;
+
+  /// No description provided for @reversiMap.
+  ///
+  /// In ja, this message translates to:
+  /// **'盤面'**
+  String get reversiMap;
+
+  /// No description provided for @reversiMapRandom.
+  ///
+  /// In ja, this message translates to:
+  /// **'ランダム'**
+  String get reversiMapRandom;
+
+  /// No description provided for @reversiMapCustom.
+  ///
+  /// In ja, this message translates to:
+  /// **'カスタム'**
+  String get reversiMapCustom;
+
+  /// No description provided for @reversiBlackOrWhite.
+  ///
+  /// In ja, this message translates to:
+  /// **'先手'**
+  String get reversiBlackOrWhite;
+
+  /// No description provided for @reversiBlackIsRandom.
+  ///
+  /// In ja, this message translates to:
+  /// **'ランダム'**
+  String get reversiBlackIsRandom;
+
+  /// No description provided for @reversiBlackIs.
+  ///
+  /// In ja, this message translates to:
+  /// **'{user} が黒'**
+  String reversiBlackIs(String user);
+
+  /// No description provided for @reversiTimeLimitForEachTurn.
+  ///
+  /// In ja, this message translates to:
+  /// **'1手あたりの制限時間'**
+  String get reversiTimeLimitForEachTurn;
+
+  /// No description provided for @reversiSeconds.
+  ///
+  /// In ja, this message translates to:
+  /// **'{seconds}秒'**
+  String reversiSeconds(int seconds);
+
+  /// No description provided for @reversiRules.
+  ///
+  /// In ja, this message translates to:
+  /// **'ルール'**
+  String get reversiRules;
+
+  /// No description provided for @reversiIsLlotheo.
+  ///
+  /// In ja, this message translates to:
+  /// **'石の少ないほうが勝ち'**
+  String get reversiIsLlotheo;
+
+  /// No description provided for @reversiLoopedMap.
+  ///
+  /// In ja, this message translates to:
+  /// **'端がループする盤面'**
+  String get reversiLoopedMap;
+
+  /// No description provided for @reversiCanPutEverywhere.
+  ///
+  /// In ja, this message translates to:
+  /// **'どこにでも置ける'**
+  String get reversiCanPutEverywhere;
+
+  /// No description provided for @reversiSettingsLockedWhenReady.
+  ///
+  /// In ja, this message translates to:
+  /// **'準備完了を外すと設定を変えられるで'**
+  String get reversiSettingsLockedWhenReady;
+
   /// No description provided for @remoteServerWithoutLogin.
   ///
   /// In ja, this message translates to:

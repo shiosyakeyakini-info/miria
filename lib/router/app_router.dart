@@ -44,6 +44,8 @@ import "package:miria/view/explore_page/explore_role_users_page.dart";
 import "package:miria/view/favorited_note_page/favorited_note_page.dart";
 import "package:miria/view/federation_page/federation_page.dart";
 import "package:miria/view/games_page/misskey_games_page.dart";
+import "package:miria/view/games_page/reversi/reversi_game_page.dart";
+import "package:miria/view/games_page/reversi/reversi_page.dart";
 import "package:miria/view/hashtag_page/hashtag_page.dart";
 import "package:miria/view/login_page/login_page.dart";
 import "package:miria/view/login_page/misskey_server_list_dialog.dart";
@@ -154,6 +156,8 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: SeveralAccountGeneralSettingsRoute.page),
     AutoRoute(page: SharingAccountSelectRoute.page),
     AutoRoute(page: MisskeyGamesRoute.page),
+    AutoRoute(page: ReversiRoute.page),
+    AutoRoute(page: ReversiGameRoute.page),
     // きしょ……
     AutoRoute(page: MisskeyRouteRoute.page),
     AutoRoute(page: ChatHomeRoute.page),

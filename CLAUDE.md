@@ -92,6 +92,64 @@ Provider は Riverpod の遅延生成の仕様上スナップショットに現�
 ある。MCP サーバーを立てずに済ませたい場合の
 `scripts/marionette.py` も同梱している。
 
+### リバーシ（実証実験）
+
+Misskey のリバーシをアプリ内で遊べるようにしたもの。ルールエンジンは本家
+`packages/misskey-reversi` を Dart に移植してある（`lib/model/reversi/`）。
+
+移植が要るのは見た目の都合ではない。サーバーは対局が始まったあと盤面を
+一度も送ってこず、`reversiGame` チャンネルに「誰がどこに打ったか」の `log`
+イベントしか流さない。盤面はクライアントが自前で再現するしかなく、実装が
+1 箇所でもずれると `reversi/verify` の CRC32 が合わなくなる。
+
+| ファイル | 中身 |
+|---|---|
+| `lib/model/reversi/reversi_game.dart` | ルールエンジン（`game.ts` の移植） |
+| `lib/model/reversi/reversi_maps.dart` | 40 種類のマップ（`maps.ts` の移植） |
+| `lib/model/reversi/reversi_serializer.dart` | 対局ログの復元（`serializer.ts` の移植） |
+| `lib/state_notifier/reversi/` | マッチングと対局の状態 |
+| `lib/view/games_page/reversi/` | マッチング画面・対局画面・盤面 |
+
+移植の正しさは `test/model/reversi/reversi_golden_test.dart` が見ている。
+本家の TypeScript を実際に走らせて作った棋譜
+（41 マップ × 5 ルール設定 = 205 局、10918 手）と、1 手ごとに盤面・手番・
+CRC32 まで突き合わせる。照合データの作り直しは
+`test/assets/reversi_golden_gen.js` を参照。
+
+#### e2e の回し方
+
+marionette から動かせるのは miria 1 つだけなので、対戦相手は別に用意する。
+
+```bash
+# 相手役。招待を出し、マッチしたら自動で打ち返す
+fvm dart run tool/reversi_bot.dart --token <相手のトークン> --target miria
+
+# 盤面の確認（Riverpod の状態が読めないときの代替、下記参照）
+fvm dart run tool/reversi_show.dart --token <トークン> --game <gameId>
+```
+
+miria 側は `Misskey Games → リバーシ` から招待に応じ、`reversi-ready` を押し、
+`reversi-cell-<pos>` をタップして打つ。盤面のマスは 1 つずつ Key を持たせて
+あるので、座標を数えずに指定できる。
+
+盤面の状態は `riverpod_read` からも読める。`ReversiGameState.toJson` が
+盤面・手番・着手可能マス・crc32 を出すので、e2e のアサーションはこれを見る
+のがいちばん確実（マス目はウィジェットツリー上ではただの矩形で、盤面の
+中身が読めない）。
+
+対局画面は `AccountContextScope` が挟む子 `ProviderScope` の下にあるため、
+以前は root コンテナしか見ない marionette_riverpod_plugin から見えなかった。
+プラグイン側が入れ子の `ProviderScope` を辿るようになったので今は見える。
+スコープ内の provider は id に `#scopeN` が付く。
+
+```bash
+m snapshot --filter reversi   # scopes が 1 より大きければスコープが効いている
+m read 'reversiGameProvider(<gameId>)#scope1'
+```
+
+`tool/reversi_show.dart` はサーバー側から同じ盤面を組み直すので、アプリの
+盤面が正しいかを外から突き合わせたいときに使う。
+
 ## アーキテクチャ
 
 ### 状態管理
