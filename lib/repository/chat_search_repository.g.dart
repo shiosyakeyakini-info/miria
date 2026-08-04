@@ -6,8 +6,11 @@ part of 'chat_search_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(ChatSearchRepository)
-const chatSearchRepositoryProvider = ChatSearchRepositoryProvider._();
+final chatSearchRepositoryProvider = ChatSearchRepositoryProvider._();
 
 final class ChatSearchRepositoryProvider
     extends
@@ -15,22 +18,22 @@ final class ChatSearchRepositoryProvider
           ChatSearchRepository,
           Map<String, List<ChatMessage>>
         > {
-  const ChatSearchRepositoryProvider._()
+  ChatSearchRepositoryProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'chatSearchRepositoryProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[misskeyGetContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyGetContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           ChatSearchRepositoryProvider.$allTransitiveDependencies0,
           ChatSearchRepositoryProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = misskeyGetContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyGetContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyGetContextProvider.$allTransitiveDependencies0;
 
   @override
@@ -60,7 +63,6 @@ abstract class _$ChatSearchRepository
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref =
         this.ref
             as $Ref<
@@ -78,16 +80,16 @@ abstract class _$ChatSearchRepository
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(ChatSearchPagination)
-const chatSearchPaginationProvider = ChatSearchPaginationFamily._();
+final chatSearchPaginationProvider = ChatSearchPaginationFamily._();
 
 final class ChatSearchPaginationProvider
     extends $NotifierProvider<ChatSearchPagination, List<ChatMessage>> {
-  const ChatSearchPaginationProvider._({
+  ChatSearchPaginationProvider._({
     required ChatSearchPaginationFamily super.from,
     required String super.argument,
   }) : super(
@@ -143,7 +145,7 @@ final class ChatSearchPaginationFamily extends $Family
           List<ChatMessage>,
           String
         > {
-  const ChatSearchPaginationFamily._()
+  ChatSearchPaginationFamily._()
     : super(
         retry: null,
         name: r'chatSearchPaginationProvider',
@@ -167,7 +169,6 @@ abstract class _$ChatSearchPagination extends $Notifier<List<ChatMessage>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<List<ChatMessage>, List<ChatMessage>>;
     final element =
         ref.element
@@ -177,9 +178,6 @@ abstract class _$ChatSearchPagination extends $Notifier<List<ChatMessage>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

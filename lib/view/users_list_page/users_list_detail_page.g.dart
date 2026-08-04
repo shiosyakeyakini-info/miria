@@ -6,17 +6,20 @@ part of 'users_list_detail_page.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(_UsersListNotifier)
-const _usersListNotifierProvider = _UsersListNotifierFamily._();
+final _usersListProvider = _UsersListNotifierFamily._();
 
 final class _UsersListNotifierProvider
     extends $AsyncNotifierProvider<_UsersListNotifier, UsersList> {
-  const _UsersListNotifierProvider._({
+  _UsersListNotifierProvider._({
     required _UsersListNotifierFamily super.from,
     required (Misskey, String) super.argument,
   }) : super(
          retry: null,
-         name: r'_usersListNotifierProvider',
+         name: r'_usersListProvider',
          isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
@@ -27,7 +30,7 @@ final class _UsersListNotifierProvider
 
   @override
   String toString() {
-    return r'_usersListNotifierProvider'
+    return r'_usersListProvider'
         ''
         '$argument';
   }
@@ -59,10 +62,10 @@ final class _UsersListNotifierFamily extends $Family
           FutureOr<UsersList>,
           (Misskey, String)
         > {
-  const _UsersListNotifierFamily._()
+  _UsersListNotifierFamily._()
     : super(
         retry: null,
-        name: r'_usersListNotifierProvider',
+        name: r'_usersListProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
         isAutoDispose: true,
@@ -72,7 +75,7 @@ final class _UsersListNotifierFamily extends $Family
       _UsersListNotifierProvider._(argument: (misskey, listId), from: this);
 
   @override
-  String toString() => r'_usersListNotifierProvider';
+  String toString() => r'_usersListProvider';
 }
 
 abstract class _$UsersListNotifier extends $AsyncNotifier<UsersList> {
@@ -84,7 +87,6 @@ abstract class _$UsersListNotifier extends $AsyncNotifier<UsersList> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args.$1, _$args.$2);
     final ref = this.ref as $Ref<AsyncValue<UsersList>, UsersList>;
     final element =
         ref.element
@@ -94,16 +96,16 @@ abstract class _$UsersListNotifier extends $AsyncNotifier<UsersList> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args.$1, _$args.$2));
   }
 }
 
 @ProviderFor(_UsersListUsers)
-const _usersListUsersProvider = _UsersListUsersFamily._();
+final _usersListUsersProvider = _UsersListUsersFamily._();
 
 final class _UsersListUsersProvider
     extends $AsyncNotifierProvider<_UsersListUsers, List<User>> {
-  const _UsersListUsersProvider._({
+  _UsersListUsersProvider._({
     required _UsersListUsersFamily super.from,
     required (Misskey, String) super.argument,
   }) : super(
@@ -139,7 +141,7 @@ final class _UsersListUsersProvider
   }
 }
 
-String _$_usersListUsersHash() => r'd4f5066da6faec88593e8f35da198edb0b3150a4';
+String _$_usersListUsersHash() => r'ca1a1f0b844b97f34536d7b13b6ddd93da5998fd';
 
 final class _UsersListUsersFamily extends $Family
     with
@@ -150,7 +152,7 @@ final class _UsersListUsersFamily extends $Family
           FutureOr<List<User>>,
           (Misskey, String)
         > {
-  const _UsersListUsersFamily._()
+  _UsersListUsersFamily._()
     : super(
         retry: null,
         name: r'_usersListUsersProvider',
@@ -175,7 +177,6 @@ abstract class _$UsersListUsers extends $AsyncNotifier<List<User>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args.$1, _$args.$2);
     final ref = this.ref as $Ref<AsyncValue<List<User>>, List<User>>;
     final element =
         ref.element
@@ -185,9 +186,6 @@ abstract class _$UsersListUsers extends $AsyncNotifier<List<User>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args.$1, _$args.$2));
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

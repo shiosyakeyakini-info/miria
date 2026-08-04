@@ -6,34 +6,37 @@ part of 'note_modal_sheet.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(NoteModalSheetNotifier)
-const noteModalSheetNotifierProvider = NoteModalSheetNotifierFamily._();
+final noteModalSheetProvider = NoteModalSheetNotifierFamily._();
 
 final class NoteModalSheetNotifierProvider
     extends $NotifierProvider<NoteModalSheetNotifier, NoteModalSheetState> {
-  const NoteModalSheetNotifierProvider._({
+  NoteModalSheetNotifierProvider._({
     required NoteModalSheetNotifierFamily super.from,
     required Note super.argument,
   }) : super(
          retry: null,
-         name: r'noteModalSheetNotifierProvider',
+         name: r'noteModalSheetProvider',
          isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 = misskeyGetContextProvider;
-  static const $allTransitiveDependencies3 = notesWithProvider;
+  static final $allTransitiveDependencies2 = misskeyGetContextProvider;
+  static final $allTransitiveDependencies3 = notesWithProvider;
 
   @override
   String debugGetCreateSourceHash() => _$noteModalSheetNotifierHash();
 
   @override
   String toString() {
-    return r'noteModalSheetNotifierProvider'
+    return r'noteModalSheetProvider'
         ''
         '($argument)';
   }
@@ -63,7 +66,7 @@ final class NoteModalSheetNotifierProvider
 }
 
 String _$noteModalSheetNotifierHash() =>
-    r'500faf8f42ddccca0502c701cbd2791aa39f3cdf';
+    r'fd7ce41085cfdef3aaf1e67e8fbe6c4f1d1c6214';
 
 final class NoteModalSheetNotifierFamily extends $Family
     with
@@ -74,17 +77,17 @@ final class NoteModalSheetNotifierFamily extends $Family
           NoteModalSheetState,
           Note
         > {
-  const NoteModalSheetNotifierFamily._()
+  NoteModalSheetNotifierFamily._()
     : super(
         retry: null,
-        name: r'noteModalSheetNotifierProvider',
-        dependencies: const <ProviderOrFamily>[
+        name: r'noteModalSheetProvider',
+        dependencies: <ProviderOrFamily>[
           misskeyPostContextProvider,
           misskeyGetContextProvider,
           accountContextProvider,
           notesWithProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        $allTransitiveDependencies: <ProviderOrFamily>{
           NoteModalSheetNotifierProvider.$allTransitiveDependencies0,
           NoteModalSheetNotifierProvider.$allTransitiveDependencies1,
           NoteModalSheetNotifierProvider.$allTransitiveDependencies2,
@@ -97,7 +100,7 @@ final class NoteModalSheetNotifierFamily extends $Family
       NoteModalSheetNotifierProvider._(argument: note, from: this);
 
   @override
-  String toString() => r'noteModalSheetNotifierProvider';
+  String toString() => r'noteModalSheetProvider';
 }
 
 abstract class _$NoteModalSheetNotifier extends $Notifier<NoteModalSheetState> {
@@ -108,7 +111,6 @@ abstract class _$NoteModalSheetNotifier extends $Notifier<NoteModalSheetState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<NoteModalSheetState, NoteModalSheetState>;
     final element =
         ref.element
@@ -118,9 +120,6 @@ abstract class _$NoteModalSheetNotifier extends $Notifier<NoteModalSheetState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

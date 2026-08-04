@@ -27,7 +27,7 @@ class ClipsNotifier extends _$ClipsNotifier {
   }
 
   Future<void> create(ClipSettings settings) async {
-    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+    await ref.read(dialogStateProvider.notifier).guard(() async {
       final list = await ref
           .read(misskeyPostContextProvider)
           .clips
@@ -44,7 +44,7 @@ class ClipsNotifier extends _$ClipsNotifier {
 
   Future<void> delete(String clipId) async {
     final result = await ref
-        .read(dialogStateNotifierProvider.notifier)
+        .read(dialogStateProvider.notifier)
         .showDialog(
           message: (context) => S.of(context).confirmDeleteClip,
           actions: (context) => [
@@ -54,7 +54,7 @@ class ClipsNotifier extends _$ClipsNotifier {
         );
     if (result != 0) return;
 
-    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+    await ref.read(dialogStateProvider.notifier).guard(() async {
       await ref
           .read(misskeyPostContextProvider)
           .clips
@@ -64,7 +64,7 @@ class ClipsNotifier extends _$ClipsNotifier {
   }
 
   Future<void> updateClip(String clipId, ClipSettings settings) async {
-    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+    await ref.read(dialogStateProvider.notifier).guard(() async {
       final clip = await ref
           .read(misskeyPostContextProvider)
           .clips

@@ -17,7 +17,7 @@ class AntennasNotifier extends _$AntennasNotifier {
   }
 
   Future<void> create(AntennaSettings settings) async {
-    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+    await ref.read(dialogStateProvider.notifier).guard(() async {
       final antenna = await _misskey.antennas.create(
         AntennasCreateRequest(
           name: settings.name,
@@ -37,7 +37,7 @@ class AntennasNotifier extends _$AntennasNotifier {
   }
 
   Future<void> delete(String antennaId) async {
-    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+    await ref.read(dialogStateProvider.notifier).guard(() async {
       await _misskey.antennas.delete(
         AntennasDeleteRequest(antennaId: antennaId),
       );
@@ -48,7 +48,7 @@ class AntennasNotifier extends _$AntennasNotifier {
   }
 
   Future<void> updateAntenna(String antennaId, AntennaSettings settings) async {
-    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+    await ref.read(dialogStateProvider.notifier).guard(() async {
       await _misskey.antennas.update(
         AntennasUpdateRequest(
           antennaId: antennaId,

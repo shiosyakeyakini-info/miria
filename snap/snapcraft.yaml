@@ -63,6 +63,8 @@ parts:
       - ninja-build
       - unzip
       - jq
+      - lld-18
+      - llvm-18
     stage-packages:
       - libsecret-1-0
     override-pull: |

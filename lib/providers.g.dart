@@ -6,12 +6,15 @@ part of 'providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(dio)
-const dioProvider = DioProvider._();
+final dioProvider = DioProvider._();
 
 final class DioProvider extends $FunctionalProvider<Dio, Dio, Dio>
     with $Provider<Dio> {
-  const DioProvider._()
+  DioProvider._()
     : super(
         from: null,
         argument: null,
@@ -47,12 +50,12 @@ final class DioProvider extends $FunctionalProvider<Dio, Dio, Dio>
 String _$dioHash() => r'26309262f0000d1b9dc277bb27f212a83dea1b6b';
 
 @ProviderFor(fileSystem)
-const fileSystemProvider = FileSystemProvider._();
+final fileSystemProvider = FileSystemProvider._();
 
 final class FileSystemProvider
     extends $FunctionalProvider<FileSystem, FileSystem, FileSystem>
     with $Provider<FileSystem> {
-  const FileSystemProvider._()
+  FileSystemProvider._()
     : super(
         from: null,
         argument: null,
@@ -87,16 +90,63 @@ final class FileSystemProvider
 
 String _$fileSystemHash() => r'9b96bb59d396159330bbfc15f1c8ea184af0a9b7';
 
+/// 実績名の対訳表。表示言語を変えたら引き直す。
+
+@ProviderFor(achievements)
+final achievementsProvider = AchievementsProvider._();
+
+/// 実績名の対訳表。表示言語を変えたら引き直す。
+
+final class AchievementsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<Achievements>,
+          Achievements,
+          FutureOr<Achievements>
+        >
+    with $FutureModifier<Achievements>, $FutureProvider<Achievements> {
+  /// 実績名の対訳表。表示言語を変えたら引き直す。
+  AchievementsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'achievementsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$achievementsHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<Achievements> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<Achievements> create(Ref ref) {
+    return achievements(ref);
+  }
+}
+
+String _$achievementsHash() => r'04523e9f4daab6bbe9cdf956d1e472bd4c680a7e';
+
 @ProviderFor(misskey)
 @Deprecated(
-  "Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain",
+  'Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain',
 )
-const misskeyProvider = MisskeyFamily._();
+final misskeyProvider = MisskeyFamily._();
 
+@Deprecated(
+  'Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain',
+)
 final class MisskeyProvider
     extends $FunctionalProvider<Misskey, Misskey, Misskey>
     with $Provider<Misskey> {
-  const MisskeyProvider._({
+  MisskeyProvider._({
     required MisskeyFamily super.from,
     required Account super.argument,
   }) : super(
@@ -149,9 +199,12 @@ final class MisskeyProvider
 
 String _$misskeyHash() => r'c1dede29fabcc1bbff0c065f1ad6fc5f395efb63';
 
+@Deprecated(
+  'Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain',
+)
 final class MisskeyFamily extends $Family
     with $FunctionalFamilyOverride<Misskey, Account> {
-  const MisskeyFamily._()
+  MisskeyFamily._()
     : super(
         retry: null,
         name: r'misskeyProvider',
@@ -160,6 +213,9 @@ final class MisskeyFamily extends $Family
         isAutoDispose: false,
       );
 
+  @Deprecated(
+    'Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain',
+  )
   MisskeyProvider call(Account account) =>
       MisskeyProvider._(argument: account, from: this);
 
@@ -168,12 +224,12 @@ final class MisskeyFamily extends $Family
 }
 
 @ProviderFor(appRouter)
-const appRouterProvider = AppRouterProvider._();
+final appRouterProvider = AppRouterProvider._();
 
 final class AppRouterProvider
     extends $FunctionalProvider<Raw<AppRouter>, Raw<AppRouter>, Raw<AppRouter>>
     with $Provider<Raw<AppRouter>> {
-  const AppRouterProvider._()
+  AppRouterProvider._()
     : super(
         from: null,
         argument: null,
@@ -209,12 +265,12 @@ final class AppRouterProvider
 String _$appRouterHash() => r'9ef2ee218086b41ec585ffa1b0ed6b63ebdbb7d8';
 
 @ProviderFor(misskeyWithoutAccount)
-const misskeyWithoutAccountProvider = MisskeyWithoutAccountFamily._();
+final misskeyWithoutAccountProvider = MisskeyWithoutAccountFamily._();
 
 final class MisskeyWithoutAccountProvider
     extends $FunctionalProvider<Misskey, Misskey, Misskey>
     with $Provider<Misskey> {
-  const MisskeyWithoutAccountProvider._({
+  MisskeyWithoutAccountProvider._({
     required MisskeyWithoutAccountFamily super.from,
     required String super.argument,
   }) : super(
@@ -270,7 +326,7 @@ String _$misskeyWithoutAccountHash() =>
 
 final class MisskeyWithoutAccountFamily extends $Family
     with $FunctionalFamilyOverride<Misskey, String> {
-  const MisskeyWithoutAccountFamily._()
+  MisskeyWithoutAccountFamily._()
     : super(
         retry: null,
         name: r'misskeyWithoutAccountProvider',
@@ -287,7 +343,7 @@ final class MisskeyWithoutAccountFamily extends $Family
 }
 
 @ProviderFor(notesWith)
-const notesWithProvider = NotesWithProvider._();
+final notesWithProvider = NotesWithProvider._();
 
 final class NotesWithProvider
     extends
@@ -297,20 +353,20 @@ final class NotesWithProvider
           Raw<NoteRepository>
         >
     with $Provider<Raw<NoteRepository>> {
-  const NotesWithProvider._()
+  NotesWithProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'notesWithProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[accountContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[accountContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           NotesWithProvider.$allTransitiveDependencies0,
         ],
       );
 
-  static const $allTransitiveDependencies0 = accountContextProvider;
+  static final $allTransitiveDependencies0 = accountContextProvider;
 
   @override
   String debugGetCreateSourceHash() => _$notesWithHash();
@@ -338,13 +394,13 @@ final class NotesWithProvider
 String _$notesWithHash() => r'a9573c0a72738c0f75dfba0916d1722cd9be8a44';
 
 @ProviderFor(emojiRepository)
-const emojiRepositoryProvider = EmojiRepositoryFamily._();
+final emojiRepositoryProvider = EmojiRepositoryFamily._();
 
 final class EmojiRepositoryProvider
     extends
         $FunctionalProvider<EmojiRepository, EmojiRepository, EmojiRepository>
     with $Provider<EmojiRepository> {
-  const EmojiRepositoryProvider._({
+  EmojiRepositoryProvider._({
     required EmojiRepositoryFamily super.from,
     required Account super.argument,
   }) : super(
@@ -399,7 +455,7 @@ String _$emojiRepositoryHash() => r'a3f4aeaa087ee4b3fd7c433960b5cb4c9c21b7c6';
 
 final class EmojiRepositoryFamily extends $Family
     with $FunctionalFamilyOverride<EmojiRepository, Account> {
-  const EmojiRepositoryFamily._()
+  EmojiRepositoryFamily._()
     : super(
         retry: null,
         name: r'emojiRepositoryProvider',
@@ -416,12 +472,12 @@ final class EmojiRepositoryFamily extends $Family
 }
 
 @ProviderFor(accounts)
-const accountsProvider = AccountsProvider._();
+final accountsProvider = AccountsProvider._();
 
 final class AccountsProvider
     extends $FunctionalProvider<List<Account>, List<Account>, List<Account>>
     with $Provider<List<Account>> {
-  const AccountsProvider._()
+  AccountsProvider._()
     : super(
         from: null,
         argument: null,
@@ -457,12 +513,12 @@ final class AccountsProvider
 String _$accountsHash() => r'6d734a28da45c1d169a7abfbc5405b93078bdc1d';
 
 @ProviderFor(i)
-const iProvider = IFamily._();
+final iProvider = IFamily._();
 
 final class IProvider
     extends $FunctionalProvider<MeDetailed, MeDetailed, MeDetailed>
     with $Provider<MeDetailed> {
-  const IProvider._({required IFamily super.from, required Acct super.argument})
+  IProvider._({required IFamily super.from, required Acct super.argument})
     : super(
         retry: null,
         name: r'iProvider',
@@ -515,7 +571,7 @@ String _$iHash() => r'eb59c9498f7460da48dbfba37dd31a55083cc71d';
 
 final class IFamily extends $Family
     with $FunctionalFamilyOverride<MeDetailed, Acct> {
-  const IFamily._()
+  IFamily._()
     : super(
         retry: null,
         name: r'iProvider',
@@ -531,12 +587,12 @@ final class IFamily extends $Family
 }
 
 @ProviderFor(account)
-const accountProvider = AccountFamily._();
+final accountProvider = AccountFamily._();
 
 final class AccountProvider
     extends $FunctionalProvider<Account, Account, Account>
     with $Provider<Account> {
-  const AccountProvider._({
+  AccountProvider._({
     required AccountFamily super.from,
     required Acct super.argument,
   }) : super(
@@ -591,7 +647,7 @@ String _$accountHash() => r'cc90ca8feaa911a399c33aaa744345120b0cfae4';
 
 final class AccountFamily extends $Family
     with $FunctionalFamilyOverride<Account, Acct> {
-  const AccountFamily._()
+  AccountFamily._()
     : super(
         retry: null,
         name: r'accountProvider',
@@ -608,12 +664,12 @@ final class AccountFamily extends $Family
 }
 
 @ProviderFor(cacheManager)
-const cacheManagerProvider = CacheManagerProvider._();
+final cacheManagerProvider = CacheManagerProvider._();
 
 final class CacheManagerProvider
     extends $FunctionalProvider<CacheManager, CacheManager, CacheManager>
     with $Provider<CacheManager> {
-  const CacheManagerProvider._()
+  CacheManagerProvider._()
     : super(
         from: null,
         argument: null,
@@ -649,7 +705,7 @@ final class CacheManagerProvider
 String _$cacheManagerHash() => r'35e531d61d807b28b881aeee098bfd076a99e068';
 
 @ProviderFor(miriaWindowListener)
-const miriaWindowListenerProvider = MiriaWindowListenerProvider._();
+final miriaWindowListenerProvider = MiriaWindowListenerProvider._();
 
 final class MiriaWindowListenerProvider
     extends
@@ -659,7 +715,7 @@ final class MiriaWindowListenerProvider
           MiriaWindowListener
         >
     with $Provider<MiriaWindowListener> {
-  const MiriaWindowListenerProvider._()
+  MiriaWindowListenerProvider._()
     : super(
         from: null,
         argument: null,
@@ -697,20 +753,20 @@ String _$miriaWindowListenerHash() =>
     r'5f1551bf4377d43a7a4ff48f82703eed5c0218bc';
 
 @ProviderFor(accountContext)
-const accountContextProvider = AccountContextProvider._();
+final accountContextProvider = AccountContextProvider._();
 
 final class AccountContextProvider
     extends $FunctionalProvider<AccountContext, AccountContext, AccountContext>
     with $Provider<AccountContext> {
-  const AccountContextProvider._()
+  AccountContextProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'accountContextProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[],
-        $allTransitiveDependencies: const <ProviderOrFamily>[],
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
       );
 
   @override
@@ -738,25 +794,25 @@ final class AccountContextProvider
 String _$accountContextHash() => r'60c79f603d793d1efa1077712179b03cc831f51a';
 
 @ProviderFor(misskeyGetContext)
-const misskeyGetContextProvider = MisskeyGetContextProvider._();
+final misskeyGetContextProvider = MisskeyGetContextProvider._();
 
 final class MisskeyGetContextProvider
     extends $FunctionalProvider<Misskey, Misskey, Misskey>
     with $Provider<Misskey> {
-  const MisskeyGetContextProvider._()
+  MisskeyGetContextProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'misskeyGetContextProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[accountContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[accountContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           MisskeyGetContextProvider.$allTransitiveDependencies0,
         ],
       );
 
-  static const $allTransitiveDependencies0 = accountContextProvider;
+  static final $allTransitiveDependencies0 = accountContextProvider;
 
   @override
   String debugGetCreateSourceHash() => _$misskeyGetContextHash();
@@ -783,25 +839,25 @@ final class MisskeyGetContextProvider
 String _$misskeyGetContextHash() => r'fc267a3d020bd51305b5def2d9badedf26c4faac';
 
 @ProviderFor(misskeyPostContext)
-const misskeyPostContextProvider = MisskeyPostContextProvider._();
+final misskeyPostContextProvider = MisskeyPostContextProvider._();
 
 final class MisskeyPostContextProvider
     extends $FunctionalProvider<Misskey, Misskey, Misskey>
     with $Provider<Misskey> {
-  const MisskeyPostContextProvider._()
+  MisskeyPostContextProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'misskeyPostContextProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[accountContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[accountContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           MisskeyPostContextProvider.$allTransitiveDependencies0,
         ],
       );
 
-  static const $allTransitiveDependencies0 = accountContextProvider;
+  static final $allTransitiveDependencies0 = accountContextProvider;
 
   @override
   String debugGetCreateSourceHash() => _$misskeyPostContextHash();
@@ -827,6 +883,3 @@ final class MisskeyPostContextProvider
 
 String _$misskeyPostContextHash() =>
     r'2132cf565692af187c7efa17b3350e53c8c4d6fa';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

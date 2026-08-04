@@ -7,7 +7,10 @@ import "package:miria/model/image_file.dart";
 class FileSettingsDialogResult {
   final String fileName;
   final bool isNsfw;
-  final String caption;
+
+  /// ファイルの説明。未入力の場合は空文字ではなくnull。
+  /// 空文字を送るとMisskey Webがファイル名をALTとして表示しなくなってしまう。
+  final String? caption;
 
   const FileSettingsDialogResult({
     required this.fileName,
@@ -95,7 +98,9 @@ class FileSettingsDialog extends HookConsumerWidget {
               FileSettingsDialogResult(
                 fileName: fileNameController.text,
                 isNsfw: isNsfw.value,
-                caption: captionController.text,
+                caption: captionController.text.isEmpty
+                    ? null
+                    : captionController.text,
               ),
             );
           },

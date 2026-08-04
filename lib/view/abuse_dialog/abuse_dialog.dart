@@ -44,7 +44,7 @@ class AbuseDialog extends HookConsumerWidget implements AutoRouteWrapper {
             ),
           );
       await ref
-          .read(dialogStateNotifierProvider.notifier)
+          .read(dialogStateProvider.notifier)
           .showSimpleDialog(
             message: (context) => S.of(context).thanksForReport,
           );

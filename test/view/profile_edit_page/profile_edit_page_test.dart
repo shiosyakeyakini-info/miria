@@ -1,7 +1,7 @@
 import "dart:async";
 import "dart:typed_data";
 
-import "package:file_picker/file_picker.dart";
+import "package:file_picker/src/platform/file_picker_platform_interface.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
@@ -17,7 +17,7 @@ import "../../test_util/mock.mocks.dart";
 import "../../test_util/test_datas.dart";
 
 // Mock for FilePicker
-class MockFilePicker extends Mock implements FilePicker {}
+class MockFilePicker extends Mock implements FilePickerPlatform {}
 
 // Test implementation of EditProfileStateNotifier
 class TestEditProfileStateNotifier extends EditProfileStateNotifier {
@@ -62,7 +62,7 @@ void main() {
           misskeyPostContextProvider.overrideWithValue(mockMisskey),
           // プロバイダーの初期状態を直接設定
           if (initialState != null)
-            editProfileStateNotifierProvider.overrideWith(
+            editProfileStateProvider.overrideWith(
               () => TestEditProfileStateNotifier(initialState),
             ),
         ],
@@ -298,22 +298,20 @@ void main() {
           )
           .container;
 
-      final notifier = container.read(
-        editProfileStateNotifierProvider.notifier,
-      );
+      final notifier = container.read(editProfileStateProvider.notifier);
 
       // TestData.binaryImageを使用
       final testImageData = await TestData.binaryImage;
 
       // 初期状態を確認
-      final initialState = container.read(editProfileStateNotifierProvider);
+      final initialState = container.read(editProfileStateProvider);
       expect(initialState, isA<AsyncData<EditProfileState>>());
 
       // アバターファイルを設定
       notifier.updateAvatarFile((data: testImageData, name: "avatar.png"));
 
       // 状態にアバターファイルが設定されていることを確認（画像レンダリング前）
-      final currentState = container.read(editProfileStateNotifierProvider);
+      final currentState = container.read(editProfileStateProvider);
       expect(currentState, isA<AsyncData<EditProfileState>>());
       final data = (currentState as AsyncData<EditProfileState>).value;
       expect(data.avatarFile, isNotNull);
@@ -343,12 +341,10 @@ void main() {
             find.byType(UncontrolledProviderScope).first,
           )
           .container;
-      final notifier = container.read(
-        editProfileStateNotifierProvider.notifier,
-      );
+      final notifier = container.read(editProfileStateProvider.notifier);
 
       // 初期状態を確認（TestEditProfileStateNotifierを使用しているため即座にAsyncData）
-      final beforeState = container.read(editProfileStateNotifierProvider);
+      final beforeState = container.read(editProfileStateProvider);
       expect(beforeState, isA<AsyncData<EditProfileState>>());
 
       // ドライブからのアバターIDを設定
@@ -358,7 +354,7 @@ void main() {
       );
 
       // 状態にアバターIDが設定されていることを確認
-      final currentState = container.read(editProfileStateNotifierProvider);
+      final currentState = container.read(editProfileStateProvider);
       expect(currentState, isA<AsyncData<EditProfileState>>());
       final data = (currentState as AsyncData<EditProfileState>).value;
       expect(data.avatarDriveId, equals("selected_drive_file_id"));
@@ -389,9 +385,7 @@ void main() {
             find.byType(UncontrolledProviderScope).first,
           )
           .container;
-      final notifier = container.read(
-        editProfileStateNotifierProvider.notifier,
-      );
+      final notifier = container.read(editProfileStateProvider.notifier);
 
       // TestData.binaryImageを使用
       final testImageData = await TestData.binaryImage;
@@ -455,12 +449,10 @@ void main() {
             find.byType(UncontrolledProviderScope).first,
           )
           .container;
-      final notifier = container.read(
-        editProfileStateNotifierProvider.notifier,
-      );
+      final notifier = container.read(editProfileStateProvider.notifier);
 
       // 初期状態を確認
-      final beforeState = container.read(editProfileStateNotifierProvider);
+      final beforeState = container.read(editProfileStateProvider);
       expect(beforeState, isA<AsyncData<EditProfileState>>());
       final beforeData = (beforeState as AsyncData<EditProfileState>).value;
       expect(beforeData.avatarDriveId, equals("selected_drive_file_id"));

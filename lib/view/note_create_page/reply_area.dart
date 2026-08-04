@@ -8,9 +8,7 @@ class ReplyArea extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final reply = ref.watch(
-      noteCreateNotifierProvider.select((value) => value.reply),
-    );
+    final reply = ref.watch(noteCreateProvider.select((value) => value.reply));
 
     if (reply != null) {
       return MediaQuery(

@@ -6,8 +6,11 @@ part of 'role_select_dialog.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(_roles)
-const _rolesProvider = _RolesProvider._();
+final _rolesProvider = _RolesProvider._();
 
 final class _RolesProvider
     extends
@@ -19,22 +22,22 @@ final class _RolesProvider
     with
         $FutureModifier<List<RolesListResponse>>,
         $FutureProvider<List<RolesListResponse>> {
-  const _RolesProvider._()
+  _RolesProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'_rolesProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[misskeyGetContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyGetContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           _RolesProvider.$allTransitiveDependencies0,
           _RolesProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = misskeyGetContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyGetContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyGetContextProvider.$allTransitiveDependencies0;
 
   @override
@@ -53,6 +56,3 @@ final class _RolesProvider
 }
 
 String _$_rolesHash() => r'c10d381c1a9041d45d7197d476ce56705dd16100';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

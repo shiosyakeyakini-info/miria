@@ -6,8 +6,11 @@ part of 'instance_mute_page.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(InstanceMutePageNotifier)
-const instanceMutePageNotifierProvider = InstanceMutePageNotifierProvider._();
+final instanceMutePageProvider = InstanceMutePageNotifierProvider._();
 
 final class InstanceMutePageNotifierProvider
     extends
@@ -15,22 +18,22 @@ final class InstanceMutePageNotifierProvider
           InstanceMutePageNotifier,
           (List<String>, AsyncValue<void>?)
         > {
-  const InstanceMutePageNotifierProvider._()
+  InstanceMutePageNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'instanceMutePageNotifierProvider',
+        name: r'instanceMutePageProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           InstanceMutePageNotifierProvider.$allTransitiveDependencies0,
           InstanceMutePageNotifierProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
 
   @override
@@ -42,7 +45,7 @@ final class InstanceMutePageNotifierProvider
 }
 
 String _$instanceMutePageNotifierHash() =>
-    r'66d63bb0c86f7bec0da2078bfcaff5f43a86d50f';
+    r'16ed1bcb95f9877f14966297f66239086ace23a1';
 
 abstract class _$InstanceMutePageNotifier
     extends $AsyncNotifier<(List<String>, AsyncValue<void>?)> {
@@ -50,7 +53,6 @@ abstract class _$InstanceMutePageNotifier
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref =
         this.ref
             as $Ref<
@@ -68,9 +70,6 @@ abstract class _$InstanceMutePageNotifier
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

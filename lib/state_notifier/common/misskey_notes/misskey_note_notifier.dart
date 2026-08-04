@@ -29,7 +29,7 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
 
     if (note.localOnly) {
       await ref
-          .read(dialogStateNotifierProvider.notifier)
+          .read(dialogStateProvider.notifier)
           .showSimpleDialog(
             message: (context) =>
                 S.of(context).cannotOpenLocalOnlyNoteFromRemote,
@@ -75,7 +75,7 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
 
       // 最終手段として、連合で照会する
       final response = await ref
-          .read(dialogStateNotifierProvider.notifier)
+          .read(dialogStateProvider.notifier)
           .guard(
             () async => await ref
                 .read(misskeyProvider(accountContext.getAccount))
@@ -112,7 +112,7 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
     final host = user.host ?? accountContext.getAccount.host;
 
     final response = await ref
-        .read(dialogStateNotifierProvider.notifier)
+        .read(dialogStateProvider.notifier)
         .guard(
           () async => ref
               .read(misskeyProvider(accountContext.getAccount))
@@ -126,7 +126,7 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
 
   Future<void> navigateToNoteDetailPage(Note note, {Account? account}) async {
     final router = ref.read(appRouterProvider);
-    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+    await ref.read(dialogStateProvider.notifier).guard(() async {
       final accountContext = account != null
           ? AccountContext(
               getAccount: account,
@@ -152,7 +152,7 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
 
   Future<void> navigateToUserPage(User user, {Account? account}) async {
     final router = ref.read(appRouterProvider);
-    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+    await ref.read(dialogStateProvider.notifier).guard(() async {
       final accountContext = account != null
           ? AccountContext(
               getAccount: account,

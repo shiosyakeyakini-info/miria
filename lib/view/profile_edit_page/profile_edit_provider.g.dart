@@ -6,11 +6,14 @@ part of 'profile_edit_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(ProfileName)
-const profileNameProvider = ProfileNameProvider._();
+final profileNameProvider = ProfileNameProvider._();
 
 final class ProfileNameProvider extends $NotifierProvider<ProfileName, String> {
-  const ProfileNameProvider._()
+  ProfileNameProvider._()
     : super(
         from: null,
         argument: null,
@@ -44,7 +47,6 @@ abstract class _$ProfileName extends $Notifier<String> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<String, String>;
     final element =
         ref.element
@@ -54,16 +56,16 @@ abstract class _$ProfileName extends $Notifier<String> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(ProfileDescription)
-const profileDescriptionProvider = ProfileDescriptionProvider._();
+final profileDescriptionProvider = ProfileDescriptionProvider._();
 
 final class ProfileDescriptionProvider
     extends $NotifierProvider<ProfileDescription, String> {
-  const ProfileDescriptionProvider._()
+  ProfileDescriptionProvider._()
     : super(
         from: null,
         argument: null,
@@ -98,7 +100,6 @@ abstract class _$ProfileDescription extends $Notifier<String> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<String, String>;
     final element =
         ref.element
@@ -108,16 +109,16 @@ abstract class _$ProfileDescription extends $Notifier<String> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(ProfileLocation)
-const profileLocationProvider = ProfileLocationProvider._();
+final profileLocationProvider = ProfileLocationProvider._();
 
 final class ProfileLocationProvider
     extends $NotifierProvider<ProfileLocation, String> {
-  const ProfileLocationProvider._()
+  ProfileLocationProvider._()
     : super(
         from: null,
         argument: null,
@@ -151,7 +152,6 @@ abstract class _$ProfileLocation extends $Notifier<String> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<String, String>;
     final element =
         ref.element
@@ -161,16 +161,16 @@ abstract class _$ProfileLocation extends $Notifier<String> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(ProfileBirthday)
-const profileBirthdayProvider = ProfileBirthdayProvider._();
+final profileBirthdayProvider = ProfileBirthdayProvider._();
 
 final class ProfileBirthdayProvider
     extends $NotifierProvider<ProfileBirthday, DateTime?> {
-  const ProfileBirthdayProvider._()
+  ProfileBirthdayProvider._()
     : super(
         from: null,
         argument: null,
@@ -204,7 +204,6 @@ abstract class _$ProfileBirthday extends $Notifier<DateTime?> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<DateTime?, DateTime?>;
     final element =
         ref.element
@@ -214,16 +213,16 @@ abstract class _$ProfileBirthday extends $Notifier<DateTime?> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(ProfileFields)
-const profileFieldsProvider = ProfileFieldsProvider._();
+final profileFieldsProvider = ProfileFieldsProvider._();
 
 final class ProfileFieldsProvider
     extends $NotifierProvider<ProfileFields, List<UserField>> {
-  const ProfileFieldsProvider._()
+  ProfileFieldsProvider._()
     : super(
         from: null,
         argument: null,
@@ -257,7 +256,6 @@ abstract class _$ProfileFields extends $Notifier<List<UserField>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<List<UserField>, List<UserField>>;
     final element =
         ref.element
@@ -267,16 +265,16 @@ abstract class _$ProfileFields extends $Notifier<List<UserField>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(ProfileFollowedMessage)
-const profileFollowedMessageProvider = ProfileFollowedMessageProvider._();
+final profileFollowedMessageProvider = ProfileFollowedMessageProvider._();
 
 final class ProfileFollowedMessageProvider
     extends $NotifierProvider<ProfileFollowedMessage, String> {
-  const ProfileFollowedMessageProvider._()
+  ProfileFollowedMessageProvider._()
     : super(
         from: null,
         argument: null,
@@ -311,7 +309,6 @@ abstract class _$ProfileFollowedMessage extends $Notifier<String> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<String, String>;
     final element =
         ref.element
@@ -321,16 +318,16 @@ abstract class _$ProfileFollowedMessage extends $Notifier<String> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(ProfileAvatarDriveId)
-const profileAvatarDriveIdProvider = ProfileAvatarDriveIdProvider._();
+final profileAvatarDriveIdProvider = ProfileAvatarDriveIdProvider._();
 
 final class ProfileAvatarDriveIdProvider
     extends $NotifierProvider<ProfileAvatarDriveId, String?> {
-  const ProfileAvatarDriveIdProvider._()
+  ProfileAvatarDriveIdProvider._()
     : super(
         from: null,
         argument: null,
@@ -365,7 +362,6 @@ abstract class _$ProfileAvatarDriveId extends $Notifier<String?> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<String?, String?>;
     final element =
         ref.element
@@ -375,17 +371,17 @@ abstract class _$ProfileAvatarDriveId extends $Notifier<String?> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(ProfileAvatarFile)
-const profileAvatarFileProvider = ProfileAvatarFileProvider._();
+final profileAvatarFileProvider = ProfileAvatarFileProvider._();
 
 final class ProfileAvatarFileProvider
     extends
         $NotifierProvider<ProfileAvatarFile, ({Uint8List data, String name})?> {
-  const ProfileAvatarFileProvider._()
+  ProfileAvatarFileProvider._()
     : super(
         from: null,
         argument: null,
@@ -422,7 +418,6 @@ abstract class _$ProfileAvatarFile
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref =
         this.ref
             as $Ref<
@@ -440,17 +435,17 @@ abstract class _$ProfileAvatarFile
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(profileEditRequest)
-const profileEditRequestProvider = ProfileEditRequestProvider._();
+final profileEditRequestProvider = ProfileEditRequestProvider._();
 
 final class ProfileEditRequestProvider
     extends $FunctionalProvider<IUpdateRequest, IUpdateRequest, IUpdateRequest>
     with $Provider<IUpdateRequest> {
-  const ProfileEditRequestProvider._()
+  ProfileEditRequestProvider._()
     : super(
         from: null,
         argument: null,
@@ -485,6 +480,3 @@ final class ProfileEditRequestProvider
 
 String _$profileEditRequestHash() =>
     r'7808ee90e71cadb3719449a8757393383938efe1';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -369,7 +369,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                           if (event.logicalKey == LogicalKeyboardKey.enter &&
                               HardwareKeyboard.instance.isControlPressed) {
                             ref
-                                .read(dialogStateNotifierProvider.notifier)
+                                .read(dialogStateProvider.notifier)
                                 .guard(() => note());
                             return KeyEventResult.handled;
                           }
@@ -381,7 +381,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                   ),
                   IconButton(
                     onPressed: () => ref
-                        .read(dialogStateNotifierProvider.notifier)
+                        .read(dialogStateProvider.notifier)
                         .guard(() => note()),
                     icon: const Icon(Icons.send),
                   ),

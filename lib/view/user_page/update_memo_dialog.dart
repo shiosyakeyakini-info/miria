@@ -29,10 +29,9 @@ class UpdateMemoDialog extends HookConsumerWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = useTextEditingController(text: initialMemo);
+    final notifier = ref.watch(userInfoNotifierProxyProvider(userId));
     final updateMemo = useAsync(() async {
-      await ref
-          .read(userInfoNotifierProxyProvider(userId))
-          .updateMemo(controller.text);
+      await notifier.updateMemo(controller.text);
       await ref.read(appRouterProvider).maybePop();
     });
 

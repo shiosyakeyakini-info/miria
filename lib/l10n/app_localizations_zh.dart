@@ -632,6 +632,12 @@ class SZh extends S {
   String get finishedVotedNotification => '投票已经结束了';
 
   @override
+  String get scheduledNotePostedNotification => '预约发布的帖子已发布';
+
+  @override
+  String get scheduledNotePostFailedNotification => '预约发布失败了';
+
+  @override
   String renoteAndReactionsNotification(
     String? reactionUser,
     String? renotedUser,
@@ -1997,6 +2003,9 @@ class SZh extends S {
   String get chatOwnRooms => '我创建的房间';
 
   @override
+  String get chatJoining => '加入的房间';
+
+  @override
   String get chatNewChat => '开始新聊天';
 
   @override
@@ -2031,6 +2040,9 @@ class SZh extends S {
 
   @override
   String get chatCreator => '聊天创建者';
+
+  @override
+  String get confirmChatLeave => '真的可以退出这个聊天吗？';
 
   @override
   String get chatLeave => '退出聊天';
@@ -2073,6 +2085,9 @@ class SZh extends S {
 
   @override
   String get chatNsfw => 'NSFW';
+
+  @override
+  String get chatUpdateCompleted => '好像更新成功了';
 
   @override
   String chatRoomInvitation(String roomName) {
@@ -2733,6 +2748,12 @@ class SZhCn extends SZh {
 
   @override
   String get finishedVotedNotification => '投票已经结束了';
+
+  @override
+  String get scheduledNotePostedNotification => '预约发布的帖子已发布';
+
+  @override
+  String get scheduledNotePostFailedNotification => '预约发布失败了';
 
   @override
   String renoteAndReactionsNotification(

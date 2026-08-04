@@ -38,7 +38,7 @@ class NoteBackground extends ConsumerWidget {
             : settings.lightNoteBackgroundDirect;
     }
 
-    if (color == null || color.opacity == 0) {
+    if (color == null || color.a == 0) {
       return child;
     }
 

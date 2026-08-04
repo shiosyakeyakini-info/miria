@@ -1,11 +1,11 @@
 name: miria
 description: Miria is Misskey Client for Mobile App.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 version: 3.0.1+123
 
 environment:
-  sdk: '>=3.8.0 <4.0.0'
+  sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
   collection: ^1.16.0
@@ -15,30 +15,30 @@ dependencies:
     sdk: flutter
   flutter_html: ^3.0.0-beta.2
   misskey_dart:
-    git: 
+    git:
       url: https://github.com/shiosyakeyakini-info/misskey_dart.git
       ref: master
   mfm: ^1.0.9
   tuple: ^2.0.1
-  path_provider: ^2.0.14
-  dio: ^5.1.1
+  path_provider: ^2.1.6
+  dio: ^5.10.0
   path: ^1.8.2
-  auto_route: ^10.1.0+1
+  auto_route: ^11.1.0
   freezed_annotation: ^3.0.0
   url_launcher: ^6.1.10
   intl: ^0.20.2
   scrollable_positioned_list: ^0.3.6
   kana_kit: ^2.0.0
   cached_network_image: ^3.2.3
-  json_annotation: ^4.8.0
+  json_annotation: ^4.11.0
   shared_preferences: ^2.1.0
   badges: ^3.1.1
   bubble: ^1.2.1
-  flutter_secure_storage: ^9.2.2
-  google_fonts: ^6.1.0
-  uuid: ^4.4.0
-  file_picker: ^10.2.0
-  package_info_plus: ^8.0.0
+  flutter_secure_storage: ^10.0.0
+  google_fonts: ^8.2.0
+  uuid: ^4.6.0
+  file_picker: ^12.0.0-beta.7
+  package_info_plus: ^10.2.1
   reorderables: ^0.6.0
   confetti: ^0.8.0
   flutter_highlighting: ^0.9.0+11.8.0
@@ -51,32 +51,32 @@ dependencies:
     git:
       url: https://github.com/KasemJaffer/receive_sharing_intent
       ref: 2cea396843cd3ab1b5ec4334be4233864637874e
-  share_plus: ^11.0.0
-  mfm_parser: ^1.0.3
+  share_plus: ^13.2.1
+  mfm_parser: ^1.0.7
   flutter_svg: ^2.0.6
   image_editor: ^1.3.0
   json5: ^0.8.0
   file: ^7.0.0
-  image_gallery_saver: ^2.0.3
+  flutter_image_gallery_saver: ^2.0.0
   permission_handler: ^12.0.0+1
-  device_info_plus: ^11.5.0
+  device_info_plus: ^13.2.0
   colorfilter_generator: ^0.0.8
   matrix2d: ^1.0.4
-  flutter_image_compress: ^2.0.4
-  webview_flutter: ^4.3.0
+  flutter_image_compress: ^2.5.0
+  webview_flutter: ^4.14.1
   webview_flutter_android: ^4.7.0
   webview_flutter_wkwebview: ^3.9.0
   flutter_colorpicker: ^1.1.0
-  window_manager: ^0.5.0
-  shared_preference_app_group: ^1.0.0+1
+  window_manager: ^0.5.2
+  shared_preference_app_group: ^2.1.0
   stack_trace: ^1.11.1
   flutter_cache_manager: ^3.4.1
-  riverpod_annotation: ^3.0.0-dev.16
+  riverpod_annotation: ^4.0.2
   simple_logger: ^1.9.0+3
   hooks_riverpod: ^3.0.0-dev.16
   flutter_hooks: ^0.21.2
   punycode: ^1.0.0
-  image: ^4.3.0
+  image: ^4.9.1
   flutter_twemoji: ^1.0.1
   mime: ^2.0.0
   fvp: ^0.34.0
@@ -84,6 +84,16 @@ dependencies:
   video_player_avfoundation: ^2.8.4
   video_player_android: ^2.8.13
   video_player_platform_interface: ^6.4.0
+
+  # AI エージェントから実行中アプリを操作・観測するための開発用依存
+  # (marionette_mcp)。Dart には debug 限定の依存指定がないため通常の
+  # dependencies に置くが、lib/marionette_debug.dart の kDebugMode ガードにより
+  # release ビルドではツリーシェイクで落ちる。
+  marionette_flutter: ^0.6.0
+  marionette_riverpod_plugin:
+    git:
+      url: https://github.com/shiosyakeyakini-info/marionette_riverpod_plugin.git
+      ref: main
 
 dependency_overrides:
   image_editor:
@@ -98,15 +108,16 @@ dependency_overrides:
     git:
       url: https://github.com/shiosyakeyakini-info/flutter_image_editor_fix_ios_color_option.git
       path: ./image_editor_platform_interface/
-  image_gallery_saver:
-    git:
-      url: https://github.com/knottx/image_gallery_saver.git
-      ref: knottx-latest
   flutter_cache_manager:
     git:
       url: https://github.com/Baseflow/flutter_cache_manager
       ref: 54904e499a06d0364a2b3f4ca9789e5f829f1879
       path: ./flutter_cache_manager
+  permission_handler_windows:
+    git:
+      url: https://github.com/MSOB7YY/flutter-permission-handler
+      ref: 32ffba1b3b62a881b2208297fd20bfb2776000bd
+      path: ./permission_handler_windows
 
 dev_dependencies:
   flutter_test:
@@ -120,8 +131,10 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.1
   mockito: ^5.4.6
   cider: ^0.2.3
-  riverpod_generator: ^3.0.0-dev.16
+  riverpod_generator: ^4.0.3
   riverpod_lint: ^3.0.0-dev.16
+  # テストで UrlLauncherPlatform.instance を差し替えるために直接参照する
+  url_launcher_platform_interface: ^2.3.2
 
 flutter:
   uses-material-design: true

@@ -1,4 +1,5 @@
 import "package:auto_route/auto_route.dart";
+import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/experimental/mutation.dart";
@@ -48,8 +49,8 @@ class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
   @override
   Future<List<(Clip, bool)>> build(String noteId) async {
     final (userClips, noteClips) = await (
-      ref.watch(clipsNotifierProvider.future),
-      ref.watch(_notesClipsNotifierProvider(noteId).future),
+      ref.watch(clipsProvider.future),
+      ref.watch(_notesClipsProvider(noteId).future),
     ).wait;
 
     return [
@@ -60,23 +61,23 @@ class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
 
   Future<List<Clip>> loadClips({String? untilId, int limit = 10}) async {
     return ref
-        .read(clipsNotifierProvider.notifier)
+        .read(clipsProvider.notifier)
         .loadClips(untilId: untilId, limit: limit);
   }
 
   Future<void> addToClip(Clip clip) async {
-    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+    await ref.read(dialogStateProvider.notifier).guard(() async {
       try {
         await ref
             .read(misskeyPostContextProvider)
             .clips
             .addNote(ClipsAddNoteRequest(clipId: clip.id, noteId: noteId));
-        ref.read(_notesClipsNotifierProvider(noteId).notifier).addClip(clip);
+        ref.read(_notesClipsProvider(noteId).notifier).addClip(clip);
       } on MisskeyException catch (e) {
         // すでにクリップに追加されている場合、削除するかどうかを確認する
         if (e.code == "ALREADY_CLIPPED") {
           final confirm = await ref
-              .read(dialogStateNotifierProvider.notifier)
+              .read(dialogStateProvider.notifier)
               .showDialog(
                 message: (context) => S.of(context).alreadyAddedClip,
                 actions: (context) => [
@@ -95,14 +96,12 @@ class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
   }
 
   Future<void> removeFromClip(Clip clip) async {
-    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+    await ref.read(dialogStateProvider.notifier).guard(() async {
       await ref
           .read(misskeyPostContextProvider)
           .clips
           .removeNote(ClipsRemoveNoteRequest(clipId: clip.id, noteId: noteId));
-      ref
-          .read(_notesClipsNotifierProvider(noteId).notifier)
-          .removeClip(clip.id);
+      ref.read(_notesClipsProvider(noteId).notifier).removeClip(clip.id);
     });
   }
 }
@@ -126,17 +125,28 @@ class ClipModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(_clipModalSheetNotifierProvider(noteId));
-    final notifier = _clipModalSheetNotifierProvider(noteId).notifier;
+    final state = ref.watch(_clipModalSheetProvider(noteId));
+    final notifier = _clipModalSheetProvider(noteId).notifier;
     final loadClips = ref.watch(loadClipsMutation);
-    final isFinalPage = useState(false);
+    final isFinalPage = useState<bool?>(null);
+
+    // ソートされていない場合、ページネーションに対応していないとみなす。
+    ref.listen(_clipModalSheetProvider(noteId), (_, next) {
+      if (isFinalPage.value == null) {
+        if (next case AsyncData(:final value)) {
+          isFinalPage.value =
+              value.isEmpty ||
+              !value.isSorted((a, b) => b.$1.id.compareTo(a.$1.id));
+        }
+      }
+    });
 
     final create = useAsync(() async {
       final settings = await context.pushRoute<ClipSettings>(
         ClipSettingsRoute(title: Text(S.of(context).create)),
       );
       if (settings == null) return;
-      await ref.read(clipsNotifierProvider.notifier).create(settings);
+      await ref.read(clipsProvider.notifier).create(settings);
     });
 
     return switch (state) {
@@ -161,7 +171,7 @@ class ClipModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
               subtitle: Text(clip.description ?? ""),
             );
           } else if (index == value.length) {
-            if (isFinalPage.value) {
+            if (isFinalPage.value ?? false) {
               return SizedBox.shrink();
             }
 
@@ -169,7 +179,7 @@ class ClipModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
               MutationIdle() || MutationSuccess() => IconButton(
                 onPressed: () => loadClipsMutation.run(ref, (tsx) async {
                   final items = await tsx
-                      .get(_clipModalSheetNotifierProvider(noteId).notifier)
+                      .get(_clipModalSheetProvider(noteId).notifier)
                       .loadClips(untilId: value.lastOrNull?.$1.id);
                   isFinalPage.value = items.isEmpty;
                 }),

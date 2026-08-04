@@ -59,7 +59,7 @@ class PlaySearch extends HookConsumerWidget {
                       );
                   return response.toList();
                 },
-                nextFuture: (_, __) async => [],
+                nextFuture: (_, _) async => [],
                 hideIsEmpty: false,
                 itemBuilder: (context, play) => Card(
                   margin: const EdgeInsets.symmetric(vertical: 4),

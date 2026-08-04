@@ -4,6 +4,7 @@ import "dart:typed_data";
 import "package:collection/collection.dart";
 import "package:file/memory.dart";
 import "package:file_picker/file_picker.dart";
+import "package:file_picker/src/platform/file_picker_platform_interface.dart";
 import "package:flutter/material.dart";
 import "package:flutter_svg/svg.dart";
 import "package:flutter_test/flutter_test.dart";
@@ -3028,7 +3029,7 @@ void main() {
 
         final binaryImage = await TestData.binaryImage;
         final filePicker = MockFilePickerPlatform();
-        FilePicker.platform = filePicker;
+        FilePickerPlatform.instance = filePicker;
         when(
           filePicker.pickFiles(
             dialogTitle: anyNamed("dialogTitle"),
@@ -3036,7 +3037,6 @@ void main() {
             type: anyNamed("type"),
             allowedExtensions: anyNamed("allowedExtensions"),
             onFileLoading: anyNamed("onFileLoading"),
-            allowCompression: anyNamed("allowCompression"),
             allowMultiple: anyNamed("allowMultiple"),
             withData: anyNamed("withData"),
             withReadStream: anyNamed("withReadStream"),
@@ -3125,7 +3125,7 @@ void main() {
         when(mockMisskey.notes).thenReturn(mockNote);
 
         final filePicker = MockFilePickerPlatform();
-        FilePicker.platform = filePicker;
+        FilePickerPlatform.instance = filePicker;
         when(
           filePicker.pickFiles(
             dialogTitle: anyNamed("dialogTitle"),
@@ -3133,7 +3133,6 @@ void main() {
             type: anyNamed("type"),
             allowedExtensions: anyNamed("allowedExtensions"),
             onFileLoading: anyNamed("onFileLoading"),
-            allowCompression: anyNamed("allowCompression"),
             allowMultiple: anyNamed("allowMultiple"),
             withData: anyNamed("withData"),
             withReadStream: anyNamed("withReadStream"),

@@ -6,30 +6,33 @@ part of 'note_draft_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(NoteDraftRepository)
-const noteDraftRepositoryProvider = NoteDraftRepositoryProvider._();
+final noteDraftRepositoryProvider = NoteDraftRepositoryProvider._();
 
 final class NoteDraftRepositoryProvider
     extends $NotifierProvider<NoteDraftRepository, Map<String, NoteDraft>> {
-  const NoteDraftRepositoryProvider._()
+  NoteDraftRepositoryProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'noteDraftRepositoryProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           misskeyPostContextProvider,
           accountContextProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>[
           NoteDraftRepositoryProvider.$allTransitiveDependencies0,
           NoteDraftRepositoryProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
 
   @override
@@ -56,7 +59,6 @@ abstract class _$NoteDraftRepository extends $Notifier<Map<String, NoteDraft>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref =
         this.ref as $Ref<Map<String, NoteDraft>, Map<String, NoteDraft>>;
     final element =
@@ -67,9 +69,6 @@ abstract class _$NoteDraftRepository extends $Notifier<Map<String, NoteDraft>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

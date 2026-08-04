@@ -53,7 +53,14 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.byType(ColoredBox), findsNothing);
+
+    // 透明な ColoredBox が生成されることを確認
+    expect(find.byType(ColoredBox), findsOneWidget);
+
+    // 色がアルファ 0 の黒色（透明）であることを確認
+    final coloredBox =
+        find.byType(ColoredBox).evaluate().first.widget as ColoredBox;
+    expect(coloredBox.color.a, equals(0.0));
   });
 
   testWidgets("apply background color", (tester) async {
@@ -65,7 +72,16 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    final box = tester.widget<ColoredBox>(find.byType(ColoredBox));
-    expect(box.color, color);
+
+    // 複数存在することを検証
+    expect(find.byType(ColoredBox), findsWidgets);
+
+    // 色が赤いものを確認
+    final boxes = find.byType(ColoredBox).evaluate();
+    final hasRedBox = boxes.any((widget) {
+      final box = widget.widget as ColoredBox;
+      return box.color == color;
+    });
+    expect(hasRedBox, isTrue);
   });
 }

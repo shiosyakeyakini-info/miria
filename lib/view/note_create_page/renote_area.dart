@@ -9,7 +9,7 @@ class RenoteArea extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final renote = ref.watch(
-      noteCreateNotifierProvider.select((value) => value.renote),
+      noteCreateProvider.select((value) => value.renote),
     );
 
     if (renote != null) {

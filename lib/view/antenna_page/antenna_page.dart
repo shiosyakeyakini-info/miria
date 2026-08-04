@@ -36,9 +36,7 @@ class AntennaPage extends ConsumerWidget implements AutoRouteWrapper {
               );
               if (!context.mounted) return;
               if (settings == null) return;
-              await ref
-                  .read(antennasNotifierProvider.notifier)
-                  .create(settings);
+              await ref.read(antennasProvider.notifier).create(settings);
             },
           ),
         ],

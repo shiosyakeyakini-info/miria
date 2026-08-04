@@ -25,15 +25,9 @@ class LinkNavigator {
     // 他サーバーや外部サイトは別アプリで起動する
     if (uri.host != accountContext.getAccount.host) {
       try {
-        await ref
-            .read(dioProvider)
-            .getUri(
-              Uri(
-                scheme: "https",
-                host: uri.host,
-                pathSegments: [".well-known", "nodeinfo"],
-              ),
-            );
+        // nodeinfo は見ない。連合をオフにしたサーバーは 403 を返すため、
+        // ここで弾くと Misskey なのに外部ブラウザに飛んでしまう (#770)。
+        // Misskey かどうかは下の endpoints() で判定できる。
         final meta = await ref
             .read(misskeyWithoutAccountProvider(uri.host))
             .meta();
@@ -48,10 +42,12 @@ class LinkNavigator {
         await ref.read(emojiRepositoryProvider(account)).loadFromSourceIfNeed();
       } catch (e) {
         if (await canLaunchUrl(uri)) {
-          if (!await launchUrl(
-            uri,
-            mode: LaunchMode.externalNonBrowserApplication,
-          )) {
+          try {
+            await launchUrl(
+              uri,
+              mode: LaunchMode.externalNonBrowserApplication,
+            );
+          } catch (e) {
             await launchUrl(uri, mode: LaunchMode.externalApplication);
           }
           return;

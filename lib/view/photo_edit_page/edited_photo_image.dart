@@ -8,14 +8,14 @@ class EditedPhotoImage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final image = ref.watch(
-      photoEditStateNotifierProvider.select((value) => value.editedImage),
+      photoEditStateProvider.select((value) => value.editedImage),
     );
 
     final defaultSize = ref.watch(
-      photoEditStateNotifierProvider.select((value) => value.defaultSize),
+      photoEditStateProvider.select((value) => value.defaultSize),
     );
     final actualSize = ref.watch(
-      photoEditStateNotifierProvider.select((value) => value.actualSize),
+      photoEditStateProvider.select((value) => value.actualSize),
     );
 
     if (image != null) {

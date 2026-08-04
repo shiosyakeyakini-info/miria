@@ -53,7 +53,7 @@ class UsersListSettingsDialog extends HookConsumerWidget
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = useState(GlobalKey<FormState>());
     final initialSettings = ref.watch(_initialSettingsProvider);
-    final settings = ref.watch(_usersListSettingsNotifierProvider);
+    final settings = ref.watch(_usersListSettingsProvider);
 
     return AlertDialog(
       title: title,
@@ -75,15 +75,13 @@ class UsersListSettingsDialog extends HookConsumerWidget
                 }
                 return null;
               },
-              onSaved: ref
-                  .read(_usersListSettingsNotifierProvider.notifier)
-                  .updateName,
+              onSaved: ref.read(_usersListSettingsProvider.notifier).updateName,
             ),
             CheckboxListTile(
               title: Text(S.of(context).public),
               value: settings.isPublic,
               onChanged: ref
-                  .read(_usersListSettingsNotifierProvider.notifier)
+                  .read(_usersListSettingsProvider.notifier)
                   .updateIsPublic,
             ),
             ElevatedButton(
@@ -91,7 +89,7 @@ class UsersListSettingsDialog extends HookConsumerWidget
               onPressed: () {
                 if (formKey.value.currentState!.validate()) {
                   formKey.value.currentState!.save();
-                  final settings = ref.read(_usersListSettingsNotifierProvider);
+                  final settings = ref.read(_usersListSettingsProvider);
                   if (settings == initialSettings) {
                     Navigator.of(context).pop();
                   } else {

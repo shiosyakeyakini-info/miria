@@ -226,7 +226,9 @@ class UserChatPage extends HookConsumerWidget implements AutoRouteWrapper {
           ),
         ],
       ),
-      body: Center(child: UserChatTimeline(user: user)),
+      body: SafeArea(
+        child: Center(child: UserChatTimeline(user: user)),
+      ),
     );
   }
 }
@@ -409,7 +411,7 @@ class UserChatTextField extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final textEditingController = useTextEditingController();
     final focusNode = ref.watch(userChatFocusNodeProvider);
-    final chatInputState = ref.watch(chatInputStateNotifierProvider);
+    final chatInputState = ref.watch(chatInputStateProvider);
     final sendMessageMutation = ref.watch(sendUserChatMessageMutation);
 
     void sendMessage() {
@@ -436,7 +438,7 @@ class UserChatTextField extends HookConsumerWidget {
         try {
           // ファイルをアップロードしてfileIdを取得
           final fileId = await ref
-              .get(chatInputStateNotifierProvider.notifier)
+              .get(chatInputStateProvider.notifier)
               .uploadAndGetFileId();
 
           await ref
@@ -484,7 +486,7 @@ class UserChatTextField extends HookConsumerWidget {
                   child: ChatFilePreview(
                     file: chatInputState.files[index],
                     onFileDeleted: () => ref
-                        .read(chatInputStateNotifierProvider.notifier)
+                        .read(chatInputStateProvider.notifier)
                         .removeFile(index),
                     onFileSettingChanged: (file) async {
                       final editedFile =
@@ -511,10 +513,10 @@ class UserChatTextField extends HookConsumerWidget {
                           _ => file,
                         };
                         ref
-                            .read(chatInputStateNotifierProvider.notifier)
+                            .read(chatInputStateProvider.notifier)
                             .removeFile(index);
                         await ref
-                            .read(chatInputStateNotifierProvider.notifier)
+                            .read(chatInputStateProvider.notifier)
                             .addFile(updatedFile);
                       }
                     },
@@ -527,9 +529,7 @@ class UserChatTextField extends HookConsumerWidget {
           children: [
             IconButton(
               onPressed: () async {
-                await ref
-                    .read(chatInputStateNotifierProvider.notifier)
-                    .chooseFile();
+                await ref.read(chatInputStateProvider.notifier).chooseFile();
               },
               icon: const Icon(Icons.attach_file),
             ),
@@ -548,6 +548,8 @@ class UserChatTextField extends HookConsumerWidget {
                 child: TextField(
                   controller: textEditingController,
                   focusNode: focusNode,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
                 ),
               ),
             ),

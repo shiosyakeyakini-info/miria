@@ -29,10 +29,14 @@ abstract class UserInfo with _$UserInfo {
 // でもまだ https://github.com/rrousselGit/riverpod/issues/767 の機能がないことに加え、
 // https://github.com/rrousselGit/riverpod/issues/2383 のようなこともあるので、
 // UserInfoNotifierが直接accountContextにdependenciesを設定したり、引数のデフォルトにしたりすることが現状できない。
+// userInfoProviderはautoDisposeなので、readではなくwatchで参照する。
+// readにすると購読が張られず、このプロキシを利用しているだけの画面
+// (タイムラインのノートメニューから開いたユーザーメニューなど)では
+// UserInfoNotifierが即座に破棄され、以降の操作が一切効かなくなる。
 @Riverpod(dependencies: [accountContext])
 Raw<UserInfoNotifier> userInfoNotifierProxy(Ref ref, String userId) {
-  return ref.read(
-    userInfoNotifierProvider(
+  return ref.watch(
+    userInfoProvider(
       userId: userId,
       context: ref.read(accountContextProvider),
     ).notifier,
@@ -42,17 +46,13 @@ Raw<UserInfoNotifier> userInfoNotifierProxy(Ref ref, String userId) {
 @Riverpod(dependencies: [accountContext])
 AsyncValue<UserInfo> userInfoProxy(Ref ref, String userId) {
   return ref.watch(
-    userInfoNotifierProvider(
-      userId: userId,
-      context: ref.read(accountContextProvider),
-    ),
+    userInfoProvider(userId: userId, context: ref.read(accountContextProvider)),
   );
 }
 
 @Riverpod()
 class UserInfoNotifier extends _$UserInfoNotifier {
-  DialogStateNotifier get _dialog =>
-      ref.read(dialogStateNotifierProvider.notifier);
+  DialogStateNotifier get _dialog => ref.read(dialogStateProvider.notifier);
 
   Misskey get _getMisskey => ref.read(misskeyProvider(context.getAccount));
   Misskey get _postMisskey => ref.read(misskeyProvider(context.postAccount));

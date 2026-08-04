@@ -6,30 +6,33 @@ part of 'misskey_note_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(MisskeyNoteNotifier)
-const misskeyNoteNotifierProvider = MisskeyNoteNotifierProvider._();
+final misskeyNoteProvider = MisskeyNoteNotifierProvider._();
 
 final class MisskeyNoteNotifierProvider
     extends $NotifierProvider<MisskeyNoteNotifier, void> {
-  const MisskeyNoteNotifierProvider._()
+  MisskeyNoteNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'misskeyNoteNotifierProvider',
+        name: r'misskeyNoteProvider',
         isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           accountContextProvider,
           misskeyGetContextProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>[
           MisskeyNoteNotifierProvider.$allTransitiveDependencies0,
           MisskeyNoteNotifierProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = accountContextProvider;
-  static const $allTransitiveDependencies1 = misskeyGetContextProvider;
+  static final $allTransitiveDependencies0 = accountContextProvider;
+  static final $allTransitiveDependencies1 = misskeyGetContextProvider;
 
   @override
   String debugGetCreateSourceHash() => _$misskeyNoteNotifierHash();
@@ -48,14 +51,13 @@ final class MisskeyNoteNotifierProvider
 }
 
 String _$misskeyNoteNotifierHash() =>
-    r'2498b99dd118b71f706d8d830b41047aa7ee3ded';
+    r'2eaa2dab6ead93c01dd98132fc90e47d34b78dce';
 
 abstract class _$MisskeyNoteNotifier extends $Notifier<void> {
   void build();
   @$mustCallSuper
   @override
   void runBuild() {
-    build();
     final ref = this.ref as $Ref<void, void>;
     final element =
         ref.element
@@ -65,9 +67,6 @@ abstract class _$MisskeyNoteNotifier extends $Notifier<void> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, null);
+    element.handleCreate(ref, build);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

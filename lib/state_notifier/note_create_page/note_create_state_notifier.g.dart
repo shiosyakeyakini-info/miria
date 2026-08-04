@@ -6,25 +6,28 @@ part of 'note_create_state_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(NoteCreateNotifier)
-const noteCreateNotifierProvider = NoteCreateNotifierProvider._();
+final noteCreateProvider = NoteCreateNotifierProvider._();
 
 final class NoteCreateNotifierProvider
     extends $NotifierProvider<NoteCreateNotifier, NoteCreate> {
-  const NoteCreateNotifierProvider._()
+  NoteCreateNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'noteCreateNotifierProvider',
+        name: r'noteCreateProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           misskeyPostContextProvider,
           notesWithProvider,
           accountContextProvider,
           noteDraftRepositoryProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        $allTransitiveDependencies: <ProviderOrFamily>{
           NoteCreateNotifierProvider.$allTransitiveDependencies0,
           NoteCreateNotifierProvider.$allTransitiveDependencies1,
           NoteCreateNotifierProvider.$allTransitiveDependencies2,
@@ -32,11 +35,11 @@ final class NoteCreateNotifierProvider
         },
       );
 
-  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyPostContextProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 = notesWithProvider;
-  static const $allTransitiveDependencies3 = noteDraftRepositoryProvider;
+  static final $allTransitiveDependencies2 = notesWithProvider;
+  static final $allTransitiveDependencies3 = noteDraftRepositoryProvider;
 
   @override
   String debugGetCreateSourceHash() => _$noteCreateNotifierHash();
@@ -55,14 +58,13 @@ final class NoteCreateNotifierProvider
 }
 
 String _$noteCreateNotifierHash() =>
-    r'0742f393ed2005cb9981cbbff5451b5a4dfb6f8d';
+    r'8f02313d01678db05b62133639831006e442b38a';
 
 abstract class _$NoteCreateNotifier extends $Notifier<NoteCreate> {
   NoteCreate build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<NoteCreate, NoteCreate>;
     final element =
         ref.element
@@ -72,9 +74,6 @@ abstract class _$NoteCreateNotifier extends $Notifier<NoteCreate> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

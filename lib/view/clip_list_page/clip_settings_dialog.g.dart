@@ -6,8 +6,11 @@ part of 'clip_settings_dialog.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(_formKey)
-const _formKeyProvider = _FormKeyProvider._();
+final _formKeyProvider = _FormKeyProvider._();
 
 final class _FormKeyProvider
     extends
@@ -17,15 +20,15 @@ final class _FormKeyProvider
           GlobalKey<FormState>
         >
     with $Provider<GlobalKey<FormState>> {
-  const _FormKeyProvider._()
+  _FormKeyProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'_formKeyProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[],
-        $allTransitiveDependencies: const <ProviderOrFamily>[],
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
       );
 
   @override
@@ -54,20 +57,20 @@ final class _FormKeyProvider
 String _$_formKeyHash() => r'd8a56e0366cb1a53da5331749cce00aef36862b1';
 
 @ProviderFor(_initialSettings)
-const _initialSettingsProvider = _InitialSettingsProvider._();
+final _initialSettingsProvider = _InitialSettingsProvider._();
 
 final class _InitialSettingsProvider
     extends $FunctionalProvider<ClipSettings, ClipSettings, ClipSettings>
     with $Provider<ClipSettings> {
-  const _InitialSettingsProvider._()
+  _InitialSettingsProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'_initialSettingsProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[],
-        $allTransitiveDependencies: const <ProviderOrFamily>[],
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
       );
 
   @override
@@ -95,24 +98,24 @@ final class _InitialSettingsProvider
 String _$_initialSettingsHash() => r'5822fd6a8e4070e8a4da0c299a6149e49f7ef49e';
 
 @ProviderFor(_ClipSettingsNotifier)
-const _clipSettingsNotifierProvider = _ClipSettingsNotifierProvider._();
+final _clipSettingsProvider = _ClipSettingsNotifierProvider._();
 
 final class _ClipSettingsNotifierProvider
     extends $NotifierProvider<_ClipSettingsNotifier, ClipSettings> {
-  const _ClipSettingsNotifierProvider._()
+  _ClipSettingsNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'_clipSettingsNotifierProvider',
+        name: r'_clipSettingsProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[_initialSettingsProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[_initialSettingsProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           _ClipSettingsNotifierProvider.$allTransitiveDependencies0,
         ],
       );
 
-  static const $allTransitiveDependencies0 = _initialSettingsProvider;
+  static final $allTransitiveDependencies0 = _initialSettingsProvider;
 
   @override
   String debugGetCreateSourceHash() => _$_clipSettingsNotifierHash();
@@ -138,7 +141,6 @@ abstract class _$ClipSettingsNotifier extends $Notifier<ClipSettings> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<ClipSettings, ClipSettings>;
     final element =
         ref.element
@@ -148,9 +150,6 @@ abstract class _$ClipSettingsNotifier extends $Notifier<ClipSettings> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

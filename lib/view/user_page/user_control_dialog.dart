@@ -46,14 +46,17 @@ class UserControlDialog extends HookConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = userInfoNotifierProxyProvider(response.id);
+    // readではなくwatchすること。readだとこのダイアログがnotifierを購読せず、
+    // 呼び出し元がuserInfoProviderを購読していない場合(タイムラインのノートメニュー
+    // から開いた場合など)にnotifierが破棄され、ミュート・ブロックが動作しなくなる。
+    final notifier = ref.watch(userInfoNotifierProxyProvider(response.id));
 
-    final createBlocking = useAsync(ref.read(provider).createBlocking);
-    final deleteBlocking = useAsync(ref.read(provider).deleteBlocking);
-    final createRenoteMute = useAsync(ref.read(provider).createRenoteMute);
-    final deleteRenoteMute = useAsync(ref.read(provider).deleteRenoteMute);
-    final createMute = useAsync(ref.read(provider).createMute);
-    final deleteMute = useAsync(ref.read(provider).deleteMute);
+    final createBlocking = useAsync(notifier.createBlocking);
+    final deleteBlocking = useAsync(notifier.deleteBlocking);
+    final createRenoteMute = useAsync(notifier.createRenoteMute);
+    final deleteRenoteMute = useAsync(notifier.deleteRenoteMute);
+    final createMute = useAsync(notifier.createMute);
+    final deleteMute = useAsync(notifier.deleteMute);
     final copyName = useAsync(() async {
       await Clipboard.setData(
         ClipboardData(text: response.name ?? response.username),
@@ -106,7 +109,7 @@ class UserControlDialog extends HookConsumerWidget implements AutoRouteWrapper {
     });
     final openUserInOtherAccount = useAsync(
       () async => ref
-          .read(misskeyNoteNotifierProvider.notifier)
+          .read(misskeyNoteProvider.notifier)
           .openUserInOtherAccount(response, host),
     );
 

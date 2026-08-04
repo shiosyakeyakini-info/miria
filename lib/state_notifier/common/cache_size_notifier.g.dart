@@ -6,17 +6,20 @@ part of 'cache_size_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(CacheSizeNotifier)
-const cacheSizeNotifierProvider = CacheSizeNotifierProvider._();
+final cacheSizeProvider = CacheSizeNotifierProvider._();
 
 final class CacheSizeNotifierProvider
     extends $AsyncNotifierProvider<CacheSizeNotifier, String> {
-  const CacheSizeNotifierProvider._()
+  CacheSizeNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'cacheSizeNotifierProvider',
+        name: r'cacheSizeProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -37,7 +40,6 @@ abstract class _$CacheSizeNotifier extends $AsyncNotifier<String> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AsyncValue<String>, String>;
     final element =
         ref.element
@@ -47,9 +49,6 @@ abstract class _$CacheSizeNotifier extends $AsyncNotifier<String> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

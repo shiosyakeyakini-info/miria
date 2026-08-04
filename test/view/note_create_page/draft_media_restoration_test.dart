@@ -73,12 +73,12 @@ void main() {
         visibility: NoteVisibility.public,
       );
 
-      final notifier = container.read(noteCreateNotifierProvider.notifier);
+      final notifier = container.read(noteCreateProvider.notifier);
 
       // 下書きから初期化
       await notifier.initializeFromDraft(noMediaDraft);
 
-      final state = container.read(noteCreateNotifierProvider);
+      final state = container.read(noteCreateProvider);
 
       // ファイルリストが空であることを確認
       expect(state.files, isEmpty);

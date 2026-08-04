@@ -102,7 +102,7 @@ class ChatInputStateNotifier extends _$ChatInputStateNotifier {
       // ファイルアップロード（既存の処理）
       final fileSystem = ref.read(fileSystemProvider);
 
-      final result = await FilePicker.platform.pickFiles(
+      final result = await FilePicker.pickFiles(
         allowMultiple: false,
         type: FileType.custom,
         allowedExtensions: ["jpg", "jpeg", "png", "gif", "mp4", "webm"],

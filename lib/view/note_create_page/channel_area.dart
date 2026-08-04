@@ -8,7 +8,7 @@ class ChannelArea extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final channel = ref.watch(
-      noteCreateNotifierProvider.select((value) => value.channel),
+      noteCreateProvider.select((value) => value.channel),
     );
     if (channel == null) return Container();
 

@@ -58,6 +58,26 @@ class AuthTestData {
     },
   };
 
+  static Map<String, dynamic> mastodonNodeInfo = {
+    "links": [
+      {
+        "rel": "http://nodeinfo.diaspora.software/ns/schema/2.0",
+        "href": "https://mastodon.social/nodeinfo/2.0",
+      },
+    ],
+  };
+
+  static Map<String, dynamic> mastodonNodeInfo2 = {
+    "version": "2.0",
+    "software": {"name": "mastodon", "version": "4.3.0"},
+    "protocols": ["activitypub"],
+    "openRegistrations": true,
+    "usage": {
+      "users": {"total": 1000},
+    },
+    "metadata": <String, dynamic>{},
+  };
+
   static Map<String, dynamic> oldVerMisskeyNodeInfo = {
     "links": [
       {

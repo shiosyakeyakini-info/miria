@@ -18,13 +18,13 @@ class MutedUsersNotifier extends _$MutedUsersNotifier {
   }
 
   Future<void> delete(String userId) async {
-    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+    await ref.read(dialogStateProvider.notifier).guard(() async {
       // ユーザー名を取得
       final user = state.value?.firstWhere((e) => e.muteeId == userId);
       final userName = user?.mutee.name ?? user?.mutee.username ?? "";
 
       final result = await ref
-          .read(dialogStateNotifierProvider.notifier)
+          .read(dialogStateProvider.notifier)
           .showDialog(
             message: (context) => S.of(context).confirmUnmuteUser(userName),
             actions: (context) => [S.of(context).unmute, S.of(context).cancel],

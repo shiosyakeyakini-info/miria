@@ -6,8 +6,11 @@ part of 'explore_users.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(_pinnedUser)
-const _pinnedUserProvider = _PinnedUserProvider._();
+final _pinnedUserProvider = _PinnedUserProvider._();
 
 final class _PinnedUserProvider
     extends
@@ -19,22 +22,22 @@ final class _PinnedUserProvider
     with
         $FutureModifier<List<UserDetailed>>,
         $FutureProvider<List<UserDetailed>> {
-  const _PinnedUserProvider._()
+  _PinnedUserProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'_pinnedUserProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[misskeyGetContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyGetContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           _PinnedUserProvider.$allTransitiveDependencies0,
           _PinnedUserProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = misskeyGetContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyGetContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyGetContextProvider.$allTransitiveDependencies0;
 
   @override
@@ -53,6 +56,3 @@ final class _PinnedUserProvider
 }
 
 String _$_pinnedUserHash() => r'bc9d937e7e437c825d643641c24715a4d5762f89';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -6,8 +6,11 @@ part of 'app_info_page.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(packageInfo)
-const packageInfoProvider = PackageInfoProvider._();
+final packageInfoProvider = PackageInfoProvider._();
 
 final class PackageInfoProvider
     extends
@@ -17,7 +20,7 @@ final class PackageInfoProvider
           FutureOr<PackageInfo>
         >
     with $FutureModifier<PackageInfo>, $FutureProvider<PackageInfo> {
-  const PackageInfoProvider._()
+  PackageInfoProvider._()
     : super(
         from: null,
         argument: null,
@@ -44,6 +47,3 @@ final class PackageInfoProvider
 }
 
 String _$packageInfoHash() => r'033806d620d2468d3918fbeb8531c7383430b019';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

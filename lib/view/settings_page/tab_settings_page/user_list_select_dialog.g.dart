@@ -6,8 +6,11 @@ part of 'user_list_select_dialog.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(_usersList)
-const _usersListProvider = _UsersListProvider._();
+final _usersListProvider = _UsersListProvider._();
 
 final class _UsersListProvider
     extends
@@ -17,22 +20,22 @@ final class _UsersListProvider
           FutureOr<List<UsersList>>
         >
     with $FutureModifier<List<UsersList>>, $FutureProvider<List<UsersList>> {
-  const _UsersListProvider._()
+  _UsersListProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'_usersListProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[misskeyGetContextProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[misskeyGetContextProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           _UsersListProvider.$allTransitiveDependencies0,
           _UsersListProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = misskeyGetContextProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = misskeyGetContextProvider;
+  static final $allTransitiveDependencies1 =
       MisskeyGetContextProvider.$allTransitiveDependencies0;
 
   @override
@@ -51,6 +54,3 @@ final class _UsersListProvider
 }
 
 String _$_usersListHash() => r'd7fab580bf6bc18fc282743de3d482f5d1d62a49';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
