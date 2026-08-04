@@ -9,8 +9,8 @@
 library;
 
 import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:flutter/widgets.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:marionette_flutter/marionette_flutter.dart";
 import "package:marionette_riverpod_plugin/marionette_riverpod_plugin.dart";
@@ -43,7 +43,7 @@ void initializeMarionetteBinding() {
   MarionetteBinding.ensureInitialized(
     MarionetteConfiguration(
       logCollector: logCollector,
-      extractText: _extractMfmText,
+      extractText: extractMarionetteText,
     ),
   );
   logger.onLogged = (log, info) => logCollector.addLog(log);
@@ -172,6 +172,81 @@ String? _extractMfmText(Element element) {
     _ => null,
   };
 }
+
+/// marionette の `extractText` に渡す本体。
+///
+/// 組み込みの抽出（[Text] や [TextField] など）が null を返したときだけ呼ばれる。
+@visibleForTesting
+String? extractMarionetteText(Element element) =>
+    _extractMfmText(element) ?? _extractButtonLabel(element);
+
+/// ラベルを直接持たないボタン類に、配下の [Text] をラベルとして与える。
+///
+/// marionette は操作可能ウィジェットで走査を打ち切る（`shouldStopAtType`）。
+/// [InkWell] と [GestureDetector] だけは例外で子まで降りるため、それらで
+/// 組まれたタブなどはラベルが要素一覧に出る。一方 Material のボタン類は
+/// 走査が止まるので、子の [Text] が一覧にまったく現れない。結果、確認
+/// ダイアログの「削除する」「やっぱやめる」がどちらも `TextButton ''` になり、
+/// 座標でしか撃ち分けられなくなる（実際に取り違えが起きた）。
+///
+/// 走査が止まる前に呼ばれる `extractText` で配下を自前で辿ってラベルを
+/// 組み立てれば、`tap --text "削除する"` が通るようになる。
+///
+/// 走査が止まるウィジェットにしか適用しないので、要素の数は増えない。
+/// これらは元から操作可能で一覧に載っており、空だった `text` が埋まるだけ。
+String? _extractButtonLabel(Element element) {
+  if (!_isLabelledButton(element.widget)) return null;
+
+  final parts = <String>[];
+
+  void visit(Element element) {
+    if (parts.length >= _maxLabelParts) return;
+
+    // アイコンは [Icon] が内部で [RichText] を作り、その平文はフォントの
+    // 私用領域のコードポイント（`` など）になる。ラベルとしては
+    // ノイズにしかならないので、[Icon] より下は見ない。
+    if (element.widget is Icon) return;
+
+    final text = _extractMfmText(element) ?? _labelTextOf(element.widget);
+    if (text != null) {
+      final trimmed = text.trim();
+      if (trimmed.isNotEmpty) parts.add(trimmed);
+      // [Text] より下は同じ文字列の作り直しなので降りない。
+      return;
+    }
+
+    element.visitChildren(visit);
+  }
+
+  element.visitChildren(visit);
+
+  return parts.isEmpty ? null : parts.join(" ");
+}
+
+/// ラベルを合成する対象。いずれも marionette の走査が止まるウィジェット。
+bool _isLabelledButton(Widget widget) =>
+    widget is ButtonStyleButton ||
+    widget is FloatingActionButton ||
+    widget is IconButton ||
+    widget is DropdownButton ||
+    widget is PopupMenuButton ||
+    widget is CheckboxListTile ||
+    widget is RadioListTile ||
+    widget is SwitchListTile;
+
+/// ラベルとして読める平文を持つウィジェットならそれを返す。
+String? _labelTextOf(Widget widget) => switch (widget) {
+  Text(:final data?) => data,
+  Text(:final textSpan?) => textSpan.toPlainText(),
+  RichText(:final text) => text.toPlainText(),
+  _ => null,
+};
+
+/// 1 つのボタンから拾うラベルの上限。
+///
+/// アイコン + 短い語という構成を想定しており、これを超える要素を持つボタンの
+/// 全文が要るとは考えにくい。走査が止まらない構造を踏んだときの保険でもある。
+const _maxLabelParts = 4;
 
 /// パース済みの MFM を、書かれていた文字列に近い平文へ戻す。
 ///

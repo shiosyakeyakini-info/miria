@@ -28,7 +28,7 @@ class UserDetail extends ConsumerWidget {
     //   userInfoProvider(response.id)
     //       .select((value) => value.value?.follow is AsyncLoading),
     // );
-    final notifier = ref.read(userInfoNotifierProxyProvider(response.id));
+    final notifier = ref.watch(userInfoNotifierProxyProvider(response.id));
     final memo = response.memo ?? "";
 
     final isSameAccount = ref.read(accountContextProvider).isSame;

@@ -8,6 +8,7 @@ import "package:freezed_annotation/freezed_annotation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:hooks_riverpod/legacy.dart";
 import "package:miria/model/account.dart";
+import "package:miria/model/achievement.dart";
 import "package:miria/model/acct.dart";
 import "package:miria/model/tab_setting.dart";
 import "package:miria/model/tab_type.dart";
@@ -50,6 +51,17 @@ Dio dio(Ref ref) {
 
 @Riverpod(keepAlive: true)
 FileSystem fileSystem(Ref ref) => const LocalFileSystem();
+
+/// 実績名の対訳表。表示言語を変えたら引き直す。
+@Riverpod(keepAlive: true)
+Future<Achievements> achievements(Ref ref) async {
+  final language = ref.watch(
+    generalSettingsRepositoryProvider.select(
+      (value) => value.settings.languages,
+    ),
+  );
+  return Achievements.load(language);
+}
 
 @Riverpod(keepAlive: true)
 @Deprecated(

@@ -75,6 +75,26 @@ The accessibility question — whether mfm_renderer should carry
 currently has none, and ignores `MediaQuery.disableAnimations` for `shake` /
 `jelly` / `spin` / `twitch`.
 
+### Button labels
+
+Traversal stops at every interactive widget except `GestureDetector` and
+`InkWell` (`_isBuiltInStopWidget`), so a Material button's child `Text` is
+never emitted. Tabs built on `InkWell` kept their label, but every
+`TextButton` / `ElevatedButton` / `OutlinedButton` arrived as `''` — a confirm
+dialog was two anonymous buttons at two coordinates, and the affirmative is
+not reliably the right-hand one (`削除する` sits on the **left**). That
+mis-tap happened.
+
+`extractText` runs before traversal stops, so `_extractButtonLabel` in
+`lib/marionette_debug.dart` walks the button's own subtree and joins the
+`Text` it finds. Only widgets that stop traversal are eligible, so no new
+elements appear — these are already interactive and listed, and only their
+empty `text` gets filled.
+
+`Icon` subtrees are skipped: `Icon` builds a `RichText` whose plain text is a
+private-use codepoint, which would turn every icon button into `''`-grade
+noise. Icon-only buttons therefore stay empty, which is the honest answer.
+
 ## Element discovery
 
 `isElementHittable` hit-tests the element's **centre point** and checks the

@@ -1070,10 +1070,10 @@ packages:
     dependency: "direct main"
     description:
       name: mfm
-      sha256: "1e7f9e02eb7536d5bd127ba19da568262cb064ea79bf461e11257930d53c5528"
+      sha256: a95edd06754ebdf6e65ee975c4b2c227670e38b641d72ca0a49f36e19ea9c4c0
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.9"
+    version: "1.0.10"
   mfm_parser:
     dependency: "direct main"
     description:
