@@ -16,6 +16,7 @@ import "package:miria/view/common/misskey_notes/custom_emoji.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart"
     as misskey_note;
+import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:miria/view/common/pushable_listview.dart";
 import "package:miria/view/notification_page/notification_page_data.dart";
 import "package:miria/view/user_page/user_list_item.dart";
@@ -531,6 +532,69 @@ class NotificationItem extends ConsumerWidget {
                   S
                       .of(context)
                       .roleAssignedNotification(notification.role?.name ?? ""),
+                ),
+              ),
+            ],
+          ),
+        );
+      case AppNotificationData():
+        // icon はアプリが自由に入れる文字列なので、絶対 URL のときだけ画像に
+        // する。そうでなければ汎用のアイコンで代替する
+        final icon = notification.icon?.hasScheme ?? false
+            ? notification.icon
+            : null;
+        final header = notification.header;
+        return Padding(
+          padding: const EdgeInsets.only(
+            left: 10,
+            top: 10,
+            bottom: 10,
+            right: 10,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: SizedBox.square(
+                    dimension: 40,
+                    child: icon != null
+                        ? NetworkImageView(
+                            url: icon.toString(),
+                            type: ImageType.serverIcon,
+                            fit: BoxFit.cover,
+                          )
+                        : ColoredBox(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.surfaceContainerHighest,
+                            child: Icon(
+                              Icons.apps,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SimpleMfmText(
+                            header ?? S.of(context).appNotification,
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                        ),
+                        Text(notification.createdAt.differenceNow(context)),
+                      ],
+                    ),
+                    MfmText(mfmText: notification.body),
+                  ],
                 ),
               ),
             ],
