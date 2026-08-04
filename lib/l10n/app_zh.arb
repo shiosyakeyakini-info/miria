@@ -944,6 +944,20 @@
     "createdAtDescendingOrder": "创建时间从新到旧",
     "updatedAtAscendingOrder": "更新时间从旧到新",
     "updatedAtDescendingOrder": "更新时间从新到旧",
+    
+    "unsupportedFile": "不支持的文件",
+    "unsupportedFileWithFilename": "{filename}是不支持的文件",
+    "@unsupportedFileWithFilename": {
+        "placeholders": {
+            "filename": {
+                "type": "String"
+            }
+        }
+    },
+    "failedFileSave": "文件保存失败",
+    
+    "loopPlayback": "循环播放",
+
     "misskeyGames": "Misskey Games",
     "cookieCliker": "Cookie Cliker",
     "bubbleGame": "Bubble Game",

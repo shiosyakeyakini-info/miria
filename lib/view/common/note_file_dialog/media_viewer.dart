@@ -34,6 +34,7 @@ class MediaViewer extends HookConsumerWidget {
               url: file.thumbnailUrl.toString(),
               type: ImageType.imageThumbnail,
               fit: BoxFit.contain,
+              errorBuilder: null,
             ),
           Icon(
             Icons.play_circle,
@@ -43,9 +44,7 @@ class MediaViewer extends HookConsumerWidget {
         ],
       ),
     );
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
+    return SizedBox.expand(
       child:
           (enabledAutoPlay.value ||
               (!enabledAutoPlay.value && !isThumbnailVisible.value))

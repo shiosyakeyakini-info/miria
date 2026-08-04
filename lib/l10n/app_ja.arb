@@ -1045,6 +1045,8 @@
     },
     "failedFileSave": "ファイルの保存に失敗したみたいや",
 
+    "loopPlayback": "ループ再生",
+
     "misskeyGames": "Misskey Games",
     "cookieCliker": "Cookie Cliker",
     "bubbleGame": "Bubble Game",

@@ -41,7 +41,7 @@ final class AccountRepositoryProvider
   }
 }
 
-String _$accountRepositoryHash() => r'b7751aedff52231e1cd9f818db64c9bc6c20446a';
+String _$accountRepositoryHash() => r'79dbcc9020ca1905a09340adc1d18a75427e9957';
 
 abstract class _$AccountRepository extends $Notifier<List<Account>> {
   List<Account> build();

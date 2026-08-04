@@ -7,7 +7,6 @@ import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:flutter_localizations/flutter_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:media_kit/media_kit.dart";
 import "package:miria/const.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/marionette_debug.dart";
@@ -23,7 +22,6 @@ Future<void> main() async {
   // debug ビルドでは marionette の binding が立ち上がる。
   // release では通常の WidgetsFlutterBinding と同じ。
   initializeMarionetteBinding();
-  MediaKit.ensureInitialized();
   if (!kIsWeb && (Platform.isWindows || Platform.isMacOS || Platform.isLinux)) {
     await windowManager.ensureInitialized();
   }

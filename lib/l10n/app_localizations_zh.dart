@@ -1906,15 +1906,18 @@ class SZh extends S {
   String get updatedAtDescendingOrder => '更新时间从新到旧';
 
   @override
-  String get unsupportedFile => '対応してないファイルやわ';
+  String get unsupportedFile => '不支持的文件';
 
   @override
   String unsupportedFileWithFilename(String filename) {
-    return '$filenameは対応してないファイルやわ';
+    return '$filename是不支持的文件';
   }
 
   @override
-  String get failedFileSave => 'ファイルの保存に失敗したみたいや';
+  String get failedFileSave => '文件保存失败';
+
+  @override
+  String get loopPlayback => '循环播放';
 
   @override
   String get misskeyGames => 'Misskey Games';

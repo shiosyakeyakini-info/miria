@@ -66,9 +66,6 @@ dependencies:
   webview_flutter: ^4.14.1
   webview_flutter_android: ^4.7.0
   webview_flutter_wkwebview: ^3.9.0
-  media_kit: ^1.1.11
-  media_kit_video: ^2.0.1
-  media_kit_libs_video: ^1.0.5
   flutter_colorpicker: ^1.1.0
   window_manager: ^0.5.2
   shared_preference_app_group: ^2.1.0
@@ -82,6 +79,11 @@ dependencies:
   image: ^4.9.1
   flutter_twemoji: ^1.0.1
   mime: ^2.0.0
+  fvp: ^0.34.0
+  video_player: ^2.10.0
+  video_player_avfoundation: ^2.8.4
+  video_player_android: ^2.8.13
+  video_player_platform_interface: ^6.4.0
 
   # AI エージェントから実行中アプリを操作・観測するための開発用依存
   # (marionette_mcp)。Dart には debug 限定の依存指定がないため通常の
