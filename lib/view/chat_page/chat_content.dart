@@ -8,7 +8,8 @@ import "package:misskey_dart/misskey_dart.dart";
 
 class ChatContent extends ConsumerWidget {
   final ChatMessage message;
-  const ChatContent({required this.message, super.key});
+  final Function() onTap;
+  const ChatContent({required this.message, required this.onTap, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,32 +21,50 @@ class ChatContent extends ConsumerWidget {
             : message.toUser) ??
         ref.read(accountContextProvider).getAccount.i;
 
-    return Row(
-      children: [
-        AvatarIcon(user: targetUser),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  if (room != null)
-                    Expanded(child: Text(room.name))
-                  else
-                    Expanded(
-                      child: SimpleMfmText(
-                        targetUser.name ?? targetUser.username,
+    return ListTile(
+      contentPadding: EdgeInsets.only(right: 5.0),
+      leading: AvatarIcon(user: targetUser),
+      onTap: onTap,
+      title: Row(
+        children: [
+          if (room != null)
+            Expanded(
+              child: Text.rich(
+                TextSpan(
+                  style: Theme.of(context).textTheme.titleSmall,
+                  children: [
+                    WidgetSpan(
+                      alignment: PlaceholderAlignment.middle,
+                      child: Icon(
+                        Icons.people_alt,
+                        size: 16,
+                        color: Theme.of(context).iconTheme.color,
                       ),
                     ),
-                  Text(message.createdAt.differenceNow(context)),
-                ],
+                    const WidgetSpan(child: SizedBox(width: 4)),
+                    TextSpan(text: room.name),
+                  ],
+                ),
               ),
-              SimpleMfmText(message.text ?? ""),
-            ],
+            )
+          else
+            Expanded(
+              child: SimpleMfmText(
+                targetUser.name ?? targetUser.username,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+            ),
+          Text(
+            message.createdAt.differenceNow(context),
+            style: Theme.of(context).textTheme.titleSmall,
           ),
-        ),
-      ],
+        ],
+      ),
+      subtitle: SimpleMfmText(
+        message.text ?? "",
+        style: Theme.of(context).textTheme.bodySmall,
+        maxLines: 5,
+      ),
     );
   }
 }
