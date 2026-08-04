@@ -67,6 +67,8 @@
     "renotedUsersInNotification": "リノートされた方",
     "reactionUsersInNotification": "リアクションされた人",
     "finishedVotedNotification": "投票結果が出たそうですわよ",
+    "scheduledNotePostedNotification": "予約投稿がノートされましてよ",
+    "scheduledNotePostFailedNotification": "予約投稿が失敗したそうですわ",
     "renoteAndReactionsNotification": "{reactionUser}らがリアクションを、{renotedUser}らがリノートをされましたのよ",
     "renoteNotification": "{renoteUser}らがリノートされましてよ",
     "reactionNotification": "{reactionUser}らがリアクションされましてよ",

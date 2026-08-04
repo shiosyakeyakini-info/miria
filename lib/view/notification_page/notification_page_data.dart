@@ -135,6 +135,16 @@ class NoteNotification extends NotificationData {
   });
 }
 
+/// 予約投稿がノートされたときの通知
+class ScheduledNoteNotification extends NotificationData {
+  final Note? note;
+  ScheduledNoteNotification({
+    required this.note,
+    required super.createdAt,
+    required super.id,
+  });
+}
+
 class RoleNotification extends NotificationData {
   final RolesListResponse? role;
   RoleNotification({
@@ -292,6 +302,22 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
           resultList.add(
             PollNotification(
               note: element.note,
+              createdAt: element.createdAt,
+              id: element.id,
+            ),
+          );
+        case NotificationType.scheduledNotePosted:
+          resultList.add(
+            ScheduledNoteNotification(
+              note: element.note,
+              createdAt: element.createdAt,
+              id: element.id,
+            ),
+          );
+        case NotificationType.scheduledNotePostFailed:
+          resultList.add(
+            SimpleNotificationData(
+              text: localize.scheduledNotePostFailedNotification,
               createdAt: element.createdAt,
               id: element.id,
             ),

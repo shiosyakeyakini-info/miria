@@ -468,6 +468,29 @@ class NotificationItem extends ConsumerWidget {
             ],
           ),
         );
+      case ScheduledNoteNotification(:final note):
+        return Padding(
+          padding: const EdgeInsets.only(top: 10, bottom: 10, right: 10),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        S.of(context).scheduledNotePostedNotification,
+                      ),
+                    ),
+                    Text(notification.createdAt.differenceNow(context)),
+                  ],
+                ),
+              ),
+              if (note != null)
+                misskey_note.MisskeyNote(note: note, isDisplayBorder: false),
+            ],
+          ),
+        );
       case NoteNotification(:final note):
         final user = note?.user;
         return Padding(

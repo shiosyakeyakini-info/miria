@@ -335,6 +335,8 @@
     "renotedUsersInNotification": "リノートしてくれはった人",
     "reactionUsersInNotification": "リアクションしてくれはった人",
     "finishedVotedNotification": "投票が終わったみたいや",
+    "scheduledNotePostedNotification": "予約投稿がノートされたで",
+    "scheduledNotePostFailedNotification": "予約投稿がしくじったみたいや",
     "renoteAndReactionsNotification": "{reactionUser}さんたちがリアクションしはって、{renotedUser}さんたちがリノートしはったで",
     "@renoteAndReactionsNotification": {
         "placeholders": {

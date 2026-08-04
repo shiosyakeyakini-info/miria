@@ -1215,6 +1215,18 @@ abstract class S {
   /// **'投票が終わったみたいや'**
   String get finishedVotedNotification;
 
+  /// No description provided for @scheduledNotePostedNotification.
+  ///
+  /// In ja, this message translates to:
+  /// **'予約投稿がノートされたで'**
+  String get scheduledNotePostedNotification;
+
+  /// No description provided for @scheduledNotePostFailedNotification.
+  ///
+  /// In ja, this message translates to:
+  /// **'予約投稿がしくじったみたいや'**
+  String get scheduledNotePostFailedNotification;
+
   /// No description provided for @renoteAndReactionsNotification.
   ///
   /// In ja, this message translates to:
