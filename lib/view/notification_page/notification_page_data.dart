@@ -144,6 +144,25 @@ class RoleNotification extends NotificationData {
   });
 }
 
+/// アプリからの通知。
+///
+/// Misskey は `body` のみ必須で、`header` と `icon` は通知を作ったアプリの
+/// 名前とアイコンで埋まる。アプリを介さず `notifications/create` を直接
+/// 叩いた場合は両方 null になりうる。
+class AppNotificationData extends NotificationData {
+  final String body;
+  final String? header;
+  final Uri? icon;
+
+  AppNotificationData({
+    required this.body,
+    required this.header,
+    required this.icon,
+    required super.createdAt,
+    required super.id,
+  });
+}
+
 class InvitedChatRoomNotification extends NotificationData {
   final ChatJoining invitation;
   InvitedChatRoomNotification({
@@ -323,13 +342,27 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
             ),
           );
         case NotificationType.app:
-          resultList.add(
-            SimpleNotificationData(
-              text: localize.appNotification,
-              createdAt: element.createdAt,
-              id: element.id,
-            ),
-          );
+          final body = element.body;
+          if (body == null || body.isEmpty) {
+            // 本文がなければ従来どおり「アプリからの通知」とだけ伝える
+            resultList.add(
+              SimpleNotificationData(
+                text: localize.appNotification,
+                createdAt: element.createdAt,
+                id: element.id,
+              ),
+            );
+          } else {
+            resultList.add(
+              AppNotificationData(
+                body: body,
+                header: element.header,
+                icon: element.icon,
+                createdAt: element.createdAt,
+                id: element.id,
+              ),
+            );
+          }
 
         case NotificationType.groupInvited:
         case NotificationType.reactionGrouped:
