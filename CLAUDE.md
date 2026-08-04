@@ -56,6 +56,34 @@ fvm flutter pub run cider bump build --bump-build
 fvm flutter pub run cider version
 ```
 
+### Misskey由来のアセット（assets_builder）
+
+Misskey本体にしかないデータは `assets_builder/` のスクリプトで `assets/` に
+取り込む。どれもサブモジュール `assets_builder/misskey` を要求する。
+
+```bash
+git submodule update --init --depth 1 assets_builder/misskey
+```
+
+| ビルダー | 出力 | 中身 |
+|---|---|---|
+| `emoji_list/builder.mjs` | `assets/emoji_list.json` | Unicode絵文字と読みがな |
+| `achievements/builder.mjs` | `assets/achievements.json` | 実績名の対訳 |
+| `theme_list/builder.mjs` | （つくりかけ） | テーマ |
+
+実績はサーバーが `notes1` のような名前しか寄越さず、対訳はMisskeyの
+`locales/*.yml` の `_achievements._types` にしかない。ビルダーはそこだけを
+`locales/index.js` と同じフォールバック規則で解決して書き出す。
+
+```bash
+cd assets_builder/achievements && npm install && node builder.mjs
+```
+
+引くのは `lib/model/achievement.dart` の `Achievements`。表示言語との対応は
+同ファイルにあり、miriaの日本語は関西弁が規定なのでMisskeyの **ja-KS** を、
+お嬢様言葉はMisskeyに相当するロケールがないので ja-JP を引く。Misskey側で
+実績が増えたら対訳がないので、実績名がそのまま出る。
+
 ### 実行中アプリの観測・操作（marionette MCP）
 
 debug ビルドには [marionette_mcp](https://github.com/leancodepl/marionette_mcp)

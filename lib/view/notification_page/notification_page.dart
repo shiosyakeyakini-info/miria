@@ -58,6 +58,9 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
               PushableListView<NotificationData>(
                 initializeFuture: () async {
                   final localize = S.of(context);
+                  final achievements = await ref.read(
+                    achievementsProvider.future,
+                  );
                   final result = await misskey.i.notifications(
                     const INotificationsRequest(limit: 50, markAsRead: true),
                   );
@@ -68,17 +71,20 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
                   await ref
                       .read(accountRepositoryProvider.notifier)
                       .readAllNotification(accountContext.postAccount);
-                  return result.toNotificationData(localize);
+                  return result.toNotificationData(localize, achievements);
                 },
                 nextFuture: (lastElement, _) async {
                   final localize = S.of(context);
+                  final achievements = await ref.read(
+                    achievementsProvider.future,
+                  );
                   final result = await misskey.i.notifications(
                     INotificationsRequest(limit: 50, untilId: lastElement.id),
                   );
                   ref
                       .read(notesWithProvider)
                       .registerAll(result.map((e) => e.note).nonNulls);
-                  return result.toNotificationData(localize);
+                  return result.toNotificationData(localize, achievements);
                 },
                 itemBuilder: (context, notification) => Align(
                   alignment: Alignment.center,
