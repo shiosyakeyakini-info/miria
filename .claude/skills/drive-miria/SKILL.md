@@ -84,6 +84,11 @@ Note bodies are readable — they surface as `Mfm` / `SimpleMfm` elements with
 the text flattened the way it looks on screen, and are valid `--text`
 matchers. The `Text '￼'` sitting at the same spot is the same note; ignore it.
 
+Buttons carry their own label, so a confirm dialog reads `TextButton '削除する'`
+/ `TextButton 'やっぱやめる'` rather than two anonymous buttons — match those by
+`--text`, never by guessing which side is affirmative. Icon-only buttons stay
+empty; the icon glyph is deliberately kept out of the label.
+
 ## The screen
 
 Coordinates below are for the default 384×661 window. Tabs are user
