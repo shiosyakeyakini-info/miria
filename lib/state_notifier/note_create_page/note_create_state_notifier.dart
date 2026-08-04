@@ -488,6 +488,32 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
     state = state.copyWith(selectedDraftId: draftId);
   }
 
+  /// ドライブのファイル情報を更新する
+  ///
+  /// misskey_dartの`drive.files.update`はFreezedのtoJsonを経由するため
+  /// undefinedとnullを区別できず、`comment: null`を渡すとキーごと削除される。
+  /// 一方で説明が空のときに`comment: ''`を送ると、Misskey Webが
+  /// ALTテキストとしてファイル名を表示しなくなってしまう。
+  /// そのためapiServiceを直接呼び、commentについてはnullをそのまま送る。
+  Future<DriveFile> _updateDriveFile({
+    required String fileId,
+    required String name,
+    required bool isSensitive,
+    required String? comment,
+  }) async {
+    final response = await _misskey.apiService.post<Map<String, dynamic>>(
+      "drive/files/update",
+      DriveFilesUpdateRequest(
+        fileId: fileId,
+        name: name,
+        isSensitive: isSensitive,
+        comment: comment,
+      ).toJson(),
+      excludeRemoveNullPredicate: (key, _) => key == "comment",
+    );
+    return DriveFile.fromJson(response);
+  }
+
   /// ノートを投稿する
   Future<void> note() async {
     if (state.text.isEmpty && state.files.isEmpty && !state.isVote) {
@@ -573,25 +599,21 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
 
             case UnknownAlreadyPostedFile():
               if (file.isEdited) {
-                await _misskey.drive.files.update(
-                  DriveFilesUpdateRequest(
-                    fileId: file.id,
-                    name: file.fileName,
-                    isSensitive: file.isNsfw,
-                    comment: file.caption,
-                  ),
+                await _updateDriveFile(
+                  fileId: file.id,
+                  name: file.fileName,
+                  isSensitive: file.isNsfw,
+                  comment: file.caption,
                 );
               }
               fileIds.add(file.id);
             case ImageFileAlreadyPostedFile():
               if (file.isEdited) {
-                response = await _misskey.drive.files.update(
-                  DriveFilesUpdateRequest(
-                    fileId: file.id,
-                    name: file.fileName,
-                    isSensitive: file.isNsfw,
-                    comment: file.caption,
-                  ),
+                response = await _updateDriveFile(
+                  fileId: file.id,
+                  name: file.fileName,
+                  isSensitive: file.isNsfw,
+                  comment: file.caption,
                 );
               }
 

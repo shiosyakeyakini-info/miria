@@ -130,7 +130,7 @@ void main() {
       expect(fileSettingChanged, isFalse);
     });
 
-    testWidgets("既存ファイルの場合は何も表示されないこと", (tester) async {
+    testWidgets("ドライブから添付した既存ファイルのプレビューが表示されること", (tester) async {
       var fileDeleted = false;
       var fileSettingChanged = false;
 
@@ -153,10 +153,17 @@ void main() {
         ),
       );
 
-      // 何も表示されないことを確認
-      expect(find.byType(Image), findsNothing);
-      expect(find.byIcon(Icons.close), findsNothing);
-      expect(find.byIcon(Icons.insert_drive_file), findsNothing);
+      // 画像が表示されることを確認
+      expect(find.byType(Image), findsOneWidget);
+
+      // 削除ボタンが表示されることを確認
+      expect(find.byIcon(Icons.close), findsOneWidget);
+
+      // 削除ボタンをタップすると削除コールバックが呼ばれることを確認
+      await tester.tap(find.byIcon(Icons.close));
+      await tester.pumpAndSettle();
+      expect(fileDeleted, isTrue);
+      expect(fileSettingChanged, isFalse);
     });
 
     testWidgets("画像プレビューのサイズが正しいこと", (tester) async {

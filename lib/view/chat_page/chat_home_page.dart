@@ -49,11 +49,12 @@ class ChatHomePage extends HookConsumerWidget implements AutoRouteWrapper {
           final tabController = DefaultTabController.of(context);
           return Scaffold(
             appBar: AppBar(
+              title: Text(S.of(context).chat),
               bottom: TabBar(
                 tabs: [
                   Tab(child: Text(S.of(context).home)),
                   Tab(child: Text(S.of(context).chatInvitation)),
-                  Tab(child: Text(S.of(context).channel)),
+                  Tab(child: Text(S.of(context).chatJoining)),
                   Tab(child: Text(S.of(context).chatOwnRooms)),
                 ],
               ),
@@ -120,18 +121,18 @@ class ChatHomePage extends HookConsumerWidget implements AutoRouteWrapper {
 
 @Riverpod(dependencies: [misskeyPostContext])
 Future<List<ChatMessage>> history(Ref ref) async {
-  final (a, b) = await (
-    ref
-        .read(misskeyPostContextProvider)
-        .chat
-        .history(const ChatHistoryRequest(limit: 30, room: false)),
-    ref
-        .read(misskeyPostContextProvider)
-        .chat
-        .history(const ChatHistoryRequest(limit: 30, room: true)),
-  ).wait;
+  final history = await ref
+      .read(misskeyPostContextProvider)
+      .chat
+      .history(const ChatHistoryRequest(limit: 30, room: false));
 
-  return [...a, ...b]..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+  final roomHistory = await ref
+      .read(misskeyPostContextProvider)
+      .chat
+      .history(const ChatHistoryRequest(limit: 30, room: true));
+
+  return [...history, ...roomHistory]
+    ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
 }
 
 class ChatHome extends HookConsumerWidget {
@@ -164,10 +165,11 @@ class ChatHome extends HookConsumerWidget {
         stackTrace: stackTrace,
       ),
       AsyncData(:final value) => Padding(
-        padding: const EdgeInsets.only(right: 4.0),
+        padding: const EdgeInsets.only(left: 5.0, right: 5.0),
         child: ListView.builder(
           itemCount: value.length,
-          itemBuilder: (context, index) => GestureDetector(
+          itemBuilder: (context, index) => ChatContent(
+            message: value[index],
             onTap: () async {
               final room = value[index].toRoom;
               final targetUser =
@@ -191,7 +193,6 @@ class ChatHome extends HookConsumerWidget {
                 );
               }
             },
-            child: ChatContent(message: value[index]),
           ),
         ),
       ),
@@ -206,7 +207,7 @@ class InvitedChat extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final valueNotifier = useState(DateTime.now());
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.only(left: 10, right: 10),
       child: PushableListView(
         initializeFuture: () async => [
           ...await ref
@@ -273,85 +274,75 @@ class InvitedChatItem extends HookConsumerWidget {
       });
     });
 
-    return GestureDetector(
-      onTap: () async {
-        await context.router.push(
-          RoomChatRoute(
-            room: room,
-            accountContext: ref.read(accountContextProvider),
-          ),
-        );
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            border: Border.all(color: Theme.of(context).primaryColor),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  color: AppTheme.of(context).colorTheme.accentedBackground,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                  ),
-                ),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10, top: 3, bottom: 3),
-                    child: Text(room.name),
-                  ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border.all(color: Theme.of(context).primaryColor),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: AppTheme.of(context).colorTheme.accentedBackground,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
-                child: Row(
-                  children: [
-                    AvatarIcon(user: room.owner),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SimpleMfmText(room.owner.name ?? room.owner.username),
-                        const Divider(),
-                        Text(
-                          room.description.isEmpty
-                              ? S.of(context).chatNoDescription
-                              : room.description,
-                        ),
-                      ],
-                    ),
-                  ],
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10, top: 3, bottom: 3),
+                  child: Text(room.name),
                 ),
               ),
-              const Padding(padding: EdgeInsets.all(5)),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: join.executeOrNull,
-                        child: Text(S.of(context).chatJoin),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
+              child: Row(
+                children: [
+                  AvatarIcon(user: room.owner),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SimpleMfmText(room.owner.name ?? room.owner.username),
+                      const Divider(),
+                      Text(
+                        room.description.isEmpty
+                            ? S.of(context).chatNoDescription
+                            : room.description,
                       ),
-                    ),
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: ignore.executeOrNull,
-                        child: Text(S.of(context).chatIgnore),
-                      ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            const Padding(padding: EdgeInsets.all(5)),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: join.executeOrNull,
+                      child: Text(S.of(context).chatJoin),
+                    ),
+                  ),
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: ignore.executeOrNull,
+                      child: Text(S.of(context).chatIgnore),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -364,7 +355,7 @@ class JoiningChat extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(left: 5.0, right: 5.0),
       child: PushableListView(
         initializeFuture: () async => [
           ...await ref
@@ -378,7 +369,7 @@ class JoiningChat extends ConsumerWidget {
               .read(misskeyGetContextProvider)
               .chat
               .rooms
-              .joining(ChatRoomsJoiningRequest(sinceId: item.id)),
+              .joining(ChatRoomsJoiningRequest(untilId: item.id)),
         ],
         itemBuilder: (context, item) => RoomInfo(room: item.room!),
       ),
@@ -392,7 +383,9 @@ class RoomInfo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return GestureDetector(
+    return ListTile(
+      title: Text(room.name),
+      subtitle: Text(room.description),
       onTap: () async {
         await context.router.push(
           RoomChatRoute(
@@ -401,13 +394,6 @@ class RoomInfo extends ConsumerWidget {
           ),
         );
       },
-      child: Padding(
-        padding: const EdgeInsets.only(right: 4.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [Text(room.name), Text(room.description)],
-        ),
-      ),
     );
   }
 }
@@ -418,22 +404,24 @@ class OwnedChat extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(left: 5.0, right: 5.0),
       child: PushableListView(
-        initializeFuture: () async => [
-          ...await ref
+        initializeFuture: () async {
+          final response = await ref
               .read(misskeyGetContextProvider)
               .chat
               .rooms
-              .owned(const ChatRoomsOwnedRequest()),
-        ],
-        nextFuture: (item, _) async => [
-          ...await ref
+              .owned(const ChatRoomsOwnedRequest());
+          return response.toList();
+        },
+        nextFuture: (item, _) async {
+          final response = await ref
               .read(misskeyGetContextProvider)
               .chat
               .rooms
-              .owned(ChatRoomsOwnedRequest(sinceId: item.id)),
-        ],
+              .owned(ChatRoomsOwnedRequest(untilId: item.id));
+          return response.toList();
+        },
         itemBuilder: (context, item) => RoomInfo(room: item),
       ),
     );

@@ -58,6 +58,9 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
               PushableListView<NotificationData>(
                 initializeFuture: () async {
                   final localize = S.of(context);
+                  final achievements = await ref.read(
+                    achievementsProvider.future,
+                  );
                   final result = await misskey.i.notifications(
                     const INotificationsRequest(limit: 50, markAsRead: true),
                   );
@@ -68,17 +71,20 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
                   await ref
                       .read(accountRepositoryProvider.notifier)
                       .readAllNotification(accountContext.postAccount);
-                  return result.toNotificationData(localize);
+                  return result.toNotificationData(localize, achievements);
                 },
                 nextFuture: (lastElement, _) async {
                   final localize = S.of(context);
+                  final achievements = await ref.read(
+                    achievementsProvider.future,
+                  );
                   final result = await misskey.i.notifications(
                     INotificationsRequest(limit: 50, untilId: lastElement.id),
                   );
                   ref
                       .read(notesWithProvider)
                       .registerAll(result.map((e) => e.note).nonNulls);
-                  return result.toNotificationData(localize);
+                  return result.toNotificationData(localize, achievements);
                 },
                 itemBuilder: (context, notification) => Align(
                   alignment: Alignment.center,
@@ -465,6 +471,29 @@ class NotificationItem extends ConsumerWidget {
                 note: notification.note!,
                 isDisplayBorder: false,
               ),
+            ],
+          ),
+        );
+      case ScheduledNoteNotification(:final note):
+        return Padding(
+          padding: const EdgeInsets.only(top: 10, bottom: 10, right: 10),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        S.of(context).scheduledNotePostedNotification,
+                      ),
+                    ),
+                    Text(notification.createdAt.differenceNow(context)),
+                  ],
+                ),
+              ),
+              if (note != null)
+                misskey_note.MisskeyNote(note: note, isDisplayBorder: false),
             ],
           ),
         );

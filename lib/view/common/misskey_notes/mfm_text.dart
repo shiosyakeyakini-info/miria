@@ -247,6 +247,8 @@ class SimpleMfmText extends ConsumerWidget {
   final List<InlineSpan> suffixSpan;
   final List<InlineSpan> prefixSpan;
   final bool isNyaize;
+  final TextOverflow? overflow;
+  final int? maxLines;
 
   const SimpleMfmText(
     this.text, {
@@ -256,12 +258,16 @@ class SimpleMfmText extends ConsumerWidget {
     this.suffixSpan = const [],
     this.prefixSpan = const [],
     this.isNyaize = false,
+    this.overflow,
+    this.maxLines,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SimpleMfm(
       text,
+      overflow: overflow,
+      maxLines: maxLines,
       emojiBuilder: (context, emojiName, style) => DefaultTextStyle.merge(
         style: style ?? DefaultTextStyle.of(context).style,
         child: CustomEmoji(
