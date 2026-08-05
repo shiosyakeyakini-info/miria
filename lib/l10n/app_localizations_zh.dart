@@ -954,6 +954,15 @@ class SZh extends S {
   String get thrownError => '似乎发生了错误';
 
   @override
+  String get thrownTokenExpired => '认证已过期，或访问令牌已被删除。请重新登录。';
+
+  @override
+  String get thrownPermissionDenied => '没有执行此操作的权限。重新登录后可能会恢复。';
+
+  @override
+  String get reLogin => '重新登录';
+
+  @override
   String get unsupportedServer => '这是不受支持的服务器';
 
   @override
@@ -3065,6 +3074,15 @@ class SZhCn extends SZh {
 
   @override
   String get thrownError => '似乎发生了错误';
+
+  @override
+  String get thrownTokenExpired => '认证已过期，或访问令牌已被删除。请重新登录。';
+
+  @override
+  String get thrownPermissionDenied => '没有执行此操作的权限。重新登录后可能会恢复。';
+
+  @override
+  String get reLogin => '重新登录';
 
   @override
   String get unsupportedServer => '这是不受支持的服务器';

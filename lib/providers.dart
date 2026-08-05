@@ -63,6 +63,20 @@ Future<Achievements> achievements(Ref ref) async {
   return Achievements.load(language);
 }
 
+/// 再認証で差し替わったアカウントのトークン。まだ差し替わっていなければ null。
+///
+/// [misskey] から [AccountRepository] を直接 watch すれば済みそうに見えるが、
+/// [AccountRepository] 自身が [emojiRepository] 経由で [misskey] を読むため
+/// 循環参照になる。トークンだけを一方通行の provider に切り出している。
+@Riverpod(keepAlive: true)
+class LatestAccountToken extends _$LatestAccountToken {
+  @override
+  String? build(Acct acct) => null;
+
+  // ignore: use_setters_to_change_properties
+  void update(String? token) => state = token;
+}
+
 @Riverpod(keepAlive: true)
 @Deprecated(
   "Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain",
@@ -78,8 +92,15 @@ Misskey misskey(Ref ref, Account account) {
       ? "ws://$hostWithPort/streaming/"
       : null;
 
+  // 引数の account が持つトークンをそのまま使わない。Account の == は host と
+  // userId しか見ないため、再認証でトークンだけが変わってもこの family は同じ
+  // キーと判定される。family は最初に渡された引数を保持し続けるので、あとから
+  // 新しい Account で読み直しても古いトークンのままになってしまう (#776)。
+  final token =
+      ref.watch(latestAccountTokenProvider(account.acct)) ?? account.token;
+
   return Misskey(
-    token: account.token,
+    token: token,
     host: hostWithPort,
     apiUrl: apiUrl,
     streamingUrl: streamingUrl,
@@ -117,13 +138,14 @@ Misskey misskeyWithoutAccount(Ref ref, String hostOrUrl) {
 final favoriteProvider =
     ChangeNotifierProvider.family<FavoriteRepository, Account>(
       (ref, account) => FavoriteRepository(
-        ref.read(misskeyProvider(account)),
+        ref.watch(misskeyProvider(account)),
         ref.read(notesProvider(account)),
       ),
     );
 
 final notesProvider = ChangeNotifierProvider.family<NoteRepository, Account>(
-  (ref, account) => NoteRepository(ref.read(misskeyProvider(account)), account),
+  (ref, account) =>
+      NoteRepository(ref.watch(misskeyProvider(account)), account),
 );
 
 @Riverpod(dependencies: [accountContext])
@@ -134,7 +156,7 @@ Raw<NoteRepository> notesWith(Ref ref) {
 @Riverpod(keepAlive: true)
 EmojiRepository emojiRepository(Ref ref, Account account) =>
     EmojiRepositoryImpl(
-      misskey: ref.read(misskeyProvider(account)),
+      misskey: ref.watch(misskeyProvider(account)),
       account: account,
       accountSettingsRepository: ref.read(accountSettingsRepositoryProvider),
       sharePreferenceController: ref.read(sharedPrefenceControllerProvider),
@@ -218,7 +240,7 @@ Misskey misskeyGetContext(Ref ref) {
   final account = ref.read(
     accountContextProvider.select((value) => value.getAccount),
   );
-  return ref.read(misskeyProvider(account));
+  return ref.watch(misskeyProvider(account));
 }
 
 @Riverpod(dependencies: [accountContext])
@@ -226,7 +248,7 @@ Misskey misskeyPostContext(Ref ref) {
   final account = ref.read(
     accountContextProvider.select((value) => value.postAccount),
   );
-  return ref.read(misskeyProvider(account));
+  return ref.watch(misskeyProvider(account));
 }
 
 final timelineProvider =
@@ -238,7 +260,7 @@ final timelineProvider =
 
       return switch (setting.tabType) {
         TabType.localTimeline => LocalTimelineRepository(
-          ref.read(misskeyProvider(account)),
+          ref.watch(misskeyProvider(account)),
           account,
           ref.read(notesProvider(account)),
           ref.read(generalSettingsRepositoryProvider),
@@ -246,7 +268,7 @@ final timelineProvider =
           ref,
         ),
         TabType.homeTimeline => HomeTimelineRepository(
-          ref.read(misskeyProvider(account)),
+          ref.watch(misskeyProvider(account)),
           account,
           ref.read(notesProvider(account)),
           ref.read(generalSettingsRepositoryProvider),
@@ -254,7 +276,7 @@ final timelineProvider =
           ref,
         ),
         TabType.globalTimeline => GlobalTimelineRepository(
-          ref.read(misskeyProvider(account)),
+          ref.watch(misskeyProvider(account)),
           account,
           ref.read(notesProvider(account)),
           ref.read(generalSettingsRepositoryProvider),
@@ -262,7 +284,7 @@ final timelineProvider =
           ref,
         ),
         TabType.hybridTimeline => HybridTimelineRepository(
-          ref.read(misskeyProvider(account)),
+          ref.watch(misskeyProvider(account)),
           account,
           ref.read(notesProvider(account)),
           ref.read(generalSettingsRepositoryProvider),
@@ -270,7 +292,7 @@ final timelineProvider =
           ref,
         ),
         TabType.roleTimeline => RoleTimelineRepository(
-          ref.read(misskeyProvider(account)),
+          ref.watch(misskeyProvider(account)),
           account,
           ref.read(notesProvider(account)),
           ref.read(generalSettingsRepositoryProvider),
@@ -278,7 +300,7 @@ final timelineProvider =
           ref,
         ),
         TabType.channel => ChannelTimelineRepository(
-          ref.read(misskeyProvider(account)),
+          ref.watch(misskeyProvider(account)),
           account,
           ref.read(notesProvider(account)),
           ref.read(generalSettingsRepositoryProvider),
@@ -286,7 +308,7 @@ final timelineProvider =
           ref,
         ),
         TabType.userList => UserListTimelineRepository(
-          ref.read(misskeyProvider(account)),
+          ref.watch(misskeyProvider(account)),
           account,
           ref.read(notesProvider(account)),
           ref.read(generalSettingsRepositoryProvider),
@@ -294,7 +316,7 @@ final timelineProvider =
           ref,
         ),
         TabType.antenna => AntennaTimelineRepository(
-          ref.read(misskeyProvider(account)),
+          ref.watch(misskeyProvider(account)),
           account,
           ref.read(notesProvider(account)),
           ref.read(generalSettingsRepositoryProvider),
@@ -302,7 +324,7 @@ final timelineProvider =
           ref,
         ),
         TabType.customTimeline => CustomTimelineRepository(
-          ref.read(misskeyProvider(account)),
+          ref.watch(misskeyProvider(account)),
           account,
           ref.read(notesProvider(account)),
           ref.read(generalSettingsRepositoryProvider),

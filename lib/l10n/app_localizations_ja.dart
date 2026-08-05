@@ -957,6 +957,15 @@ class SJa extends S {
   String get thrownError => 'エラーが起きたみたいや';
 
   @override
+  String get thrownTokenExpired => '認証が切れてるか、アクセストークンが消されてるみたいや。もういっぺんログインしてな。';
+
+  @override
+  String get thrownPermissionDenied => 'この操作をする権限がないみたいや。もういっぺんログインしたら直るかもしれん。';
+
+  @override
+  String get reLogin => '再ログイン';
+
+  @override
   String get unsupportedServer => '非対応のサーバーです';
 
   @override
@@ -2421,6 +2430,14 @@ class SJaOj extends SJa {
 
   @override
   String get thrownError => 'なにか様子がおかしいですわね…';
+
+  @override
+  String get thrownTokenExpired =>
+      '認証が切れておりますか、アクセストークンが消えておりますわ。もう一度ログインなさってくださいまし。';
+
+  @override
+  String get thrownPermissionDenied =>
+      'この操作をする権限がございませんわ。もう一度ログインなさると直るかもしれませんわね。';
 
   @override
   String get exportedFileNotFound => 'ここにMiriaの設定ファイル見つかりませんでしたわよ';

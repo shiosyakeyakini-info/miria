@@ -98,6 +98,8 @@
     "didNotReadAnnouncement": "まだですわ",
 
     "thrownError": "なにか様子がおかしいですわね…",
+    "thrownTokenExpired": "認証が切れておりますか、アクセストークンが消えておりますわ。もう一度ログインなさってくださいまし。",
+    "thrownPermissionDenied": "この操作をする権限がございませんわ。もう一度ログインなさると直るかもしれませんわね。",
 
     "exportedFileNotFound": "ここにMiriaの設定ファイル見つかりませんでしたわよ",
     "importCompleted": "インポート終わりましたわ",

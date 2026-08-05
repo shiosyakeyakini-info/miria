@@ -23,7 +23,8 @@ class ErrorNotification extends StatelessWidget {
             border: Border.all(color: Theme.of(context).dividerColor),
           ),
           child: Column(
-            mainAxisSize: MainAxisSize.max,
+            // 長いエラーで枠が伸び切らないよう、中身の分だけの高さにする (#523)
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -31,7 +32,7 @@ class ErrorNotification extends StatelessWidget {
                 S.of(context).thrownError,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
-              ErrorDetail(error: error, stackTrace: stackTrace),
+              BoundedErrorDetail(error: error, stackTrace: stackTrace),
             ],
           ),
         ),
