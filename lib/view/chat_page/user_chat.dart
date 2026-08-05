@@ -489,36 +489,16 @@ class UserChatTextField extends HookConsumerWidget {
                         .read(chatInputStateProvider.notifier)
                         .removeFile(index),
                     onFileSettingChanged: (file) async {
-                      final editedFile =
+                      final result =
                           await showDialog<FileSettingsDialogResult?>(
                             context: context,
                             builder: (context) =>
                                 FileSettingsDialog(file: file),
                           );
-                      if (editedFile != null) {
-                        // NSFWやキャプションの変更を反映
-                        final updatedFile = switch (file) {
-                          ImageFile() => ImageFile(
-                            data: file.data,
-                            fileName: file.fileName,
-                            isNsfw: editedFile.isNsfw,
-                            caption: editedFile.caption,
-                          ),
-                          UnknownFile() => UnknownFile(
-                            data: file.data,
-                            fileName: file.fileName,
-                            isNsfw: editedFile.isNsfw,
-                            caption: editedFile.caption,
-                          ),
-                          _ => file,
-                        };
-                        ref
-                            .read(chatInputStateProvider.notifier)
-                            .removeFile(index);
-                        await ref
-                            .read(chatInputStateProvider.notifier)
-                            .addFile(updatedFile);
-                      }
+                      if (result == null) return;
+                      ref
+                          .read(chatInputStateProvider.notifier)
+                          .setFileMetaData(index, result);
                     },
                   ),
                 );

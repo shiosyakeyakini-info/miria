@@ -11,7 +11,9 @@ import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/chat_input_state_notifier.dart";
 import "package:miria/view/note_create_page/drive_modal_sheet.dart";
+import "package:miria/view/note_create_page/file_settings_dialog.dart";
 import "package:misskey_dart/misskey_dart.dart" show DriveFile;
+import "package:misskey_dart/src/services/api_service.dart";
 import "package:mockito/mockito.dart";
 import "package:path/path.dart" as p;
 
@@ -34,6 +36,22 @@ class TestAppRouter extends AppRouter {
       return driveFileSelectReturnValue as T?;
     }
     return null;
+  }
+}
+
+/// `drive/files/update` に送られたリクエストを記録するApiService
+class RecordingApiService extends Fake implements ApiService {
+  final requests =
+      <(String, Map<String, dynamic>, bool Function(String, String?)?)>[];
+
+  @override
+  Future<T> post<T>(
+    String path,
+    Map<String, dynamic> request, {
+    bool Function(String, String?)? excludeRemoveNullPredicate,
+  }) async {
+    requests.add((path, request, excludeRemoveNullPredicate));
+    return TestData.drive1.toJson() as T;
   }
 }
 
@@ -470,6 +488,107 @@ void main() {
         // クリア後の確認
         state = container.read(chatInputStateProvider);
         expect(state.files, isEmpty);
+      });
+    });
+
+    // ChatFilePreview から onFileSettingChanged が呼ばれても、反映する先が
+    // なかった。
+    // https://github.com/shiosyakeyakini-info/miria/issues/854
+    group("ファイル情報の変更", () {
+      test("アップロード予定のファイルの名前・説明・NSFWを変更できること", () async {
+        final notifier = container.read(chatInputStateProvider.notifier);
+        await notifier.addFile(
+          ImageFile(data: await TestData.binaryImage, fileName: "before.jpg"),
+        );
+
+        notifier.setFileMetaData(
+          0,
+          const FileSettingsDialogResult(
+            fileName: "after.jpg",
+            isNsfw: true,
+            caption: "ねこ",
+          ),
+        );
+
+        final file = container.read(chatInputStateProvider).files.single;
+        expect(file.fileName, "after.jpg");
+        expect(file.isNsfw, isTrue);
+        expect(file.caption, "ねこ");
+      });
+
+      test("変更しても添付の順番が変わらないこと", () async {
+        final notifier = container.read(chatInputStateProvider.notifier);
+        await notifier.addFile(
+          UnknownFile(data: Uint8List.fromList([1]), fileName: "1.pdf"),
+        );
+        await notifier.addFile(
+          UnknownFile(data: Uint8List.fromList([2]), fileName: "2.pdf"),
+        );
+
+        notifier.setFileMetaData(
+          0,
+          const FileSettingsDialogResult(
+            fileName: "1-edited.pdf",
+            isNsfw: false,
+            caption: null,
+          ),
+        );
+
+        final files = container.read(chatInputStateProvider).files;
+        expect(files.map((e) => e.fileName), ["1-edited.pdf", "2.pdf"]);
+      });
+
+      test("ドライブのファイルを変更すると、送信時にdrive/files/updateが飛ぶこと", () async {
+        final apiService = RecordingApiService();
+        when(mockMisskey.apiService).thenReturn(apiService);
+
+        final notifier = container.read(chatInputStateProvider.notifier);
+        await notifier.addFile(
+          ImageFileAlreadyPostedFile(
+            data: await TestData.binaryImage,
+            id: "drive-file-id",
+            fileName: "before.jpg",
+          ),
+        );
+
+        notifier.setFileMetaData(
+          0,
+          const FileSettingsDialogResult(
+            fileName: "after.jpg",
+            isNsfw: true,
+            caption: null,
+          ),
+        );
+
+        final fileId = await notifier.uploadAndGetFileId();
+
+        expect(fileId, "drive-file-id");
+        expect(apiService.requests.length, 1);
+        final (path, request, predicate) = apiService.requests.single;
+        expect(path, "drive/files/update");
+        expect(request["fileId"], "drive-file-id");
+        expect(request["name"], "after.jpg");
+        expect(request["isSensitive"], isTrue);
+        // 説明が未入力のとき、空文字ではなくnullをそのまま送る
+        expect(predicate?.call("comment", null), isTrue);
+      });
+
+      test("ドライブのファイルを変更していなければ、drive/files/updateは飛ばないこと", () async {
+        final apiService = RecordingApiService();
+        when(mockMisskey.apiService).thenReturn(apiService);
+
+        final notifier = container.read(chatInputStateProvider.notifier);
+        await notifier.addFile(
+          ImageFileAlreadyPostedFile(
+            data: await TestData.binaryImage,
+            id: "drive-file-id",
+            fileName: "before.jpg",
+          ),
+        );
+
+        await notifier.uploadAndGetFileId();
+
+        expect(apiService.requests, isEmpty);
       });
     });
   });
