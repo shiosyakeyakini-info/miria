@@ -8,6 +8,7 @@ import "package:miria/model/image_file.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/note_create_page/drive_modal_sheet.dart";
+import "package:miria/view/note_create_page/file_settings_dialog.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:path/path.dart" as p;
 import "package:path_provider/path_provider.dart";
@@ -49,6 +50,77 @@ class ChatInputStateNotifier extends _$ChatInputStateNotifier {
 
   void clearFiles() {
     state = state.copyWith(files: []);
+  }
+
+  /// ファイルのメタデータを変更する
+  ///
+  /// ドライブから添付したファイルは `isEdited` を立てておき、送信時に
+  /// `drive/files/update` を投げる。
+  void setFileMetaData(int index, FileSettingsDialogResult result) {
+    if (index < 0 || index >= state.files.length) return;
+    final files = state.files.toList();
+    final file = files[index];
+
+    files[index] = switch (file) {
+      ImageFile() => ImageFile(
+        data: file.data,
+        fileName: result.fileName,
+        isNsfw: result.isNsfw,
+        caption: result.caption,
+      ),
+      ImageFileAlreadyPostedFile() => ImageFileAlreadyPostedFile(
+        data: file.data,
+        id: file.id,
+        fileName: result.fileName,
+        isNsfw: result.isNsfw,
+        caption: result.caption,
+        isEdited: true,
+      ),
+      UnknownFile() => UnknownFile(
+        data: file.data,
+        fileName: result.fileName,
+        isNsfw: result.isNsfw,
+        caption: result.caption,
+      ),
+      UnknownAlreadyPostedFile() => UnknownAlreadyPostedFile(
+        url: file.url,
+        id: file.id,
+        fileName: result.fileName,
+        isNsfw: result.isNsfw,
+        caption: result.caption,
+        isEdited: true,
+      ),
+    };
+
+    state = state.copyWith(files: files);
+  }
+
+  /// ドライブのファイル情報を更新する
+  ///
+  /// misskey_dartの`drive.files.update`はFreezedのtoJsonを経由するため
+  /// undefinedとnullを区別できず、`comment: null`を渡すとキーごと削除される。
+  /// 一方で説明が空のときに`comment: ''`を送ると、Misskey Webが
+  /// ALTテキストとしてファイル名を表示しなくなってしまう。
+  /// そのためapiServiceを直接呼び、commentについてはnullをそのまま送る。
+  Future<void> _updateDriveFile({
+    required String fileId,
+    required String name,
+    required bool isSensitive,
+    required String? comment,
+  }) async {
+    await ref
+        .read(misskeyPostContextProvider)
+        .apiService
+        .post<Map<String, dynamic>>(
+          "drive/files/update",
+          DriveFilesUpdateRequest(
+            fileId: fileId,
+            name: name,
+            isSensitive: isSensitive,
+            comment: comment,
+          ).toJson(),
+          excludeRemoveNullPredicate: (key, _) => key == "comment",
+        );
   }
 
   Future<void> chooseFile() async {
@@ -166,6 +238,14 @@ class ChatInputStateNotifier extends _$ChatInputStateNotifier {
           file.data,
         );
       case ImageFileAlreadyPostedFile():
+        if (file.isEdited) {
+          await _updateDriveFile(
+            fileId: file.id,
+            name: file.fileName,
+            isSensitive: file.isNsfw,
+            comment: file.caption,
+          );
+        }
         clearFiles();
         return file.id;
       case UnknownFile():
@@ -178,13 +258,19 @@ class ChatInputStateNotifier extends _$ChatInputStateNotifier {
           file.data,
         );
       case UnknownAlreadyPostedFile():
+        if (file.isEdited) {
+          await _updateDriveFile(
+            fileId: file.id,
+            name: file.fileName,
+            isSensitive: file.isNsfw,
+            comment: file.caption,
+          );
+        }
         clearFiles();
         return file.id;
     }
 
     clearFiles();
     return uploadedFile.id;
-
-    return null;
   }
 }
