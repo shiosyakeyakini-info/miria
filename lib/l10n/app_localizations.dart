@@ -333,6 +333,18 @@ abstract class S {
   /// **'ダイレクト'**
   String get direct;
 
+  /// No description provided for @searchPostFrom.
+  ///
+  /// In ja, this message translates to:
+  /// **'投稿日時（から）'**
+  String get searchPostFrom;
+
+  /// No description provided for @searchPostTo.
+  ///
+  /// In ja, this message translates to:
+  /// **'投稿日時（まで）'**
+  String get searchPostTo;
+
   /// No description provided for @onlyLocal.
   ///
   /// In ja, this message translates to:

@@ -126,6 +126,12 @@ class SJa extends S {
   String get direct => 'ダイレクト';
 
   @override
+  String get searchPostFrom => '投稿日時（から）';
+
+  @override
+  String get searchPostTo => '投稿日時（まで）';
+
+  @override
   String get onlyLocal => 'ローカルのみ';
 
   @override

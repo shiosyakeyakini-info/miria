@@ -38,6 +38,8 @@
     "home": "ホーム",
     "local": "ローカル",
     "direct": "ダイレクト",
+    "searchPostFrom": "投稿日時（から）",
+    "searchPostTo": "投稿日時（まで）",
     "onlyLocal": "ローカルのみ",
     "remote": "リモート",
     "@done": {

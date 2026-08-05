@@ -10,6 +10,7 @@ import "package:mockito/mockito.dart";
 import "../../test_util/default_root_widget.dart";
 import "../../test_util/mock.mocks.dart";
 import "../../test_util/test_datas.dart";
+import "../../test_util/widget_tester_extension.dart";
 
 void main() {
   group("ノート検索", () {
@@ -168,6 +169,82 @@ void main() {
         ),
       ).called(1);
     }, skip: true);
+
+    // notes/search は投稿日時での絞り込みを受け付けるのに、指定する手段がなかった
+    // https://github.com/shiosyakeyakini-info/miria/issues/294
+    testWidgets("投稿日時を指定すると、検索リクエストに載ること", (tester) async {
+      final mockMisskey = MockMisskey();
+      final mockNote = MockMisskeyNotes();
+      when(mockMisskey.notes).thenReturn(mockNote);
+      when(mockNote.search(any)).thenAnswer((_) async => [TestData.note1]);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            misskeyProvider.overrideWith((ref, account) => mockMisskey),
+          ],
+          child: DefaultRootWidget(
+            initialRoute: SearchRoute(accountContext: TestData.accountContext),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextField), "Misskey");
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+
+      // 指定していないうちは載らない
+      verify(
+        mockNote.search(
+          argThat(equals(const NotesSearchRequest(query: "Misskey"))),
+        ),
+      ).called(1);
+
+      // 詳細を開いて「投稿日時（から）」を指定する
+      await tester.tap(find.byIcon(Icons.keyboard_arrow_down).first);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text("投稿日時（から）"));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text("OK"));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text("OK"));
+      await tester.pumpAndSettle();
+
+      // 指定するとrangeStartAtつきで引き直される
+      verify(
+        mockNote.search(
+          argThat(
+            predicate<NotesSearchRequest>(
+              (request) =>
+                  request.query == "Misskey" &&
+                  request.rangeStartAt != null &&
+                  request.rangeEndAt == null,
+            ),
+          ),
+        ),
+      ).called(1);
+
+      // 続きを読み込んでも指定が維持されること
+      // 詳細を畳んで、残る keyboard_arrow_down を「さらに読み込む」だけにする
+      await tester.tap(find.byIcon(Icons.keyboard_arrow_up));
+      await tester.pumpAndSettle();
+
+      when(mockNote.search(any)).thenAnswer((_) async => [TestData.note2]);
+      await tester.pageNation();
+
+      verify(
+        mockNote.search(
+          argThat(
+            predicate<NotesSearchRequest>(
+              (request) =>
+                  request.rangeStartAt != null &&
+                  request.untilId == TestData.note1.id,
+            ),
+          ),
+        ),
+      ).called(1);
+    });
 
     testWidgets("ハッシュタグを検索した場合、ハッシュタグのエンドポイントで検索されること", (tester) async {
       final mockMisskey = MockMisskey();

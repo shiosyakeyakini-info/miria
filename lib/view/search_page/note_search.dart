@@ -3,10 +3,12 @@ import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mfm_parser/mfm_parser.dart";
+import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/note_search_condition.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
+import "package:miria/view/common/date_time_picker.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
 import "package:miria/view/common/pushable_listview.dart";
 import "package:miria/view/user_page/user_list_item.dart";
@@ -27,6 +29,8 @@ class NoteSearch extends HookConsumerWidget {
     final selectedUser = useState(initialCondition?.user);
     final selectedChannel = useState(initialCondition?.channel);
     final localOnly = useState(initialCondition?.localOnly ?? false);
+    final rangeStartAt = useState(initialCondition?.rangeStartAt);
+    final rangeEndAt = useState(initialCondition?.rangeEndAt);
     final isDetail = useState(false);
 
     final selectedUserValue = selectedUser.value;
@@ -107,6 +111,16 @@ class NoteSearch extends HookConsumerWidget {
                         },
                         trailing: const Icon(Icons.keyboard_arrow_right),
                       ),
+                      _DateTimeTile(
+                        title: S.of(context).searchPostFrom,
+                        value: rangeStartAt.value,
+                        onChanged: (value) => rangeStartAt.value = value,
+                      ),
+                      _DateTimeTile(
+                        title: S.of(context).searchPostTo,
+                        value: rangeEndAt.value,
+                        onChanged: (value) => rangeEndAt.value = value,
+                      ),
                       CheckboxListTile(
                         title: Text(S.of(context).onlyLocal),
                         value: localOnly.value,
@@ -126,10 +140,55 @@ class NoteSearch extends HookConsumerWidget {
               localOnly: localOnly.value,
               channelId: selectedChannel.value?.id,
               userId: selectedUser.value?.id,
+              rangeStartAt: rangeStartAt.value,
+              rangeEndAt: rangeEndAt.value,
             ),
           ),
         ),
       ],
+    );
+  }
+}
+
+/// 投稿日時の範囲をひとつ指定するタイル。
+class _DateTimeTile extends StatelessWidget {
+  final String title;
+  final DateTime? value;
+  final ValueChanged<DateTime?> onChanged;
+
+  const _DateTimeTile({
+    required this.title,
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final current = value;
+    return ListTile(
+      title: Text(title),
+      subtitle: current == null
+          ? null
+          : Text(current.formatUntilSeconds(context)),
+      trailing: current == null
+          ? const Icon(Icons.date_range)
+          : IconButton(
+              icon: const Icon(Icons.clear),
+              tooltip: S.of(context).clear,
+              onPressed: () => onChanged(null),
+            ),
+      onTap: () async {
+        final result = await showDateTimePicker(
+          context: context,
+          initialDate: current ?? DateTime.now(),
+          // Misskeyの誕生日より前を選ばせても意味がない
+          firstDate: DateTime(2014),
+          lastDate: DateTime.now().add(const Duration(days: 1)),
+          datePickerHelpText: title,
+          timePickerHelpText: title,
+        );
+        if (result != null) onChanged(result);
+      },
     );
   }
 }
@@ -139,6 +198,8 @@ class NoteSearchList extends ConsumerWidget {
   final bool localOnly;
   final String? channelId;
   final String? userId;
+  final DateTime? rangeStartAt;
+  final DateTime? rangeEndAt;
 
   const NoteSearchList({
     required this.query,
@@ -146,6 +207,8 @@ class NoteSearchList extends ConsumerWidget {
     super.key,
     this.channelId,
     this.userId,
+    this.rangeStartAt,
+    this.rangeEndAt,
   });
 
   @override
@@ -157,7 +220,14 @@ class NoteSearchList extends ConsumerWidget {
     if (query.isEmpty) return const SizedBox.shrink();
 
     return PushableListView(
-      listKey: Object.hash(query, localOnly, channelId, userId),
+      listKey: Object.hash(
+        query,
+        localOnly,
+        channelId,
+        userId,
+        rangeStartAt,
+        rangeEndAt,
+      ),
       initializeFuture: () async {
         final Iterable<Note> notes;
         if (isHashtagOnly) {
@@ -179,6 +249,8 @@ class NoteSearchList extends ConsumerWidget {
                   userId: userId,
                   channelId: channelId,
                   host: localOnly ? "." : null,
+                  rangeStartAt: rangeStartAt,
+                  rangeEndAt: rangeEndAt,
                 ),
               );
         }
@@ -208,6 +280,8 @@ class NoteSearchList extends ConsumerWidget {
                   userId: userId,
                   channelId: channelId,
                   host: localOnly ? "." : null,
+                  rangeStartAt: rangeStartAt,
+                  rangeEndAt: rangeEndAt,
                   untilId: lastItem.id,
                 ),
               );

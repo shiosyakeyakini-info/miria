@@ -126,6 +126,12 @@ class SZh extends S {
   String get direct => '直接';
 
   @override
+  String get searchPostFrom => '起始日期';
+
+  @override
+  String get searchPostTo => '终止日期';
+
+  @override
   String get onlyLocal => '仅本地';
 
   @override
@@ -2251,6 +2257,12 @@ class SZhCn extends SZh {
 
   @override
   String get direct => '直接';
+
+  @override
+  String get searchPostFrom => '起始日期';
+
+  @override
+  String get searchPostTo => '终止日期';
 
   @override
   String get onlyLocal => '仅本地';
