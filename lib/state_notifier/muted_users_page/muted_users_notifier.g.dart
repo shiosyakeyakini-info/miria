@@ -13,7 +13,7 @@ part of 'muted_users_notifier.dart';
 final mutedUsersProvider = MutedUsersNotifierProvider._();
 
 final class MutedUsersNotifierProvider
-    extends $AsyncNotifierProvider<MutedUsersNotifier, List<Muting>> {
+    extends $NotifierProvider<MutedUsersNotifier, void> {
   MutedUsersNotifierProvider._()
     : super(
         from: null,
@@ -38,22 +38,30 @@ final class MutedUsersNotifierProvider
   @$internal
   @override
   MutedUsersNotifier create() => MutedUsersNotifier();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(void value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<void>(value),
+    );
+  }
 }
 
 String _$mutedUsersNotifierHash() =>
-    r'627cc21f13351f8fbde61aa1ae5d560d413952ad';
+    r'b35275ec22130fa0361b63e1384609cd981313af';
 
-abstract class _$MutedUsersNotifier extends $AsyncNotifier<List<Muting>> {
-  FutureOr<List<Muting>> build();
+abstract class _$MutedUsersNotifier extends $Notifier<void> {
+  void build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final ref = this.ref as $Ref<AsyncValue<List<Muting>>, List<Muting>>;
+    final ref = this.ref as $Ref<void, void>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<List<Muting>>, List<Muting>>,
-              AsyncValue<List<Muting>>,
+              AnyNotifier<void, void>,
+              void,
               Object?,
               Object?
             >;
