@@ -60,6 +60,20 @@ class DriveFileSelectDialog extends HookConsumerWidget
             ),
         ],
         backgroundColor: Colors.transparent,
+
+        // この [AppBar] は [AlertDialog] の上に載っているため、背景はダイアログ面で
+        // あってプライマリカラーではない。前景色を指定しないと、グローバルの
+        // [AppBarTheme]（プライマリカラーの上に載る前提で白）がそのまま効き、
+        // ライトテーマでは白い面に白い字とアイコンを描くことになる。
+        //
+        // 有効なアイコンだけが消える。無効なアイコンは [IconButton] が
+        // `Theme.disabledColor` を使うので見えており、「押せるときだけ見えない」
+        // という逆転が起きていた。
+        iconTheme: Theme.of(context).iconTheme,
+        actionsIconTheme: Theme.of(context).iconTheme,
+        titleTextStyle: Theme.of(context).appBarTheme.titleTextStyle?.copyWith(
+          color: Theme.of(context).textTheme.bodyMedium?.color,
+        ),
       ),
       content: SizedBox(
         width: MediaQuery.of(context).size.width * 0.8,
