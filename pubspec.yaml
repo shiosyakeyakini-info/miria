@@ -79,6 +79,8 @@ dependencies:
   image: ^4.9.1
   flutter_twemoji: ^1.0.1
   mime: ^2.0.0
+  # 0.36.0 未満は Flutter SDK 直下の廃止済み `version` ファイルを前提にしていて
+  # Android のビルドが、0.37.3 未満は Windows の mdk-sdk 展開がそれぞれ通らない
   fvp: ^0.38.0
   video_player: ^2.10.0
   video_player_avfoundation: ^2.8.4
