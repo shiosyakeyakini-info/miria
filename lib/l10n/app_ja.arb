@@ -1081,6 +1081,7 @@
     "bubbleGameHighScore": "ハイスコア",
     "bubbleGameRetry": "もういっかい",
     "bubbleGameBackToTitle": "モード選択に戻る",
+    "bubbleGameScoreRateLimited": "スコアの登録は30秒に1回までやから、今回のぶんは登録できひんかったわ",
     "bubbleGameHowToPlay": "画面を長押しして左右に動かすと落とす場所を決められるで。指を離したら落ちるわ。",
 
     "remoteServerWithoutLogin": "相手先のサーバー（ログインなし）",

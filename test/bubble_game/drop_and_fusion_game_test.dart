@@ -105,6 +105,59 @@ void main() {
       expect(deserialized[2].x, 100);
     });
 
+    test("シードと操作ログからスコアを再現できる", () {
+      // サーバーは記録を seed と操作ログの形で保存しており、
+      // 後から検証する場合はこれを再生することになる。
+      const seed = "1755000000000";
+
+      int playAndScore(List<List<int>>? replayLogs) {
+        resetMatterIdCounter();
+        final game = DropAndFusionGame(
+          seed: seed,
+          gameMode: BubbleGameMode.normal,
+        )..start();
+        final logs = replayLogs == null
+            ? null
+            : DropAndFusionGame.deserializeLogs(replayLogs);
+
+        for (var frame = 0; frame < 3000; frame++) {
+          if (logs == null) {
+            if (game.canDrop) game.drop(180 + (frame % 5) * 20);
+          } else {
+            for (final log in logs.where((x) => x.frame == game.frame)) {
+              switch (log.operation) {
+                case BubbleGameOperation.drop:
+                  game.drop(log.x.toDouble());
+                case BubbleGameOperation.hold:
+                  game.hold();
+                case BubbleGameOperation.surrender:
+                  game.surrender();
+              }
+            }
+          }
+          if (!game.tick()) break;
+        }
+
+        return game.score;
+      }
+
+      // 一度遊んでログを取り、そのログだけを頼りに再生する
+      resetMatterIdCounter();
+      final original = DropAndFusionGame(
+        seed: seed,
+        gameMode: BubbleGameMode.normal,
+      )..start();
+      for (var frame = 0; frame < 3000; frame++) {
+        if (original.canDrop) original.drop(180 + (frame % 5) * 20);
+        if (!original.tick()) break;
+      }
+      final serialized = DropAndFusionGame.serializeLogs(original.getLogs());
+
+      expect(original.score, greaterThan(0));
+      expect(playAndScore(serialized), original.score);
+      expect(playAndScore(null), original.score);
+    });
+
     test("同じシードなら同じストックが出る", () {
       resetMatterIdCounter();
       final first = DropAndFusionGame(

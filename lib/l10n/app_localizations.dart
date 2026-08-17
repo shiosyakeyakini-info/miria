@@ -3486,6 +3486,12 @@ abstract class S {
   /// **'モード選択に戻る'**
   String get bubbleGameBackToTitle;
 
+  /// No description provided for @bubbleGameScoreRateLimited.
+  ///
+  /// In ja, this message translates to:
+  /// **'スコアの登録は30秒に1回までやから、今回のぶんは登録できひんかったわ'**
+  String get bubbleGameScoreRateLimited;
+
   /// No description provided for @bubbleGameHowToPlay.
   ///
   /// In ja, this message translates to:

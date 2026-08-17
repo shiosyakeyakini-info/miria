@@ -2005,6 +2005,10 @@ class SJa extends S {
   String get bubbleGameBackToTitle => 'モード選択に戻る';
 
   @override
+  String get bubbleGameScoreRateLimited =>
+      'スコアの登録は30秒に1回までやから、今回のぶんは登録できひんかったわ';
+
+  @override
   String get bubbleGameHowToPlay => '画面を長押しして左右に動かすと落とす場所を決められるで。指を離したら落ちるわ。';
 
   @override

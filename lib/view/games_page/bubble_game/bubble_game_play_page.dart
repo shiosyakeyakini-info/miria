@@ -11,9 +11,11 @@ import "package:miria/providers.dart";
 import "package:miria/repository/bubble_game_repository.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/games_page/bubble_game/bubble_game_mode_extension.dart";
 import "package:miria/view/games_page/bubble_game/bubble_game_painter.dart";
 import "package:miria/view/games_page/bubble_game/mono_textures.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 /// バブルゲーム(ドロップ&フュージョン)の本体。
 @RoutePage()
@@ -154,15 +156,23 @@ class _BubbleGamePlayPageState extends ConsumerState<BubbleGamePlayPage>
   Future<void> _registerScore() async {
     final score = _game.score;
     final repository = ref.read(bubbleGameRepositoryProvider);
+    final rateLimitMessage = S.of(context).bubbleGameScoreRateLimited;
 
     setState(() => _isRegistering = true);
     await ref.read(dialogStateProvider.notifier).guard(() async {
-      await repository.register(
-        seed: _game.seed,
-        score: score,
-        gameMode: widget.gameMode,
-        logs: _game.getLogs(),
-      );
+      try {
+        await repository.register(
+          seed: _game.seed,
+          score: score,
+          gameMode: widget.gameMode,
+          logs: _game.getLogs(),
+        );
+      } on MisskeyException catch (e) {
+        // スコアの登録は30秒に1回までなので、短い勝負を続けると弾かれる。
+        // 何が起きたか分かる文言にしておく。
+        if (e.code != "RATE_LIMIT_EXCEEDED") rethrow;
+        throw SpecifiedException(rateLimitMessage);
+      }
       if (score > (_highScore ?? 0)) {
         await repository.setHighScore(widget.gameMode, score);
       }
