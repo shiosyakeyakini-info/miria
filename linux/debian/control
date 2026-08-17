@@ -4,5 +4,5 @@ Section: net
 Priority: optional
 Architecture: amd64
 Maintainer: sorairo <sorairo@shiosyakeyakini.info>
-Depends: libgtk-3-0, libstdc++6, libmpv2, libsecret-1-0
+Depends: libgtk-3-0, libstdc++6, libsecret-1-0
 Description: Misskey client app for mobile (Linux build)
