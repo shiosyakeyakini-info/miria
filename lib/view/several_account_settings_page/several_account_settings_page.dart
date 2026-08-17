@@ -1,5 +1,6 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
+import "package:flutter_svg/flutter_svg.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/router/app_router.dart";
@@ -47,7 +48,14 @@ class SeveralAccountSettingsPage extends StatelessWidget {
             onTap: () async =>
                 await context.pushRoute(ReactionMuteRoute(account: account)),
             title: Text(S.of(context).reactionMute),
-            leading: const Icon(Icons.comments_disabled),
+            leading: SvgPicture.asset(
+              "assets/images/muted_reactions.svg",
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).textTheme.bodyMedium!.color ??
+                    const Color(0xff5f6368),
+                BlendMode.srcIn,
+              ),
+            ),
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
@@ -70,7 +78,14 @@ class SeveralAccountSettingsPage extends StatelessWidget {
             onTap: () async =>
                 await context.pushRoute(InstanceMuteRoute(account: account)),
             title: Text(S.of(context).instanceMute),
-            leading: const Icon(Icons.comments_disabled),
+            leading: SvgPicture.asset(
+              "assets/images/muted_instances.svg",
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).textTheme.bodyMedium!.color ??
+                    const Color(0xff5f6368),
+                BlendMode.srcIn,
+              ),
+            ),
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
