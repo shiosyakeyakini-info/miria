@@ -18,7 +18,7 @@ dependencies:
     git:
       url: https://github.com/shiosyakeyakini-info/misskey_dart.git
       ref: master
-  mfm: ^1.0.9
+  mfm: ^1.0.11
   tuple: ^2.0.1
   path_provider: ^2.1.6
   dio: ^5.10.0
@@ -151,7 +151,7 @@ flutter_launcher_icons:
   image_path: "assets/images/icon.png"
   adaptive_icon_background: "#ace601"
   adaptive_icon_foreground: "assets/images/icon_adaptive_foreground.png"
-  adaptive_icon_monochrome: "assets/images/icon_adaptive_monochrome.png" # Not working?
+  adaptive_icon_monochrome: "assets/images/icon_adaptive_monochrome.png"
   min_sdk_android: 21
   windows:
     generate: true
