@@ -180,6 +180,7 @@ class MfmText extends ConsumerWidget {
       prefixSpan: prefixSpan,
       isUseAnimation: isEnableAnimatedMFM,
       maxLines: maxLines,
+      defaultBorderColor: AppTheme.of(context).colorTheme.primary,
     );
   }
 }
