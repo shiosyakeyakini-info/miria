@@ -73,14 +73,17 @@ class Mono {
 
 /// バブルゲームのゲームモード。
 enum BubbleGameMode {
-  normal("normal"),
-  yen("yen"),
-  square("square"),
-  sweets("sweets"),
-  space("space");
+  normal("normal", "pt"),
+  yen("yen", "円"),
+  square("square", "pt"),
+  sweets("sweets", "kcal"),
+  space("space", "");
 
-  const BubbleGameMode(this.apiValue);
+  const BubbleGameMode(this.apiValue, this.scoreUnit);
 
   /// `bubble-game/register`などのAPIに渡す値。
   final String apiValue;
+
+  /// スコアの単位。本家の表示に合わせている。
+  final String scoreUnit;
 }

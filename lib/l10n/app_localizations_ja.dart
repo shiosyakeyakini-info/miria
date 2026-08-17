@@ -1951,6 +1951,63 @@ class SJa extends S {
   String get nonInvitedReversi => '招待はされとらへんみたいや';
 
   @override
+  String get bubbleGameSelectMode => 'モードを選んでや';
+
+  @override
+  String get bubbleGameRanking => 'このサーバーのランキング';
+
+  @override
+  String get bubbleGameRankingEmpty => 'まだ誰も記録を出しとらへんで';
+
+  @override
+  String get bubbleGameModeNormal => 'ノーマル';
+
+  @override
+  String get bubbleGameModeYen => 'おかね';
+
+  @override
+  String get bubbleGameModeSquare => 'スクエア';
+
+  @override
+  String get bubbleGameModeSweets => 'スイーツ';
+
+  @override
+  String get bubbleGameModeSpace => 'スペース';
+
+  @override
+  String get bubbleGameScore => 'スコア';
+
+  @override
+  String get bubbleGameCombo => 'コンボ';
+
+  @override
+  String get bubbleGameNext => 'つぎ';
+
+  @override
+  String get bubbleGameHold => 'ホールド';
+
+  @override
+  String get bubbleGameSurrender => 'ギブアップ';
+
+  @override
+  String get bubbleGameSurrenderConfirm => 'ギブアップしてええか？';
+
+  @override
+  String get bubbleGameOver => 'ゲームオーバー';
+
+  @override
+  String get bubbleGameHighScore => 'ハイスコア';
+
+  @override
+  String get bubbleGameRetry => 'もういっかい';
+
+  @override
+  String get bubbleGameBackToTitle => 'モード選択に戻る';
+
+  @override
+  String get bubbleGameHowToPlay => '画面を長押しして左右に動かすと落とす場所を決められるで。指を離したら落ちるわ。';
+
+  @override
   String get remoteServerWithoutLogin => '相手先のサーバー（ログインなし）';
 
   @override

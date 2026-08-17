@@ -5,6 +5,7 @@ import "package:collection/collection.dart";
 import "package:flutter/material.dart" hide Page;
 import "package:miria/model/account.dart";
 import "package:miria/model/antenna_settings.dart";
+import "package:miria/model/bubble_game/mono.dart";
 import "package:miria/model/clip_settings.dart";
 import "package:miria/model/image_file.dart";
 import "package:miria/model/misskey_emoji_data.dart";
@@ -15,6 +16,8 @@ import "package:miria/model/users_list_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/abuse_dialog/abuse_dialog.dart";
 import "package:miria/view/announcements_page/announcements_page.dart";
+import "package:miria/view/games_page/bubble_game/bubble_game_page.dart";
+import "package:miria/view/games_page/bubble_game/bubble_game_play_page.dart";
 import "package:miria/view/antenna_page/antenna_notes_page.dart";
 import "package:miria/view/antenna_page/antenna_page.dart";
 import "package:miria/view/antenna_page/antenna_settings_dialog.dart";
@@ -154,6 +157,8 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: SeveralAccountGeneralSettingsRoute.page),
     AutoRoute(page: SharingAccountSelectRoute.page),
     AutoRoute(page: MisskeyGamesRoute.page),
+    AutoRoute(page: BubbleGameRoute.page),
+    AutoRoute(page: BubbleGamePlayRoute.page),
     // きしょ……
     AutoRoute(page: MisskeyRouteRoute.page),
     AutoRoute(page: ChatHomeRoute.page),

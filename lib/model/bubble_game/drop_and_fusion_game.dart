@@ -200,6 +200,9 @@ class DropAndFusionGame {
   int get score => _score;
   int get combo => _combo;
   bool get isGameOver => _isGameOver;
+
+  /// いま落とせるかどうか。落としてから[dropCooltime]フレームは落とせない。
+  bool get canDrop => !_isGameOver && frame - _latestDroppedAt >= dropCooltime;
   List<BubbleGameStockItem> get stock => List.unmodifiable(_stock);
   BubbleGameStockItem? get holding => _holding;
 

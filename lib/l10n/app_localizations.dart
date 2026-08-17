@@ -3378,6 +3378,120 @@ abstract class S {
   /// **'招待はされとらへんみたいや'**
   String get nonInvitedReversi;
 
+  /// No description provided for @bubbleGameSelectMode.
+  ///
+  /// In ja, this message translates to:
+  /// **'モードを選んでや'**
+  String get bubbleGameSelectMode;
+
+  /// No description provided for @bubbleGameRanking.
+  ///
+  /// In ja, this message translates to:
+  /// **'このサーバーのランキング'**
+  String get bubbleGameRanking;
+
+  /// No description provided for @bubbleGameRankingEmpty.
+  ///
+  /// In ja, this message translates to:
+  /// **'まだ誰も記録を出しとらへんで'**
+  String get bubbleGameRankingEmpty;
+
+  /// No description provided for @bubbleGameModeNormal.
+  ///
+  /// In ja, this message translates to:
+  /// **'ノーマル'**
+  String get bubbleGameModeNormal;
+
+  /// No description provided for @bubbleGameModeYen.
+  ///
+  /// In ja, this message translates to:
+  /// **'おかね'**
+  String get bubbleGameModeYen;
+
+  /// No description provided for @bubbleGameModeSquare.
+  ///
+  /// In ja, this message translates to:
+  /// **'スクエア'**
+  String get bubbleGameModeSquare;
+
+  /// No description provided for @bubbleGameModeSweets.
+  ///
+  /// In ja, this message translates to:
+  /// **'スイーツ'**
+  String get bubbleGameModeSweets;
+
+  /// No description provided for @bubbleGameModeSpace.
+  ///
+  /// In ja, this message translates to:
+  /// **'スペース'**
+  String get bubbleGameModeSpace;
+
+  /// No description provided for @bubbleGameScore.
+  ///
+  /// In ja, this message translates to:
+  /// **'スコア'**
+  String get bubbleGameScore;
+
+  /// No description provided for @bubbleGameCombo.
+  ///
+  /// In ja, this message translates to:
+  /// **'コンボ'**
+  String get bubbleGameCombo;
+
+  /// No description provided for @bubbleGameNext.
+  ///
+  /// In ja, this message translates to:
+  /// **'つぎ'**
+  String get bubbleGameNext;
+
+  /// No description provided for @bubbleGameHold.
+  ///
+  /// In ja, this message translates to:
+  /// **'ホールド'**
+  String get bubbleGameHold;
+
+  /// No description provided for @bubbleGameSurrender.
+  ///
+  /// In ja, this message translates to:
+  /// **'ギブアップ'**
+  String get bubbleGameSurrender;
+
+  /// No description provided for @bubbleGameSurrenderConfirm.
+  ///
+  /// In ja, this message translates to:
+  /// **'ギブアップしてええか？'**
+  String get bubbleGameSurrenderConfirm;
+
+  /// No description provided for @bubbleGameOver.
+  ///
+  /// In ja, this message translates to:
+  /// **'ゲームオーバー'**
+  String get bubbleGameOver;
+
+  /// No description provided for @bubbleGameHighScore.
+  ///
+  /// In ja, this message translates to:
+  /// **'ハイスコア'**
+  String get bubbleGameHighScore;
+
+  /// No description provided for @bubbleGameRetry.
+  ///
+  /// In ja, this message translates to:
+  /// **'もういっかい'**
+  String get bubbleGameRetry;
+
+  /// No description provided for @bubbleGameBackToTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'モード選択に戻る'**
+  String get bubbleGameBackToTitle;
+
+  /// No description provided for @bubbleGameHowToPlay.
+  ///
+  /// In ja, this message translates to:
+  /// **'画面を長押しして左右に動かすと落とす場所を決められるで。指を離したら落ちるわ。'**
+  String get bubbleGameHowToPlay;
+
   /// No description provided for @remoteServerWithoutLogin.
   ///
   /// In ja, this message translates to:
