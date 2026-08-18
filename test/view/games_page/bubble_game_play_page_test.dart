@@ -142,6 +142,38 @@ void main() {
       );
     });
 
+    testWidgets("遊んで戻るとランキングを取り直すこと", (tester) async {
+      // 自分がいま出したスコアが載らないままになるので、戻ってきたら取り直す
+      final bubbleGame = MockMisskeyBubbleGame();
+      final misskey = MockMisskey();
+      when(misskey.bubbleGame).thenReturn(bubbleGame);
+      when(bubbleGame.show(any)).thenAnswer((_) async => const []);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
+          child: DefaultRootWidget(
+            initialRoute: BubbleGameRoute(
+              accountContext: TestData.accountContext,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      verify(bubbleGame.show(any)).called(1);
+
+      // 遊びに行って戻ってくる
+      await tester.tap(find.byIcon(Icons.play_arrow));
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+      // pageBackは英語のツールチップを探すので、戻るボタンを直接押す
+      await tester.tap(find.byType(BackButton));
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+
+      verify(bubbleGame.show(any)).called(1);
+    });
+
     testWidgets("モノの画像をアカウントのスキームで取りにいくこと", (tester) async {
       // httpのサーバーもあるので、httpsを決め打ちにしてはいけない
       final account = Account(

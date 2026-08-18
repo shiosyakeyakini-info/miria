@@ -60,12 +60,17 @@ class _BubbleGamePageState extends ConsumerState<BubbleGamePage> {
           ),
           const SizedBox(height: 16),
           FilledButton.icon(
-            onPressed: () => context.pushRoute(
-              BubbleGamePlayRoute(
-                accountContext: widget.accountContext,
-                gameMode: _gameMode,
-              ),
-            ),
+            onPressed: () async {
+              await context.pushRoute(
+                BubbleGamePlayRoute(
+                  accountContext: widget.accountContext,
+                  gameMode: _gameMode,
+                ),
+              );
+              // 遊んだあとに戻ってきたら、いま出したスコアも見えるようにする
+              if (!context.mounted) return;
+              ref.invalidate(_rankingProvider(_gameMode));
+            },
             icon: const Icon(Icons.play_arrow),
             label: Text(_gameMode.displayName(context)),
           ),
