@@ -599,6 +599,125 @@ class BlockedUsersRouteArgs {
 }
 
 /// generated route for
+/// [BubbleGamePage]
+class BubbleGameRoute extends PageRouteInfo<BubbleGameRouteArgs> {
+  BubbleGameRoute({
+    required AccountContext accountContext,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         BubbleGameRoute.name,
+         args: BubbleGameRouteArgs(accountContext: accountContext, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'BubbleGameRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<BubbleGameRouteArgs>();
+      return WrappedRoute(
+        child: BubbleGamePage(
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
+}
+
+class BubbleGameRouteArgs {
+  const BubbleGameRouteArgs({required this.accountContext, this.key});
+
+  final AccountContext accountContext;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'BubbleGameRouteArgs{accountContext: $accountContext, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! BubbleGameRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
+}
+
+/// generated route for
+/// [BubbleGamePlayPage]
+class BubbleGamePlayRoute extends PageRouteInfo<BubbleGamePlayRouteArgs> {
+  BubbleGamePlayRoute({
+    required AccountContext accountContext,
+    required BubbleGameMode gameMode,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         BubbleGamePlayRoute.name,
+         args: BubbleGamePlayRouteArgs(
+           accountContext: accountContext,
+           gameMode: gameMode,
+           key: key,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'BubbleGamePlayRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<BubbleGamePlayRouteArgs>();
+      return WrappedRoute(
+        child: BubbleGamePlayPage(
+          accountContext: args.accountContext,
+          gameMode: args.gameMode,
+          key: args.key,
+        ),
+      );
+    },
+  );
+}
+
+class BubbleGamePlayRouteArgs {
+  const BubbleGamePlayRouteArgs({
+    required this.accountContext,
+    required this.gameMode,
+    this.key,
+  });
+
+  final AccountContext accountContext;
+
+  final BubbleGameMode gameMode;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'BubbleGamePlayRouteArgs{accountContext: $accountContext, gameMode: $gameMode, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! BubbleGamePlayRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        gameMode == other.gameMode &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode =>
+      accountContext.hashCode ^ gameMode.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [CacheManagementPage]
 class CacheManagementRoute extends PageRouteInfo<CacheManagementRouteArgs> {
   CacheManagementRoute({

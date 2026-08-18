@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
@@ -35,9 +36,8 @@ class MisskeyGamesPage extends ConsumerWidget implements AutoRouteWrapper {
           ),
           ListTile(
             title: Text(S.of(context).bubbleGame),
-            onTap: () async => launchUrlString(
-              "https://${accountContext.postAccount.host}/bubble-game",
-              mode: LaunchMode.externalApplication,
+            onTap: () async => context.pushRoute(
+              BubbleGameRoute(accountContext: accountContext),
             ),
           ),
           ListTile(

@@ -49,6 +49,7 @@ import "package:url_launcher_platform_interface/url_launcher_platform_interface.
   MockSpec<MisskeyNotesPolls>(),
   MockSpec<MisskeyRenoteMute>(),
   MockSpec<MisskeyRoles>(),
+  MockSpec<MisskeyBubbleGame>(),
   MockSpec<MisskeyUsers>(),
 
   // チャット関連

@@ -1943,6 +1943,91 @@ class SZh extends S {
   String get nonInvitedReversi => '好像没有收到邀请';
 
   @override
+  String get bubbleGameSelectMode => 'モードを選んでや';
+
+  @override
+  String get bubbleGameRanking => 'このサーバーのランキング';
+
+  @override
+  String get bubbleGameRankingEmpty => 'まだ誰も記録を出しとらへんで';
+
+  @override
+  String get bubbleGameModeNormal => 'ノーマル';
+
+  @override
+  String get bubbleGameModeYen => 'おかね';
+
+  @override
+  String get bubbleGameModeSquare => 'スクエア';
+
+  @override
+  String get bubbleGameModeSweets => 'スイーツ';
+
+  @override
+  String get bubbleGameModeSpace => 'スペース';
+
+  @override
+  String get bubbleGameScore => 'スコア';
+
+  @override
+  String get bubbleGameCombo => 'コンボ';
+
+  @override
+  String get bubbleGameNext => 'つぎ';
+
+  @override
+  String get bubbleGameHold => 'ホールド';
+
+  @override
+  String get bubbleGameSurrender => 'ギブアップ';
+
+  @override
+  String get bubbleGameSurrenderConfirm => 'ギブアップしてええか？';
+
+  @override
+  String get bubbleGameOver => 'ゲームオーバー';
+
+  @override
+  String get bubbleGameHighScore => 'ハイスコア';
+
+  @override
+  String get bubbleGameRetry => 'もういっかい';
+
+  @override
+  String get bubbleGameBackToTitle => 'モード選択に戻る';
+
+  @override
+  String get bubbleGameScoreRateLimited =>
+      'スコアの登録は30秒に1回までやから、今回のぶんは登録できひんかったわ';
+
+  @override
+  String get bubbleGameShowReplay => 'リプレイを見る';
+
+  @override
+  String get bubbleGameReplaying => '再生中';
+
+  @override
+  String get bubbleGameEndReplay => 'やめる';
+
+  @override
+  String get bubbleGameCopyReplayData => 'リプレイデータをコピー';
+
+  @override
+  String get bubbleGameReplayDataCopied => 'コピーしたで';
+
+  @override
+  String get bubbleGameVolume => '音量';
+
+  @override
+  String get bubbleGameBgmVolume => 'BGM';
+
+  @override
+  String get bubbleGameSfxVolume => '効果音';
+
+  @override
+  String get bubbleGameHowToPlay => '画面を長押しして左右に動かすと落とす場所を決められるで。指を離したら落ちるわ。';
+
+  @override
   String get remoteServerWithoutLogin => '相手先のサーバー（ログインなし）';
 
   @override
