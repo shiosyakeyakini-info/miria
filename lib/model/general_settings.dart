@@ -115,6 +115,12 @@ abstract class GeneralSettings with _$GeneralSettings {
     /// 文字の大きさの倍率
     @Default(1.0) double textScaleFactor,
 
+    /// バブルゲームのBGMの音量
+    @Default(0.25) double bubbleGameBgmVolume,
+
+    /// バブルゲームの効果音の音量
+    @Default(1.0) double bubbleGameSfxVolume,
+
     /// 使用するUnicodeの絵文字種別
     @Default(EmojiType.twemoji) EmojiType emojiType,
 

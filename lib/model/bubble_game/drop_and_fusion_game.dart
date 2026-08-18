@@ -68,6 +68,17 @@ class BubbleGameBodyState {
   final List<MatterVector> vertices;
 }
 
+/// 物がぶつかったときの情報。
+class BubbleGameCollision {
+  const BubbleGameCollision({required this.energy, required this.x});
+
+  /// めり込みの深さ。強くぶつかるほど大きい。
+  final double energy;
+
+  /// ぶつかった位置。壁が相手のときは壁でないほうの位置。
+  final double x;
+}
+
 /// 合体が起きたときの情報。
 class BubbleGameFusion {
   const BubbleGameFusion({
@@ -193,7 +204,7 @@ class DropAndFusionGame {
   void Function(BubbleGameStockItem? holding)? onChangeHolding;
   void Function(double x)? onDropped;
   void Function(BubbleGameFusion fusion)? onFusioned;
-  void Function(double energy, Mono? mono)? onCollision;
+  void Function(BubbleGameCollision collision)? onCollision;
   void Function(Mono mono)? onMonoAdded;
   void Function()? onGameOver;
 
@@ -371,9 +382,14 @@ class DropAndFusionGame {
         }
 
         onCollision?.call(
-          energy,
-          monoDefinitions.where((x) => x.id == bodyA.label).firstOrNull ??
-              monoDefinitions.where((x) => x.id == bodyB.label).firstOrNull,
+          BubbleGameCollision(
+            energy: energy,
+            x: bodyA.label == _wallLabel
+                ? bodyB.position.x
+                : bodyB.label == _wallLabel
+                ? bodyA.position.x
+                : (bodyA.position.x + bodyB.position.x) / 2,
+          ),
         );
       }
     }

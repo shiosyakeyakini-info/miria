@@ -14,6 +14,7 @@ import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/games_page/bubble_game/bubble_game_mode_extension.dart";
 import "package:miria/view/games_page/bubble_game/bubble_game_painter.dart";
+import "package:miria/view/games_page/bubble_game/bubble_game_sounds.dart";
 import "package:miria/view/games_page/bubble_game/mono_textures.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
@@ -52,6 +53,7 @@ class _BubbleGamePlayPageState extends ConsumerState<BubbleGamePlayPage>
   final _repaint = ValueNotifier<int>(0);
 
   MonoTextures? _textures;
+  BubbleGameSounds? _sounds;
   Duration _lastElapsed = Duration.zero;
   Duration _accumulated = Duration.zero;
 
@@ -68,6 +70,7 @@ class _BubbleGamePlayPageState extends ConsumerState<BubbleGamePlayPage>
     _game = _createGame();
     _ticker = createTicker(_onTick)..start();
     unawaited(_loadTextures());
+    unawaited(_loadSounds());
     unawaited(_loadHighScore());
   }
 
@@ -77,6 +80,7 @@ class _BubbleGamePlayPageState extends ConsumerState<BubbleGamePlayPage>
     _repaint.dispose();
     _game.dispose();
     _textures?.dispose();
+    unawaited(_sounds?.dispose());
     super.dispose();
   }
 
@@ -95,7 +99,25 @@ class _BubbleGamePlayPageState extends ConsumerState<BubbleGamePlayPage>
       if (combo != _combo) setState(() => _combo = combo);
     };
     game.onChangeStock = (_) => setState(() {});
-    game.onChangeHolding = (_) => setState(() {});
+    game.onChangeHolding = (holding) {
+      setState(() {});
+      if (holding != null) _sounds?.playHold();
+    };
+    game.onDropped = (x) => _sounds?.playDrop(_pan(x));
+    game.onFusioned = (fusion) {
+      final next = fusion.next;
+      if (next == null) return;
+      _sounds?.playFusion(
+        pan: _pan(fusion.x),
+        pitch: next.sfxPitch,
+        isYen: widget.gameMode == BubbleGameMode.yen,
+      );
+    };
+    game.onCollision = (collision) => _sounds?.playCollision(
+      energy: collision.energy,
+      pan: _pan(collision.x),
+      isYen: widget.gameMode == BubbleGameMode.yen,
+    );
     game.onGameOver = _onGameOver;
 
     return game..start();
@@ -118,6 +140,36 @@ class _BubbleGamePlayPageState extends ConsumerState<BubbleGamePlayPage>
       return;
     }
     setState(() => _textures = textures);
+  }
+
+  Future<void> _loadSounds() async {
+    final account = widget.accountContext.postAccount;
+    final settings = ref.read(generalSettingsRepositoryProvider).settings;
+    final sounds = await BubbleGameSounds.load(
+      cacheManager: ref.read(cacheManagerProvider),
+      host: Uri(
+        scheme: account.scheme ?? "https",
+        host: account.host,
+        port: account.port,
+      ),
+      gameMode: widget.gameMode,
+    );
+    if (!mounted) {
+      await sounds.dispose();
+      return;
+    }
+    sounds
+      ..bgmVolume = settings.bubbleGameBgmVolume
+      ..sfxVolume = settings.bubbleGameSfxVolume;
+    setState(() => _sounds = sounds);
+    if (!_isGameOver) await sounds.startBgm();
+  }
+
+  /// ゲーム内のx座標を、左右の振り分け (-1〜1) に直す。
+  double _pan(double x) {
+    const margin = DropAndFusionGame.playareaMargin;
+    const width = DropAndFusionGame.gameWidth - margin - margin;
+    return ((x - margin) / width - 0.5) * 2;
   }
 
   Future<void> _loadHighScore() async {
@@ -155,6 +207,8 @@ class _BubbleGamePlayPageState extends ConsumerState<BubbleGamePlayPage>
   void _onGameOver() {
     _ticker.stop();
     setState(() => _isGameOver = true);
+    _sounds?.playGameOver(isYen: widget.gameMode == BubbleGameMode.yen);
+    unawaited(_sounds?.stopBgm());
     unawaited(_registerScore());
   }
 
@@ -202,6 +256,75 @@ class _BubbleGamePlayPageState extends ConsumerState<BubbleGamePlayPage>
     _accumulated = Duration.zero;
     _lastElapsed = Duration.zero;
     _ticker.start();
+    unawaited(_sounds?.startBgm());
+  }
+
+  /// 音量の調整。変えた値は次に遊ぶときのために覚えておく。
+  Future<void> _showVolumeSheet() async {
+    final repository = ref.read(generalSettingsRepositoryProvider);
+
+    await showModalBottomSheet<void>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setSheetState) {
+          final settings = repository.settings;
+
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    S.of(context).bubbleGameVolume,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  for (final entry in [
+                    (
+                      S.of(context).bubbleGameBgmVolume,
+                      settings.bubbleGameBgmVolume,
+                      (double value) async {
+                        await repository.update(
+                          settings.copyWith(bubbleGameBgmVolume: value),
+                        );
+                        await _sounds?.setBgmVolume(value);
+                      },
+                    ),
+                    (
+                      S.of(context).bubbleGameSfxVolume,
+                      settings.bubbleGameSfxVolume,
+                      (double value) async {
+                        await repository.update(
+                          settings.copyWith(bubbleGameSfxVolume: value),
+                        );
+                        _sounds?.sfxVolume = value;
+                      },
+                    ),
+                  ])
+                    Row(
+                      children: [
+                        SizedBox(width: 64, child: Text(entry.$1)),
+                        Expanded(
+                          child: Slider(
+                            value: entry.$2,
+                            onChanged: (value) async {
+                              await entry.$3(value);
+                              setSheetState(() {});
+                              if (mounted) setState(() {});
+                            },
+                          ),
+                        ),
+                        Text("${(entry.$2 * 100).round()}%"),
+                      ],
+                    ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   Future<void> _surrender() async {
@@ -229,6 +352,15 @@ class _BubbleGamePlayPageState extends ConsumerState<BubbleGamePlayPage>
       appBar: AppBar(
         title: Text(widget.gameMode.displayName(context)),
         actions: [
+          IconButton(
+            onPressed: _showVolumeSheet,
+            icon: Icon(
+              _sounds != null && _sounds!.bgmVolume + _sounds!.sfxVolume > 0
+                  ? Icons.volume_up
+                  : Icons.volume_off,
+            ),
+            tooltip: S.of(context).bubbleGameVolume,
+          ),
           IconButton(
             onPressed: _isGameOver ? null : _surrender,
             icon: const Icon(Icons.flag),

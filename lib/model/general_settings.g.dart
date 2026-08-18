@@ -31,6 +31,10 @@ _GeneralSettings _$GeneralSettingsFromJson(Map<String, dynamic> json) =>
           $enumDecodeNullable(_$TabPositionEnumMap, json['tabPosition']) ??
           TabPosition.top,
       textScaleFactor: (json['textScaleFactor'] as num?)?.toDouble() ?? 1.0,
+      bubbleGameBgmVolume:
+          (json['bubbleGameBgmVolume'] as num?)?.toDouble() ?? 0.25,
+      bubbleGameSfxVolume:
+          (json['bubbleGameSfxVolume'] as num?)?.toDouble() ?? 1.0,
       emojiType:
           $enumDecodeNullable(_$EmojiTypeEnumMap, json['emojiType']) ??
           EmojiType.twemoji,
@@ -98,6 +102,8 @@ Map<String, dynamic> _$GeneralSettingsToJson(_GeneralSettings instance) =>
       'enableFavoritedRenoteElipsed': instance.enableFavoritedRenoteElipsed,
       'tabPosition': _$TabPositionEnumMap[instance.tabPosition]!,
       'textScaleFactor': instance.textScaleFactor,
+      'bubbleGameBgmVolume': instance.bubbleGameBgmVolume,
+      'bubbleGameSfxVolume': instance.bubbleGameSfxVolume,
       'emojiType': _$EmojiTypeEnumMap[instance.emojiType]!,
       'defaultFontName': instance.defaultFontName,
       'serifFontName': instance.serifFontName,

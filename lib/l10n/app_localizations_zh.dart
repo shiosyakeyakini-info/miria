@@ -2001,6 +2001,15 @@ class SZh extends S {
       'スコアの登録は30秒に1回までやから、今回のぶんは登録できひんかったわ';
 
   @override
+  String get bubbleGameVolume => '音量';
+
+  @override
+  String get bubbleGameBgmVolume => 'BGM';
+
+  @override
+  String get bubbleGameSfxVolume => '効果音';
+
+  @override
   String get bubbleGameHowToPlay => '画面を長押しして左右に動かすと落とす場所を決められるで。指を離したら落ちるわ。';
 
   @override

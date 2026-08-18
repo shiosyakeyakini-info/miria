@@ -3492,6 +3492,24 @@ abstract class S {
   /// **'スコアの登録は30秒に1回までやから、今回のぶんは登録できひんかったわ'**
   String get bubbleGameScoreRateLimited;
 
+  /// No description provided for @bubbleGameVolume.
+  ///
+  /// In ja, this message translates to:
+  /// **'音量'**
+  String get bubbleGameVolume;
+
+  /// No description provided for @bubbleGameBgmVolume.
+  ///
+  /// In ja, this message translates to:
+  /// **'BGM'**
+  String get bubbleGameBgmVolume;
+
+  /// No description provided for @bubbleGameSfxVolume.
+  ///
+  /// In ja, this message translates to:
+  /// **'効果音'**
+  String get bubbleGameSfxVolume;
+
   /// No description provided for @bubbleGameHowToPlay.
   ///
   /// In ja, this message translates to:
