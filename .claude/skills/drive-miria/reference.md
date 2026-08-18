@@ -1,8 +1,9 @@
 # marionette against miria — mechanics and limits
 
 Read `SKILL.md` first; this is the "why" behind it. Everything here was
-observed against a real build (marionette_flutter 0.6.0, Flutter 3.44.6,
-Windows).
+observed against a real build (marionette_flutter 0.6.0, Flutter 3.44.6) —
+on Windows unless a section says Linux, and the Linux runs were headless in a
+container against misskey 2025.8.0-beta.4.
 
 ## Building on Windows
 
@@ -24,6 +25,38 @@ after any `flutter clean`.
 
 Do not run `flutter test` while `flutter run` is up — they share `build/` and
 clobber each other's `native_assets.json`.
+
+## A local misskey to drive against
+
+`assets_builder/misskey` is the submodule; `git submodule update --init --depth 1`
+brings it down. It needs postgres and redis, `.config/default.yml` pointing at
+them, `pnpm install`, `pnpm build`, `pnpm migrate`, `pnpm start`.
+
+Two things bite in a sandboxed container:
+
+- **Docker Hub is often unreachable** (the blob CDN, not the registry). Install
+  `postgresql` and `redis-server` from apt and start them with
+  `pg_ctlcluster 16 main start` / `redis-server --daemonize yes` instead of
+  `compose.local-db.yml`.
+- **`github:` dependencies fetch a codeload tarball**, which fails where plain
+  git clones succeed. Rewriting them in `packages/frontend/package.json` to
+  `git+https://github.com/<owner>/<repo>.git#<ref>` makes pnpm use git.
+  `CYPRESS_INSTALL_BINARY=0` skips another download that is only for e2e tests.
+
+`pnpm build` also builds the web frontend, which wants `fluent-emojis/dist/*.png`.
+Those are absent from a plain checkout and the vite build dies on them — but
+**miria only needs the backend API**, and `packages/backend/built` is produced
+before that failure. Migrate and start anyway.
+
+First account, then a token for the API-key login:
+
+```bash
+curl -s -X POST http://localhost:3000/api/admin/accounts/create \
+  -H "Content-Type: application/json" -d '{"username":"miria","password":"..."}'
+curl -s -X POST http://localhost:3000/api/signin-flow \
+  -H "Content-Type: application/json" \
+  -d '{"username":"miria","password":"..."}'      # -> {"i": "<token>"}
+```
 
 ## Transports
 
@@ -177,16 +210,71 @@ read that instead.
 Wiring `FlutterError.onError` and a `runZoned` print handler into the
 collector would make this tool useful.
 
+## Building on Linux
+
+Nothing to configure — `fvm flutter build linux --debug` succeeds against
+stock Ubuntu 24.04 build deps (clang, cmake, ninja, `libgtk-3-dev`). No
+toolset pinning, no `permission_handler` fallout: that package's Windows
+implementation is what breaks there, and it is not in the Linux build.
+
+Headless needs Xvfb, `LIBGL_ALWAYS_SOFTWARE=1`, a session bus, gnome-keyring
+and the portal stub — `SKILL.md` has the launch block. Flutter renders through
+llvmpipe without complaint; the only console noise is a harmless
+`Atk-CRITICAL ... atk_socket_embed` from GTK's accessibility bridge.
+
+## The file picker on Linux
+
+file_picker 12 dropped the native dialog on Linux. `FilePickerLinux` is pure
+D-Bus (`lib/src/platform/linux/file_picker_linux.dart`): it calls
+`org.freedesktop.portal.FileChooser.OpenFile` on
+`org.freedesktop.portal.Desktop`, gets back a Request object path, and awaits
+one `org.freedesktop.portal.Request.Response` signal (`ua{sv}`) on it —
+`response == 0` plus a `uris` array, or any non-zero for cancelled.
+`getDirectoryPath` is the same call with `directory: true`; `saveFile` is
+`SaveFile`. All three read `uris` from the same reply.
+
+Nothing about that is a GUI, so none of it needs one. `scripts/portal_stub.py`
+owns the name and answers from `/tmp/marionette-portal/answer.json` — the whole
+picker becomes a file you write before the tap. It is ~120 lines of `jeepney`
+(`pip install jeepney`, pure Python, no libdbus).
+
+Consequences worth knowing:
+
+- **With no portal on the bus, the picker throws** —
+  `org.freedesktop.DBus.Error.ServiceUnknown: The name
+  org.freedesktop.portal.Desktop was not provided by any .service files`.
+  A bare container has no `xdg-desktop-portal` installed, so this is the
+  default state, not an edge case.
+- **The response must not be instant.** The client subscribes to the Response
+  signal only *after* `OpenFile` returns, so a stub that answers in the same
+  millisecond loses the race and the signal is dropped. `pickFiles` then awaits
+  forever, with the app looking perfectly healthy. Measured: a 0-second delay
+  fails every time, 0.6 s (the stub default, `PORTAL_STUB_DELAY`) is reliable.
+  A real portal is safe here only because a human takes seconds to click.
+- **Request handles must stay unique across stub restarts.** A client whose
+  Response was lost is still subscribed to that object path. Restarting a stub
+  that numbers handles from zero hands the next client the same path, and the
+  one signal completes *both* awaits — observed as the same file attached
+  twice from a single tap. The stub puts its pid in the path for this reason.
+- `answer.json` is consumed per request (`"once": false` keeps it armed).
+  Absent file == cancelled, which is how you exercise the cancel branch.
+
+Verified against miria's composer: single file, two files, and cancel, each
+confirmed on the server (`/api/users/notes` showed the attached
+`image/png`, byte size matching the source). miria calls `pickFiles` from three
+places — `note_create_state_notifier.dart`, `chat_input_state_notifier.dart`,
+`profile_edit_page.dart` — all through this one platform call.
+
 ## Out of reach
 
-- **Native dialogs.** 「アップロード」 opens a `File Picker` window owned by the
-  miria process. `elements` does not change, `take_screenshots` does not show
-  it (it renders the Flutter scene only), and the VM Service keeps answering —
-  indistinguishable from a tap that did nothing. Detect with `Get-Process | ?
-  { $_.MainWindowTitle }`; dismiss with
+- **Native dialogs (Windows).** 「アップロード」 opens a `File Picker` window owned
+  by the miria process. `elements` does not change, `take_screenshots` does not
+  show it (it renders the Flutter scene only), and the VM Service keeps
+  answering — indistinguishable from a tap that did nothing. Detect with
+  `Get-Process | ? { $_.MainWindowTitle }`; dismiss with
   `(New-Object -ComObject WScript.Shell).AppActivate("File Picker")` then
   `SendKeys("{ESC}")`. The in-app drive picker (「ドライブから」) is fully
-  driveable.
+  driveable. **On Linux this limit does not apply** — see above.
 - **External browser.** MiAuth (`account_repository.dart`) and note links use
   `launchUrl(externalApplication)`. Same invisibility. API-key login is the
   only automatable sign-in for this reason.
