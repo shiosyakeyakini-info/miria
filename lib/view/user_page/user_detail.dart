@@ -438,7 +438,10 @@ class UserDetail extends ConsumerWidget {
         ),
         if (response.pinnedNotes != null)
           SliverPadding(
-            padding: const EdgeInsets.only(right: 10),
+            padding: EdgeInsets.only(
+              right: 10,
+              bottom: MediaQuery.of(context).padding.bottom,
+            ),
             sliver: SliverList.builder(
               itemCount: response.pinnedNotes!.length,
               itemBuilder: (context, index) =>
