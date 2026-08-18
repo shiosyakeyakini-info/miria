@@ -1,10 +1,14 @@
+import "package:dio/dio.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
 import "package:miria/model/bubble_game/mono.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/games_page/bubble_game/bubble_game_painter.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:mockito/mockito.dart";
 
 import "../../test_util/default_root_widget.dart";
 import "../../test_util/mock.mocks.dart";
@@ -100,6 +104,87 @@ void main() {
       await tester.pump();
 
       expect(game.holding?.id, head.id);
+    });
+
+    testWidgets("モード選択の画面でランキングが表示されること", (tester) async {
+      // ランキングのプロバイダはアカウントごとにスコープされたリポジトリを読むので、
+      // dependenciesの宣言が足りないと実行時に落ちる
+      final bubbleGame = MockMisskeyBubbleGame();
+      final misskey = MockMisskey();
+      when(misskey.bubbleGame).thenReturn(bubbleGame);
+      when(bubbleGame.show(any)).thenAnswer(
+        (_) async => [
+          BubbleGameRankingResponse(
+            id: "record1",
+            score: 1234,
+            user: TestData.user1,
+          ),
+        ],
+      );
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
+          child: DefaultRootWidget(
+            initialRoute: BubbleGameRoute(
+              accountContext: TestData.accountContext,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text("1234pt"), findsOneWidget);
+      verify(
+        bubbleGame.show(
+          argThat(equals(const BubbleGameRankingRequest(gameMode: "normal"))),
+        ),
+      );
+    });
+
+    testWidgets("モノの画像をアカウントのスキームで取りにいくこと", (tester) async {
+      // httpのサーバーもあるので、httpsを決め打ちにしてはいけない
+      final account = Account(
+        host: "localhost",
+        userId: "miria",
+        i: TestData.i1,
+        meta: TestData.meta,
+        scheme: "http",
+        port: 3000,
+      );
+      final dio = MockDio();
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            misskeyProvider.overrideWith((ref, account) => MockMisskey()),
+            dioProvider.overrideWith((ref) => dio),
+          ],
+          child: DefaultRootWidget(
+            initialRoute: BubbleGamePlayRoute(
+              accountContext: AccountContext(
+                getAccount: account,
+                postAccount: account,
+              ),
+              gameMode: BubbleGameMode.normal,
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 16));
+
+      final captured = verify(
+        dio.getUri<List<int>>(captureAny, options: anyNamed("options")),
+      ).captured.cast<Uri>();
+
+      expect(captured, isNotEmpty);
+      for (final uri in captured) {
+        expect(uri.scheme, "http");
+        expect(uri.host, "localhost");
+        expect(uri.port, 3000);
+        expect(uri.path, startsWith("/client-assets/drop-and-fusion/"));
+      }
     });
   });
 }

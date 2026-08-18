@@ -105,7 +105,12 @@ class _BubbleGamePlayPageState extends ConsumerState<BubbleGamePlayPage>
     final account = widget.accountContext.postAccount;
     final textures = await MonoTextures.load(
       dio: ref.read(dioProvider),
-      host: Uri(scheme: "https", host: account.host, port: account.port),
+      // httpのサーバーもあるので、アカウントのスキームをそのまま使う
+      host: Uri(
+        scheme: account.scheme ?? "https",
+        host: account.host,
+        port: account.port,
+      ),
       monos: _game.monoDefinitions,
     );
     if (!mounted) {
@@ -468,43 +473,47 @@ class _GameOverOverlay extends StatelessWidget {
     final theme = Theme.of(context);
 
     return ColoredBox(
-      color: theme.colorScheme.scrim.withValues(alpha: 0.6),
+      color: theme.colorScheme.scrim.withValues(alpha: 0.5),
       child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              S.of(context).bubbleGameOver,
-              style: theme.textTheme.headlineMedium?.copyWith(
-                color: theme.colorScheme.onPrimary,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              "$score${gameMode.scoreUnit}",
-              style: theme.textTheme.headlineLarge?.copyWith(
-                color: theme.colorScheme.onPrimary,
-              ),
-            ),
-            const SizedBox(height: 16),
-            if (isRegistering)
-              const CircularProgressIndicator.adaptive()
-            else
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  FilledButton(
-                    onPressed: onRetry,
-                    child: Text(S.of(context).bubbleGameRetry),
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  S.of(context).bubbleGameOver,
+                  style: theme.textTheme.headlineSmall,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  "$score${gameMode.scoreUnit}",
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    color: theme.colorScheme.primary,
                   ),
-                  const SizedBox(width: 8),
-                  FilledButton.tonal(
-                    onPressed: () => Navigator.of(context).maybePop(),
-                    child: Text(S.of(context).bubbleGameBackToTitle),
+                ),
+                const SizedBox(height: 16),
+                if (isRegistering)
+                  const CircularProgressIndicator.adaptive()
+                else
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    alignment: WrapAlignment.center,
+                    children: [
+                      FilledButton(
+                        onPressed: onRetry,
+                        child: Text(S.of(context).bubbleGameRetry),
+                      ),
+                      FilledButton.tonal(
+                        onPressed: () => Navigator.of(context).maybePop(),
+                        child: Text(S.of(context).bubbleGameBackToTitle),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-          ],
+              ],
+            ),
+          ),
         ),
       ),
     );

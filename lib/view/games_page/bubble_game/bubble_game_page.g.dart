@@ -33,9 +33,11 @@ final class _RankingProvider
          $allTransitiveDependencies: null,
        );
 
-  static final $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static final $allTransitiveDependencies0 = bubbleGameRepositoryProvider;
   static final $allTransitiveDependencies1 =
-      MisskeyPostContextProvider.$allTransitiveDependencies0;
+      BubbleGameRepositoryProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies2 =
+      BubbleGameRepositoryProvider.$allTransitiveDependencies1;
 
   @override
   String debugGetCreateSourceHash() => _$_rankingHash();
@@ -70,7 +72,7 @@ final class _RankingProvider
   }
 }
 
-String _$_rankingHash() => r'c9f185481536501e55eef616b3d05509d84fdf44';
+String _$_rankingHash() => r'dc8963e6fdb8c195e152d328607b737bf5d417e1';
 
 final class _RankingFamily extends $Family
     with
@@ -82,10 +84,11 @@ final class _RankingFamily extends $Family
     : super(
         retry: null,
         name: r'_rankingProvider',
-        dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
+        dependencies: <ProviderOrFamily>[bubbleGameRepositoryProvider],
         $allTransitiveDependencies: <ProviderOrFamily>[
           _RankingProvider.$allTransitiveDependencies0,
           _RankingProvider.$allTransitiveDependencies1,
+          _RankingProvider.$allTransitiveDependencies2,
         ],
         isAutoDispose: true,
       );

@@ -82,7 +82,9 @@ class _BubbleGamePageState extends ConsumerState<BubbleGamePage> {
   }
 }
 
-@Riverpod(dependencies: [misskeyPostContext])
+// bubbleGameRepositoryProvider はアカウントごとにスコープされるので、
+// ここで読むならdependenciesに並べておく必要がある
+@Riverpod(dependencies: [bubbleGameRepository])
 Future<List<BubbleGameRankingResponse>> _ranking(
   Ref ref,
   BubbleGameMode gameMode,
