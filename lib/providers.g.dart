@@ -90,6 +90,50 @@ final class FileSystemProvider
 
 String _$fileSystemHash() => r'9b96bb59d396159330bbfc15f1c8ea184af0a9b7';
 
+/// 実績名の対訳表。表示言語を変えたら引き直す。
+
+@ProviderFor(achievements)
+final achievementsProvider = AchievementsProvider._();
+
+/// 実績名の対訳表。表示言語を変えたら引き直す。
+
+final class AchievementsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<Achievements>,
+          Achievements,
+          FutureOr<Achievements>
+        >
+    with $FutureModifier<Achievements>, $FutureProvider<Achievements> {
+  /// 実績名の対訳表。表示言語を変えたら引き直す。
+  AchievementsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'achievementsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$achievementsHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<Achievements> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<Achievements> create(Ref ref) {
+    return achievements(ref);
+  }
+}
+
+String _$achievementsHash() => r'04523e9f4daab6bbe9cdf956d1e472bd4c680a7e';
+
 @ProviderFor(misskey)
 @Deprecated(
   'Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain',

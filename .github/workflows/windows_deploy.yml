@@ -38,9 +38,12 @@ jobs:
         run: |
           flutter build windows --release
 
+      # main は開発版を指しており、6.5 で ChineseSimplified が公式言語に昇格した際に
+      # Unofficial/ から消えて 404 になった。curl が 404 本文をそのまま .isl として
+      # 保存してしまうので、タグで固定した上で --fail で落とす。
       - name: Get translation files for Inno Setup
         run: |
-          curl -o ${{ env.builddir }}\ChineseSimplified.isl https://raw.githubusercontent.com/jrsoftware/issrc/main/Files/Languages/Unofficial/ChineseSimplified.isl
+          curl -fL -o ${{ env.builddir }}\ChineseSimplified.isl https://raw.githubusercontent.com/jrsoftware/issrc/is-6_4_3/Files/Languages/Unofficial/ChineseSimplified.isl
 
       - name: Copy DLL
         run: |

@@ -8,21 +8,27 @@ part "muted_users_notifier.g.dart";
 
 @Riverpod(dependencies: [misskeyPostContext])
 class MutedUsersNotifier extends _$MutedUsersNotifier {
+  /// 一覧そのものは `PushableListView` が持つので、ここでは状態を持たない。
   @override
-  Future<List<Muting>> build() async {
+  void build() {}
+
+  /// ミュート済みユーザーを1ページ分取得する。
+  ///
+  /// `mute/list` は `untilId` に [Muting] の id を渡してページングする。
+  /// ミュートされている側のユーザーIDではない。
+  Future<List<Muting>> fetch({String? untilId}) async {
     final response = await ref
         .read(misskeyPostContextProvider)
         .mute
-        .list(const MuteListRequest());
+        .list(MuteListRequest(untilId: untilId));
     return response.toList();
   }
 
-  Future<void> delete(String userId) async {
+  /// ミュートを解除する。解除したら `true`。
+  Future<bool> delete(Muting muting) async {
+    var deleted = false;
     await ref.read(dialogStateProvider.notifier).guard(() async {
-      // ユーザー名を取得
-      final user = state.value?.firstWhere((e) => e.muteeId == userId);
-      final userName = user?.mutee.name ?? user?.mutee.username ?? "";
-
+      final userName = muting.mutee.name ?? muting.mutee.username;
       final result = await ref
           .read(dialogStateProvider.notifier)
           .showDialog(
@@ -34,11 +40,10 @@ class MutedUsersNotifier extends _$MutedUsersNotifier {
         await ref
             .read(misskeyPostContextProvider)
             .mute
-            .delete(MuteDeleteRequest(userId: userId));
-        state = AsyncValue.data([
-          ...?state.value?.where((e) => e.muteeId != userId),
-        ]);
+            .delete(MuteDeleteRequest(userId: muting.muteeId));
+        deleted = true;
       }
     });
+    return deleted;
   }
 }

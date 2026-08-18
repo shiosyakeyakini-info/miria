@@ -226,7 +226,9 @@ class UserChatPage extends HookConsumerWidget implements AutoRouteWrapper {
           ),
         ],
       ),
-      body: Center(child: UserChatTimeline(user: user)),
+      body: SafeArea(
+        child: Center(child: UserChatTimeline(user: user)),
+      ),
     );
   }
 }
@@ -487,36 +489,16 @@ class UserChatTextField extends HookConsumerWidget {
                         .read(chatInputStateProvider.notifier)
                         .removeFile(index),
                     onFileSettingChanged: (file) async {
-                      final editedFile =
+                      final result =
                           await showDialog<FileSettingsDialogResult?>(
                             context: context,
                             builder: (context) =>
                                 FileSettingsDialog(file: file),
                           );
-                      if (editedFile != null) {
-                        // NSFWやキャプションの変更を反映
-                        final updatedFile = switch (file) {
-                          ImageFile() => ImageFile(
-                            data: file.data,
-                            fileName: file.fileName,
-                            isNsfw: editedFile.isNsfw,
-                            caption: editedFile.caption,
-                          ),
-                          UnknownFile() => UnknownFile(
-                            data: file.data,
-                            fileName: file.fileName,
-                            isNsfw: editedFile.isNsfw,
-                            caption: editedFile.caption,
-                          ),
-                          _ => file,
-                        };
-                        ref
-                            .read(chatInputStateProvider.notifier)
-                            .removeFile(index);
-                        await ref
-                            .read(chatInputStateProvider.notifier)
-                            .addFile(updatedFile);
-                      }
+                      if (result == null) return;
+                      ref
+                          .read(chatInputStateProvider.notifier)
+                          .setFileMetaData(index, result);
                     },
                   ),
                 );
@@ -546,6 +528,8 @@ class UserChatTextField extends HookConsumerWidget {
                 child: TextField(
                   controller: textEditingController,
                   focusNode: focusNode,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
                 ),
               ),
             ),

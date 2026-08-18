@@ -52,6 +52,12 @@ add_subdirectory(${FLUTTER_MANAGED_DIR})
 # Application build; see runner/CMakeLists.txt.
 add_subdirectory("runner")
 
+# permission_handler_windows は /await と <experimental/coroutine> を使っているが、
+# MSVC 14.5x 以降はこのヘッダが static_assert (STL1011) で落ちるようになった。
+# pub.dev の最新版 (0.2.2) も同じなのでプラグイン側では直せず、Microsoft が案内する
+# 抑止マクロをプラグインのビルドに渡す。
+add_compile_definitions(_SILENCE_EXPERIMENTAL_COROUTINE_DEPRECATION_WARNINGS)
+
 # Generated plugin build rules, which manage building the plugins and adding
 # them to the application.
 include(flutter/generated_plugins.cmake)

@@ -85,7 +85,7 @@ class ChatReactionWidget extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
         decoration: BoxDecoration(
           color: isMyReaction
-              ? Theme.of(context).colorScheme.primary.withOpacity(0.2)
+              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.2)
               : Theme.of(context).colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(12),
           border: isMyReaction

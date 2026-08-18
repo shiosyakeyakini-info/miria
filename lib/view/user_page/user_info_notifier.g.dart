@@ -75,7 +75,7 @@ final class UserInfoNotifierProxyProvider
 }
 
 String _$userInfoNotifierProxyHash() =>
-    r'589b031eee730ce6b5f1b9786d11718e2cb3d141';
+    r'1157e282e6cc4f3562f1403cc7b9d07f1e460e4c';
 
 final class UserInfoNotifierProxyFamily extends $Family
     with $FunctionalFamilyOverride<Raw<UserInfoNotifier>, String> {

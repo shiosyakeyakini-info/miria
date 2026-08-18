@@ -28,7 +28,7 @@ class UserDetail extends ConsumerWidget {
     //   userInfoProvider(response.id)
     //       .select((value) => value.value?.follow is AsyncLoading),
     // );
-    final notifier = ref.read(userInfoNotifierProxyProvider(response.id));
+    final notifier = ref.watch(userInfoNotifierProxyProvider(response.id));
     final memo = response.memo ?? "";
 
     final isSameAccount = ref.read(accountContextProvider).isSame;
@@ -438,7 +438,10 @@ class UserDetail extends ConsumerWidget {
         ),
         if (response.pinnedNotes != null)
           SliverPadding(
-            padding: const EdgeInsets.only(right: 10),
+            padding: EdgeInsets.only(
+              right: 10,
+              bottom: MediaQuery.of(context).padding.bottom,
+            ),
             sliver: SliverList.builder(
               itemCount: response.pinnedNotes!.length,
               itemBuilder: (context, index) =>

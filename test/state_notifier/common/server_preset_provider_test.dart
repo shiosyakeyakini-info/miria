@@ -99,10 +99,19 @@ void main() {
         ),
       );
 
-      expect(
-        () => container.read(serverPresetsProvider.future),
-        throwsA(isA<Exception>()),
+      // 自動破棄で読み込み中に破棄されないよう購読を保持したうえで状態を確認する
+      final subscription = container.listen(
+        serverPresetsProvider,
+        (_, _) {},
+        onError: (_, _) {},
       );
+      addTearDown(subscription.close);
+
+      await pumpEventQueue();
+
+      final value = container.read(serverPresetsProvider);
+      expect(value.hasError, isTrue);
+      expect(value.error, isA<Exception>());
     });
 
     test("should handle invalid JSON string gracefully", () async {
@@ -116,10 +125,19 @@ void main() {
         ),
       );
 
-      expect(
-        () => container.read(serverPresetsProvider.future),
-        throwsA(isA<Exception>()),
+      // 自動破棄で読み込み中に破棄されないよう購読を保持したうえで状態を確認する
+      final subscription = container.listen(
+        serverPresetsProvider,
+        (_, _) {},
+        onError: (_, _) {},
       );
+      addTearDown(subscription.close);
+
+      await pumpEventQueue();
+
+      final value = container.read(serverPresetsProvider);
+      expect(value.hasError, isTrue);
+      expect(value.error, isA<Exception>());
     });
   });
 }

@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:miria/l10n/app_localizations.dart";
+import "package:miria/model/achievement.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 sealed class NotificationData {
@@ -135,10 +136,39 @@ class NoteNotification extends NotificationData {
   });
 }
 
+/// 予約投稿がノートされたときの通知
+class ScheduledNoteNotification extends NotificationData {
+  final Note? note;
+  ScheduledNoteNotification({
+    required this.note,
+    required super.createdAt,
+    required super.id,
+  });
+}
+
 class RoleNotification extends NotificationData {
   final RolesListResponse? role;
   RoleNotification({
     required this.role,
+    required super.createdAt,
+    required super.id,
+  });
+}
+
+/// アプリからの通知。
+///
+/// Misskey は `body` のみ必須で、`header` と `icon` は通知を作ったアプリの
+/// 名前とアイコンで埋まる。アプリを介さず `notifications/create` を直接
+/// 叩いた場合は両方 null になりうる。
+class AppNotificationData extends NotificationData {
+  final String body;
+  final String? header;
+  final Uri? icon;
+
+  AppNotificationData({
+    required this.body,
+    required this.header,
+    required this.icon,
     required super.createdAt,
     required super.id,
   });
@@ -154,7 +184,10 @@ class InvitedChatRoomNotification extends NotificationData {
 }
 
 extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
-  List<NotificationData> toNotificationData(S localize) {
+  List<NotificationData> toNotificationData(
+    S localize,
+    Achievements achievements,
+  ) {
     final resultList = <NotificationData>[];
 
     for (final element in this) {
@@ -271,10 +304,12 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
           );
 
         case NotificationType.achievementEarned:
+          final achievement = element.achievement ?? "";
           resultList.add(
             SimpleNotificationData(
               text:
-                  "${localize.achievementEarnedNotification}[${element.achievement}]",
+                  "${localize.achievementEarnedNotification}"
+                  "[${achievements[achievement]?.title ?? achievement}]",
               createdAt: element.createdAt,
               id: element.id,
             ),
@@ -292,6 +327,22 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
           resultList.add(
             PollNotification(
               note: element.note,
+              createdAt: element.createdAt,
+              id: element.id,
+            ),
+          );
+        case NotificationType.scheduledNotePosted:
+          resultList.add(
+            ScheduledNoteNotification(
+              note: element.note,
+              createdAt: element.createdAt,
+              id: element.id,
+            ),
+          );
+        case NotificationType.scheduledNotePostFailed:
+          resultList.add(
+            SimpleNotificationData(
+              text: localize.scheduledNotePostFailedNotification,
               createdAt: element.createdAt,
               id: element.id,
             ),
@@ -323,13 +374,27 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
             ),
           );
         case NotificationType.app:
-          resultList.add(
-            SimpleNotificationData(
-              text: localize.appNotification,
-              createdAt: element.createdAt,
-              id: element.id,
-            ),
-          );
+          final body = element.body;
+          if (body == null || body.isEmpty) {
+            // 本文がなければ従来どおり「アプリからの通知」とだけ伝える
+            resultList.add(
+              SimpleNotificationData(
+                text: localize.appNotification,
+                createdAt: element.createdAt,
+                id: element.id,
+              ),
+            );
+          } else {
+            resultList.add(
+              AppNotificationData(
+                body: body,
+                header: element.header,
+                icon: element.icon,
+                createdAt: element.createdAt,
+                id: element.id,
+              ),
+            );
+          }
 
         case NotificationType.groupInvited:
         case NotificationType.reactionGrouped:

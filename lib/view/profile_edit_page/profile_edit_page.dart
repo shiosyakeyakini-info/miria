@@ -2,6 +2,7 @@ import "dart:typed_data";
 
 import "package:auto_route/auto_route.dart";
 import "package:file_picker/file_picker.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
@@ -136,8 +137,12 @@ class _ProfileEditForm extends HookConsumerWidget {
                           if (pickedFile != null &&
                               pickedFile.files.isNotEmpty) {
                             final f = pickedFile.files.first;
-                            if (f.bytes != null) {
-                              if (context.mounted) {
+                            if (f.bytes case final bytes?) {
+                              if (!context.mounted) return;
+                              if (defaultTargetPlatform
+                                  case TargetPlatform.android ||
+                                      TargetPlatform.iOS ||
+                                      TargetPlatform.macOS) {
                                 final editedBytes = await context
                                     .pushRoute<Uint8List>(
                                       PhotoEditRoute(
@@ -145,7 +150,7 @@ class _ProfileEditForm extends HookConsumerWidget {
                                           accountContextProvider,
                                         ),
                                         file: ImageFile(
-                                          data: f.bytes!,
+                                          data: bytes,
                                           fileName: f.name,
                                         ),
                                         onSubmit: (editedData) {
@@ -159,6 +164,11 @@ class _ProfileEditForm extends HookConsumerWidget {
                                     name: f.name,
                                   ));
                                 }
+                              } else {
+                                notifier.updateAvatarFile((
+                                  data: bytes,
+                                  name: f.name,
+                                ));
                               }
                             }
                           }

@@ -130,7 +130,7 @@ void main() {
       expect(fileSettingChanged, isFalse);
     });
 
-    testWidgets("既存ファイルの場合は何も表示されないこと", (tester) async {
+    testWidgets("ドライブから添付した既存ファイルのプレビューが表示されること", (tester) async {
       var fileDeleted = false;
       var fileSettingChanged = false;
 
@@ -153,11 +153,73 @@ void main() {
         ),
       );
 
-      // 何も表示されないことを確認
-      expect(find.byType(Image), findsNothing);
-      expect(find.byIcon(Icons.close), findsNothing);
-      expect(find.byIcon(Icons.insert_drive_file), findsNothing);
+      // 画像が表示されることを確認
+      expect(find.byType(Image), findsOneWidget);
+
+      // 削除ボタンが表示されることを確認
+      expect(find.byIcon(Icons.close), findsOneWidget);
+
+      // 削除ボタンをタップすると削除コールバックが呼ばれることを確認
+      await tester.tap(find.byIcon(Icons.close));
+      await tester.pumpAndSettle();
+      expect(fileDeleted, isTrue);
+      expect(fileSettingChanged, isFalse);
     });
+
+    // onFileSettingChanged を受け取っていながら、どこからも呼んでいなかった
+    // https://github.com/shiosyakeyakini-info/miria/issues/854
+    for (final (name, file) in [
+      (
+        "画像",
+        () async =>
+            ImageFile(data: await TestData.binaryImage, fileName: "a.jpg"),
+      ),
+      (
+        "ドライブの画像",
+        () async => ImageFileAlreadyPostedFile(
+          data: await TestData.binaryImage,
+          id: "id",
+          fileName: "a.jpg",
+        ),
+      ),
+      (
+        "その他ファイル",
+        () async =>
+            UnknownFile(data: Uint8List.fromList([1, 2]), fileName: "a.pdf"),
+      ),
+      (
+        "ドライブのその他ファイル",
+        () async => UnknownAlreadyPostedFile(
+          url: "https://example.com/a.pdf",
+          id: "id",
+          fileName: "a.pdf",
+        ),
+      ),
+    ]) {
+      testWidgets("$name のプレビューをタップすると、ファイル設定のコールバックが呼ばれること", (tester) async {
+        var fileDeleted = false;
+        MisskeyPostFile? changed;
+        final target = await file();
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: ChatFilePreview(
+                file: target,
+                onFileDeleted: () => fileDeleted = true,
+                onFileSettingChanged: (file) async => changed = file,
+              ),
+            ),
+          ),
+        );
+
+        await tester.tap(find.byKey(ValueKey("chatFile:${target.fileName}")));
+        await tester.pumpAndSettle();
+
+        expect(changed, same(target));
+        expect(fileDeleted, isFalse);
+      });
+    }
 
     testWidgets("画像プレビューのサイズが正しいこと", (tester) async {
       var fileDeleted = false;

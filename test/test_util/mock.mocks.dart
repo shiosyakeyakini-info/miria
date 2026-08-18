@@ -10,7 +10,9 @@ import 'dart:ui' as _i18;
 
 import 'package:dio/dio.dart' as _i9;
 import 'package:file/file.dart' as _i14;
-import 'package:file_picker/file_picker.dart' as _i33;
+import 'package:file_picker/src/api/android_saf_options.dart' as _i35;
+import 'package:file_picker/src/api/file_picker_result.dart' as _i33;
+import 'package:file_picker/src/api/file_picker_types.dart' as _i34;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart' as _i11;
 import 'package:flutter_cache_manager/src/cache_store.dart' as _i12;
 import 'package:flutter_cache_manager/src/web/web_helper.dart' as _i13;
@@ -37,7 +39,7 @@ import 'package:mockito/src/dummies.dart' as _i23;
 import 'package:riverpod_annotation/riverpod_annotation.dart' as _i22;
 import 'package:state_notifier/state_notifier.dart' as _i24;
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart'
-    as _i34;
+    as _i36;
 
 import 'mock.dart' as _i32;
 
@@ -6185,9 +6187,9 @@ class MockFilePickerPlatform extends _i1.Mock
   _i17.Future<_i33.FilePickerResult?> pickFiles({
     String? dialogTitle,
     String? initialDirectory,
-    _i33.FileType? type = _i33.FileType.any,
+    _i34.FileType? type = _i34.FileType.any,
     List<String>? allowedExtensions,
-    dynamic Function(_i33.FilePickerStatus)? onFileLoading,
+    dynamic Function(_i34.FilePickerStatus)? onFileLoading,
     int? compressionQuality = 0,
     bool? allowMultiple = false,
     bool? withData = false,
@@ -6195,7 +6197,7 @@ class MockFilePickerPlatform extends _i1.Mock
     bool? lockParentWindow = false,
     bool? readSequential = false,
     bool? cancelUploadOnWindowBlur = true,
-    _i33.AndroidSAFOptions? androidSafOptions,
+    _i35.AndroidSAFOptions? androidSafOptions,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#pickFiles, [], {
@@ -6223,7 +6225,7 @@ class MockFilePickerPlatform extends _i1.Mock
   _i17.Future<List<String>?> pickFileAndDirectoryPaths({
     String? dialogTitle,
     String? initialDirectory,
-    _i33.FileType? type = _i33.FileType.any,
+    _i34.FileType? type = _i34.FileType.any,
     List<String>? allowedExtensions,
   }) =>
       (super.noSuchMethod(
@@ -6261,7 +6263,7 @@ class MockFilePickerPlatform extends _i1.Mock
     String? dialogTitle,
     bool? lockParentWindow = false,
     String? initialDirectory,
-    _i33.AndroidSAFOptions? androidSafOptions,
+    _i35.AndroidSAFOptions? androidSafOptions,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#getDirectoryPath, [], {
@@ -6280,10 +6282,10 @@ class MockFilePickerPlatform extends _i1.Mock
     String? dialogTitle,
     required String? fileName,
     String? initialDirectory,
-    _i33.FileType? type = _i33.FileType.any,
+    _i34.FileType? type = _i34.FileType.any,
     List<String>? allowedExtensions,
     required _i30.Uint8List? bytes,
-    dynamic Function(_i33.FilePickerStatus)? onFileLoading,
+    dynamic Function(_i34.FilePickerStatus)? onFileLoading,
     bool? lockParentWindow = false,
   }) =>
       (super.noSuchMethod(
@@ -6658,7 +6660,7 @@ class MockUrlLauncherPlatform extends _i1.Mock
           as _i17.Future<bool>);
 
   @override
-  _i17.Future<bool> launchUrl(String? url, _i34.LaunchOptions? options) =>
+  _i17.Future<bool> launchUrl(String? url, _i36.LaunchOptions? options) =>
       (super.noSuchMethod(
             Invocation.method(#launchUrl, [url, options]),
             returnValue: _i17.Future<bool>.value(false),
@@ -6676,7 +6678,7 @@ class MockUrlLauncherPlatform extends _i1.Mock
           as _i17.Future<void>);
 
   @override
-  _i17.Future<bool> supportsMode(_i34.PreferredLaunchMode? mode) =>
+  _i17.Future<bool> supportsMode(_i36.PreferredLaunchMode? mode) =>
       (super.noSuchMethod(
             Invocation.method(#supportsMode, [mode]),
             returnValue: _i17.Future<bool>.value(false),
@@ -6685,7 +6687,7 @@ class MockUrlLauncherPlatform extends _i1.Mock
           as _i17.Future<bool>);
 
   @override
-  _i17.Future<bool> supportsCloseForMode(_i34.PreferredLaunchMode? mode) =>
+  _i17.Future<bool> supportsCloseForMode(_i36.PreferredLaunchMode? mode) =>
       (super.noSuchMethod(
             Invocation.method(#supportsCloseForMode, [mode]),
             returnValue: _i17.Future<bool>.value(false),

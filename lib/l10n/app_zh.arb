@@ -321,6 +321,8 @@
     "renotedUsersInNotification": "转发的人",
     "reactionUsersInNotification": "回应的人",
     "finishedVotedNotification": "投票已经结束了",
+    "scheduledNotePostedNotification": "预约发布的帖子已发布",
+    "scheduledNotePostFailedNotification": "预约发布失败了",
     "renoteAndReactionsNotification": "{reactionUser}回应了，{renotedUser}转发了",
     "@renoteAndReactionsNotification": {
         "placeholders": {
@@ -942,6 +944,20 @@
     "createdAtDescendingOrder": "创建时间从新到旧",
     "updatedAtAscendingOrder": "更新时间从旧到新",
     "updatedAtDescendingOrder": "更新时间从新到旧",
+    
+    "unsupportedFile": "不支持的文件",
+    "unsupportedFileWithFilename": "{filename}是不支持的文件",
+    "@unsupportedFileWithFilename": {
+        "placeholders": {
+            "filename": {
+                "type": "String"
+            }
+        }
+    },
+    "failedFileSave": "文件保存失败",
+    
+    "loopPlayback": "循环播放",
+
     "misskeyGames": "Misskey Games",
     "cookieCliker": "Cookie Cliker",
     "bubbleGame": "Bubble Game",
@@ -986,6 +1002,7 @@
     "chat": "聊天",
     "chatInvitation": "邀请",
     "chatOwnRooms": "我创建的房间",
+    "chatJoining": "加入的房间",
     "chatNewChat": "开始新聊天",
     "chatIgnored": "已忽略",
     "chatNoDescription": "没有描述",
@@ -998,6 +1015,7 @@
     "chatUpdate": "更新",
     "chatDelete": "删除",
     "chatCreator": "聊天创建者",
+    "confirmChatLeave": "真的可以退出这个聊天吗？",
     "chatLeave": "退出聊天",
     "chatLeftRoom": "已退出聊天",
     "chatRetry": "重试",
@@ -1012,6 +1030,7 @@
     "chatReactionList": "回应列表",
     "chatUnknownUser": "未知用户",
     "chatNsfw": "NSFW",
+    "chatUpdateCompleted": "好像更新成功了",
 
     "chatRoomInvitation": "您被邀请加入聊天室【{roomName}】",
     "@chatRoomInvitation": {

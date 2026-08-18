@@ -67,6 +67,7 @@ class ChatMessageMenuSheet extends ConsumerWidget implements AutoRouteWrapper {
             title: Text(S.of(context).chatReport),
             onTap: () => context.maybePop(ChatMessageMenuAction.report),
           ),
+        SizedBox(height: MediaQuery.of(context).padding.bottom),
       ],
     );
   }

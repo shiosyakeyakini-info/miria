@@ -49,7 +49,7 @@ class ChatMessageItem extends ConsumerWidget {
                 onLongPress: () => _showMessageMenu(context, ref),
                 child: Bubble(
                   nip: BubbleNip.rightBottom,
-                  color: AppTheme.of(context).colorTheme.primary,
+                  color: AppTheme.of(context).colorTheme.accentedBackground,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,

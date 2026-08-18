@@ -131,7 +131,7 @@ class ClipModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
     final isFinalPage = useState<bool?>(null);
 
     // ソートされていない場合、ページネーションに対応していないとみなす。
-    ref.listen(_clipModalSheetNotifierProvider(noteId), (_, next) {
+    ref.listen(_clipModalSheetProvider(noteId), (_, next) {
       if (isFinalPage.value == null) {
         if (next case AsyncData(:final value)) {
           isFinalPage.value =
