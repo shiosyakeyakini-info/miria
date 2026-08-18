@@ -8,6 +8,14 @@
 ///
 /// そこでNode.js 22系 (V8 12.4) の`src/base/ieee754.cc`が使っている
 /// fdlibm由来の実装をDartに移植している。
+///
+/// 合わせる相手をV8にしているのは意図的で、`Math.sin`/`Math.cos`は
+/// ECMAScriptの仕様上エンジンごとに結果が違ってよいことになっている。
+/// V8はfdlibmを同梱していてOSによらず同じ結果を出すが、
+/// SpiderMonkeyとJavaScriptCoreは既定でシステムのlibmを使うため一致しない
+/// (実測で衝突が2%前後あり、再生させると別の試合になる)。
+/// サーバーはNode.js (V8) で動いているので、そこに合わせておくのが安全。
+/// 詳細は`test/bubble_game/README.md`を参照。
 library;
 
 import "dart:math" as math;

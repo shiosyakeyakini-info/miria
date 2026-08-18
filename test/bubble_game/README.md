@@ -164,3 +164,34 @@ OK   normal  stored=    35 replayed=    35 frames=4948 ops=13
 
 手で作った記録 (APIを直接叩いてスコアだけ詐称したもの) はここで`NG`になるので、
 チェックが素通りしていないことも同時に分かります。
+
+## どのエンジンに合わせているか
+
+`Math.sin` / `Math.cos` はECMAScriptの仕様では
+"implementation-approximated" とされていて、エンジンごとに結果が違いえます。
+実際に違います。
+
+- **V8 (Chrome / Edge / Node.js)**: fdlibm由来の実装を同梱していて、
+  OSによらず同じ結果になる
+- **SpiderMonkey (Firefox)**: 既定ではシステムのlibm。
+  fdlibmを使うのはフィンガープリント対策が有効なときだけ
+  (`UseFdlibmForSinCosTan`)
+- **JavaScriptCore (Safari / Bun)**: システムのlibm
+
+同じ環境で2000点を比べたところ、JavaScriptCoreとV8では
+`cos`が2.2%、`sin`が1.9%、`atan2`が23%で最終ビットが違いました。
+
+これは飾りの差ではありません。同じ記録を再生させると結果が変わります。
+
+| エンジン | 33件の記録を再生した結果 |
+| --- | --- |
+| V8 (Node.js) | 31件一致 / 2件不一致 (不一致はAPIを直接叩いて作った偽の記録) |
+| JavaScriptCore (Bun) | 8件一致 / 25件不一致 |
+
+スコアが 551 → 1022、9455 → 3173 のように、まったく別の試合になります。
+つまり**本家のリプレイ機能自体が、遊んだブラウザと再生するブラウザが違うと
+別の結果を出します**。
+
+移植では`lib/util/matter/js_math.dart`でV8と同じfdlibm実装を使っています。
+サーバーがNode.js (V8) で動いている以上、将来サーバー側で検証を実装するなら
+V8基準になるはずで、そこに合わせるのが最も安全なためです。
