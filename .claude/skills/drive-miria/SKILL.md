@@ -1,6 +1,6 @@
 ---
 name: drive-miria
-description: Launch miria and operate it as a real user through marionette — log in, navigate, post a note, react, search, inspect Riverpod state, take screenshots. Use when asked to run miria, reproduce a UI bug, or confirm a change works in the running app rather than only in tests.
+description: Launch miria and operate it as a real user through marionette — log in, navigate, post a note, react, search, attach a file, inspect Riverpod state, take screenshots. Covers running it headless on Linux. Use when asked to run miria, reproduce a UI bug, or confirm a change works in the running app rather than only in tests.
 ---
 
 # Driving miria with marionette
@@ -19,10 +19,13 @@ is usually already signed in.
 
 ```bash
 fvm flutter run -d windows --debug    # prints: A Dart VM Service ... at: <URI>
+fvm flutter run -d linux   --debug    # same, on a Linux desktop or container
 ```
 
 That URI is the handle for everything, and changes on every launch. Windows
 builds need a pinned MSVC toolset — see `reference.md` if the build fails.
+Linux builds need no such coaxing, but a headless one needs an X display, a
+session bus and a few daemons around it — see **Linux, headless** below.
 
 Drive it with `scripts/marionette.py` (plain HTTP, no MCP server needed):
 
@@ -151,6 +154,46 @@ pre-populated default never does — then repeat with the real query.
 m swipe --start 190 450 --end 190 150
 ```
 
+### Attach a file (Linux only)
+
+On Linux the 「アップロード」 picker is **not** a native dialog: file_picker 12
+asks the XDG desktop portal over the session bus and waits for its reply. Serve
+that yourself with `scripts/portal_stub.py` and the picker becomes ordinary
+scripted UI — arm the answer, tap, verify.
+
+```bash
+python .claude/skills/drive-miria/scripts/portal_stub.py &   # once per session
+```
+
+```bash
+echo '{"paths": ["/abs/path/pic.png"]}' > /tmp/marionette-portal/answer.json
+m tap  --x 25 --y 238        # 画像アイコン, leftmost under the compose field
+m tap  --text "アップロード"
+```
+
+Re-read `elements` for that first coordinate rather than trusting it — it is
+from one 400×700 Linux window.
+
+The answer is consumed by one request, so arm it again for the next pick. Two
+paths in `paths` selects two files; **leaving the file absent is how you press
+Cancel**. Every call is appended to `/tmp/marionette-portal/requests.log` —
+that log is the proof the picker actually opened, since a tap that missed looks
+identical from `elements`.
+
+Give it real files. The stub hands over whatever path you name, but miria asks
+for `FileType.image` and decodes the result, and
+`note_create_state_notifier.dart` pops an error dialog when the decode yields
+nothing — so a bad file fails inside miria, well after the picker looked fine.
+Verify uploads on the server, never on the screen:
+
+```bash
+curl -s -X POST http://localhost:3000/api/users/notes \
+  -H "Content-Type: application/json" -d '{"userId":"<id>","limit":1}'
+```
+
+Windows has no equivalent — there the picker is a real native window and stays
+out of reach (`reference.md`).
+
 ### Log in (API key)
 
 Only needed on a fresh profile. MiAuth opens an external browser and cannot be
@@ -186,9 +229,49 @@ Repositories serialize to `{"runtimeType": ...}` only, so the timeline's notes
 are not reachable this way. Values can contain API tokens; never paste a raw
 snapshot anywhere public.
 
+## Linux, headless
+
+A container with no display runs miria fine — verified end to end on Ubuntu
+24.04 against a local misskey, including uploads. Bring these up **before**
+`flutter run`; the app inherits them from the environment:
+
+```bash
+Xvfb :99 -screen 0 1280x900x24 &
+export DISPLAY=:99
+export LIBGL_ALWAYS_SOFTWARE=1                 # llvmpipe; no GPU in a container
+export DBUS_SESSION_BUS_ADDRESS=$(dbus-daemon --session --print-address --fork)
+printf '\n' | gnome-keyring-daemon --unlock --replace --daemonize --components=secrets
+python .claude/skills/drive-miria/scripts/portal_stub.py &
+```
+
+- **Xvfb** — the GTK shell needs an X server. `m shot` still captures the
+  Flutter scene, so screenshots work with nothing on screen.
+- **gnome-keyring** — `flutter_secure_storage` stores the account through
+  `org.freedesktop.secrets`, which nothing else in a bare container provides.
+  It was up before the login above; a run without it was not tried.
+- **portal_stub.py** — the file picker. See the recipe above.
+
+The session bus is the load-bearing part: the app reads
+`DBUS_SESSION_BUS_ADDRESS` at startup, so a bus started afterwards is invisible
+to it. `dbus-send --session --dest=org.freedesktop.DBus --print-reply \
+/org/freedesktop/DBus org.freedesktop.DBus.ListNames` should list both
+`org.freedesktop.portal.Desktop` and `org.freedesktop.secrets` before you launch.
+
+The Linux window is larger than the Windows one — every coordinate under
+**The screen** is wrong here. Read `elements` and use what it reports.
+
 ## When it looks like nothing happened
 
-In order: re-read `elements`; take a screenshot; check whether a **native
-dialog** is up (`Get-Process | ? { $_.MainWindowTitle }` — file pickers and
-browsers are invisible to marionette); ask the server. `reference.md` has the
-full list of what is out of reach and why.
+In order: re-read `elements`; take a screenshot; ask the server. Then check
+whether something outside the Flutter scene is holding the app:
+
+- **Windows** — a native dialog (`Get-Process | ? { $_.MainWindowTitle }`);
+  file pickers and browsers are invisible to marionette.
+- **Linux** — no native dialog exists for the file picker, so read
+  `/tmp/marionette-portal/requests.log` instead. No request line at all means
+  the tap missed, or the stub is down and the call threw `ServiceUnknown`. A
+  request *and* a response logged, with nothing on screen, means the response
+  lost the subscription race and `pickFiles` is now hung — restart the stub
+  with a larger `PORTAL_STUB_DELAY` (`reference.md`).
+
+`reference.md` has the full list of what is out of reach and why.
