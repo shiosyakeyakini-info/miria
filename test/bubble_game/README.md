@@ -125,3 +125,42 @@ curl -s http://localhost:3000/api/admin/accounts/create \
   -H 'Content-Type: application/json' \
   -d '{"username":"miria","password":"<password>"}'
 ```
+
+## サーバー側検証を模したチェック
+
+`bubble-game/register`は今のところ記録を`isVerified: false`のまま保存するだけで、
+操作ログを再生して照合する処理は本家にありません。
+将来サーバーが検証を始めた場合に、Miriaが送った記録がそれを通るかどうかは
+`verify_with_upstream.ts`で確かめられます。
+記録の`seed`と操作ログだけを頼りに**本家の実装で**再生し、
+申告されたスコアと一致するかを見ます。
+
+まず記録を取り出します。
+
+```bash
+psql -d misskey -t -A -c "SELECT json_agg(json_build_object(
+  'gameMode', \"gameMode\", 'seed', seed, 'score', score, 'logs', logs))
+  FROM bubble_game_record;" > records.json
+```
+
+本家の`misskey-bubble-game`をビルドしてから流します。
+
+```bash
+cd assets_builder/misskey
+CYPRESS_INSTALL_BINARY=0 pnpm install --frozen-lockfile --filter misskey-bubble-game...
+pnpm --filter misskey-bubble-game build
+
+cd /tmp/bubble-ref   # 依存を入れた作業用ディレクトリ (上記参照)
+ln -sf <miriaのパス>/assets_builder/misskey/packages/misskey-bubble-game node_modules/
+NODE_PATH=$PWD/node_modules npx esbuild \
+  <miriaのパス>/test/bubble_game/verify_with_upstream.ts \
+  --bundle --platform=node --format=esm --outfile=verify.mjs
+node verify.mjs records.json
+```
+
+```
+OK   normal  stored=    35 replayed=    35 frames=4948 ops=13
+```
+
+手で作った記録 (APIを直接叩いてスコアだけ詐称したもの) はここで`NG`になるので、
+チェックが素通りしていないことも同時に分かります。
