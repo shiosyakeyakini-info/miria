@@ -3492,6 +3492,36 @@ abstract class S {
   /// **'スコアの登録は30秒に1回までやから、今回のぶんは登録できひんかったわ'**
   String get bubbleGameScoreRateLimited;
 
+  /// No description provided for @bubbleGameShowReplay.
+  ///
+  /// In ja, this message translates to:
+  /// **'リプレイを見る'**
+  String get bubbleGameShowReplay;
+
+  /// No description provided for @bubbleGameReplaying.
+  ///
+  /// In ja, this message translates to:
+  /// **'再生中'**
+  String get bubbleGameReplaying;
+
+  /// No description provided for @bubbleGameEndReplay.
+  ///
+  /// In ja, this message translates to:
+  /// **'やめる'**
+  String get bubbleGameEndReplay;
+
+  /// No description provided for @bubbleGameCopyReplayData.
+  ///
+  /// In ja, this message translates to:
+  /// **'リプレイデータをコピー'**
+  String get bubbleGameCopyReplayData;
+
+  /// No description provided for @bubbleGameReplayDataCopied.
+  ///
+  /// In ja, this message translates to:
+  /// **'コピーしたで'**
+  String get bubbleGameReplayDataCopied;
+
   /// No description provided for @bubbleGameVolume.
   ///
   /// In ja, this message translates to:

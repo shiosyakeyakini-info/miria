@@ -32,6 +32,9 @@ class BubbleGameSounds {
   double bgmVolume = 0.25;
   double sfxVolume = 1;
 
+  /// 効果音の再生レートにかける倍率。リプレイの早送りで使う。
+  double rateMultiplier = 1;
+
   /// 必要な音をまとめて取得する。取れなかった音は黙って鳴らさない。
   static Future<BubbleGameSounds> load({
     required BaseCacheManager cacheManager,
@@ -168,7 +171,7 @@ class BubbleGameSounds {
         await player.setSource(DeviceFileSource(path));
         await player.setVolume(volume.clamp(0, 1));
         await player.setBalance(pan.clamp(-1, 1));
-        await player.setPlaybackRate(rate.clamp(0.25, 4));
+        await player.setPlaybackRate((rate * rateMultiplier).clamp(0.25, 4));
         await player.resume();
       }),
     );

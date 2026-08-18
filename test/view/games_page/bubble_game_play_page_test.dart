@@ -106,6 +106,78 @@ void main() {
       expect(game.holding?.id, head.id);
     });
 
+    testWidgets("ゲームオーバーのあと自分の試合を再生できること", (tester) async {
+      await pumpGame(tester, BubbleGameMode.normal);
+
+      final board = find
+          .byWidgetPredicate(
+            (widget) =>
+                widget is CustomPaint && widget.painter is BubbleGamePainter,
+          )
+          .first;
+      BubbleGamePainter painter() =>
+          tester.widget<CustomPaint>(board).painter! as BubbleGamePainter;
+
+      Future<void> advance(int frames) async {
+        for (var i = 0; i < frames; i++) {
+          await tester.pump(const Duration(milliseconds: 16));
+        }
+      }
+
+      // 何個か落としてからギブアップする
+      for (var i = 0; i < 4; i++) {
+        await advance(32);
+        if (painter().game.canDrop) {
+          await tester.tapAt(tester.getCenter(board));
+        }
+      }
+      await advance(30);
+
+      final played = painter().game;
+      final logs = played.getLogs();
+      final seed = played.seed;
+      expect(logs, isNotEmpty);
+
+      await tester.tap(find.byIcon(Icons.flag));
+      await advance(5);
+      await tester.tap(find.text("ギブアップ"));
+      await advance(5);
+
+      // スコアの登録はモックなので失敗する。出たダイアログを閉じる
+      if (find.text("ほい").evaluate().isNotEmpty) {
+        await tester.tap(find.text("ほい"));
+        await advance(5);
+      }
+      expect(find.text("リプレイを見る"), findsOneWidget);
+
+      // 再生すると、同じシードのゲームが操作なしで進む
+      await tester.tap(find.text("リプレイを見る"));
+      await advance(5);
+
+      final replay = painter().game;
+      expect(replay.seed, seed);
+      expect(identical(replay, played), isFalse);
+      expect(find.text("再生中"), findsOneWidget);
+
+      await advance(200);
+
+      // 記録した操作が同じフレームで流れる。
+      // 最後にギブアップも記録されているので、再生側のほうが1件多くなる
+      final replayed = replay.getLogs();
+      expect(replayed.length, greaterThanOrEqualTo(logs.length));
+      expect(
+        replayed.take(logs.length).map((x) => x.frame),
+        logs.map((x) => x.frame),
+        reason: "記録どおりのフレームで操作が流れていない",
+      );
+      expect(
+        replayed.take(logs.length).map((x) => x.x),
+        logs.map((x) => x.x),
+        reason: "記録どおりの位置に落ちていない",
+      );
+      expect(replay.getBodyStates(), isNotEmpty, reason: "何も落ちていない");
+    });
+
     testWidgets("モード選択の画面でランキングが表示されること", (tester) async {
       // ランキングのプロバイダはアカウントごとにスコープされたリポジトリを読むので、
       // dependenciesの宣言が足りないと実行時に落ちる

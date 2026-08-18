@@ -1,8 +1,10 @@
 import "dart:async";
+import "dart:convert";
 
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter/scheduler.dart";
+import "package:flutter/services.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/bubble_game/drop_and_fusion_game.dart";
@@ -64,6 +66,12 @@ class _BubbleGamePlayPageState extends ConsumerState<BubbleGamePlayPage>
   bool _isGameOver = false;
   bool _isRegistering = false;
 
+  /// リプレイ再生に使う、直前の試合のシードと操作ログ。
+  String? _replaySeed;
+  List<BubbleGameLog>? _replayLogs;
+  bool _isReplaying = false;
+  int _replaySpeed = 1;
+
   @override
   void initState() {
     super.initState();
@@ -84,10 +92,10 @@ class _BubbleGamePlayPageState extends ConsumerState<BubbleGamePlayPage>
     super.dispose();
   }
 
-  DropAndFusionGame _createGame() {
+  DropAndFusionGame _createGame({String? seed}) {
     // シードは本家と同じく開始時刻。サーバーは発行から5時間以内かを見ている。
     final game = DropAndFusionGame(
-      seed: DateTime.now().millisecondsSinceEpoch.toString(),
+      seed: seed ?? DateTime.now().millisecondsSinceEpoch.toString(),
       gameMode: widget.gameMode,
     );
 
@@ -190,13 +198,15 @@ class _BubbleGamePlayPageState extends ConsumerState<BubbleGamePlayPage>
     _accumulated += elapsed - _lastElapsed;
     _lastElapsed = elapsed;
 
+    final maxSteps = _maxStepsPerFrame * _replaySpeed;
     var steps = 0;
-    while (_accumulated >= _step && steps < _maxStepsPerFrame) {
-      _accumulated -= _step;
+    while (_accumulated >= _step && steps < maxSteps) {
+      _accumulated -= _step ~/ _replaySpeed;
       steps++;
+      if (_isReplaying) _applyReplayOperations();
       if (!_game.tick()) break;
     }
-    if (_accumulated >= _step * _maxStepsPerFrame) {
+    if (_accumulated >= (_step ~/ _replaySpeed) * maxSteps) {
       // 追いつけないぶんは捨てる
       _accumulated = Duration.zero;
     }
@@ -206,10 +216,99 @@ class _BubbleGamePlayPageState extends ConsumerState<BubbleGamePlayPage>
 
   void _onGameOver() {
     _ticker.stop();
-    setState(() => _isGameOver = true);
     _sounds?.playGameOver(isYen: widget.gameMode == BubbleGameMode.yen);
     unawaited(_sounds?.stopBgm());
+
+    // リプレイは同じ試合をなぞっているだけなので、送り直さない
+    if (_isReplaying) {
+      _endReplay();
+      return;
+    }
+
+    setState(() {
+      _isGameOver = true;
+      _replaySeed = _game.seed;
+      _replayLogs = _game.getLogs();
+    });
     unawaited(_registerScore());
+  }
+
+  /// そのフレームに記録されている操作を流す。
+  void _applyReplayOperations() {
+    final logs = _replayLogs;
+    if (logs == null) return;
+
+    for (final log in logs) {
+      if (log.frame != _game.frame) continue;
+      switch (log.operation) {
+        case BubbleGameOperation.drop:
+          _game.drop(log.x.toDouble());
+        case BubbleGameOperation.hold:
+          _game.hold();
+        case BubbleGameOperation.surrender:
+          _game.surrender();
+      }
+    }
+  }
+
+  /// 直前の試合を、記録したシードと操作ログからそのまま再生する。
+  void _startReplay() {
+    final seed = _replaySeed;
+    if (seed == null || _replayLogs == null) return;
+
+    _game.dispose();
+    setState(() {
+      _isReplaying = true;
+      _replaySpeed = 1;
+      _isGameOver = false;
+      _score = 0;
+      _combo = 0;
+      _game = _createGame(seed: seed);
+    });
+    _sounds?.rateMultiplier = 1;
+    _accumulated = Duration.zero;
+    _lastElapsed = Duration.zero;
+    _ticker.start();
+    unawaited(_sounds?.startBgm());
+  }
+
+  void _endReplay() {
+    _ticker.stop();
+    _sounds?.rateMultiplier = 1;
+    unawaited(_sounds?.stopBgm());
+    setState(() {
+      _isReplaying = false;
+      _replaySpeed = 1;
+      _isGameOver = true;
+    });
+  }
+
+  void _setReplaySpeed(int speed) {
+    setState(() => _replaySpeed = _replaySpeed == speed ? 1 : speed);
+    _sounds?.rateMultiplier = _replaySpeed.toDouble();
+  }
+
+  /// 本家と同じ形式でリプレイデータを書き出す。
+  Future<void> _copyReplayData() async {
+    final seed = _replaySeed;
+    final logs = _replayLogs;
+    if (seed == null || logs == null) return;
+
+    await Clipboard.setData(
+      ClipboardData(
+        text: jsonEncode({
+          "v": DropAndFusionGame.gameVersion,
+          "m": widget.gameMode.apiValue,
+          "s": seed,
+          "d": DateTime.now().toUtc().toIso8601String(),
+          "l": DropAndFusionGame.serializeLogs(logs),
+        }),
+      ),
+    );
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(S.of(context).bubbleGameReplayDataCopied)),
+    );
   }
 
   Future<void> _registerScore() async {
@@ -246,6 +345,8 @@ class _BubbleGamePlayPageState extends ConsumerState<BubbleGamePlayPage>
   void _restart() {
     _game.dispose();
     setState(() {
+      _isReplaying = false;
+      _replaySpeed = 1;
       _game = _createGame();
       _score = 0;
       _combo = 0;
@@ -391,14 +492,24 @@ class _BubbleGamePlayPageState extends ConsumerState<BubbleGamePlayPage>
                         final size = constraints.biggest;
                         return GestureDetector(
                           behavior: HitTestBehavior.opaque,
-                          onTapDown: (details) =>
-                              _moveDropper(details.localPosition, size),
-                          onTapUp: (_) => _game.drop(_dropperX),
-                          onHorizontalDragStart: (details) =>
-                              _moveDropper(details.localPosition, size),
-                          onHorizontalDragUpdate: (details) =>
-                              _moveDropper(details.localPosition, size),
-                          onHorizontalDragEnd: (_) => _game.drop(_dropperX),
+                          onTapDown: _isReplaying
+                              ? null
+                              : (details) =>
+                                    _moveDropper(details.localPosition, size),
+                          onTapUp: _isReplaying
+                              ? null
+                              : (_) => _game.drop(_dropperX),
+                          onHorizontalDragStart: _isReplaying
+                              ? null
+                              : (details) =>
+                                    _moveDropper(details.localPosition, size),
+                          onHorizontalDragUpdate: _isReplaying
+                              ? null
+                              : (details) =>
+                                    _moveDropper(details.localPosition, size),
+                          onHorizontalDragEnd: _isReplaying
+                              ? null
+                              : (_) => _game.drop(_dropperX),
                           child: Stack(
                             fit: StackFit.expand,
                             children: [
@@ -408,6 +519,7 @@ class _BubbleGamePlayPageState extends ConsumerState<BubbleGamePlayPage>
                                   textures: _textures,
                                   dropperX: _dropperX,
                                   canDrop: _game.canDrop,
+                                  showDropper: !_isReplaying,
                                   colorScheme: Theme.of(context).colorScheme,
                                   repaint: _repaint,
                                 ),
@@ -418,6 +530,12 @@ class _BubbleGamePlayPageState extends ConsumerState<BubbleGamePlayPage>
                                   gameMode: widget.gameMode,
                                   isRegistering: _isRegistering,
                                   onRetry: _restart,
+                                  onReplay: _replayLogs == null
+                                      ? null
+                                      : _startReplay,
+                                  onCopyReplayData: _replayLogs == null
+                                      ? null
+                                      : _copyReplayData,
                                 ),
                             ],
                           ),
@@ -435,16 +553,40 @@ class _BubbleGamePlayPageState extends ConsumerState<BubbleGamePlayPage>
                 children: [
                   Expanded(
                     child: Text(
-                      S.of(context).bubbleGameHowToPlay,
+                      _isReplaying
+                          ? S.of(context).bubbleGameReplaying
+                          : S.of(context).bubbleGameHowToPlay,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ),
                   const SizedBox(width: 8),
-                  FilledButton.tonalIcon(
-                    onPressed: _isGameOver ? null : () => _game.hold(),
-                    icon: const Icon(Icons.swap_horiz),
-                    label: Text(S.of(context).bubbleGameHold),
-                  ),
+                  if (_isReplaying) ...[
+                    FilledButton.tonal(
+                      onPressed: _endReplay,
+                      child: Text(S.of(context).bubbleGameEndReplay),
+                    ),
+                    const SizedBox(width: 8),
+                    for (final speed in const [4, 16])
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4),
+                        child: FilledButton.tonal(
+                          onPressed: () => _setReplaySpeed(speed),
+                          style: _replaySpeed == speed
+                              ? FilledButton.styleFrom(
+                                  backgroundColor: Theme.of(
+                                    context,
+                                  ).colorScheme.primaryContainer,
+                                )
+                              : null,
+                          child: Text("x$speed"),
+                        ),
+                      ),
+                  ] else
+                    FilledButton.tonalIcon(
+                      onPressed: _isGameOver ? null : () => _game.hold(),
+                      icon: const Icon(Icons.swap_horiz),
+                      label: Text(S.of(context).bubbleGameHold),
+                    ),
                 ],
               ),
             ),
@@ -593,12 +735,16 @@ class _GameOverOverlay extends StatelessWidget {
     required this.gameMode,
     required this.isRegistering,
     required this.onRetry,
+    required this.onReplay,
+    required this.onCopyReplayData,
   });
 
   final int score;
   final BubbleGameMode gameMode;
   final bool isRegistering;
   final void Function() onRetry;
+  final void Function()? onReplay;
+  final void Function()? onCopyReplayData;
 
   @override
   Widget build(BuildContext context) {
@@ -607,43 +753,55 @@ class _GameOverOverlay extends StatelessWidget {
     return ColoredBox(
       color: theme.colorScheme.scrim.withValues(alpha: 0.5),
       child: Center(
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  S.of(context).bubbleGameOver,
-                  style: theme.textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  "$score${gameMode.scoreUnit}",
-                  style: theme.textTheme.headlineMedium?.copyWith(
-                    color: theme.colorScheme.primary,
+        // ボタンが増えると狭い画面では収まらないので、はみ出す前にスクロールさせる
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(8),
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    S.of(context).bubbleGameOver,
+                    style: theme.textTheme.headlineSmall,
                   ),
-                ),
-                const SizedBox(height: 16),
-                if (isRegistering)
-                  const CircularProgressIndicator.adaptive()
-                else
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    alignment: WrapAlignment.center,
-                    children: [
-                      FilledButton(
-                        onPressed: onRetry,
-                        child: Text(S.of(context).bubbleGameRetry),
-                      ),
-                      FilledButton.tonal(
-                        onPressed: () => Navigator.of(context).maybePop(),
-                        child: Text(S.of(context).bubbleGameBackToTitle),
-                      ),
-                    ],
+                  const SizedBox(height: 8),
+                  Text(
+                    "$score${gameMode.scoreUnit}",
+                    style: theme.textTheme.headlineMedium?.copyWith(
+                      color: theme.colorScheme.primary,
+                    ),
                   ),
-              ],
+                  const SizedBox(height: 16),
+                  if (isRegistering)
+                    const CircularProgressIndicator.adaptive()
+                  else
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        FilledButton(
+                          onPressed: onRetry,
+                          child: Text(S.of(context).bubbleGameRetry),
+                        ),
+                        FilledButton.tonal(
+                          onPressed: onReplay,
+                          child: Text(S.of(context).bubbleGameShowReplay),
+                        ),
+                        FilledButton.tonal(
+                          onPressed: () => Navigator.of(context).maybePop(),
+                          child: Text(S.of(context).bubbleGameBackToTitle),
+                        ),
+                        TextButton(
+                          onPressed: onCopyReplayData,
+                          child: Text(S.of(context).bubbleGameCopyReplayData),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
             ),
           ),
         ),

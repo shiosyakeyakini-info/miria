@@ -2001,6 +2001,21 @@ class SZh extends S {
       'スコアの登録は30秒に1回までやから、今回のぶんは登録できひんかったわ';
 
   @override
+  String get bubbleGameShowReplay => 'リプレイを見る';
+
+  @override
+  String get bubbleGameReplaying => '再生中';
+
+  @override
+  String get bubbleGameEndReplay => 'やめる';
+
+  @override
+  String get bubbleGameCopyReplayData => 'リプレイデータをコピー';
+
+  @override
+  String get bubbleGameReplayDataCopied => 'コピーしたで';
+
+  @override
   String get bubbleGameVolume => '音量';
 
   @override

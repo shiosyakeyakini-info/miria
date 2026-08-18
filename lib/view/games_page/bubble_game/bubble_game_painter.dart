@@ -16,6 +16,7 @@ class BubbleGamePainter extends CustomPainter {
     required this.textures,
     required this.dropperX,
     required this.canDrop,
+    required this.showDropper,
     required this.colorScheme,
     required super.repaint,
   });
@@ -24,6 +25,9 @@ class BubbleGamePainter extends CustomPainter {
   final MonoTextures? textures;
   final double dropperX;
   final bool canDrop;
+
+  /// 落とす位置のガイドを描くかどうか。再生中は自分で操作しないので描かない。
+  final bool showDropper;
   final ColorScheme colorScheme;
 
   /// これより上でモノがぶつかるとゲームオーバーになる位置。
@@ -76,7 +80,7 @@ class BubbleGamePainter extends CustomPainter {
   /// 次に落とすモノと、落ちる位置のガイドを描く。
   void _paintDropper(Canvas canvas) {
     final pick = game.stock.firstOrNull;
-    if (pick == null || game.isGameOver) return;
+    if (pick == null || game.isGameOver || !showDropper) return;
 
     const margin = DropAndFusionGame.playareaMargin;
     final x = dropperX.clamp(
@@ -182,5 +186,6 @@ class BubbleGamePainter extends CustomPainter {
       oldDelegate.game != game ||
       oldDelegate.textures != textures ||
       oldDelegate.dropperX != dropperX ||
-      oldDelegate.canDrop != canDrop;
+      oldDelegate.canDrop != canDrop ||
+      oldDelegate.showDropper != showDropper;
 }
