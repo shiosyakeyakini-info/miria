@@ -96,6 +96,8 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
     final focusNode = ref.watch(noteFocusProvider);
     final notifier = ref.read(noteCreateProvider.notifier);
     final controller = ref.watch(noteInputTextProvider);
+    // 下書き保存の確認ダイアログの多重表示を防ぐためのフラグ
+    final isDraftDialogShowing = useRef(false);
 
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((timestamp) async {
@@ -171,6 +173,11 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
 
+        // 下書き保存の確認ダイアログはNavigatorのルートを積まないオーバーレイ方式のため、
+        // 表示中でもAndroidの戻るキーはこのページに届いてしまう。
+        // ガードがないと戻るキーを連打した数だけダイアログが積み重なる。
+        if (isDraftDialogShowing.value) return;
+
         final state = ref.read(noteCreateProvider);
         final hasContent = _hasDraftContent(state);
         final draftLimitPolicy =
@@ -185,14 +192,20 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
         if (hasContent && draftLimitPolicy > 0) {
           // Show save to draft dialog only if drafts are supported
           final dialogNotifier = ref.read(dialogStateProvider.notifier);
-          final choice = await dialogNotifier.showDialog(
-            message: (context) => S.of(context).saveToDrafts,
-            actions: (context) => [
-              S.of(context).discardAndReturn,
-              S.of(context).continueEditing,
-              S.of(context).saveAndClose,
-            ],
-          );
+          isDraftDialogShowing.value = true;
+          final int choice;
+          try {
+            choice = await dialogNotifier.showDialog(
+              message: (context) => S.of(context).saveToDrafts,
+              actions: (context) => [
+                S.of(context).discardAndReturn,
+                S.of(context).continueEditing,
+                S.of(context).saveAndClose,
+              ],
+            );
+          } finally {
+            isDraftDialogShowing.value = false;
+          }
 
           switch (choice) {
             case 0: // Discard
