@@ -10,6 +10,28 @@ import "package:url_launcher/url_launcher.dart";
 class LinkNavigator {
   const LinkNavigator();
 
+  /// URLを扱えるアプリがあればそれで、なければ外部ブラウザで開く。
+  ///
+  /// 失敗の伝え方がプラットフォームによって違う。Androidは
+  /// PlatformExceptionを投げるが、iOSは
+  /// UIApplication.open(universalLinksOnly:) がfalseを返すだけで例外を
+  /// 投げない。例外だけを見ていると、ふつうのWebサイトはUniversal Linkを
+  /// 持つアプリがないのでiOSでは何も起きなくなる。戻り値と例外の両方を見る。
+  Future<void> _launchExternal(Uri uri) async {
+    bool launched;
+    try {
+      launched = await launchUrl(
+        uri,
+        mode: LaunchMode.externalNonBrowserApplication,
+      );
+    } catch (_) {
+      launched = false;
+    }
+    if (!launched) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
   Future<void> onTapLink(
     BuildContext context,
     WidgetRef ref,
@@ -42,14 +64,7 @@ class LinkNavigator {
         await ref.read(emojiRepositoryProvider(account)).loadFromSourceIfNeed();
       } catch (e) {
         if (await canLaunchUrl(uri)) {
-          try {
-            await launchUrl(
-              uri,
-              mode: LaunchMode.externalNonBrowserApplication,
-            );
-          } catch (e) {
-            await launchUrl(uri, mode: LaunchMode.externalApplication);
-          }
+          await _launchExternal(uri);
           return;
         }
       }
