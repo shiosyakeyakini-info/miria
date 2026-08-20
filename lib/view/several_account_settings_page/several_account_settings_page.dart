@@ -71,8 +71,10 @@ class SeveralAccountSettingsPage extends StatelessWidget {
               WordMuteRoute(account: account, muteType: MuteType.hard),
             ),
             title: Text(S.of(context).hardWordMute),
+            subtitle: account.host != "misskey.io" ? null : Text(S.of(context).unsupportedServer),
             leading: const Icon(Icons.comments_disabled),
             trailing: const Icon(Icons.chevron_right),
+            enabled: account.host != "misskey.io",
           ),
           ListTile(
             onTap: () async =>
