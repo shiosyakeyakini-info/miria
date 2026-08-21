@@ -461,14 +461,36 @@ class AccountRepository extends _$AccountRepository {
     );
   }
 
-  Future<void> _addAccount(Account account) async {
-    final alreadyCreated = state.map((e) => e.acct).contains(account.acct);
-    if (alreadyCreated) {
-      state.removeWhere((e) => e.acct == account.acct);
-    }
+  @visibleForTesting
+  Future<void> addAccount(Account account) => _addAccount(account);
 
-    state = [...state, account];
+  Future<void> _addAccount(Account account) async {
+    // 再認証のときは、同じ位置に新しいトークンの Account を差し替える。
+    // 以前は remove してから末尾に足していたので、再ログインするたびに
+    // アカウントの並び順が変わってしまっていた。
+    final index = state.indexWhere((e) => e.acct == account.acct);
+    final alreadyCreated = index >= 0;
+    final tokenChanged = alreadyCreated && state[index].token != account.token;
+
+    state = alreadyCreated
+        ? [...state.sublist(0, index), account, ...state.sublist(index + 1)]
+        : [...state, account];
     _validatedAccts.add(account.acct);
+
+    // misskeyProvider は account をキーにした keepAlive な family だが、
+    // Account の == は host と userId しか見ないので、再認証でトークンだけが
+    // 変わっても同じキーと判定され、しかも family は最初に渡された引数を
+    // 保持し続ける。トークンはここから渡してやらないと、再起動するまで古い
+    // ままになる (#776)。
+    //
+    // misskeyProvider を読んでいる notesProvider / favoriteProvider /
+    // emojiRepositoryProvider / timelineProvider は watch しているので、
+    // ここを更新すれば一緒に作り直される。
+    if (tokenChanged || !alreadyCreated) {
+      ref
+          .read(latestAccountTokenProvider(account.acct).notifier)
+          .update(account.token);
+    }
     await ref.read(emojiRepositoryProvider(account)).loadFromSourceIfNeed();
 
     await _save();

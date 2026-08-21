@@ -1740,6 +1740,24 @@ abstract class S {
   /// **'エラーが起きたみたいや'**
   String get thrownError;
 
+  /// No description provided for @thrownTokenExpired.
+  ///
+  /// In ja, this message translates to:
+  /// **'認証が切れてるか、アクセストークンが消されてるみたいや。もういっぺんログインしてな。'**
+  String get thrownTokenExpired;
+
+  /// No description provided for @thrownPermissionDenied.
+  ///
+  /// In ja, this message translates to:
+  /// **'この操作をする権限がないみたいや。もういっぺんログインしたら直るかもしれん。'**
+  String get thrownPermissionDenied;
+
+  /// No description provided for @reLogin.
+  ///
+  /// In ja, this message translates to:
+  /// **'再ログイン'**
+  String get reLogin;
+
   /// No description provided for @unsupportedServer.
   ///
   /// In ja, this message translates to:

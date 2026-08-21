@@ -134,6 +134,138 @@ final class AchievementsProvider
 
 String _$achievementsHash() => r'04523e9f4daab6bbe9cdf956d1e472bd4c680a7e';
 
+/// 再認証で差し替わったアカウントのトークン。まだ差し替わっていなければ null。
+///
+/// [misskey] から [AccountRepository] を直接 watch すれば済みそうに見えるが、
+/// [AccountRepository] 自身が [emojiRepository] 経由で [misskey] を読むため
+/// 循環参照になる。トークンだけを一方通行の provider に切り出している。
+
+@ProviderFor(LatestAccountToken)
+final latestAccountTokenProvider = LatestAccountTokenFamily._();
+
+/// 再認証で差し替わったアカウントのトークン。まだ差し替わっていなければ null。
+///
+/// [misskey] から [AccountRepository] を直接 watch すれば済みそうに見えるが、
+/// [AccountRepository] 自身が [emojiRepository] 経由で [misskey] を読むため
+/// 循環参照になる。トークンだけを一方通行の provider に切り出している。
+final class LatestAccountTokenProvider
+    extends $NotifierProvider<LatestAccountToken, String?> {
+  /// 再認証で差し替わったアカウントのトークン。まだ差し替わっていなければ null。
+  ///
+  /// [misskey] から [AccountRepository] を直接 watch すれば済みそうに見えるが、
+  /// [AccountRepository] 自身が [emojiRepository] 経由で [misskey] を読むため
+  /// 循環参照になる。トークンだけを一方通行の provider に切り出している。
+  LatestAccountTokenProvider._({
+    required LatestAccountTokenFamily super.from,
+    required Acct super.argument,
+  }) : super(
+         retry: null,
+         name: r'latestAccountTokenProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$latestAccountTokenHash();
+
+  @override
+  String toString() {
+    return r'latestAccountTokenProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  LatestAccountToken create() => LatestAccountToken();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(String? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<String?>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is LatestAccountTokenProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$latestAccountTokenHash() =>
+    r'0ef1d3156b8af62c8fc2d7f3c34bdbf506cca88d';
+
+/// 再認証で差し替わったアカウントのトークン。まだ差し替わっていなければ null。
+///
+/// [misskey] から [AccountRepository] を直接 watch すれば済みそうに見えるが、
+/// [AccountRepository] 自身が [emojiRepository] 経由で [misskey] を読むため
+/// 循環参照になる。トークンだけを一方通行の provider に切り出している。
+
+final class LatestAccountTokenFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          LatestAccountToken,
+          String?,
+          String?,
+          String?,
+          Acct
+        > {
+  LatestAccountTokenFamily._()
+    : super(
+        retry: null,
+        name: r'latestAccountTokenProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  /// 再認証で差し替わったアカウントのトークン。まだ差し替わっていなければ null。
+  ///
+  /// [misskey] から [AccountRepository] を直接 watch すれば済みそうに見えるが、
+  /// [AccountRepository] 自身が [emojiRepository] 経由で [misskey] を読むため
+  /// 循環参照になる。トークンだけを一方通行の provider に切り出している。
+
+  LatestAccountTokenProvider call(Acct acct) =>
+      LatestAccountTokenProvider._(argument: acct, from: this);
+
+  @override
+  String toString() => r'latestAccountTokenProvider';
+}
+
+/// 再認証で差し替わったアカウントのトークン。まだ差し替わっていなければ null。
+///
+/// [misskey] から [AccountRepository] を直接 watch すれば済みそうに見えるが、
+/// [AccountRepository] 自身が [emojiRepository] 経由で [misskey] を読むため
+/// 循環参照になる。トークンだけを一方通行の provider に切り出している。
+
+abstract class _$LatestAccountToken extends $Notifier<String?> {
+  late final _$args = ref.$arg as Acct;
+  Acct get acct => _$args;
+
+  String? build(Acct acct);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<String?, String?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<String?, String?>,
+              String?,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, () => build(_$args));
+  }
+}
+
 @ProviderFor(misskey)
 @Deprecated(
   'Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain',
@@ -197,7 +329,7 @@ final class MisskeyProvider
   }
 }
 
-String _$misskeyHash() => r'c1dede29fabcc1bbff0c065f1ad6fc5f395efb63';
+String _$misskeyHash() => r'4366215e55c7927fbb561e5a158b87f93c1b3869';
 
 @Deprecated(
   'Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain',
@@ -451,7 +583,7 @@ final class EmojiRepositoryProvider
   }
 }
 
-String _$emojiRepositoryHash() => r'a3f4aeaa087ee4b3fd7c433960b5cb4c9c21b7c6';
+String _$emojiRepositoryHash() => r'07d72eba6563ff08950d1d074dd322975681aef9';
 
 final class EmojiRepositoryFamily extends $Family
     with $FunctionalFamilyOverride<EmojiRepository, Account> {
@@ -836,7 +968,7 @@ final class MisskeyGetContextProvider
   }
 }
 
-String _$misskeyGetContextHash() => r'fc267a3d020bd51305b5def2d9badedf26c4faac';
+String _$misskeyGetContextHash() => r'94040ebfd1b6217a4e9a57ae4fec722518fd895a';
 
 @ProviderFor(misskeyPostContext)
 final misskeyPostContextProvider = MisskeyPostContextProvider._();
@@ -882,4 +1014,4 @@ final class MisskeyPostContextProvider
 }
 
 String _$misskeyPostContextHash() =>
-    r'2132cf565692af187c7efa17b3350e53c8c4d6fa';
+    r'2a3f314cdde5415eb1fe46ace933785f03ee22b1';

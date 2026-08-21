@@ -539,6 +539,9 @@
     "thrownTimeoutException": "サーバーが応答してくれませんでした。",
     "thrownUnknownError": "不明なエラー",
     "thrownError": "エラーが起きたみたいや",
+    "thrownTokenExpired": "認証が切れてるか、アクセストークンが消されてるみたいや。もういっぺんログインしてな。",
+    "thrownPermissionDenied": "この操作をする権限がないみたいや。もういっぺんログインしたら直るかもしれん。",
+    "reLogin": "再ログイン",
     "unsupportedServer": "非対応のサーバーです",
 
     "future": "未来",
