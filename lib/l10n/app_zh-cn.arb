@@ -38,6 +38,8 @@
     "home": "首页",
     "local": "本地",
     "direct": "直接",
+    "searchPostFrom": "起始日期",
+    "searchPostTo": "终止日期",
     "onlyLocal": "仅本地",
     "remote": "远程",
     "@done": {

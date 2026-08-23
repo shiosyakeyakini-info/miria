@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$NoteSearchCondition {
 
- String? get query; User? get user; CommunityChannel? get channel; bool get localOnly;
+ String? get query; User? get user; CommunityChannel? get channel; bool get localOnly; DateTime? get rangeStartAt; DateTime? get rangeEndAt;
 /// Create a copy of NoteSearchCondition
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $NoteSearchConditionCopyWith<NoteSearchCondition> get copyWith => _$NoteSearchCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NoteSearchCondition&&(identical(other.query, query) || other.query == query)&&(identical(other.user, user) || other.user == user)&&(identical(other.channel, channel) || other.channel == channel)&&(identical(other.localOnly, localOnly) || other.localOnly == localOnly));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is NoteSearchCondition&&(identical(other.query, query) || other.query == query)&&(identical(other.user, user) || other.user == user)&&(identical(other.channel, channel) || other.channel == channel)&&(identical(other.localOnly, localOnly) || other.localOnly == localOnly)&&(identical(other.rangeStartAt, rangeStartAt) || other.rangeStartAt == rangeStartAt)&&(identical(other.rangeEndAt, rangeEndAt) || other.rangeEndAt == rangeEndAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,query,user,channel,localOnly);
+int get hashCode => Object.hash(runtimeType,query,user,channel,localOnly,rangeStartAt,rangeEndAt);
 
 @override
 String toString() {
-  return 'NoteSearchCondition(query: $query, user: $user, channel: $channel, localOnly: $localOnly)';
+  return 'NoteSearchCondition(query: $query, user: $user, channel: $channel, localOnly: $localOnly, rangeStartAt: $rangeStartAt, rangeEndAt: $rangeEndAt)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $NoteSearchConditionCopyWith<$Res>  {
   factory $NoteSearchConditionCopyWith(NoteSearchCondition value, $Res Function(NoteSearchCondition) _then) = _$NoteSearchConditionCopyWithImpl;
 @useResult
 $Res call({
- String? query, User? user, CommunityChannel? channel, bool localOnly
+ String? query, User? user, CommunityChannel? channel, bool localOnly, DateTime? rangeStartAt, DateTime? rangeEndAt
 });
 
 
@@ -62,13 +62,15 @@ class _$NoteSearchConditionCopyWithImpl<$Res>
 
 /// Create a copy of NoteSearchCondition
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? query = freezed,Object? user = freezed,Object? channel = freezed,Object? localOnly = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? query = freezed,Object? user = freezed,Object? channel = freezed,Object? localOnly = null,Object? rangeStartAt = freezed,Object? rangeEndAt = freezed,}) {
   return _then(_self.copyWith(
 query: freezed == query ? _self.query : query // ignore: cast_nullable_to_non_nullable
 as String?,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as User?,channel: freezed == channel ? _self.channel : channel // ignore: cast_nullable_to_non_nullable
 as CommunityChannel?,localOnly: null == localOnly ? _self.localOnly : localOnly // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,rangeStartAt: freezed == rangeStartAt ? _self.rangeStartAt : rangeStartAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,rangeEndAt: freezed == rangeEndAt ? _self.rangeEndAt : rangeEndAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 /// Create a copy of NoteSearchCondition
@@ -165,10 +167,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? query,  User? user,  CommunityChannel? channel,  bool localOnly)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? query,  User? user,  CommunityChannel? channel,  bool localOnly,  DateTime? rangeStartAt,  DateTime? rangeEndAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _NoteSearchCondition() when $default != null:
-return $default(_that.query,_that.user,_that.channel,_that.localOnly);case _:
+return $default(_that.query,_that.user,_that.channel,_that.localOnly,_that.rangeStartAt,_that.rangeEndAt);case _:
   return orElse();
 
 }
@@ -186,10 +188,10 @@ return $default(_that.query,_that.user,_that.channel,_that.localOnly);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? query,  User? user,  CommunityChannel? channel,  bool localOnly)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? query,  User? user,  CommunityChannel? channel,  bool localOnly,  DateTime? rangeStartAt,  DateTime? rangeEndAt)  $default,) {final _that = this;
 switch (_that) {
 case _NoteSearchCondition():
-return $default(_that.query,_that.user,_that.channel,_that.localOnly);case _:
+return $default(_that.query,_that.user,_that.channel,_that.localOnly,_that.rangeStartAt,_that.rangeEndAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -206,10 +208,10 @@ return $default(_that.query,_that.user,_that.channel,_that.localOnly);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? query,  User? user,  CommunityChannel? channel,  bool localOnly)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? query,  User? user,  CommunityChannel? channel,  bool localOnly,  DateTime? rangeStartAt,  DateTime? rangeEndAt)?  $default,) {final _that = this;
 switch (_that) {
 case _NoteSearchCondition() when $default != null:
-return $default(_that.query,_that.user,_that.channel,_that.localOnly);case _:
+return $default(_that.query,_that.user,_that.channel,_that.localOnly,_that.rangeStartAt,_that.rangeEndAt);case _:
   return null;
 
 }
@@ -221,13 +223,15 @@ return $default(_that.query,_that.user,_that.channel,_that.localOnly);case _:
 
 
 class _NoteSearchCondition extends NoteSearchCondition {
-  const _NoteSearchCondition({this.query, this.user, this.channel, this.localOnly = false}): super._();
+  const _NoteSearchCondition({this.query, this.user, this.channel, this.localOnly = false, this.rangeStartAt, this.rangeEndAt}): super._();
   
 
 @override final  String? query;
 @override final  User? user;
 @override final  CommunityChannel? channel;
 @override@JsonKey() final  bool localOnly;
+@override final  DateTime? rangeStartAt;
+@override final  DateTime? rangeEndAt;
 
 /// Create a copy of NoteSearchCondition
 /// with the given fields replaced by the non-null parameter values.
@@ -239,16 +243,16 @@ _$NoteSearchConditionCopyWith<_NoteSearchCondition> get copyWith => __$NoteSearc
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoteSearchCondition&&(identical(other.query, query) || other.query == query)&&(identical(other.user, user) || other.user == user)&&(identical(other.channel, channel) || other.channel == channel)&&(identical(other.localOnly, localOnly) || other.localOnly == localOnly));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoteSearchCondition&&(identical(other.query, query) || other.query == query)&&(identical(other.user, user) || other.user == user)&&(identical(other.channel, channel) || other.channel == channel)&&(identical(other.localOnly, localOnly) || other.localOnly == localOnly)&&(identical(other.rangeStartAt, rangeStartAt) || other.rangeStartAt == rangeStartAt)&&(identical(other.rangeEndAt, rangeEndAt) || other.rangeEndAt == rangeEndAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,query,user,channel,localOnly);
+int get hashCode => Object.hash(runtimeType,query,user,channel,localOnly,rangeStartAt,rangeEndAt);
 
 @override
 String toString() {
-  return 'NoteSearchCondition(query: $query, user: $user, channel: $channel, localOnly: $localOnly)';
+  return 'NoteSearchCondition(query: $query, user: $user, channel: $channel, localOnly: $localOnly, rangeStartAt: $rangeStartAt, rangeEndAt: $rangeEndAt)';
 }
 
 
@@ -259,7 +263,7 @@ abstract mixin class _$NoteSearchConditionCopyWith<$Res> implements $NoteSearchC
   factory _$NoteSearchConditionCopyWith(_NoteSearchCondition value, $Res Function(_NoteSearchCondition) _then) = __$NoteSearchConditionCopyWithImpl;
 @override @useResult
 $Res call({
- String? query, User? user, CommunityChannel? channel, bool localOnly
+ String? query, User? user, CommunityChannel? channel, bool localOnly, DateTime? rangeStartAt, DateTime? rangeEndAt
 });
 
 
@@ -276,13 +280,15 @@ class __$NoteSearchConditionCopyWithImpl<$Res>
 
 /// Create a copy of NoteSearchCondition
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? query = freezed,Object? user = freezed,Object? channel = freezed,Object? localOnly = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? query = freezed,Object? user = freezed,Object? channel = freezed,Object? localOnly = null,Object? rangeStartAt = freezed,Object? rangeEndAt = freezed,}) {
   return _then(_NoteSearchCondition(
 query: freezed == query ? _self.query : query // ignore: cast_nullable_to_non_nullable
 as String?,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as User?,channel: freezed == channel ? _self.channel : channel // ignore: cast_nullable_to_non_nullable
 as CommunityChannel?,localOnly: null == localOnly ? _self.localOnly : localOnly // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,rangeStartAt: freezed == rangeStartAt ? _self.rangeStartAt : rangeStartAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,rangeEndAt: freezed == rangeEndAt ? _self.rangeEndAt : rangeEndAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 

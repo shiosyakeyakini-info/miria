@@ -10,6 +10,8 @@ abstract class NoteSearchCondition with _$NoteSearchCondition {
     User? user,
     CommunityChannel? channel,
     @Default(false) bool localOnly,
+    DateTime? rangeStartAt,
+    DateTime? rangeEndAt,
   }) = _NoteSearchCondition;
   const NoteSearchCondition._();
 
