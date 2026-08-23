@@ -98,6 +98,23 @@ dependencies:
       ref: main
 
 dependency_overrides:
+  # ここの 2 件はこの PR 限定の仮止め。どちらも上流の PR がマージされたら
+  # override ごと消す（通常の依存が既に master / main を指しているため、
+  # 消すだけでよい）。
+  #
+  # reversi の match / surrender / verify とストリーミングチャンネル
+  # shiosyakeyakini-info/misskey_dart#108
+  misskey_dart:
+    git:
+      url: https://github.com/shiosyakeyakini-info/misskey_dart.git
+      ref: feature/reversi
+  # 入れ子の ProviderScope を辿れるようにしたもの。対局画面は
+  # AccountContextScope の下にあるので、これが無いと状態を覗けない
+  # shiosyakeyakini-info/marionette_riverpod_plugin#1
+  marionette_riverpod_plugin:
+    git:
+      url: https://github.com/shiosyakeyakini-info/marionette_riverpod_plugin.git
+      ref: feature/nested-provider-scope
   image_editor:
     git:
       url: https://github.com/shiosyakeyakini-info/flutter_image_editor_fix_ios_color_option.git

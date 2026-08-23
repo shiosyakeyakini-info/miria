@@ -1943,6 +1943,178 @@ class SZh extends S {
   String get nonInvitedReversi => '好像没有收到邀请';
 
   @override
+  String get reversiPlay => 'アプリで遊ぶ';
+
+  @override
+  String get reversiOpenInBrowser => 'ブラウザで開く';
+
+  @override
+  String get reversiMatchAnyone => '誰かと対戦する';
+
+  @override
+  String get reversiCancelMatching => 'さがすのをやめる';
+
+  @override
+  String get reversiMatching => '対戦相手をさがしとるで...';
+
+  @override
+  String get reversiInvitations => '招待されとる対局';
+
+  @override
+  String get reversiMyGames => '自分の対局';
+
+  @override
+  String get reversiNoGames => '対局はまだあらへん';
+
+  @override
+  String get reversiPlaying => '対局中';
+
+  @override
+  String get reversiFinished => '終わっとる';
+
+  @override
+  String get reversiKifu => '棋譜';
+
+  @override
+  String get reversiKifuFirst => '最初から';
+
+  @override
+  String get reversiKifuPrevious => '1手戻す';
+
+  @override
+  String get reversiKifuNext => '1手進める';
+
+  @override
+  String get reversiKifuLast => '最後まで';
+
+  @override
+  String get reversiKifuLatest => '最新の盤面に戻す';
+
+  @override
+  String get reversiKifuStart => '開始';
+
+  @override
+  String reversiKifuProgress(int index, int total) {
+    return '$index / $total 手';
+  }
+
+  @override
+  String get reversiReady => '準備完了';
+
+  @override
+  String get reversiCancelReady => 'やっぱ待って';
+
+  @override
+  String get reversiWaitingOpponent => '相手の準備待ちや';
+
+  @override
+  String get reversiStarting => 'もうすぐ始まるで';
+
+  @override
+  String get reversiSurrender => '投了する';
+
+  @override
+  String get reversiYourTurn => 'あんたの番やで';
+
+  @override
+  String get reversiOpponentTurn => '相手の番や';
+
+  @override
+  String get reversiWin => 'あんたの勝ちや';
+
+  @override
+  String get reversiLose => 'あんたの負けや';
+
+  @override
+  String get reversiDraw => '引き分けや';
+
+  @override
+  String get reversiDesynced => '盤面がサーバーとずれとる';
+
+  @override
+  String reversiVersus(String opponent) {
+    return '$opponent と対戦中';
+  }
+
+  @override
+  String get reversiInvite => '誘って対戦する';
+
+  @override
+  String reversiWaitingFor(String user) {
+    return '$user の返事待ちや';
+  }
+
+  @override
+  String get reversiInvitationExpired => '招待の期限が切れとったわ';
+
+  @override
+  String get reversiAllowIrregularRules => '変則ルールもあり';
+
+  @override
+  String get reversiDisallowIrregularRules => 'ふつうのルールだけ';
+
+  @override
+  String get reversiGameCanceled => '対局が取り消されたで';
+
+  @override
+  String get reversiCancelGame => '対局をやめる';
+
+  @override
+  String get reversiConfirmCancelGame => 'この対局やめてええか？';
+
+  @override
+  String get reversiConfirmSurrender => '投了してええか？';
+
+  @override
+  String get reversiOpponentChangedSettings => '相手が設定を変えたから準備完了を外したで';
+
+  @override
+  String get reversiGameSettings => '対局の設定';
+
+  @override
+  String get reversiMap => '盤面';
+
+  @override
+  String get reversiMapRandom => 'ランダム';
+
+  @override
+  String get reversiMapCustom => 'カスタム';
+
+  @override
+  String get reversiBlackOrWhite => '先手';
+
+  @override
+  String get reversiBlackIsRandom => 'ランダム';
+
+  @override
+  String reversiBlackIs(String user) {
+    return '$user が黒';
+  }
+
+  @override
+  String get reversiTimeLimitForEachTurn => '1手あたりの制限時間';
+
+  @override
+  String reversiSeconds(int seconds) {
+    return '$seconds秒';
+  }
+
+  @override
+  String get reversiRules => 'ルール';
+
+  @override
+  String get reversiIsLlotheo => '石の少ないほうが勝ち';
+
+  @override
+  String get reversiLoopedMap => '端がループする盤面';
+
+  @override
+  String get reversiCanPutEverywhere => 'どこにでも置ける';
+
+  @override
+  String get reversiSettingsLockedWhenReady => '準備完了を外すと設定を変えられるで';
+
+  @override
   String get remoteServerWithoutLogin => '相手先のサーバー（ログインなし）';
 
   @override

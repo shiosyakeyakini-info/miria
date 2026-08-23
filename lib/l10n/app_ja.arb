@@ -1063,6 +1063,100 @@
     },
     "nonInvitedReversi": "招待はされとらへんみたいや",
 
+    "reversiPlay": "アプリで遊ぶ",
+    "reversiOpenInBrowser": "ブラウザで開く",
+    "reversiMatchAnyone": "誰かと対戦する",
+    "reversiCancelMatching": "さがすのをやめる",
+    "reversiMatching": "対戦相手をさがしとるで...",
+    "reversiInvitations": "招待されとる対局",
+    "reversiMyGames": "自分の対局",
+    "reversiNoGames": "対局はまだあらへん",
+    "reversiPlaying": "対局中",
+    "reversiFinished": "終わっとる",
+    "reversiKifu": "棋譜",
+    "reversiKifuFirst": "最初から",
+    "reversiKifuPrevious": "1手戻す",
+    "reversiKifuNext": "1手進める",
+    "reversiKifuLast": "最後まで",
+    "reversiKifuLatest": "最新の盤面に戻す",
+    "reversiKifuStart": "開始",
+    "reversiKifuProgress": "{index} / {total} 手",
+    "@reversiKifuProgress": {
+        "placeholders": {
+            "index": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "reversiReady": "準備完了",
+    "reversiCancelReady": "やっぱ待って",
+    "reversiWaitingOpponent": "相手の準備待ちや",
+    "reversiStarting": "もうすぐ始まるで",
+    "reversiSurrender": "投了する",
+    "reversiYourTurn": "あんたの番やで",
+    "reversiOpponentTurn": "相手の番や",
+    "reversiWin": "あんたの勝ちや",
+    "reversiLose": "あんたの負けや",
+    "reversiDraw": "引き分けや",
+    "reversiDesynced": "盤面がサーバーとずれとる",
+    "reversiVersus": "{opponent} と対戦中",
+    "@reversiVersus": {
+        "placeholders": {
+            "opponent": {
+                "type": "String"
+            }
+        }
+    },
+
+    "reversiInvite": "誘って対戦する",
+    "reversiWaitingFor": "{user} の返事待ちや",
+    "@reversiWaitingFor": {
+        "placeholders": {
+            "user": {
+                "type": "String"
+            }
+        }
+    },
+    "reversiInvitationExpired": "招待の期限が切れとったわ",
+    "reversiAllowIrregularRules": "変則ルールもあり",
+    "reversiDisallowIrregularRules": "ふつうのルールだけ",
+    "reversiGameCanceled": "対局が取り消されたで",
+    "reversiCancelGame": "対局をやめる",
+    "reversiConfirmCancelGame": "この対局やめてええか？",
+    "reversiConfirmSurrender": "投了してええか？",
+    "reversiOpponentChangedSettings": "相手が設定を変えたから準備完了を外したで",
+    "reversiGameSettings": "対局の設定",
+    "reversiMap": "盤面",
+    "reversiMapRandom": "ランダム",
+    "reversiMapCustom": "カスタム",
+    "reversiBlackOrWhite": "先手",
+    "reversiBlackIsRandom": "ランダム",
+    "reversiBlackIs": "{user} が黒",
+    "@reversiBlackIs": {
+        "placeholders": {
+            "user": {
+                "type": "String"
+            }
+        }
+    },
+    "reversiTimeLimitForEachTurn": "1手あたりの制限時間",
+    "reversiSeconds": "{seconds}秒",
+    "@reversiSeconds": {
+        "placeholders": {
+            "seconds": {
+                "type": "int"
+            }
+        }
+    },
+    "reversiRules": "ルール",
+    "reversiIsLlotheo": "石の少ないほうが勝ち",
+    "reversiLoopedMap": "端がループする盤面",
+    "reversiCanPutEverywhere": "どこにでも置ける",
+    "reversiSettingsLockedWhenReady": "準備完了を外すと設定を変えられるで",
+
     "remoteServerWithoutLogin": "相手先のサーバー（ログインなし）",
     "nothingHere": "なんもないで",
 

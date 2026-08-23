@@ -3322,6 +3322,121 @@ class RenoteUserRouteArgs {
 }
 
 /// generated route for
+/// [ReversiGamePage]
+class ReversiGameRoute extends PageRouteInfo<ReversiGameRouteArgs> {
+  ReversiGameRoute({
+    required AccountContext accountContext,
+    required String gameId,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ReversiGameRoute.name,
+         args: ReversiGameRouteArgs(
+           accountContext: accountContext,
+           gameId: gameId,
+           key: key,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'ReversiGameRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ReversiGameRouteArgs>();
+      return WrappedRoute(
+        child: ReversiGamePage(
+          accountContext: args.accountContext,
+          gameId: args.gameId,
+          key: args.key,
+        ),
+      );
+    },
+  );
+}
+
+class ReversiGameRouteArgs {
+  const ReversiGameRouteArgs({
+    required this.accountContext,
+    required this.gameId,
+    this.key,
+  });
+
+  final AccountContext accountContext;
+
+  final String gameId;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ReversiGameRouteArgs{accountContext: $accountContext, gameId: $gameId, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ReversiGameRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        gameId == other.gameId &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ gameId.hashCode ^ key.hashCode;
+}
+
+/// generated route for
+/// [ReversiPage]
+class ReversiRoute extends PageRouteInfo<ReversiRouteArgs> {
+  ReversiRoute({
+    required AccountContext accountContext,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ReversiRoute.name,
+         args: ReversiRouteArgs(accountContext: accountContext, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'ReversiRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ReversiRouteArgs>();
+      return WrappedRoute(
+        child: ReversiPage(accountContext: args.accountContext, key: args.key),
+      );
+    },
+  );
+}
+
+class ReversiRouteArgs {
+  const ReversiRouteArgs({required this.accountContext, this.key});
+
+  final AccountContext accountContext;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ReversiRouteArgs{accountContext: $accountContext, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ReversiRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [RoleSelectDialog]
 class RoleSelectRoute extends PageRouteInfo<RoleSelectRouteArgs> {
   RoleSelectRoute({

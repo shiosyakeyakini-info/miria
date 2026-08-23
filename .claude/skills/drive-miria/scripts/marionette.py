@@ -171,9 +171,13 @@ def cmd_snapshot(app, args):
 
 
 def cmd_read(app, args):
+    # 入れ子の ProviderScope にある provider は、同じ名前のものが複数のスコープ
+    # で同時に生きうる。そのときは id (末尾に #scopeN が付く) で指定する。
+    key = "id" if args.id else "name"
+    value = args.id or args.name
     print(
         json.dumps(
-            app.call("ext.flutter.riverpod.read", name=args.name),
+            app.call("ext.flutter.riverpod.read", **{key: value}),
             ensure_ascii=False,
             indent=1,
         )
@@ -219,7 +223,8 @@ def main():
     sn.add_argument("--values", action="store_true", help="include provider values")
     sn.set_defaults(fn=cmd_snapshot)
     rd = sub.add_parser("read")
-    rd.add_argument("name")
+    rd.add_argument("name", nargs="?", help="provider name (ambiguous names are rejected)")
+    rd.add_argument("--id", help="exact id from snapshot, e.g. fooProvider#scope3")
     rd.set_defaults(fn=cmd_read)
 
     args = p.parse_args()
