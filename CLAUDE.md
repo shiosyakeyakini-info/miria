@@ -59,17 +59,33 @@ fvm flutter pub run cider version
 ### Misskey由来のアセット（assets_builder）
 
 Misskey本体にしかないデータは `assets_builder/` のスクリプトで `assets/` に
-取り込む。どれもサブモジュール `assets_builder/misskey` を要求する。
+取り込む。サブモジュール `assets_builder/misskey` を要求するものがある。
 
 ```bash
 git submodule update --init --depth 1 assets_builder/misskey
 ```
 
-| ビルダー | 出力 | 中身 |
-|---|---|---|
-| `emoji_list/builder.mjs` | `assets/emoji_list.json` | Unicode絵文字と読みがな |
-| `achievements/builder.mjs` | `assets/achievements.json` | 実績名の対訳 |
-| `theme_list/builder.mjs` | （つくりかけ） | テーマ |
+| ビルダー | 出力 | 中身 | サブモジュール |
+|---|---|---|---|
+| `emoji_list/builder.mjs` | `assets/emoji_list.json` | Unicode絵文字と読みがな | 任意 |
+| `achievements/builder.mjs` | `assets/achievements.json` | 実績名の対訳 | 必須 |
+| `theme_list/builder.mjs` | （つくりかけ） | テーマ | 必須 |
+
+Unicode絵文字のデータはMisskey本体から
+[@misskey-dev/emoji-data](https://github.com/misskey-dev/emojis) に切り出されて
+いるので、絵文字ビルダーはnpmパッケージを引く。バージョンは本家の
+`packages/frontend-shared/package.json` の pin に合わせること。サブモジュールが
+あればビルダーがつきあわせて、ずれていれば警告する。
+
+```bash
+cd assets_builder/emoji_list && npm install && node builder.mjs
+```
+
+絵文字を増やしても、`flutter_twemoji` の絵文字正規表現が古いままだと
+「絵文字のスタイル」が既定（Twemoji）のときに描画されず、ノート本文からも
+リアクションピッカーからも消える（読みがなでは引けるが押しても見えない）。
+`assets/emoji_list.json` を更新したら
+`Twemoji` の描画も確かめること。
 
 実績はサーバーが `notes1` のような名前しか寄越さず、対訳はMisskeyの
 `locales/*.yml` の `_achievements._types` にしかない。ビルダーはそこだけを
