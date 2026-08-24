@@ -29,6 +29,14 @@ jobs:
           git config --system core.longpaths true
           flutter pub get
 
+      # AiScript 処理系は rust/ の cargo ビルドとして入る。native assets は
+      # 既定で無効なので有効化しておかないと、DLL が同梱されない
+      - name: Update Rust
+        run: rustup update
+
+      - name: Enable native assets
+        run: flutter config --enable-native-assets
+
       - name: Get App Version
         run:  |
           echo "version=$(flutter pub run cider version)" >> $env:GITHUB_ENV

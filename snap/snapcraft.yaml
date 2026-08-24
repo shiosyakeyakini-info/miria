@@ -58,6 +58,8 @@ parts:
       # flutterプラグインで使用されるパッケージ
       - clang
       - curl
+      # AiScript 処理系 (rust/) の cargo ビルドに要るリンカ
+      - build-essential
       - git
       - cmake
       - ninja-build
@@ -74,6 +76,11 @@ parts:
       # flutterプラグインの処理を代替
       set +e
       git clone --depth 1 -b $(jq -r .flutter .fvmrc) https://github.com/flutter/flutter.git $CRAFT_PART_BUILD/FlutterSDK
+      # AiScript 処理系は rust/ の cargo ビルドとして入る。native assets を
+      # 有効にしないと共有ライブラリが同梱されない
+      curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain none
+      export PATH="$HOME/.cargo/bin:$PATH"
+      flutter config --enable-native-assets
       flutter precache --linux
       flutter pub get
       set -eux
