@@ -2911,6 +2911,72 @@ class PhotoEditRouteArgs {
 }
 
 /// generated route for
+/// [PlayPage]
+class PlayRoute extends PageRouteInfo<PlayRouteArgs> {
+  PlayRoute({
+    required AccountContext accountContext,
+    required Flash flash,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         PlayRoute.name,
+         args: PlayRouteArgs(
+           accountContext: accountContext,
+           flash: flash,
+           key: key,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'PlayRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<PlayRouteArgs>();
+      return WrappedRoute(
+        child: PlayPage(
+          accountContext: args.accountContext,
+          flash: args.flash,
+          key: args.key,
+        ),
+      );
+    },
+  );
+}
+
+class PlayRouteArgs {
+  const PlayRouteArgs({
+    required this.accountContext,
+    required this.flash,
+    this.key,
+  });
+
+  final AccountContext accountContext;
+
+  final Flash flash;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'PlayRouteArgs{accountContext: $accountContext, flash: $flash, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PlayRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        flash == other.flash &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ flash.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [ProfileEditPage]
 class ProfileEditRoute extends PageRouteInfo<ProfileEditRouteArgs> {
   ProfileEditRoute({
