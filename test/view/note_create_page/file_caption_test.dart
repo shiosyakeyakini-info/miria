@@ -1,7 +1,6 @@
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account_settings.dart";
-import "package:miria/model/image_file.dart";
 import "package:miria/providers.dart";
 import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 import "package:miria/view/note_create_page/file_settings_dialog.dart";
