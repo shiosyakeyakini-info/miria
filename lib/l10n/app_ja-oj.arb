@@ -183,5 +183,9 @@
     "emptyNote": "空のノートですわ",
     "continueEditing": "もう少し編集を続けますわ",
     "saveAndClose": "保存して閉じますわ",
-    "discardAndReturn": "保存せずに戻りますわ"
+    "discardAndReturn": "保存せずに戻りますわ",
+    "scratchpad": "スクラッチパッド",
+    "scratchpadDescription": "AiScriptを書いて動かせる場所ですわ。Misskeyと対話するコードをお試しになれますの。",
+    "runScript": "実行いたしますわ",
+    "scriptOutput": "出力"
 }

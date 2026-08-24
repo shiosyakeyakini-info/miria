@@ -2129,6 +2129,19 @@ class SZh extends S {
 
   @override
   String get discardAndReturn => '放弃并返回';
+
+  @override
+  String get scratchpad => 'スクラッチパッド';
+
+  @override
+  String get scratchpadDescription =>
+      'AiScriptを書いて動かせるとこや。Misskeyと喋るコードを試すのに使うとええ。';
+
+  @override
+  String get runScript => '実行';
+
+  @override
+  String get scriptOutput => '出力';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).

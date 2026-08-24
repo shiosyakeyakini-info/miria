@@ -1139,6 +1139,9 @@
     "poll": "アンケート",
     "continueEditing": "もうちょっと編集を続ける",
     "saveAndClose": "保存して閉じる", 
-    "discardAndReturn": "保存せずに戻る"
-
+    "discardAndReturn": "保存せずに戻る",
+    "scratchpad": "スクラッチパッド",
+    "scratchpadDescription": "AiScriptを書いて動かせるとこや。Misskeyと喋るコードを試すのに使うとええ。",
+    "runScript": "実行",
+    "scriptOutput": "出力"
 }

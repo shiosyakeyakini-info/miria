@@ -3749,6 +3749,30 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'保存せずに戻る'**
   String get discardAndReturn;
+
+  /// No description provided for @scratchpad.
+  ///
+  /// In ja, this message translates to:
+  /// **'スクラッチパッド'**
+  String get scratchpad;
+
+  /// No description provided for @scratchpadDescription.
+  ///
+  /// In ja, this message translates to:
+  /// **'AiScriptを書いて動かせるとこや。Misskeyと喋るコードを試すのに使うとええ。'**
+  String get scratchpadDescription;
+
+  /// No description provided for @runScript.
+  ///
+  /// In ja, this message translates to:
+  /// **'実行'**
+  String get runScript;
+
+  /// No description provided for @scriptOutput.
+  ///
+  /// In ja, this message translates to:
+  /// **'出力'**
+  String get scriptOutput;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

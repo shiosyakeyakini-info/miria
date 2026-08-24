@@ -172,6 +172,18 @@ class CommonDrawer extends ConsumerWidget {
                       },
                     ),
                     ListTile(
+                      leading: const Icon(Icons.terminal),
+                      title: Text(S.of(context).scratchpad),
+                      onTap: () async {
+                        closeDrawer(context);
+                        await context.pushRoute(
+                          ScratchpadRoute(
+                            accountContext: AccountContext.as(account),
+                          ),
+                        );
+                      },
+                    ),
+                    ListTile(
                       leading: const Icon(Icons.settings),
                       title: Text(
                         S

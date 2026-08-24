@@ -2137,6 +2137,19 @@ class SJa extends S {
 
   @override
   String get discardAndReturn => '保存せずに戻る';
+
+  @override
+  String get scratchpad => 'スクラッチパッド';
+
+  @override
+  String get scratchpadDescription =>
+      'AiScriptを書いて動かせるとこや。Misskeyと喋るコードを試すのに使うとええ。';
+
+  @override
+  String get runScript => '実行';
+
+  @override
+  String get scriptOutput => '出力';
 }
 
 /// The translations for Japanese (`ja_OJ`).
@@ -2584,4 +2597,17 @@ class SJaOj extends SJa {
 
   @override
   String get discardAndReturn => '保存せずに戻りますわ';
+
+  @override
+  String get scratchpad => 'スクラッチパッド';
+
+  @override
+  String get scratchpadDescription =>
+      'AiScriptを書いて動かせる場所ですわ。Misskeyと対話するコードをお試しになれますの。';
+
+  @override
+  String get runScript => '実行いたしますわ';
+
+  @override
+  String get scriptOutput => '出力';
 }
