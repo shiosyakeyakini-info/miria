@@ -84,6 +84,42 @@ cd assets_builder/achievements && npm install && node builder.mjs
 お嬢様言葉はMisskeyに相当するロケールがないので ja-JP を引く。Misskey側で
 実績が増えたら対訳がないので、実績名がそのまま出る。
 
+### AiScript（Rust 連携）
+
+Play を動かすための AiScript 処理系は Dart ではなく Rust 側に持つ。Flutter には
+ECMAScript 処理系がないため、本家の `@syuilo/aiscript` をそのままは使えない。
+
+| 場所 | 中身 |
+|---|---|
+| `rust/` | `rust_lib_miria` クレート。[aiscript-rs](https://github.com/poppingmoon/aiscript-rs)（MIT-0、AiScript v0/v1 両対応）を包む |
+| `rust/src/api/` | Dart に公開する関数。`flutter_rust_bridge.yaml` の `rust_input` がここを指す |
+| `lib/rust/` | flutter_rust_bridge の生成物。手で編集しない |
+| `hook/build.dart` | native assets のビルドフック。`flutter run` / `flutter build` 時に cargo を回す |
+
+Rust 側の関数を足したり型を変えたら、バインディングを生成し直す。
+
+```bash
+cargo install flutter_rust_bridge_codegen --version 2.13.0-beta.6 --locked  # 初回のみ
+flutter_rust_bridge_codegen generate
+```
+
+native assets は既定で無効なので、一度だけ有効化が要る。
+
+```bash
+fvm flutter config --enable-native-assets
+```
+
+`flutter test` は native assets を FFI に解決しないため、テストからは frb の
+フォールバック先である `rust/target/release/` が参照される。`test/rust/` を
+動かす前にビルドしておくこと（CI も同じことをしている）。
+
+```bash
+cargo build --release --manifest-path rust/Cargo.toml
+```
+
+この方針は先行実装である [aria](https://github.com/poppingmoon/aria) に倣った。
+aria は miria の git フォークではないが、どちらも AGPL-3.0 である。
+
 ### 実行中アプリの観測・操作（marionette MCP）
 
 debug ビルドには [marionette_mcp](https://github.com/leancodepl/marionette_mcp)

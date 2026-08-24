@@ -79,6 +79,13 @@ dependencies:
   image: ^4.9.1
   flutter_twemoji: ^1.0.1
   mime: ^2.0.0
+
+  # AiScript (Play) の処理系。aiscript-rs (MIT-0) を rust/ 経由で組み込み、
+  # flutter_rust_bridge で Dart から呼ぶ。Flutter には ECMAScript 処理系が
+  # ないため、本家 Misskey の @syuilo/aiscript をそのままは使えない。
+  flutter_rust_bridge: 2.13.0-beta.6
+  flutter_rust_bridge_hooks: ^2.13.0-beta.6
+  native_toolchain_rust: ^1.0.4+0
   # 0.36.0 未満は Flutter SDK 直下の廃止済み `version` ファイルを前提にしていて
   # Android のビルドが、0.37.3 未満は Windows の mdk-sdk 展開がそれぞれ通らない
   fvp: ^0.38.0

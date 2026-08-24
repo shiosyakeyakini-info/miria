@@ -1,0 +1,16 @@
+[package]
+name = "rust_lib_miria"
+version = "0.1.0"
+edition = "2024"
+license = "AGPL-3.0-only"
+
+[lib]
+crate-type = ["cdylib", "staticlib"]
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }
+
+[dependencies]
+aiscript = { git = "https://github.com/poppingmoon/aiscript-rs", rev = "3833cb04dc0a79fa3deffec5c40157ebbea05fc8" }
+flutter_rust_bridge = "=2.13.0-beta.6"
+futures = "0.3"
