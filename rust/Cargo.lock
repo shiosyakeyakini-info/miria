@@ -892,6 +892,11 @@ dependencies = [
  "aiscript",
  "flutter_rust_bridge",
  "futures",
+ "indexmap",
+ "nom",
+ "serde_json",
+ "tokio",
+ "uuid",
 ]
 
 [[package]]

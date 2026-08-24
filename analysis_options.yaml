@@ -53,6 +53,8 @@ analyzer:
   exclude:
     - "**/*.freezed.dart"
     - "**/*.g.dart"
+    # flutter_rust_bridge の生成物
+    - lib/rust/**
     - build/**
     - android/**
     - ios/**

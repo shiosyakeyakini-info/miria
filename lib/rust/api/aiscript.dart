@@ -4,15 +4,34 @@
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
 import "package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart";
+import "package:miria/rust/api/aiscript/api.dart";
+import "package:miria/rust/api/aiscript/play.dart";
+import "package:miria/rust/api/aiscript/ui.dart";
 import "package:miria/rust/frb_generated.dart";
 
-/// 組み込んでいる AiScript のバージョン。
-Future<String> aiscriptVersion() =>
-    RustLib.instance.api.crateApiAiscriptAiscriptVersion();
+// These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `Interpreter`, `Parser`
 
-/// スクリプトを実行し、`<:` で出力された行を返す。
-///
-/// Rust 連携が通っているかを確かめるための最小実装。Play 本体の環境
-/// (Mk:api / Ui:C:* など) はまだ生えていない。
-Future<List<String>> eval({required String input}) =>
-    RustLib.instance.api.crateApiAiscriptEval(input: input);
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<AiScript>>
+abstract class AiScript implements RustOpaqueInterface {
+  Future<void> abort();
+
+  static Future<String> aiscriptVersion() =>
+      RustLib.instance.api.crateApiAiscriptAiScriptAiscriptVersion();
+
+  Future<String> exec({required String input, bool? isLegacy});
+
+  // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
+  static Future<AiScript> newInstance({
+    required FutureOr<String> Function(String) read,
+    required FutureOr<void> Function(String) write,
+    AsApiLib? api,
+    AsUiLib? ui,
+    AsPlayLib? play,
+  }) => RustLib.instance.api.crateApiAiscriptAiScriptNew(
+    read: read,
+    write: write,
+    api: api,
+    ui: ui,
+    play: play,
+  );
+}

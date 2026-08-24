@@ -1,45 +1,187 @@
-//! AiScript 実行環境の Rust 側入口。
-//!
-//! AiScript の処理系そのものは aiscript-rs (MIT-0) に任せ、ここでは
-//! Dart から呼べる形に包むだけにする。
+// AiScript から Misskey を触るための実行環境。
+//
+// 先行実装である aria (https://github.com/poppingmoon/aria) から移植した。
+// aria は miria の git フォークではないが、どちらも AGPL-3.0 である。
+//
+// SPDX-FileCopyrightText: poppingmoon and miria contributors
+// SPDX-License-Identifier: AGPL-3.0-only
 
-use std::sync::{Arc, Mutex};
+use std::{collections::HashMap, sync::Arc};
 
-use aiscript::v1;
+use aiscript::{v0, v1};
+use flutter_rust_bridge::{DartFnFuture, frb};
 use futures::FutureExt;
 
-/// 組み込んでいる AiScript のバージョン。
-pub fn aiscript_version() -> String {
-    String::from(v1::AISCRIPT_VERSION)
+use crate::util::compare_versions::Version;
+
+pub mod api;
+pub mod play;
+pub mod ui;
+
+pub struct AiScript {
+    parser: Parser,
+    interpreter: Interpreter,
 }
 
-/// スクリプトを実行し、`<:` で出力された行を返す。
-///
-/// Rust 連携が通っているかを確かめるための最小実装。Play 本体の環境
-/// (Mk:api / Ui:C:* など) はまだ生えていない。
-pub async fn eval(input: String) -> Result<Vec<String>, String> {
-    let output = Arc::new(Mutex::new(Vec::<String>::new()));
-    let interpreter = v1::Interpreter::new(
-        [],
-        None::<fn(_) -> _>,
-        Some({
-            let output = output.clone();
-            move |value: v1::values::Value| {
-                if let Ok(mut output) = output.lock() {
-                    // 本家 Misskey の scratchpad が `<:` の出力に使う
-                    // utils.reprValue 相当
-                    output.push(value.repr_value().to_string());
-                }
-                async move {}.boxed()
+#[frb(opaque)]
+struct Parser {
+    v0: v0::Parser,
+    v1: v1::Parser,
+}
+
+#[frb(opaque)]
+struct Interpreter {
+    v0: v0::Interpreter,
+    v1: v1::Interpreter,
+}
+
+impl AiScript {
+    pub async fn new(
+        read: impl Fn(String) -> DartFnFuture<String> + Sync + Send + 'static,
+        write: impl Fn(String) -> DartFnFuture<()> + Sync + Send + 'static,
+        api: Option<api::AsApiLib>,
+        ui: Option<ui::AsUiLib>,
+        play: Option<play::AsPlayLib>,
+    ) -> Self {
+        let parser = Parser {
+            v0: v0::Parser::default(),
+            v1: v1::Parser::default(),
+        };
+
+        let mut consts_v0 = HashMap::new();
+        let mut consts_v1 = HashMap::new();
+        if let Some(api) = api {
+            api.clone().register_v0(&mut consts_v0);
+            api.register_v1(&mut consts_v1);
+        }
+        if let Some(ui) = ui {
+            ui.register_v0(&mut consts_v0);
+            ui.register_v1(&mut consts_v1);
+        }
+        if let Some(play) = play {
+            play.register_v0(&mut consts_v0);
+            play.register_v1(&mut consts_v1);
+        }
+        let in_ = Arc::new(read);
+        let out = Arc::new(write);
+        let interpreter = Interpreter {
+            v0: v0::Interpreter::new(
+                consts_v0,
+                Some({
+                    let in_ = in_.clone();
+                    move |input| in_(input)
+                }),
+                Some({
+                    let out = out.clone();
+                    move |value: v0::values::Value| {
+                        let out = out.clone();
+                        // 本家 Misskey の scratchpad が `<:` の出力に使う
+                        // utils.reprValue に揃える。Display は `str<"a">` の
+                        // ような型つきの表現なので、そのままは出せない
+                        let value = value.repr_value().to_string();
+                        async move {
+                            out(value).await;
+                        }
+                        .boxed()
+                    }
+                }),
+                None::<fn(_) -> _>,
+                None,
+            ),
+            v1: v1::Interpreter::new(
+                consts_v1,
+                Some(move |input| in_(input)),
+                Some(move |value: v1::values::Value| {
+                    let out = out.clone();
+                    let value = value.repr_value().to_string();
+                    async move {
+                        out(value).await;
+                    }
+                    .boxed()
+                }),
+                None::<fn(_) -> _>,
+                None,
+            ),
+        };
+
+        AiScript {
+            parser,
+            interpreter,
+        }
+    }
+
+    pub async fn exec(&self, input: &str, is_legacy: Option<bool>) -> Result<String, String> {
+        let is_legacy = match is_legacy {
+            Some(true) => true,
+            Some(false) => {
+                let version = v1::utils::get_lang_version(input);
+                version.is_some_and(|version| {
+                    version
+                        .parse::<Version>()
+                        .is_ok_and(|version| version < Version::major(1))
+                })
             }
-        }),
-        None::<fn(_) -> _>,
-        None,
-    );
-    let script = v1::Parser::default()
-        .parse(&input)
-        .map_err(|err| err.to_string())?;
-    interpreter.exec(script).await.map_err(|err| err.to_string())?;
-    let output = output.lock().map_err(|err| err.to_string())?;
-    Ok(output.clone())
+            None => {
+                let version = v1::utils::get_lang_version(input);
+                version.is_none_or(|version| {
+                    version
+                        .parse::<Version>()
+                        .is_ok_and(|version| version < Version::major(1))
+                })
+            }
+        };
+        if is_legacy {
+            match self.parser.v0.parse(input) {
+                Ok(script) => self
+                    .interpreter
+                    .v0
+                    .exec(script)
+                    .await
+                    .map_err(|err| err.to_string())
+                    .map(|value| value.unwrap_or_default().display_simple().to_string()),
+                Err(err) => {
+                    if let Ok(script) = self.parser.v1.parse(input) {
+                        self.interpreter
+                            .v1
+                            .exec(script)
+                            .await
+                            .map_err(|err| err.to_string())
+                            .map(|value| value.unwrap_or_default().display_simple().to_string())
+                    } else {
+                        Err(err.to_string())?
+                    }
+                }
+            }
+        } else {
+            match self.parser.v1.parse(input) {
+                Ok(script) => self
+                    .interpreter
+                    .v1
+                    .exec(script)
+                    .await
+                    .map_err(|err| err.to_string())
+                    .map(|value| value.unwrap_or_default().display_simple().to_string()),
+                Err(err) => {
+                    if let Ok(script) = self.parser.v0.parse(input) {
+                        self.interpreter
+                            .v0
+                            .exec(script)
+                            .await
+                            .map_err(|err| err.to_string())
+                            .map(|value| value.unwrap_or_default().display_simple().to_string())
+                    } else {
+                        Err(err.to_string())?
+                    }
+                }
+            }
+        }
+    }
+
+    pub async fn abort(&self) {
+        tokio::join!(self.interpreter.v0.abort(), self.interpreter.v1.abort());
+    }
+
+    pub fn aiscript_version() -> String {
+        String::from(v1::AISCRIPT_VERSION)
+    }
 }
