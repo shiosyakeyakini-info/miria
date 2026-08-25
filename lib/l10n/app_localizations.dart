@@ -3834,17 +3834,11 @@ abstract class S {
   /// **'miriaはまだプラグイン専用のトークンを作らへん。プラグインはあんたのアカウントの権限でそのまま動くから、入れるもんはよう選んでな。'**
   String get pluginPermissionNotice;
 
-  /// No description provided for @aboutAria.
+  /// No description provided for @ariaAcknowledgement.
   ///
   /// In ja, this message translates to:
-  /// **'ariaからの逆輸入について'**
-  String get aboutAria;
-
-  /// No description provided for @aboutAriaDescription.
-  ///
-  /// In ja, this message translates to:
-  /// **'AiScript（Play・スクラッチパッド・プラグイン）は、miriaの元コントリビュータが作ったMisskeyクライアント aria から逆輸入しとります。処理系そのものは aiscript-rs（MIT-0）を使うとります。ariaはmiriaのgitフォークやないけど、どっちもAGPL-3.0です。'**
-  String get aboutAriaDescription;
+  /// **'miriaのAiScriptは[aria](https://github.com/poppingmoon/aria)を基にしとります。両プロジェクトのコントリビュータの皆さんに感謝します。'**
+  String get ariaAcknowledgement;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

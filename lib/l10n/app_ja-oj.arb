@@ -198,6 +198,5 @@
     "uninstallPlugin": "このプラグインを削除いたしますわ",
     "confirmUninstallPlugin": "{name}を削除してもよろしくて？",
     "pluginPermissionNotice": "miriaはまだプラグイン専用のトークンを発行いたしませんの。プラグインはあなたのアカウントの権限でそのまま動きますので、導入するものはよくお選びくださいまし。",
-    "aboutAria": "ariaからの逆輸入について",
-    "aboutAriaDescription": "AiScript（Play・スクラッチパッド・プラグイン）は、miriaの元コントリビュータがお作りになったMisskeyクライアント aria から逆輸入しておりますの。処理系そのものは aiscript-rs（MIT-0）を使わせていただいておりますわ。ariaはmiriaのgitフォークではございませんが、どちらもAGPL-3.0ですの。"
+    "ariaAcknowledgement": "miriaのAiScriptは[aria](https://github.com/poppingmoon/aria)を基にしておりますの。両プロジェクトのコントリビュータの皆様に感謝いたしますわ。"
 }
