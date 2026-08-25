@@ -6,10 +6,13 @@ import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
+import "package:miria/repository/aiscript_storage_repository.dart";
 import "package:miria/repository/scratchpad_repository.dart";
 import "package:miria/rust/api/aiscript.dart";
 import "package:miria/rust/api/aiscript/ui.dart";
 import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
+import "package:miria/view/dialogs/aiscript_prompt_dialog.dart";
 import "package:miria/view/play_page/as_ui_widget.dart";
 import "package:miria/view/play_page/create_aiscript.dart";
 
@@ -59,13 +62,23 @@ class ScratchpadPage extends HookConsumerWidget implements AutoRouteWrapper {
       unawaited(repository.save(code));
 
       try {
+        final account = accountContext.getAccount;
         final aiscript = await createAiScript(
-          ref,
-          accountContext: accountContext,
+          misskey: ref.read(misskeyProvider(account)),
+          account: account,
           // 本家のスクラッチパッドは Mk:save の置き場にウィジェットと同じ
           // 名前空間を使う。書いたスクリプトの挙動を揃えるため合わせる
-          namespace: "widget",
+          storage: ref.read(
+            aiScriptStorageRepositoryProvider((
+              account: account,
+              namespace: "widget",
+            )),
+          ),
+          dialogs: ref.read(dialogStateProvider.notifier),
           locale: locale,
+          read: (prompt) async => context.mounted
+              ? await showAiScriptPrompt(context, prompt) ?? ""
+              : "",
           write: (value) =>
               logs.value = [...logs.value, _ScratchpadLog(text: value)],
           onComponentUpdate: (id, component) =>

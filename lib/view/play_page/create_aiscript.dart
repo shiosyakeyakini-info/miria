@@ -1,20 +1,17 @@
 import "dart:convert";
 
 import "package:dio/dio.dart";
-import "package:flutter/material.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
-import "package:miria/providers.dart";
 import "package:miria/repository/aiscript_storage_repository.dart";
 import "package:miria/rust/api/aiscript.dart";
 import "package:miria/rust/api/aiscript/api.dart";
 import "package:miria/rust/api/aiscript/play.dart";
+import "package:miria/rust/api/aiscript/plugin.dart";
 import "package:miria/rust/api/aiscript/ui.dart";
 import "package:miria/rust/frb_generated.dart";
 import "package:miria/util/nyaize.dart";
-import "package:miria/view/dialogs/simple_confirm_dialog.dart";
-import "package:miria/view/dialogs/simple_message_dialog.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 /// Rust 側の初期化が済んでいるか。
@@ -39,40 +36,38 @@ Uri serverUriOf(Account account) => Uri(
   port: account.port,
 );
 
-/// Play や scratchpad から使う AiScript の実行環境を組み立てる。
+/// Play・スクラッチパッド・プラグインから使う AiScript の実行環境を組み立てる。
 ///
 /// Rust 側は処理系だけを持っていて、Misskey に触る部分は全部 Dart から
 /// 渡したコールバックで動く。ここがその配線。
 ///
-/// [locale] は呼び出し側の `build` で `Localizations.localeOf` して渡す。
-/// `useEffect` の中から引くと、その時点では `InheritedWidget` を購読できず
-/// 例外になる。
+/// [BuildContext] を要求しないのが要点。プラグインはアプリが動いている間
+/// ずっと生きていて、特定の画面に紐づかないため。ダイアログは
+/// [DialogStateNotifier] 経由で出す。
 ///
-/// [namespace] は `Mk:save` / `Mk:load` の置き場を分ける名前で、Play なら
-/// `flash:<PlayのID>` を渡す。[onComponentUpdate] を渡すと `Ui:render` の
-/// 結果がそこに流れてくる。[playId] を渡すと `THIS_ID` / `THIS_URL` が生える。
+/// [namespace] は `Mk:save` / `Mk:load` の置き場を分ける名前。
+/// [read] を渡さないと `Mk:readline` は空文字を返す。
+/// [onComponentUpdate] を渡すと `Ui:render` の結果がそこに流れてくる。
+/// [playId] を渡すと `THIS_ID` / `THIS_URL` が生える。
 ///
-/// スクリプトは画面を離れたあとも [AiScript.abort] が効くまで動きうるので、
-/// [onComponentUpdate] は破棄済みの状態で呼ばれても平気に書くこと。Rust 側は
-/// このコールバックが投げないことを前提にしていて、投げると panic する。
-Future<AiScript> createAiScript(
-  WidgetRef ref, {
-  required AccountContext accountContext,
-  required String namespace,
+/// スクリプトは呼び出し元が消えたあとも [AiScript.abort] が効くまで動きうる
+/// ので、[onComponentUpdate] は破棄済みの状態で呼ばれても平気に書くこと。
+/// Rust 側はこのコールバックが投げないことを前提にしていて、投げると panic
+/// する。
+Future<AiScript> createAiScript({
+  required Misskey misskey,
+  required Account account,
+  required AiScriptStorageRepository storage,
+  required DialogStateNotifier dialogs,
   required String locale,
+  Future<String> Function(String prompt)? read,
+  void Function(String value)? write,
   void Function(String id, AsUiComponent component)? onComponentUpdate,
   String? playId,
-  void Function(String value)? write,
+  AsPluginLib? plugin,
 }) async {
-  final context = ref.context;
-
   await ensureAiScriptInitialized();
 
-  final account = accountContext.getAccount;
-  final misskey = ref.read(misskeyProvider(account));
-  final storage = ref.read(
-    aiScriptStorageRepositoryProvider((account: account, namespace: namespace)),
-  );
   final serverUrl = serverUriOf(account).toString();
   final url = playId != null ? "$serverUrl/play/$playId" : serverUrl;
 
@@ -88,11 +83,12 @@ Future<AiScript> createAiScript(
   // 各 id について最後に見た更新番号より古いものは捨てる
   final updateCounts = <String, int>{};
 
+  /// 題と本文をひとつの文言にまとめる。
+  String messageOf(String title, String text) =>
+      title.isEmpty ? text : "$title\n\n$text";
+
   return AiScript.newInstance(
-    read: (prompt) async {
-      if (!context.mounted) return "";
-      return await _showPrompt(context, prompt) ?? "";
-    },
+    read: (prompt) async => await read?.call(prompt) ?? "",
     write: write ?? (_) {},
     api: AsApiLib(
       userId: account.isDemoAccount ? null : account.i.id,
@@ -104,27 +100,17 @@ Future<AiScript> createAiScript(
       url: url,
       token: account.token,
       dialog: (title, text, _) async {
-        if (!context.mounted) return;
-        await SimpleMessageDialog.show(
-          context,
-          title.isEmpty ? text : "$title\n\n$text",
-        );
+        await dialogs.showSimpleDialog(message: (_) => messageOf(title, text));
       },
       confirm: (title, text, _) async {
-        if (!context.mounted) return false;
-        final result = await SimpleConfirmDialog.show(
-          context: context,
-          message: title.isEmpty ? text : "$title\n\n$text",
-          primary: S.of(context).done,
-          secondary: S.of(context).cancel,
+        final result = await dialogs.showDialog(
+          message: (_) => messageOf(title, text),
+          actions: (context) => [S.of(context).done, S.of(context).cancel],
         );
-        return result ?? false;
+        return result == 0;
       },
       toast: (text) async {
-        if (!context.mounted) return;
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(text)));
+        await dialogs.showSimpleDialog(message: (_) => text);
       },
       api: (endpoint, param, token) async {
         final decoded = jsonDecode(param);
@@ -158,37 +144,8 @@ Future<AiScript> createAiScript(
           )
         : null,
     play: playId != null ? AsPlayLib(thisId: playId, thisUrl: url) : null,
+    plugin: plugin,
   );
-}
-
-/// `Mk:readline` の入力欄。
-Future<String?> _showPrompt(BuildContext context, String prompt) async {
-  final controller = TextEditingController();
-  try {
-    return await showDialog<String>(
-      context: context,
-      builder: (context) => AlertDialog(
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          decoration: InputDecoration(labelText: prompt),
-          onSubmitted: (value) => Navigator.of(context).pop(value),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(S.of(context).cancel),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.of(context).pop(controller.text),
-            child: Text(S.of(context).done),
-          ),
-        ],
-      ),
-    );
-  } finally {
-    controller.dispose();
-  }
 }
 
 /// AiScript 側は `Mk:api` の失敗を JSON 文字列として受け取る。

@@ -6,10 +6,13 @@ import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
+import "package:miria/repository/aiscript_storage_repository.dart";
 import "package:miria/rust/api/aiscript.dart";
 import "package:miria/rust/api/aiscript/ui.dart";
 import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
+import "package:miria/view/dialogs/aiscript_prompt_dialog.dart";
 import "package:miria/view/play_page/as_ui_widget.dart";
 import "package:miria/view/play_page/create_aiscript.dart";
 import "package:misskey_dart/misskey_dart.dart";
@@ -51,11 +54,21 @@ class PlayPage extends HookConsumerWidget implements AutoRouteWrapper {
         error.value = null;
         isRunning.value = true;
         try {
+          final account = accountContext.getAccount;
           final created = await createAiScript(
-            ref,
-            accountContext: accountContext,
-            namespace: "flash:${flash.id}",
+            misskey: ref.read(misskeyProvider(account)),
+            account: account,
+            storage: ref.read(
+              aiScriptStorageRepositoryProvider((
+                account: account,
+                namespace: "flash:${flash.id}",
+              )),
+            ),
+            dialogs: ref.read(dialogStateProvider.notifier),
             locale: locale,
+            read: (prompt) async => context.mounted
+                ? await showAiScriptPrompt(context, prompt) ?? ""
+                : "",
             playId: flash.id,
             onComponentUpdate: (id, component) {
               // abort が効くまでスクリプトは動き続けるので、破棄後に
