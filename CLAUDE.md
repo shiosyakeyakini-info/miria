@@ -120,6 +120,27 @@ cargo build --release --manifest-path rust/Cargo.toml
 この方針は先行実装である [aria](https://github.com/poppingmoon/aria) に倣った。
 aria は miria の git フォークではないが、どちらも AGPL-3.0 である。
 
+### 手元のMisskeyで実サーバー検証する
+
+`assets_builder/misskey` のサブモジュールから、そのままMisskeyを立てられる。
+AiScriptまわりはモック相手だと配線の間違いが出ないので、実サーバーに対して
+確かめる価値が大きい。
+
+手順は `docs/local-misskey.md`。要点だけ:
+
+```bash
+cd assets_builder/misskey
+CYPRESS_INSTALL_BINARY=0 pnpm install --frozen-lockfile --filter "backend..."
+pnpm build-pre && pnpm --filter "backend..." build && pnpm migrate && pnpm start
+```
+
+miriaが相手にするのはAPIだけなのでバックエンドだけ入れる。フロントエンドを
+含めると `aiscript-vscode` を `codeload.github.com` から取りに行って、閉じた
+ネットワークでは弾かれる。
+
+`test/rust/aiscript_live_server_test.dart` が実サーバー向けのテスト。
+`MISSKEY_TEST_TOKEN` を渡すと動き、渡さなければ丸ごと飛ぶ。
+
 ### 実行中アプリの観測・操作（marionette MCP）
 
 debug ビルドには [marionette_mcp](https://github.com/leancodepl/marionette_mcp)
