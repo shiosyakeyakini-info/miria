@@ -608,10 +608,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_secure_storage_linux
-      sha256: a5f35ddab43cf5c8215d2feb4ce1957851f28c5c37e6f04335066a0602087bf5
+      sha256: "76fa9c841b3b1619fc5b5bc36efc7d158fa2356f223b6caeb1d0c80a54168546"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.1"
+    version: "3.0.2"
   flutter_secure_storage_platform_interface:
     dependency: transitive
     description:
