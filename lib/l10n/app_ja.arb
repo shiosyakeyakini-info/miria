@@ -1154,5 +1154,7 @@
     "uninstallPlugin": "このプラグインを消す",
     "confirmUninstallPlugin": "{name}を消してもええか？",
     "@confirmUninstallPlugin": { "placeholders": { "name": { "type": "String" } } },
-    "pluginPermissionNotice": "miriaはまだプラグイン専用のトークンを作らへん。プラグインはあんたのアカウントの権限でそのまま動くから、入れるもんはよう選んでな。"
+    "pluginPermissionNotice": "miriaはまだプラグイン専用のトークンを作らへん。プラグインはあんたのアカウントの権限でそのまま動くから、入れるもんはよう選んでな。",
+    "aboutAria": "ariaからの逆輸入について",
+    "aboutAriaDescription": "AiScript（Play・スクラッチパッド・プラグイン）は、miriaの元コントリビュータが作ったMisskeyクライアント aria から逆輸入しとります。処理系そのものは aiscript-rs（MIT-0）を使うとります。ariaはmiriaのgitフォークやないけど、どっちもAGPL-3.0です。"
 }

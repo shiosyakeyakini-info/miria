@@ -2175,6 +2175,13 @@ class SZh extends S {
   @override
   String get pluginPermissionNotice =>
       'miriaはまだプラグイン専用のトークンを作らへん。プラグインはあんたのアカウントの権限でそのまま動くから、入れるもんはよう選んでな。';
+
+  @override
+  String get aboutAria => 'ariaからの逆輸入について';
+
+  @override
+  String get aboutAriaDescription =>
+      'AiScript（Play・スクラッチパッド・プラグイン）は、miriaの元コントリビュータが作ったMisskeyクライアント aria から逆輸入しとります。処理系そのものは aiscript-rs（MIT-0）を使うとります。ariaはmiriaのgitフォークやないけど、どっちもAGPL-3.0です。';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).

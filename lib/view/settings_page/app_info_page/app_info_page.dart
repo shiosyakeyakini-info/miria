@@ -43,6 +43,12 @@ ${S.of(context).developer}: @shiosyakeyakini@misskey.io
 [${S.of(context).officialWebSite}](https://shiosyakeyakini.info/miria_web/index.html)
 [GitHub](https://github.com/shiosyakeyakini-info/miria)
 
+\$[x2 **${S.of(context).aboutAria}**]
+${S.of(context).aboutAriaDescription}
+
+[aria](https://github.com/poppingmoon/aria)
+[aiscript-rs](https://github.com/poppingmoon/aiscript-rs)
+
 \$[x2 **${S.of(context).openSourceLicense}**]
 ''',
                 ),

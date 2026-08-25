@@ -2183,6 +2183,13 @@ class SJa extends S {
   @override
   String get pluginPermissionNotice =>
       'miriaはまだプラグイン専用のトークンを作らへん。プラグインはあんたのアカウントの権限でそのまま動くから、入れるもんはよう選んでな。';
+
+  @override
+  String get aboutAria => 'ariaからの逆輸入について';
+
+  @override
+  String get aboutAriaDescription =>
+      'AiScript（Play・スクラッチパッド・プラグイン）は、miriaの元コントリビュータが作ったMisskeyクライアント aria から逆輸入しとります。処理系そのものは aiscript-rs（MIT-0）を使うとります。ariaはmiriaのgitフォークやないけど、どっちもAGPL-3.0です。';
 }
 
 /// The translations for Japanese (`ja_OJ`).
@@ -2676,4 +2683,11 @@ class SJaOj extends SJa {
   @override
   String get pluginPermissionNotice =>
       'miriaはまだプラグイン専用のトークンを発行いたしませんの。プラグインはあなたのアカウントの権限でそのまま動きますので、導入するものはよくお選びくださいまし。';
+
+  @override
+  String get aboutAria => 'ariaからの逆輸入について';
+
+  @override
+  String get aboutAriaDescription =>
+      'AiScript（Play・スクラッチパッド・プラグイン）は、miriaの元コントリビュータがお作りになったMisskeyクライアント aria から逆輸入しておりますの。処理系そのものは aiscript-rs（MIT-0）を使わせていただいておりますわ。ariaはmiriaのgitフォークではございませんが、どちらもAGPL-3.0ですの。';
 }
