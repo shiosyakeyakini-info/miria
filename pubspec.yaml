@@ -77,7 +77,14 @@ dependencies:
   flutter_hooks: ^0.21.2
   punycode: ^1.0.0
   image: ^4.9.1
-  flutter_twemoji: ^1.0.1
+  # 本家 (jasonlessenich/flutter_twemoji) は絵文字正規表現が古く、Unicode 16 以降の絵文字を
+  # 描画できない。フォークは jdecked/twemoji のアセットに追従し、正規表現を
+  # @misskey-dev/emoji-data から生成しているので、Misskey が異体字セレクタを落として寄越す
+  # 素の絵文字も描画できる
+  flutter_twemoji:
+    git:
+      url: https://github.com/shiosyakeyakini-info/flutter_twemoji.git
+      ref: main
   mime: ^2.0.0
 
   # AiScript (Play) の処理系。aiscript-rs (MIT-0) を rust/ 経由で組み込み、
