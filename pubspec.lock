@@ -652,11 +652,12 @@ packages:
   flutter_twemoji:
     dependency: "direct main"
     description:
-      name: flutter_twemoji
-      sha256: "366cdf5f0406f7f477bbcdf45b23aa7d671a1f939bde9b115280b0981669e41f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
+      path: "."
+      ref: main
+      resolved-ref: add8622e6cfe05e87da485fc95e8912d83a788c8
+      url: "https://github.com/shiosyakeyakini-info/flutter_twemoji.git"
+    source: git
+    version: "1.2.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
