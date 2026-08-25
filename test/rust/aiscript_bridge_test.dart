@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:flutter_test/flutter_test.dart";
 import "package:miria/rust/api/aiscript.dart";
 import "package:miria/rust/api/aiscript/api.dart";
@@ -116,16 +118,24 @@ void main() {
 
   group("Ui:", () {
     test("Ui:C:text が Dart 側にコンポーネントとして届くこと", () async {
-      final updates = <(String, AsUiComponent)>[];
+      // Rust 側は更新を tokio::spawn で投げっぱなしにするので、exec が
+      // 返った時点ではまだ届いていないことがある。届くまで待つ
+      final received = Completer<AsUiComponent>();
       await run(
         "Ui:render([Ui:C:text({ text: 'ここにテキスト' })])",
         ui: AsUiLib(
-          onUpdate: (id, component, _) => updates.add((id, component)),
+          onUpdate: (id, component, _) {
+            if (!received.isCompleted && component is AsUiComponent_Root) {
+              received.complete(component);
+            }
+          },
         ),
       );
-      expect(updates, isNotEmpty);
-      final root = updates.last.$2;
-      expect(root, isA<AsUiComponent_Root>());
+
+      expect(
+        await received.future.timeout(const Duration(seconds: 5)),
+        isA<AsUiComponent_Root>(),
+      );
     });
   });
 

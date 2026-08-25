@@ -16,6 +16,7 @@ use crate::util::compare_versions::Version;
 
 pub mod api;
 pub mod play;
+pub mod plugin;
 pub mod ui;
 
 pub struct AiScript {
@@ -42,6 +43,7 @@ impl AiScript {
         api: Option<api::AsApiLib>,
         ui: Option<ui::AsUiLib>,
         play: Option<play::AsPlayLib>,
+        plugin: Option<plugin::AsPluginLib>,
     ) -> Self {
         let parser = Parser {
             v0: v0::Parser::default(),
@@ -61,6 +63,10 @@ impl AiScript {
         if let Some(play) = play {
             play.register_v0(&mut consts_v0);
             play.register_v1(&mut consts_v1);
+        }
+        if let Some(plugin) = plugin {
+            plugin.register_v0(&mut consts_v0);
+            plugin.register_v1(&mut consts_v1);
         }
         let in_ = Arc::new(read);
         let out = Arc::new(write);

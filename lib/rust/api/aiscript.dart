@@ -3,11 +3,12 @@
 
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
-import "package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart";
-import "package:miria/rust/api/aiscript/api.dart";
-import "package:miria/rust/api/aiscript/play.dart";
-import "package:miria/rust/api/aiscript/ui.dart";
-import "package:miria/rust/frb_generated.dart";
+import '../frb_generated.dart';
+import 'aiscript/api.dart';
+import 'aiscript/play.dart';
+import 'aiscript/plugin.dart';
+import 'aiscript/ui.dart';
+import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 // These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `Interpreter`, `Parser`
 
@@ -27,11 +28,13 @@ abstract class AiScript implements RustOpaqueInterface {
     AsApiLib? api,
     AsUiLib? ui,
     AsPlayLib? play,
+    AsPluginLib? plugin,
   }) => RustLib.instance.api.crateApiAiscriptAiScriptNew(
     read: read,
     write: write,
     api: api,
     ui: ui,
     play: play,
+    plugin: plugin,
   );
 }

@@ -3,11 +3,10 @@
 
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
-import "package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart";
-import "package:freezed_annotation/freezed_annotation.dart" hide protected;
-import "package:miria/rust/frb_generated.dart";
-
-part "ui.freezed.dart";
+import '../../frb_generated.dart';
+import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
+part 'ui.freezed.dart';
 
 // These functions are ignored because they are not marked as `pub`: `create_component_instance`, `create_component_instance`, `new`, `new`, `register_v0`, `register_v1`, `register`, `register`, `update`, `update`, `update`, `update`, `update`, `update`, `update`, `update`, `update`, `update`, `update`, `update`, `update`, `update`, `update`
 // These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `AsUiLibV0`, `AsUiLibV1`
