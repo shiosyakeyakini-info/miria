@@ -81,10 +81,12 @@ class AiScriptPluginNotifier extends _$AiScriptPluginNotifier {
   /// 動いているスクリプト。installId で引く。
   final _running = <String, AiScript>{};
   var _disposed = false;
+  var _launched = false;
 
   @override
   AiScriptPluginState build(Account account) {
     _disposed = false;
+    _launched = false;
     ref.onDispose(() {
       _disposed = true;
       for (final aiscript in _running.values) {
@@ -100,8 +102,11 @@ class AiScriptPluginNotifier extends _$AiScriptPluginNotifier {
 
   /// 入れてあるプラグインを読み込んで、有効なものを動かす。
   ///
-  /// アプリの起動時に一度だけ呼ぶ。
+  /// アプリの起動時に呼ぶ。呼ぶ側を選ばなくて済むよう、二度目以降は何も
+  /// しない (アカウントごとに一度だけ動く)。
   Future<void> launchAll({required String locale}) async {
+    if (_launched) return;
+    _launched = true;
     final plugins = await _repository.load();
     if (_disposed) return;
     state = state.copyWith(plugins: plugins);
