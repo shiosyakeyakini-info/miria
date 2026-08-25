@@ -80,6 +80,23 @@ void main() {
     expect(notes.notes[TestData.note1.id]?.text, "書き換えた");
   });
 
+  test("ノートが先に入っていても、あとから入れたプラグインが次から掛かること", () async {
+    // アプリの起動直後はこの順になる。タイムラインが先に流れてきて、
+    // プラグインの立ち上げはその後ろに回ることがある
+    final notes = container.read(notesProvider(TestData.account))
+      ..registerNote(TestData.note1);
+    await settle();
+    expect(notes.notes[TestData.note1.id]?.text, TestData.note1.text);
+
+    await installInterruptor("""note.text = "あとから掛かった" """);
+
+    // 読み直しで同じノートが入り直したら、今度は通る
+    notes.registerNote(TestData.note1);
+    await settle();
+
+    expect(notes.notes[TestData.note1.id]?.text, "あとから掛かった");
+  });
+
   test("プラグインが変なものを返してもノートが消えないこと", () async {
     await container
         .read(aiScriptPluginProvider(TestData.account).notifier)

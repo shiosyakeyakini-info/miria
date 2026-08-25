@@ -235,6 +235,10 @@ class AiScriptPluginNotifier extends _$AiScriptPluginNotifier {
   Future<void> _launch(AiScriptPlugin plugin, {required String locale}) async {
     final installId = plugin.installId;
     try {
+      // AsPluginLib は createAiScript の引数なので、その中の初期化より先に
+      // 評価される。frb の sync な生成なのでこの時点で Rust を呼びに行き、
+      // 初期化前だと Bad state で落ちる。ここで先に済ませておく
+      await ensureAiScriptInitialized();
       final aiscript = await createAiScript(
         // providers.dart にも account という関数があるので this を付ける
         misskey: ref.read(misskeyProvider(this.account)),

@@ -130,14 +130,10 @@ final notesProvider = ChangeNotifierProvider.family<NoteRepository, Account>((
   final repository = NoteRepository(
     ref.read(misskeyProvider(account)),
     account,
-  );
-  // プラグインが note_view_interruptor を出し入れしたら追随する
-  ref.listen(
-    aiScriptPluginProvider(
-      account,
-    ).select((state) => state.noteViewInterruptors),
-    (_, next) => repository.noteViewInterruptors = next,
-    fireImmediately: true,
+    // プラグインはノートより後に立ち上がることがあるので、押し込まれるのを
+    // 待たずに、ノートが来るたびに今の顔ぶれを引きに行く
+    noteViewInterruptors: () =>
+        ref.read(aiScriptPluginProvider(account)).noteViewInterruptors,
   );
   return repository;
 });

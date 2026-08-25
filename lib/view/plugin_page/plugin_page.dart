@@ -9,6 +9,7 @@ import "package:miria/state_notifier/aiscript_plugin_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 import "package:miria/view/dialogs/simple_message_dialog.dart";
+import "package:miria/view/dialogs/text_input_dialog.dart";
 
 /// 入れてあるクライアントプラグインの管理。
 @RoutePage()
@@ -36,7 +37,14 @@ class PluginPage extends HookConsumerWidget implements AutoRouteWrapper {
         actions: [
           IconButton(
             onPressed: () async {
-              final code = await _showInstallDialog(context);
+              final code = await TextInputDialog.show(
+                context,
+                title: S.of(context).installPlugin,
+                hint: S.of(context).pluginCode,
+                minLines: 5,
+                maxLines: 10,
+                isMonospace: true,
+              );
               if (code == null || code.isEmpty) return;
               try {
                 await notifier.install(code, locale: locale);
@@ -85,41 +93,6 @@ class PluginPage extends HookConsumerWidget implements AutoRouteWrapper {
         ),
       ),
     );
-  }
-}
-
-/// コードを貼り付けてもらう。
-Future<String?> _showInstallDialog(BuildContext context) async {
-  final controller = TextEditingController();
-  try {
-    return await showDialog<String>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(S.of(context).installPlugin),
-        content: TextField(
-          controller: controller,
-          maxLines: 10,
-          minLines: 5,
-          style: const TextStyle(fontFamily: "monospace"),
-          decoration: InputDecoration(
-            hintText: S.of(context).pluginCode,
-            border: const OutlineInputBorder(),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(S.of(context).cancel),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.of(context).pop(controller.text),
-            child: Text(S.of(context).done),
-          ),
-        ],
-      ),
-    );
-  } finally {
-    controller.dispose();
   }
 }
 

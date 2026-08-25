@@ -1,5 +1,6 @@
 import "dart:async";
 import "dart:convert";
+import "package:collection/collection.dart";
 import "package:flutter/foundation.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:miria/extensions/note_extension.dart";
@@ -28,18 +29,17 @@ class NoteRepository extends ChangeNotifier {
   final Map<String, Note> _notes = {};
   final Map<String, NoteStatus> _noteStatuses = {};
 
-  /// プラグインが登録した note_view_interruptor。
+  /// プラグインが登録した note_view_interruptor を引く。
   ///
-  /// 入れ替わると、通し直すために覚え書きを捨てる。
-  List<PluginInterruptor> get noteViewInterruptors => _noteViewInterruptors;
-  List<PluginInterruptor> _noteViewInterruptors = const [];
-  set noteViewInterruptors(List<PluginInterruptor> value) {
-    _noteViewInterruptors = value;
-    _interrupted.clear();
-  }
+  /// 押し込まれるのではなく、要るときに引きに行く。プラグインはノートより
+  /// 後に立ち上がることがあり、購読で押し込む形だと取りこぼす。
+  final List<PluginInterruptor> Function() _noteViewInterruptors;
 
   /// interruptor を通し終えたノート。二度通さないための覚え書き。
   final Set<String> _interrupted = {};
+
+  /// 最後に見た interruptor の顔ぶれ。変わったら覚え書きを捨てる。
+  List<PluginInterruptor> _lastInterruptors = const [];
 
   final List<List<String>> softMuteWordContents = [];
   final List<RegExp> softMuteWordRegExps = [];
@@ -47,9 +47,15 @@ class NoteRepository extends ChangeNotifier {
   final List<List<String>> hardMuteWordContents = [];
   final List<RegExp> hardMuteWordRegExps = [];
 
-  NoteRepository(this.misskey, this.account) {
+  NoteRepository(
+    this.misskey,
+    this.account, {
+    List<PluginInterruptor> Function()? noteViewInterruptors,
+  }) : _noteViewInterruptors = noteViewInterruptors ?? _noInterruptors {
     updateMute(account.i.mutedWords, account.i.hardMutedWords);
   }
+
+  static List<PluginInterruptor> _noInterruptors() => const [];
 
   void updateMute(List<MuteWord> softMuteWords, List<MuteWord> hardMuteWords) {
     for (final muteWord in softMuteWords) {
@@ -165,7 +171,17 @@ class NoteRepository extends ChangeNotifier {
   /// に後から差し替える。本家 Misskey は描画のたびに同期で通すが、そこは
   /// 揃えられない。代わりに一度通したノートは覚えておいて二度通さない。
   void _applyNoteViewInterruptors(String id) {
-    if (_noteViewInterruptors.isEmpty) return;
+    final interruptors = _noteViewInterruptors();
+    if (interruptors.isEmpty) return;
+    // 顔ぶれが変わっていたら、通し直すために覚え書きを捨てる
+    if (!identical(interruptors, _lastInterruptors) &&
+        !const ListEquality<PluginInterruptor>().equals(
+          interruptors,
+          _lastInterruptors,
+        )) {
+      _lastInterruptors = interruptors;
+      _interrupted.clear();
+    }
     // 既に通したものはそのまま
     if (!_interrupted.add(id)) return;
 
@@ -174,7 +190,7 @@ class NoteRepository extends ChangeNotifier {
         final registered = _notes[id];
         if (registered == null) return;
         var note = registered;
-        for (final interruptor in _noteViewInterruptors) {
+        for (final interruptor in interruptors) {
           try {
             final result = await interruptor.callback.call(
               value: jsonEncode(note.toJson()),
