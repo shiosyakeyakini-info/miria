@@ -78,10 +78,13 @@ sealed class MisskeyEmojiData {
 
     // よそのサーバー
     if (emojiInfo != null && emojiInfo.isNotEmpty) {
-      final baseName =
-          customEmojiRegExp.firstMatch(emojiName)?.group(1) ?? emojiName;
       final hostIncludedBaseName =
           hostIncludedRegExp.firstMatch(emojiName)?.group(1) ?? emojiName;
+      // `:ai@example.com:` ならホストを除いた `ai`
+      // `:ai:` なら前後のコロンを除いた `ai`
+      final baseName =
+          customEmojiRegExp.firstMatch(emojiName)?.group(1) ??
+          hostIncludedBaseName;
 
       final found = emojiInfo[hostIncludedBaseName];
       if (found != null) {
@@ -166,4 +169,30 @@ class MutedEmojiData extends MisskeyEmojiData {
     : super(originalData.baseName, originalData.isSensitive);
 
   final MisskeyEmojiData originalData;
+}
+
+extension MisskeyEmojiDataReaction on MisskeyEmojiData {
+  /// リアクションとして投げる文字列を求める。
+  ///
+  /// リモートのカスタム絵文字はそのままではリアクションに使えず、サーバーに
+  /// 弾かれて❤になってしまうため、同じショートコードの自分のサーバーの絵文字に
+  /// 読み替える。読み替える先がないときや、そもそもリアクションできない
+  /// ときはnull。
+  String? resolveReactionString(EmojiRepository? repository) {
+    switch (this) {
+      case UnicodeEmojiData(:final char):
+        return char;
+      case CustomEmojiData(:final isCurrentServer, :final baseName):
+        if (isCurrentServer) return ":$baseName:";
+        final localEmoji = repository?.emojiMap?[baseName]?.emoji;
+        if (localEmoji is! CustomEmojiData || !localEmoji.isCurrentServer) {
+          return null;
+        }
+        return ":${localEmoji.baseName}:";
+      case NotEmojiData():
+        return null;
+      case MutedEmojiData(:final originalData):
+        return originalData.resolveReactionString(repository);
+    }
+  }
 }

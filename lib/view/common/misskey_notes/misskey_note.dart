@@ -175,11 +175,16 @@ class MisskeyNote extends HookConsumerWidget {
       selectedEmoji = requestEmoji;
     }
 
+    final reactionString = selectedEmoji.resolveReactionString(
+      ref.read(emojiRepositoryProvider(account)),
+    );
+    if (reactionString == null) return;
+
     await ref.read(dialogStateProvider.notifier).guard(() async {
       await misskey.notes.reactions.create(
         NotesReactionsCreateRequest(
           noteId: displayNote.id,
-          reaction: ":${selectedEmoji.baseName}:",
+          reaction: reactionString,
         ),
       );
     });
@@ -436,10 +441,14 @@ class MisskeyNote extends HookConsumerWidget {
           }
 
           if (selectedEmoji == null) return;
+          final reactionString = selectedEmoji.resolveReactionString(
+            ref.read(emojiRepositoryProvider(account)),
+          );
+          if (reactionString == null) return;
           await misskey.notes.reactions.create(
             NotesReactionsCreateRequest(
               noteId: displayNote.id,
-              reaction: ":${selectedEmoji.baseName}:",
+              reaction: reactionString,
             ),
           );
           if (account.host == "misskey.io") {
