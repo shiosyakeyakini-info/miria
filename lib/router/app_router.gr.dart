@@ -2977,6 +2977,55 @@ class PlayRouteArgs {
 }
 
 /// generated route for
+/// [PluginPage]
+class PluginRoute extends PageRouteInfo<PluginRouteArgs> {
+  PluginRoute({
+    required AccountContext accountContext,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         PluginRoute.name,
+         args: PluginRouteArgs(accountContext: accountContext, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'PluginRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<PluginRouteArgs>();
+      return WrappedRoute(
+        child: PluginPage(accountContext: args.accountContext, key: args.key),
+      );
+    },
+  );
+}
+
+class PluginRouteArgs {
+  const PluginRouteArgs({required this.accountContext, this.key});
+
+  final AccountContext accountContext;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'PluginRouteArgs{accountContext: $accountContext, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PluginRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [ProfileEditPage]
 class ProfileEditRoute extends PageRouteInfo<ProfileEditRouteArgs> {
   ProfileEditRoute({

@@ -187,5 +187,15 @@
     "scratchpad": "スクラッチパッド",
     "scratchpadDescription": "AiScriptを書いて動かせる場所ですわ。Misskeyと対話するコードをお試しになれますの。",
     "runScript": "実行いたしますわ",
-    "scriptOutput": "出力"
+    "scriptOutput": "出力",
+    "plugins": "プラグイン",
+    "installPlugin": "プラグインを導入いたしますわ",
+    "pluginCode": "AiScriptのコードを貼り付けてくださいまし",
+    "noPluginsInstalled": "まだ何も入っておりませんわ",
+    "pluginPermissions": "要求されている権限",
+    "pluginLogs": "ログ",
+    "pluginSettings": "設定",
+    "uninstallPlugin": "このプラグインを削除いたしますわ",
+    "confirmUninstallPlugin": "{name}を削除してもよろしくて？",
+    "pluginPermissionNotice": "miriaはまだプラグイン専用のトークンを発行いたしませんの。プラグインはあなたのアカウントの権限でそのまま動きますので、導入するものはよくお選びくださいまし。"
 }

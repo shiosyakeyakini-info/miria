@@ -1,6 +1,8 @@
+import "dart:convert";
 import "dart:io";
 import "dart:typed_data";
 
+import "package:collection/collection.dart";
 import "package:dio/dio.dart";
 import "package:file/file.dart";
 import "package:file_picker/file_picker.dart";
@@ -17,6 +19,7 @@ import "package:miria/model/image_file.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/note_draft_repository.dart";
 import "package:miria/router/app_router.dart";
+import "package:miria/state_notifier/aiscript_plugin_notifier.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/note_create_page/drive_modal_sheet.dart";
 import "package:miria/view/note_create_page/file_settings_dialog.dart";
@@ -727,18 +730,20 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
           );
         } else {
           await _misskey.notes.create(
-            NotesCreateRequest(
-              visibility: state.noteVisibility,
-              text: postText,
-              cw: state.isCw ? state.cwText : null,
-              localOnly: state.localOnly,
-              replyId: state.reply?.id,
-              renoteId: state.renote?.id,
-              channelId: state.channel?.id,
-              fileIds: fileIds.isEmpty ? null : fileIds,
-              visibleUserIds: visibleUserIds.toSet().toList(), //distinct list
-              reactionAcceptance: state.reactionAcceptance,
-              poll: state.isVote ? poll : null,
+            await _applyNotePostInterruptors(
+              NotesCreateRequest(
+                visibility: state.noteVisibility,
+                text: postText,
+                cw: state.isCw ? state.cwText : null,
+                localOnly: state.localOnly,
+                replyId: state.reply?.id,
+                renoteId: state.renote?.id,
+                channelId: state.channel?.id,
+                fileIds: fileIds.isEmpty ? null : fileIds,
+                visibleUserIds: visibleUserIds.toSet().toList(), //distinct list
+                reactionAcceptance: state.reactionAcceptance,
+                poll: state.isVote ? poll : null,
+              ),
             ),
           );
         }
@@ -748,6 +753,78 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
         rethrow;
       }
     });
+  }
+
+  /// プラグインの post_form_action を投稿フォームに適用する。
+  ///
+  /// 本家 Misskey はハンドラに update 関数を渡してフォームを書き換えさせる
+  /// が、Rust 越しにその形は取れないので、ハンドラの実行中に呼ばれた update
+  /// をまとめて受け取って当てている。
+  Future<void> applyPostFormAction(PluginPostFormAction action) async {
+    try {
+      final returned = await action.callback.call(
+        form: jsonEncode({
+          "text": state.text,
+          "cw": state.isCw ? state.cwText : null,
+          "visibility": state.noteVisibility.name,
+          "localOnly": state.localOnly,
+        }),
+      );
+      final updates = jsonDecode(returned);
+      if (updates is! Map<String, dynamic>) return;
+
+      var next = state;
+      if (updates["text"] case final String text) {
+        next = next.copyWith(text: text);
+      }
+      if (updates.containsKey("cw")) {
+        next = switch (updates["cw"]) {
+          final String cw => next.copyWith(isCw: true, cwText: cw),
+          _ => next.copyWith(isCw: false),
+        };
+      }
+      if (updates["localOnly"] case final bool localOnly) {
+        next = next.copyWith(localOnly: localOnly);
+      }
+      if (updates["visibility"] case final String visibility) {
+        final parsed = NoteVisibility.values.firstWhereOrNull(
+          (e) => e.name == visibility,
+        );
+        if (parsed != null) next = next.copyWith(noteVisibility: parsed);
+      }
+      state = next;
+    } catch (e) {
+      logger.warning(e);
+    }
+  }
+
+  /// プラグインの note_post_interruptor を投稿の直前に通す。
+  ///
+  /// 本家 Misskey と同じく、投稿する内容そのものを書き換えさせる。
+  /// プラグインが壊れたものを返したら、その 1 つを飛ばして先に進む。
+  Future<NotesCreateRequest> _applyNotePostInterruptors(
+    NotesCreateRequest request,
+  ) async {
+    final interruptors = ref
+        .read(
+          aiScriptPluginProvider(ref.read(accountContextProvider).postAccount),
+        )
+        .notePostInterruptors;
+    var result = request;
+    for (final interruptor in interruptors) {
+      try {
+        final returned = await interruptor.callback.call(
+          value: jsonEncode(result.toJson()),
+        );
+        final decoded = jsonDecode(returned);
+        if (decoded is Map<String, dynamic>) {
+          result = NotesCreateRequest.fromJson(decoded);
+        }
+      } catch (e) {
+        logger.warning(e);
+      }
+    }
+    return result;
   }
 
   /// メディアを選択する

@@ -72,7 +72,7 @@ final class AiScriptPluginNotifierProvider
 }
 
 String _$aiScriptPluginNotifierHash() =>
-    r'b9ebf5370cbb9e0ddf4f3b5a1495418f0a0b5a36';
+    r'f6a0a0775716cad379b839e557b561b89427a7e8';
 
 /// 入れてあるプラグインを起動して面倒を見る。
 ///

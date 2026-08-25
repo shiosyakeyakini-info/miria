@@ -2150,6 +2150,39 @@ class SJa extends S {
 
   @override
   String get scriptOutput => '出力';
+
+  @override
+  String get plugins => 'プラグイン';
+
+  @override
+  String get installPlugin => 'プラグインを入れる';
+
+  @override
+  String get pluginCode => 'AiScriptのコードを貼り付けてや';
+
+  @override
+  String get noPluginsInstalled => 'まだ何も入ってへん';
+
+  @override
+  String get pluginPermissions => '要求してる権限';
+
+  @override
+  String get pluginLogs => 'ログ';
+
+  @override
+  String get pluginSettings => '設定';
+
+  @override
+  String get uninstallPlugin => 'このプラグインを消す';
+
+  @override
+  String confirmUninstallPlugin(String name) {
+    return '$nameを消してもええか？';
+  }
+
+  @override
+  String get pluginPermissionNotice =>
+      'miriaはまだプラグイン専用のトークンを作らへん。プラグインはあんたのアカウントの権限でそのまま動くから、入れるもんはよう選んでな。';
 }
 
 /// The translations for Japanese (`ja_OJ`).
@@ -2610,4 +2643,37 @@ class SJaOj extends SJa {
 
   @override
   String get scriptOutput => '出力';
+
+  @override
+  String get plugins => 'プラグイン';
+
+  @override
+  String get installPlugin => 'プラグインを導入いたしますわ';
+
+  @override
+  String get pluginCode => 'AiScriptのコードを貼り付けてくださいまし';
+
+  @override
+  String get noPluginsInstalled => 'まだ何も入っておりませんわ';
+
+  @override
+  String get pluginPermissions => '要求されている権限';
+
+  @override
+  String get pluginLogs => 'ログ';
+
+  @override
+  String get pluginSettings => '設定';
+
+  @override
+  String get uninstallPlugin => 'このプラグインを削除いたしますわ';
+
+  @override
+  String confirmUninstallPlugin(String name) {
+    return '$nameを削除してもよろしくて？';
+  }
+
+  @override
+  String get pluginPermissionNotice =>
+      'miriaはまだプラグイン専用のトークンを発行いたしませんの。プラグインはあなたのアカウントの権限でそのまま動きますので、導入するものはよくお選びくださいまし。';
 }

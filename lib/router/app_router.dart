@@ -58,6 +58,7 @@ import "package:miria/view/notification_page/notification_page.dart";
 import "package:miria/view/photo_edit_page/license_confirm_dialog.dart";
 import "package:miria/view/photo_edit_page/photo_edit_page.dart";
 import "package:miria/view/play_page/play_page.dart";
+import "package:miria/view/plugin_page/plugin_page.dart";
 import "package:miria/view/profile_edit_page/profile_edit_page.dart";
 import "package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart";
 import "package:miria/view/scratchpad_page/scratchpad_page.dart";
@@ -134,6 +135,7 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: ExploreRoute.page),
     AutoRoute(page: PlayRoute.page),
     AutoRoute(page: ScratchpadRoute.page),
+    AutoRoute(page: PluginRoute.page),
     AutoRoute(page: ExploreRoleUsersRoute.page),
     AutoRoute(page: SearchRoute.page),
     AutoRoute(page: FederationRoute.page),

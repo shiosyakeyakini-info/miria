@@ -1,8 +1,11 @@
+import "dart:async";
+import "dart:convert";
 import "package:flutter/foundation.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:miria/extensions/note_extension.dart";
 import "package:miria/log.dart";
 import "package:miria/model/account.dart";
+import "package:miria/state_notifier/aiscript_plugin_notifier.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 part "note_repository.freezed.dart";
@@ -24,6 +27,19 @@ class NoteRepository extends ChangeNotifier {
   final Account account;
   final Map<String, Note> _notes = {};
   final Map<String, NoteStatus> _noteStatuses = {};
+
+  /// プラグインが登録した note_view_interruptor。
+  ///
+  /// 入れ替わると、通し直すために覚え書きを捨てる。
+  List<PluginInterruptor> get noteViewInterruptors => _noteViewInterruptors;
+  List<PluginInterruptor> _noteViewInterruptors = const [];
+  set noteViewInterruptors(List<PluginInterruptor> value) {
+    _noteViewInterruptors = value;
+    _interrupted.clear();
+  }
+
+  /// interruptor を通し終えたノート。二度通さないための覚え書き。
+  final Set<String> _interrupted = {};
 
   final List<List<String>> softMuteWordContents = [];
   final List<RegExp> softMuteWordRegExps = [];
@@ -121,6 +137,7 @@ class NoteRepository extends ChangeNotifier {
                     ? registeredNote?.myReaction
                     : null)),
     );
+    _applyNoteViewInterruptors(note.id);
     _noteStatuses[note.id] ??= NoteStatus(
       isCwOpened: false,
       isLongVisible: false,
@@ -140,6 +157,44 @@ class NoteRepository extends ChangeNotifier {
     if (reply != null) {
       _registerNote(reply);
     }
+  }
+
+  /// note_view_interruptor をノートに通して、結果で置き換える。
+  ///
+  /// AiScript は Rust 側で動いていて同期には呼べないので、描画をせき止めず
+  /// に後から差し替える。本家 Misskey は描画のたびに同期で通すが、そこは
+  /// 揃えられない。代わりに一度通したノートは覚えておいて二度通さない。
+  void _applyNoteViewInterruptors(String id) {
+    if (_noteViewInterruptors.isEmpty) return;
+    // 既に通したものはそのまま
+    if (!_interrupted.add(id)) return;
+
+    unawaited(
+      Future(() async {
+        final registered = _notes[id];
+        if (registered == null) return;
+        var note = registered;
+        for (final interruptor in _noteViewInterruptors) {
+          try {
+            final result = await interruptor.callback.call(
+              value: jsonEncode(note.toJson()),
+            );
+            final decoded = jsonDecode(result);
+            if (decoded is Map<String, dynamic>) {
+              note = Note.fromJson(decoded);
+            }
+          } catch (e) {
+            // プラグインが変なものを返しても、もとのノートで表示を続ける
+            logger.warning(e);
+          }
+        }
+        // 通している間に消えていたら何もしない
+        if (_notes.containsKey(id)) {
+          _notes[id] = note;
+          notifyListeners();
+        }
+      }),
+    );
   }
 
   void registerNote(Note note) {

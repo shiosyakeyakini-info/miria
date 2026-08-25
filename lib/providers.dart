@@ -33,6 +33,7 @@ import "package:miria/repository/tab_settings_repository.dart";
 import "package:miria/repository/time_line_repository.dart";
 import "package:miria/repository/user_list_time_line_repository.dart";
 import "package:miria/router/app_router.dart";
+import "package:miria/state_notifier/aiscript_plugin_notifier.dart";
 import "package:miria/util/file_system_io.dart" as fs;
 import "package:miria/util/window_listener.dart";
 import "package:misskey_dart/misskey_dart.dart";
@@ -122,9 +123,24 @@ final favoriteProvider =
       ),
     );
 
-final notesProvider = ChangeNotifierProvider.family<NoteRepository, Account>(
-  (ref, account) => NoteRepository(ref.read(misskeyProvider(account)), account),
-);
+final notesProvider = ChangeNotifierProvider.family<NoteRepository, Account>((
+  ref,
+  account,
+) {
+  final repository = NoteRepository(
+    ref.read(misskeyProvider(account)),
+    account,
+  );
+  // プラグインが note_view_interruptor を出し入れしたら追随する
+  ref.listen(
+    aiScriptPluginProvider(
+      account,
+    ).select((state) => state.noteViewInterruptors),
+    (_, next) => repository.noteViewInterruptors = next,
+    fireImmediately: true,
+  );
+  return repository;
+});
 
 @Riverpod(dependencies: [accountContext])
 Raw<NoteRepository> notesWith(Ref ref) {

@@ -14,6 +14,7 @@ import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/note_draft_repository.dart";
 import "package:miria/router/app_router.dart";
+import "package:miria/state_notifier/aiscript_plugin_notifier.dart";
 import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
@@ -236,6 +237,22 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
                 },
                 icon: const Icon(Icons.drafts),
                 tooltip: S.of(context).drafts,
+              ),
+            // プラグインが生やした項目
+            if (ref.watch(
+                  aiScriptPluginProvider(
+                    ref.read(accountContextProvider).postAccount,
+                  ).select((state) => state.postFormActions),
+                )
+                case final postFormActions when postFormActions.isNotEmpty)
+              PopupMenuButton<PluginPostFormAction>(
+                icon: const Icon(Icons.extension),
+                itemBuilder: (context) => [
+                  for (final action in postFormActions)
+                    PopupMenuItem(value: action, child: Text(action.title)),
+                ],
+                onSelected: (action) =>
+                    unawaited(notifier.applyPostFormAction(action)),
               ),
             IconButton(
               onPressed: () async => await notifier.note(),
