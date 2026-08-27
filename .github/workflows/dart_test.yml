@@ -16,32 +16,67 @@ permissions:
   pull-requests: write
 
 jobs:
-  build:
+  format:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
-      - uses: dart-lang/setup-dart@v1
-
-      - name: Get Flutter version from .fvmrc
-        run:  echo "FLUTTER_FVM_VERSION=$(jq -r .flutter .fvmrc)" >> $GITHUB_ENV
 
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{ env.FLUTTER_FVM_VERSION }}
+          flutter-version-file: .fvmrc
           cache: true
-
-      - run: dart format --output=none --set-exit-if-changed .
 
       - name: Run flutter version
         run: flutter --version
 
       - name: Run flutter pub get
         run: flutter pub get
-      
-      # ゆくゆくは
-      # - run: flutter analyze --fatal-infos
+
+      - name: Format
+        run: dart format --output=none --set-exit-if-changed .
+
+  analyze:
+    if: false
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version-file: .fvmrc
+          cache: true
+
+      - name: Run flutter version
+        run: flutter --version
+
+      - name: Run flutter pub get
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze --fatal-infos
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version-file: .fvmrc
+          cache: true
+
+      - name: Run flutter version
+        run: flutter --version
+
+      - name: Run flutter pub get
+        run: flutter pub get
 
       - name: Run flutter test with coverage
         run: flutter test --coverage --coverage-path=~/coverage/lcov.info
@@ -50,3 +85,21 @@ jobs:
         with:
           token: ${{secrets.CODECOV_TOKEN}}
           files: ~/coverage/lcov.info
+
+  check-build-diff:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version-file: .fvmrc
+          cache: true
+
+      - name: Run build_runner
+        run: dart run build_runner build -d
+
+      - name: Check diff
+        run: git diff --exit-code
