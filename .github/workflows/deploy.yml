@@ -1,6 +1,18 @@
 name: デプロイ
 
-on: [workflow_dispatch]
+on: 
+  workflow_dispatch:
+    inputs:
+      bump_version:
+        description: 'Bump Version'
+        required: true
+        default: 'build'
+        type: choice
+        options:
+          - build
+          - patch
+          - minor
+          - major
 
 permissions:
   contents: write
@@ -68,7 +80,7 @@ jobs:
 
         - name: Bump up version
           run: |
-            flutter pub run cider bump build --bump-build
+            flutter pub run cider bump ${{ inputs.bump_version }} --bump-build
             echo "BUMP_VERSION=$(flutter pub run cider version)" >> $GITHUB_ENV
 
         - name: Commit and push pubspec.yaml
