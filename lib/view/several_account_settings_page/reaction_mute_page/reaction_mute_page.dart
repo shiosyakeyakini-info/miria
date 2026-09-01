@@ -33,64 +33,66 @@ class ReactionMutePage extends HookConsumerWidget implements AutoRouteWrapper {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextField(
-                controller: controller,
-                maxLines: null,
-                minLines: 5,
-                autofocus: true,
-                textCapitalization: TextCapitalization.none,
-              ),
-              Text(
-                S.of(context).reactionMuteDescription,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () async {
-                        final mutedReactions = await showDialog<List<String>>(
-                          context: context,
-                          builder: (context) =>
-                              AddMutedReactionsDialog(account: account),
-                        );
-                        if (mutedReactions != null) {
-                          // 既存の内容と新しい内容をマージ
-                          final currentValues = controller.text
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: controller,
+                  maxLines: null,
+                  minLines: 5,
+                  autofocus: true,
+                  textCapitalization: TextCapitalization.none,
+                ),
+                Text(
+                  S.of(context).reactionMuteDescription,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () async {
+                          final mutedReactions = await showDialog<List<String>>(
+                            context: context,
+                            builder: (context) =>
+                                AddMutedReactionsDialog(account: account),
+                          );
+                          if (mutedReactions != null) {
+                            // 既存の内容と新しい内容をマージ
+                            final currentValues = controller.text
+                                .split("\n")
+                                .where((e) => e.trim().isNotEmpty)
+                                .toSet();
+                            currentValues.addAll(mutedReactions);
+                            controller.text = currentValues.join("\n");
+                          }
+                        },
+                        icon: const Icon(Icons.download),
+                        label: Text(S.of(context).importMutedReactions),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          final values = controller.text
                               .split("\n")
                               .where((e) => e.trim().isNotEmpty)
-                              .toSet();
-                          currentValues.addAll(mutedReactions);
-                          controller.text = currentValues.join("\n");
-                        }
-                      },
-                      icon: const Icon(Icons.download),
-                      label: Text(S.of(context).importMutedReactions),
+                              .toList();
+                          final current = repo.fromAccount(account);
+                          repo.save(current.copyWith(mutedReactions: values));
+                          context.maybePop();
+                        },
+                        icon: const Icon(Icons.save),
+                        label: Text(S.of(context).save),
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        final values = controller.text
-                            .split("\n")
-                            .where((e) => e.trim().isNotEmpty)
-                            .toList();
-                        final current = repo.fromAccount(account);
-                        repo.save(current.copyWith(mutedReactions: values));
-                        context.maybePop();
-                      },
-                      icon: const Icon(Icons.save),
-                      label: Text(S.of(context).save),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
