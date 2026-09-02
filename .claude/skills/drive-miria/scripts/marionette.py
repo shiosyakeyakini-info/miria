@@ -64,6 +64,13 @@ class App:
         vm = self._get("getVM", {})
         return vm["result"]["isolates"][0]["id"]
 
+    def vm(self, method, **params):
+        """A VM Service RPC that is not scoped to an isolate."""
+        result = self._get(method, params)
+        if "error" in result:
+            raise SystemExit(json.dumps(result["error"], ensure_ascii=False, indent=1))
+        return result["result"]
+
     def call(self, method, **params):
         params["isolateId"] = self.isolate
         result = self._get(method, params)
@@ -180,6 +187,81 @@ def cmd_read(app, args):
     )
 
 
+def _mib(n):
+    return f"{n / 1024 / 1024:.1f}MiB"
+
+
+def cmd_mem(app, args):
+    """Memory as the VM sees it: process RSS, then the Dart heap inside it.
+
+    RSS is what the OS charges the app; the Dart heap is usually a fraction of
+    it, with decoded images and GPU-side buffers living outside. A leak that
+    only shows in RSS is not a Dart-object leak.
+    """
+    process = app.vm("getProcessMemoryUsage")["root"]
+    usage = app.call("getMemoryUsage")
+    print(f"rss            {_mib(process['size'])}")
+    # 子は数百件ある mmap の内訳なので、目に留まる大きさのものだけ。
+    children = sorted(process.get("children", []), key=lambda c: -c["size"])
+    for child in children[: args.top]:
+        if child["size"] < 1024 * 1024:
+            break
+        print(f"  {child['name'].split('/')[-1][:44]:44} {_mib(child['size'])}")
+    print(f"dart heap      {_mib(usage['heapUsage'])} "
+          f"(capacity {_mib(usage['heapCapacity'])}, "
+          f"external {_mib(usage['externalUsage'])})")
+
+
+def cmd_alloc(app, args):
+    """Live Dart objects by class. `--gc` collects first, so what is left is
+    genuinely reachable — the honest way to ask "is this screen still holding
+    every tile it ever built?".
+    """
+    profile = app.call("getAllocationProfile", gc="true" if args.gc else "false")
+    members = profile["members"]
+    if args.filter:
+        needle = args.filter.lower()
+        members = [m for m in members if needle in m["class"].get("name", "").lower()]
+    members.sort(key=lambda m: -m["bytesCurrent"])
+    print(f"{'class':44} {'instances':>10} {'bytes':>12}")
+    for m in members[: args.top]:
+        print(f"{m['class'].get('name', '')[:44]:44} "
+              f"{m['instancesCurrent']:>10} {m['bytesCurrent']:>12}")
+
+
+def cmd_frames(app, args):
+    """Frame times the engine reported, split into UI and raster.
+
+    Registered by lib/marionette_debug.dart. A still screen produces no
+    frames, so reset, scroll, then read.
+    """
+    print(json.dumps(
+        app.call("ext.flutter.perf.frames", reset="true" if args.reset else "false"),
+        ensure_ascii=False, indent=1))
+
+
+def cmd_imagecache(app, args):
+    """Flutter's decoded-image cache. Registered by lib/marionette_debug.dart."""
+    print(json.dumps(
+        app.call("ext.flutter.perf.imageCache",
+                 clear="true" if args.clear else "false"),
+        ensure_ascii=False, indent=1))
+
+
+def cmd_tree(app, args):
+    """Element and render-object counts, and the widget types that dominate.
+
+    Watch this while scrolling: a lazily built list holds it steady, a list
+    that materializes everything grows without bound. Registered by
+    lib/marionette_debug.dart.
+    """
+    params = {"top": str(args.top)}
+    if args.filter:
+        params["filter"] = args.filter
+    print(json.dumps(app.call("ext.flutter.perf.tree", **params),
+                     ensure_ascii=False, indent=1))
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--uri", help="Dart VM Service base URI")
@@ -218,6 +300,24 @@ def main():
     sn.add_argument("--filter")
     sn.add_argument("--values", action="store_true", help="include provider values")
     sn.set_defaults(fn=cmd_snapshot)
+    me = sub.add_parser("mem")
+    me.add_argument("--top", type=int, default=8, help="how many mappings to list")
+    me.set_defaults(fn=cmd_mem)
+    al = sub.add_parser("alloc")
+    al.add_argument("--top", type=int, default=20)
+    al.add_argument("--filter", help="only classes whose name contains this")
+    al.add_argument("--gc", action="store_true", help="collect before measuring")
+    al.set_defaults(fn=cmd_alloc)
+    fr = sub.add_parser("frames")
+    fr.add_argument("--reset", action="store_true", help="empty the buffer after reading")
+    fr.set_defaults(fn=cmd_frames)
+    ic = sub.add_parser("imagecache")
+    ic.add_argument("--clear", action="store_true", help="evict everything after reading")
+    ic.set_defaults(fn=cmd_imagecache)
+    tr = sub.add_parser("tree")
+    tr.add_argument("--top", type=int, default=15)
+    tr.add_argument("--filter", help="only widget types whose name contains this")
+    tr.set_defaults(fn=cmd_tree)
     rd = sub.add_parser("read")
     rd.add_argument("name")
     rd.set_defaults(fn=cmd_read)

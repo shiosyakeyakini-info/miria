@@ -10,6 +10,7 @@ library;
 
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
+import "package:flutter/scheduler.dart";
 import "package:flutter/services.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:marionette_flutter/marionette_flutter.dart";
@@ -50,6 +51,8 @@ void initializeMarionetteBinding() {
 
   registerRiverpodMarionetteExtensions(containerLocator: _observer!.locate);
   _registerSubmitTextExtension();
+  _registerPerformanceExtensions();
+  SchedulerBinding.instance.addTimingsCallback(_collectFrameTimings);
 }
 
 /// `TextInputAction` の名前と値の対応。拡張の `action` パラメータで使う。
@@ -297,3 +300,191 @@ String? _plainTextOf(List<MfmNode> nodes) {
 
 /// [ProviderScope] に渡す observer。release ビルドでは空になる。
 List<ProviderObserver> get marionetteObservers => [?_observer];
+
+/// 直近のフレームの計測値。`perf.frames` が読む。
+///
+/// [FrameTiming] は「そのフレームを何ミリ秒で組み立て、何ミリ秒でラスタライズ
+/// したか」を engine が事後に報告してくるもの。UI スレッドと raster スレッドが
+/// 分かれて出るので、「ビルドが重い」のか「描画が重い」のかがここで分かれる。
+final _frameTimings = <FrameTiming>[];
+
+/// 保持するフレーム数。60fps でおよそ10秒ぶん。
+const _frameHistoryLength = 600;
+
+void _collectFrameTimings(List<FrameTiming> timings) {
+  _frameTimings.addAll(timings);
+  final excess = _frameTimings.length - _frameHistoryLength;
+  if (excess > 0) _frameTimings.removeRange(0, excess);
+}
+
+/// 動いているアプリの重さを外から測るための拡張を登録する。
+///
+/// DevTools を開けば同じものは見られるが、エージェントからは GUI を読めない。
+/// VM Service には `getMemoryUsage` / `getProcessMemoryUsage` /
+/// `getAllocationProfile` があってヒープと RSS はそれで足りるので、ここで足すのは
+/// Flutter 側にしかない3つ  —  フレーム時間、画像キャッシュ、ツリーの大きさ。
+void _registerPerformanceExtensions() {
+  registerMarionetteExtension(
+    name: "perf.frames",
+    description:
+        "Frame timings the engine reported for the last few seconds, split "
+        "into UI (build+layout+paint) and raster (GPU) time. Use it to tell a "
+        "slow build from slow rasterization while scrolling.",
+    inputSchema: const ExtensionInputSchema(
+      description: "Reads the buffered frame timings.",
+      properties: {
+        "reset": ExtensionParam.boolean(
+          description:
+              "Drop the buffer after reading, so the next call only covers "
+              "what happened after this one. Measure an interaction by "
+              "resetting, doing it, then reading.",
+          defaultValue: false,
+        ),
+      },
+    ),
+    callback: (params) async {
+      final timings = List<FrameTiming>.from(_frameTimings);
+      if (params["reset"] == "true") _frameTimings.clear();
+
+      if (timings.isEmpty) {
+        return MarionetteExtensionResult.success({
+          "frames": 0,
+          "message":
+              "No frames were recorded. A still screen produces no frames at "
+              "all; do something first, or scroll.",
+        });
+      }
+
+      final build = timings
+          .map((t) => t.buildDuration.inMicroseconds / 1000)
+          .toList();
+      final raster = timings
+          .map((t) => t.rasterDuration.inMicroseconds / 1000)
+          .toList();
+      final total = timings
+          .map((t) => t.totalSpan.inMicroseconds / 1000)
+          .toList();
+
+      return MarionetteExtensionResult.success({
+        "frames": timings.length,
+        "buildMs": _describe(build),
+        "rasterMs": _describe(raster),
+        "totalSpanMs": _describe(total),
+        // 16.7ms を越えたフレームは 60Hz なら落としている。
+        "over16ms": total.where((ms) => ms > 16.7).length,
+        "over100ms": total.where((ms) => ms > 100).length,
+      });
+    },
+  );
+
+  registerMarionetteExtension(
+    name: "perf.imageCache",
+    description:
+        "Flutter's decoded-image cache. `liveBytes` is what on-screen widgets "
+        "are holding right now; a screen that keeps every tile alive keeps "
+        "every bitmap alive with it.",
+    inputSchema: const ExtensionInputSchema(
+      description: "Reads (and optionally empties) the image cache.",
+      properties: {
+        "clear": ExtensionParam.boolean(
+          description:
+              "Evict everything after reading. Useful to see how much of the "
+              "memory comes back on its own.",
+          defaultValue: false,
+        ),
+      },
+    ),
+    callback: (params) async {
+      final cache = PaintingBinding.instance.imageCache;
+      final result = {
+        "count": cache.currentSize,
+        "bytes": cache.currentSizeBytes,
+        "liveCount": cache.liveImageCount,
+        "pendingCount": cache.pendingImageCount,
+        "maximumCount": cache.maximumSize,
+        "maximumBytes": cache.maximumSizeBytes,
+      };
+      if (params["clear"] == "true") {
+        cache
+          ..clear()
+          ..clearLiveImages();
+      }
+      return MarionetteExtensionResult.success(result);
+    },
+  );
+
+  registerMarionetteExtension(
+    name: "perf.tree",
+    description:
+        "How many elements and render objects the tree currently holds, and "
+        "which widget types dominate. A lazily built list keeps this flat as "
+        "you scroll; one that materializes everything does not.",
+    inputSchema: const ExtensionInputSchema(
+      description: "Counts the live element tree.",
+      properties: {
+        "top": ExtensionParam.integer(
+          description: "How many of the most numerous widget types to list.",
+          defaultValue: 15,
+          minimum: 0,
+        ),
+        "filter": ExtensionParam.string(
+          description:
+              "Only count widget types whose name contains this substring "
+              "(case-insensitive). The totals still cover the whole tree.",
+        ),
+      },
+    ),
+    callback: (params) async {
+      final root = WidgetsBinding.instance.rootElement;
+      if (root == null) {
+        return MarionetteExtensionResult.invalidParams(
+          "The widget tree is not mounted yet.",
+        );
+      }
+
+      final counts = <String, int>{};
+      var elements = 0;
+      var renderObjects = 0;
+      final filter = params["filter"]?.toLowerCase();
+
+      void visit(Element element) {
+        elements++;
+        if (element is RenderObjectElement) renderObjects++;
+        final name = element.widget.runtimeType.toString();
+        if (filter == null || name.toLowerCase().contains(filter)) {
+          counts[name] = (counts[name] ?? 0) + 1;
+        }
+        element.visitChildren(visit);
+      }
+
+      visit(root);
+
+      final top = int.tryParse(params["top"] ?? "") ?? 15;
+      final ranked = counts.entries.toList()
+        ..sort((a, b) => b.value.compareTo(a.value));
+
+      return MarionetteExtensionResult.success({
+        "elements": elements,
+        "renderObjects": renderObjects,
+        "widgets": {
+          for (final entry in ranked.take(top)) entry.key: entry.value,
+        },
+      });
+    },
+  );
+}
+
+/// 平均・中央値・p90・最大をまとめる。小数第2位まで。
+Map<String, double> _describe(List<double> values) {
+  final sorted = List<double>.from(values)..sort();
+  double at(double q) =>
+      sorted[(sorted.length * q).clamp(0, sorted.length - 1).floor()];
+  double round(double value) => (value * 100).roundToDouble() / 100;
+
+  return {
+    "avg": round(values.reduce((a, b) => a + b) / values.length),
+    "p50": round(at(0.5)),
+    "p90": round(at(0.9)),
+    "max": round(sorted.last),
+  };
+}

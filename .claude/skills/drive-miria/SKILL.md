@@ -46,12 +46,33 @@ script path.
 | `m shot out.png` | screenshot |
 | `m snapshot` / `m read <name>` | Riverpod state |
 | `m logs` | miria's logger output (nearly always empty — `reference.md`) |
+| `m mem` | process RSS and the Dart heap inside it |
+| `m alloc --gc --filter Image` | live Dart objects by class |
+| `m frames --reset` | UI and raster time per frame, since the last reset |
+| `m imagecache` | decoded images held, in count and bytes |
+| `m tree --filter Tile` | how many elements and render objects are alive |
 
 There are more built-ins (`longPress`, `secondaryTap`, `doubleTap`,
 `pinchZoom`, `scrollTo`, `pressKey`) reachable raw as
 `ext.flutter.marionette.<name>`. `scrollTo` and `pressKey` do not do what
 their names suggest here — `reference.md` explains why, and `swipe` /
 `submit` are the working substitutes.
+
+## Measuring, not just driving
+
+`mem` and `alloc` are plain VM Service RPCs and work against any debug build.
+`frames`, `imagecache` and `tree` are registered by `lib/marionette_debug.dart`,
+so they need a build that includes it.
+
+A screen that feels heavy is usually heavy in one of three ways, and these
+verbs separate them: `tree` grows when a list keeps everything it ever built,
+`imagecache` grows when the tiles hold decoded bitmaps, `frames` splits a slow
+frame into build time (Dart) and raster time (GPU). Reset `frames`, do the
+thing, read it back — a still screen produces no frames at all, so a reading
+without an interaction in it means nothing.
+
+`reference.md` has what the numbers looked like for the drive picker, and the
+traps in reading them.
 
 ## The loop
 

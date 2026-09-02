@@ -197,6 +197,65 @@ collector would make this tool useful.
 - **Hot reload.** `flutter run` owns the compiler; calling the VM Service's own
   `reloadSources` fails with `Error while starting Kernel isolate task`.
 
+## Measuring a screen
+
+Four numbers, four different questions, and they disagree with each other on
+purpose.
+
+- **`mem`** — `rss` is what the OS charges the process; `dart heap` is the
+  Dart objects inside it. Decoded images and GPU buffers live outside the
+  heap, so a screen can add hundreds of megabytes of RSS while the heap barely
+  moves. A debug build starts around 570MiB on Linux (the kernel blob alone is
+  ~120MiB), so read the *delta*, never the absolute.
+- **`alloc --gc`** — collects first, so what is left is genuinely reachable.
+  Use it to answer "is this screen still holding what it built?".
+- **`imagecache`** — `bytes` counts what the cache holds, and it stops at
+  `maximumBytes` (100MiB). `liveCount` keeps climbing past that, because
+  images an on-screen widget still references are not evictable. The moment
+  `bytes` sits pinned at the cap while `liveCount` rises, the cache has lost
+  control of memory. Closing the screen does not give it back either: the
+  bitmaps stay cached, merely no longer live.
+- **`frames`** — build time is the UI thread, raster time is the GPU thread.
+  Under Xvfb there is no GPU, so raster runs on llvmpipe and every raster
+  number is pessimistic and roughly constant; build time is the one to trust
+  there.
+
+What the drive picker (`drive_file_select_dialog.dart`) measured against a
+local Misskey with 200 files, loading 10 at a time:
+
+| loaded | elements | render objects | image cache | RSS |
+|---|---|---|---|---|
+| 10 | 2,192 | 941 | 7MiB / 10 images | 882MiB |
+| 100 | 6,392 | 2,741 | 71MiB / 100 | 900MiB |
+| 200 | 10,172 | 4,361 | 100MiB (capped) / 190 live | 988MiB |
+
++42 elements and ~1MiB per file, none of it released while the dialog is open,
+because the two `PushableListView`s sit inside a `SingleChildScrollView` with
+`shrinkWrap: true` — an unbounded viewport builds every item there is. The
+frame times stay flat (build p90 ~3ms), which is the surprise: what actually
+stalls is any *rebuild*. Tapping one file to select it costs an 18ms build
+frame with 10 files loaded and a **147ms** one with 200 — the whole dialog is
+rebuilt on every tap.
+
+`test/performance/drive_file_select_dialog_scroll_test.dart` reproduces the
+element counts offline, without a server.
+
+## Running headless on Linux
+
+Under `xvfb-run` alone, miria signs in and then freezes solid: 0% CPU, and
+even the VM Service stops answering. `flutter_secure_storage` calls libsecret
+on the Linux platform thread, which is also the UI thread, and without a
+Secret Service on the bus that call never returns. Wrap the launch:
+
+```bash
+xvfb-run -a --server-args="-screen 0 384x800x24" dbus-run-session -- bash -c '
+  eval "$(printf pw | gnome-keyring-daemon --unlock --components=secrets)"
+  fvm flutter run -d linux --debug'
+```
+
+The window is whatever size you gave `-screen`, so the coordinates in
+`SKILL.md` (384×661) shift — read `elements` rather than trusting them.
+
 ## Encoding
 
 The VM Service answers in UTF-8. A Windows console defaulting to CP932 turns
