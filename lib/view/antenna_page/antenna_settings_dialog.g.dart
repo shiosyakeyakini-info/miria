@@ -88,7 +88,7 @@ final class _AntennaSettingsNotifierProvider
 }
 
 String _$_antennaSettingsNotifierHash() =>
-    r'a33758bbcc3f54c6eb50d2176d6ed1ce7b54f9b5';
+    r'94ff34bef3ddb81ca9ef3c043ad6ad36d1ca51cb';
 
 abstract class _$AntennaSettingsNotifier extends $Notifier<AntennaSettings> {
   AntennaSettings build();
@@ -114,11 +114,11 @@ final _usersListListProvider = _UsersListListProvider._();
 final class _UsersListListProvider
     extends
         $FunctionalProvider<
-          AsyncValue<List<UsersList>>,
-          List<UsersList>,
-          FutureOr<List<UsersList>>
+          AsyncValue<List<UserList>>,
+          List<UserList>,
+          FutureOr<List<UserList>>
         >
-    with $FutureModifier<List<UsersList>>, $FutureProvider<List<UsersList>> {
+    with $FutureModifier<List<UserList>>, $FutureProvider<List<UserList>> {
   _UsersListListProvider._()
     : super(
         from: null,
@@ -142,14 +142,14 @@ final class _UsersListListProvider
 
   @$internal
   @override
-  $FutureProviderElement<List<UsersList>> $createElement(
+  $FutureProviderElement<List<UserList>> $createElement(
     $ProviderPointer pointer,
   ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<List<UsersList>> create(Ref ref) {
+  FutureOr<List<UserList>> create(Ref ref) {
     return _usersListList(ref);
   }
 }
 
-String _$_usersListListHash() => r'038d168265d5f26396ee6dd063774e9b55055283';
+String _$_usersListListHash() => r'421398f42697c5dbabc17a605753edb788e2d953';

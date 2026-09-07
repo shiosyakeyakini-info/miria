@@ -34,7 +34,7 @@ class BlockedUsersNotifier extends _$BlockedUsersNotifier {
         await ref
             .read(misskeyPostContextProvider)
             .blocking
-            .delete(BlockDeleteRequest(userId: userId));
+            .delete(BlockingDeleteRequest(userId: userId));
         state = AsyncValue.data([
           ...?state.value?.where((e) => e.blockeeId != userId),
         ]);

@@ -1823,7 +1823,7 @@ class TestData {
 """),
   );
 
-  static RolesListResponse role = RolesListResponse.fromJson(
+  static Role role = Role.fromJson(
     JSON5.parse("""
 {
     id: '9diazxez3m',
@@ -1983,7 +1983,7 @@ class TestData {
 """),
   );
 
-  static HashtagsTrendResponse hashtagTrends = HashtagsTrendResponse.fromJson(
+  static HashtagsTrendItem hashtagTrends = HashtagsTrendItem.fromJson(
     JSON5.parse("""
 {
     tag: 'ろぐぼチャレンジ',
@@ -2135,7 +2135,7 @@ class TestData {
     isMuted: false,
   );
 
-  static ChatJoining chatJoining1 = ChatJoining(
+  static ChatRoomInvitation chatJoining1 = ChatRoomInvitation(
     id: "joining-1",
     createdAt: DateTime.parse("2024-01-01T12:00:00.000Z"),
     userId: "ai",

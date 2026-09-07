@@ -18,7 +18,7 @@ extension UserDetailedExtension on UserDetailed {
       FFVisibility.public => true,
       FFVisibility.followers =>
         user is UserDetailedNotMeWithRelations && user.isFollowing,
-      FFVisibility.private || null => false,
+      FFVisibility.private || FFVisibility.unknown || null => false,
     };
   }
 
@@ -42,7 +42,7 @@ extension UserDetailedExtension on UserDetailed {
       FFVisibility.public => true,
       FFVisibility.followers =>
         user is UserDetailedNotMeWithRelations && user.isFollowing,
-      FFVisibility.private || null => false,
+      FFVisibility.private || FFVisibility.unknown || null => false,
     };
   }
 }

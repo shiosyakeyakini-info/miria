@@ -13,10 +13,7 @@ class ChannelFavorited extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FutureListView(
-      future: ref
-          .read(misskeyPostContextProvider)
-          .channels
-          .myFavorite(const ChannelsMyFavoriteRequest()),
+      future: ref.read(misskeyPostContextProvider).channels.myFavorite(),
       builder: (context, item) => CommunityChannelView(
         channel: item,
         onTap: onChannelSelected != null

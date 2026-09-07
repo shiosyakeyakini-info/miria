@@ -52,7 +52,7 @@ final class NoteDraftRepositoryProvider
 }
 
 String _$noteDraftRepositoryHash() =>
-    r'c91b1b6702e8bfc887859cd757eba4020236c65d';
+    r'48380ea3b691da047b8ec45545ba56dac4ce0208';
 
 abstract class _$NoteDraftRepository extends $Notifier<Map<String, NoteDraft>> {
   Map<String, NoteDraft> build();

@@ -239,7 +239,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       if (note.mentions.isNotEmpty) {
         replyTo.addAll(
           await _misskey.users.showByIds(
-            UsersShowByIdsRequest(userIds: note.mentions),
+            UsersShowRequest(userIds: note.mentions),
           ),
         );
       }
@@ -279,7 +279,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
     if (renote != null) {
       resultState = resultState.copyWith(
         renote: renote,
-        noteVisibility: NoteVisibility.min(
+        noteVisibility: NoteVisibilityExtension.min(
           resultState.noteVisibility,
           renote.visibility,
         ),
@@ -291,14 +291,14 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       if (reply.mentions.isNotEmpty) {
         replyTo.addAll(
           await _misskey.users.showByIds(
-            UsersShowByIdsRequest(userIds: reply.mentions),
+            UsersShowRequest(userIds: reply.mentions),
           ),
         );
       }
 
       resultState = resultState.copyWith(
         reply: reply,
-        noteVisibility: NoteVisibility.min(
+        noteVisibility: NoteVisibilityExtension.min(
           resultState.noteVisibility,
           reply.visibility,
         ),
@@ -328,7 +328,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
         .isSilenced;
     if (isSilenced) {
       resultState = resultState.copyWith(
-        noteVisibility: NoteVisibility.min(
+        noteVisibility: NoteVisibilityExtension.min(
           resultState.noteVisibility,
           NoteVisibility.home,
         ),
@@ -670,11 +670,8 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
 
         final mentionTargetUsers = [
           for (final user in userList)
-            await _misskey.users.showByName(
-              UsersShowByUserNameRequest(
-                userName: user.username,
-                host: user.host,
-              ),
+            await _misskey.users.show(
+              UsersShowRequest(username: user.username, host: user.host),
             ),
         ];
         final visibleUserIds = state.replyTo.map((e) => e.id).toList()
@@ -700,7 +697,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
               : 0,
         );
 
-        final poll = NotesCreatePollRequest(
+        final poll = NotesCreatePoll(
           choices: state.voteContent,
           multiple: state.isVoteMultiple,
           expiresAt: state.voteExpireType == VoteExpireType.date
@@ -712,7 +709,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
         );
 
         if (state.noteCreationMode == NoteCreationMode.update) {
-          await _misskey.notes.update(
+          await _misskey.updateNote(
             NotesUpdateRequest(
               noteId: state.noteId!,
               text: postText ?? "",

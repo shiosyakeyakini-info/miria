@@ -47,12 +47,7 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
       final user = await ref
           .read(misskeyProvider(accountContext.getAccount))
           .users
-          .showByName(
-            UsersShowByUserNameRequest(
-              userName: note.user.username,
-              host: host,
-            ),
-          );
+          .show(UsersShowRequest(username: note.user.username, host: host));
 
       final userNotes = await ref
           .read(misskeyProvider(accountContext.getAccount))
@@ -117,9 +112,7 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
           () async => ref
               .read(misskeyProvider(accountContext.getAccount))
               .users
-              .showByName(
-                UsersShowByUserNameRequest(userName: user.username, host: host),
-              ),
+              .show(UsersShowRequest(username: user.username, host: host)),
         );
     return response.value;
   }

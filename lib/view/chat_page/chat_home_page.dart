@@ -225,9 +225,8 @@ class InvitedChat extends HookConsumerWidget {
               .invitations
               .inbox(ChatRoomsInvitationsInboxRequest(untilId: item.id)),
         ],
-        itemBuilder: (context, item) => item.room != null
-            ? InvitedChatItem(item.room!, valueNotifier)
-            : const SizedBox.shrink(),
+        itemBuilder: (context, item) =>
+            InvitedChatItem(item.room, valueNotifier),
         listKey: valueNotifier.value,
       ),
     );

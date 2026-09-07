@@ -14,7 +14,7 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 part "federation_custom_emojis.g.dart";
 
 @Riverpod(dependencies: [misskeyGetContext])
-Future<Map<String, List<Emoji>>> fetchEmoji(
+Future<Map<String, List<EmojiSimple>>> fetchEmoji(
   Ref ref,
   String host,
   MetaResponse meta,
@@ -71,7 +71,7 @@ class FederationCustomEmojis extends HookConsumerWidget {
 
   Widget _buildCategory(
     BuildContext context,
-    MapEntry<String, List<Emoji>> entry,
+    MapEntry<String, List<EmojiSimple>> entry,
     String query,
   ) {
     final converted = formatEmojiName(toHiraganaSafe(query));
@@ -97,7 +97,7 @@ class FederationCustomEmojis extends HookConsumerWidget {
     );
   }
 
-  Widget _buildEmojiCard(BuildContext context, Emoji element) {
+  Widget _buildEmojiCard(BuildContext context, EmojiSimple element) {
     return SizedBox(
       width: double.infinity,
       child: Padding(

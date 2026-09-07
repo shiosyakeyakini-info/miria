@@ -11,7 +11,7 @@ abstract class UsersListSettings with _$UsersListSettings {
   }) = _UsersListSettings;
   const UsersListSettings._();
 
-  factory UsersListSettings.fromUsersList(UsersList list) {
+  factory UsersListSettings.fromUsersList(UserList list) {
     return UsersListSettings(
       name: list.name ?? "",
       isPublic: list.isPublic ?? false,

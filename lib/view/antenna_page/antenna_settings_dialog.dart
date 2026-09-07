@@ -37,7 +37,7 @@ class _AntennaSettingsNotifier extends _$AntennaSettingsNotifier {
     }
   }
 
-  void updateUserList(UsersList? list) {
+  void updateUserList(UserList? list) {
     if (list != null) {
       state = state.copyWith(userListId: list.id);
     }
@@ -95,8 +95,12 @@ class _AntennaSettingsNotifier extends _$AntennaSettingsNotifier {
 }
 
 @Riverpod(dependencies: [misskeyGetContext])
-Future<List<UsersList>> _usersListList(Ref ref) async => [
-  ...await ref.read(misskeyGetContextProvider).users.list.list(),
+Future<List<UserList>> _usersListList(Ref ref) async => [
+  ...await ref
+      .read(misskeyGetContextProvider)
+      .users
+      .list
+      .list(const UsersListsListRequest()),
 ];
 
 @RoutePage()
@@ -187,6 +191,7 @@ class AntennaSettingsForm extends HookConsumerWidget {
                       AntennaSource.users => S.of(context).antennaSourceUser,
                       AntennaSource.usersBlackList => "指定したユーザー以外",
                       AntennaSource.list => S.of(context).antennaSourceList,
+                      AntennaSource.unknown => "",
                     }),
                   ),
                 )
@@ -197,7 +202,7 @@ class AntennaSettingsForm extends HookConsumerWidget {
           ),
           const SizedBox(height: 10),
           if (settings.src == AntennaSource.list)
-            DropdownButtonFormField<UsersList>(
+            DropdownButtonFormField<UserList>(
               items: list.value
                   ?.map(
                     (list) => DropdownMenuItem(

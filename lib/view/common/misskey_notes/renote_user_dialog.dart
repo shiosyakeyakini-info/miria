@@ -38,7 +38,7 @@ class RenoteUserDialog extends ConsumerWidget implements AutoRouteWrapper {
               final response = await ref
                   .read(misskeyGetContextProvider)
                   .notes
-                  .renotes(NotesRenoteRequest(noteId: noteId));
+                  .renotes(NotesRenotesRequest(noteId: noteId));
               ref
                   .read(notesWithProvider)
                   .registerAll(response.where((e) => e.text != null));
@@ -49,7 +49,7 @@ class RenoteUserDialog extends ConsumerWidget implements AutoRouteWrapper {
                   .read(misskeyGetContextProvider)
                   .notes
                   .renotes(
-                    NotesRenoteRequest(noteId: noteId, untilId: lastItem.id),
+                    NotesRenotesRequest(noteId: noteId, untilId: lastItem.id),
                   );
               ref
                   .read(notesWithProvider)

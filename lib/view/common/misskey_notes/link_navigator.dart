@@ -166,9 +166,9 @@ class LinkNavigator {
     final response = await ref
         .read(misskeyProvider(accountContext.getAccount))
         .users
-        .showByName(
-          UsersShowByUserNameRequest(
-            userName: regResult?.group(1) ?? "",
+        .show(
+          UsersShowRequest(
+            username: regResult?.group(1) ?? "",
             host: finalHost,
           ),
         );

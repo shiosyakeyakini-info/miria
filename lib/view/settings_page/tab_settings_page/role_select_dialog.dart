@@ -12,7 +12,7 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 part "role_select_dialog.g.dart";
 
 @Riverpod(dependencies: [misskeyGetContext])
-Future<List<RolesListResponse>> _roles(Ref ref) async =>
+Future<List<Role>> _roles(Ref ref) async =>
     (await ref.read(misskeyGetContextProvider).roles.list()).toList();
 
 @RoutePage()

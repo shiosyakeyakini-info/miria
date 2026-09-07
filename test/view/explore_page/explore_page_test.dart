@@ -150,7 +150,7 @@ void main() {
           users.users(
             argThat(
               equals(
-                const UsersUsersRequest(
+                const UsersRequest(
                   state: UsersState.alive,
                   origin: Origin.local,
                   sort: UsersSortType.followerDescendant,
@@ -164,7 +164,7 @@ void main() {
           users.users(
             argThat(
               equals(
-                const UsersUsersRequest(
+                const UsersRequest(
                   state: UsersState.alive,
                   origin: Origin.local,
                   sort: UsersSortType.followerDescendant,
@@ -209,7 +209,7 @@ void main() {
           users.users(
             argThat(
               equals(
-                const UsersUsersRequest(
+                const UsersRequest(
                   state: UsersState.alive,
                   origin: Origin.remote,
                   sort: UsersSortType.followerDescendant,
@@ -223,7 +223,7 @@ void main() {
           users.users(
             argThat(
               equals(
-                const UsersUsersRequest(
+                const UsersRequest(
                   state: UsersState.alive,
                   origin: Origin.remote,
                   sort: UsersSortType.followerDescendant,

@@ -617,7 +617,7 @@ class NotificationItem extends ConsumerWidget {
                   S
                       .of(context)
                       .chatRoomInvitation(
-                        notification.invitation.room?.name ?? "???",
+                        notification.invitation.room.name ?? "???",
                       ),
                 ),
                 ElevatedButton(

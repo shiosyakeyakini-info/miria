@@ -28,7 +28,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text(TestData.clip.name!), findsOneWidget);
+      expect(find.text(TestData.clip.name), findsOneWidget);
     });
   });
 }

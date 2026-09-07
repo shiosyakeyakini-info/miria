@@ -250,7 +250,7 @@ class ChatRoomInfo extends HookConsumerWidget {
                             ),
                       ],
                       itemBuilder: (context, item) =>
-                          UserListItem(user: item.user!),
+                          UserListItem(user: item.user),
                       listKey: listKey.value,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),

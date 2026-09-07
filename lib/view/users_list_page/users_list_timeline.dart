@@ -17,7 +17,7 @@ class UsersListTimeline extends ConsumerWidget {
         final response = await ref
             .read(misskeyGetContextProvider)
             .notes
-            .userListTimeline(UserListTimelineRequest(listId: listId));
+            .userListTimeline(NotesUserListTimelineRequest(listId: listId));
         ref.read(notesWithProvider).registerAll(response);
         return response.toList();
       },
@@ -26,7 +26,10 @@ class UsersListTimeline extends ConsumerWidget {
             .read(misskeyGetContextProvider)
             .notes
             .userListTimeline(
-              UserListTimelineRequest(listId: listId, untilId: lastItem.id),
+              NotesUserListTimelineRequest(
+                listId: listId,
+                untilId: lastItem.id,
+              ),
             );
         ref.read(notesWithProvider).registerAll(response);
         return response.toList();

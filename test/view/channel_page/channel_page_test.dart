@@ -101,7 +101,7 @@ void main() {
         final channel = MockMisskeyChannels();
         final misskey = MockMisskey();
         when(misskey.channels).thenReturn(channel);
-        when(channel.myFavorite(any)).thenAnswer(
+        when(channel.myFavorite()).thenAnswer(
           (_) async => [TestData.channel1.copyWith(bannerUrl: null)],
         );
 
@@ -123,11 +123,7 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.text(TestData.channel1.name), findsOneWidget);
-        verify(
-          channel.myFavorite(
-            argThat(equals(const ChannelsMyFavoriteRequest())),
-          ),
-        );
+        verify(channel.myFavorite());
       });
     });
 

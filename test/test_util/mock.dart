@@ -13,7 +13,6 @@ import "package:miria/repository/note_repository.dart";
 import "package:miria/repository/tab_settings_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:misskey_dart/misskey_dart.dart";
-import "package:misskey_dart/src/misskey_chat.dart";
 import "package:mockito/annotations.dart";
 import "package:mockito/mockito.dart";
 import "package:plugin_platform_interface/plugin_platform_interface.dart";
@@ -31,7 +30,7 @@ import "package:url_launcher_platform_interface/url_launcher_platform_interface.
 
   // API
   MockSpec<Misskey>(),
-  MockSpec<MisskeyAntenna>(),
+  MockSpec<MisskeyAntennas>(),
   MockSpec<MisskeyAp>(),
   MockSpec<MisskeyBlocking>(),
   MockSpec<MisskeyChannels>(),

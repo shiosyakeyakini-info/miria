@@ -13,7 +13,7 @@ part of 'users_list_detail_page.dart';
 final _usersListProvider = _UsersListNotifierFamily._();
 
 final class _UsersListNotifierProvider
-    extends $AsyncNotifierProvider<_UsersListNotifier, UsersList> {
+    extends $AsyncNotifierProvider<_UsersListNotifier, UserList> {
   _UsersListNotifierProvider._({
     required _UsersListNotifierFamily super.from,
     required (Misskey, String) super.argument,
@@ -51,15 +51,15 @@ final class _UsersListNotifierProvider
 }
 
 String _$_usersListNotifierHash() =>
-    r'c51fadbf7615f1343297d33391c16f5ef99d84d8';
+    r'ce1d684a8e3fae3aaeea39e6e75a087ba32b579b';
 
 final class _UsersListNotifierFamily extends $Family
     with
         $ClassFamilyOverride<
           _UsersListNotifier,
-          AsyncValue<UsersList>,
-          UsersList,
-          FutureOr<UsersList>,
+          AsyncValue<UserList>,
+          UserList,
+          FutureOr<UserList>,
           (Misskey, String)
         > {
   _UsersListNotifierFamily._()
@@ -78,21 +78,21 @@ final class _UsersListNotifierFamily extends $Family
   String toString() => r'_usersListProvider';
 }
 
-abstract class _$UsersListNotifier extends $AsyncNotifier<UsersList> {
+abstract class _$UsersListNotifier extends $AsyncNotifier<UserList> {
   late final _$args = ref.$arg as (Misskey, String);
   Misskey get misskey => _$args.$1;
   String get listId => _$args.$2;
 
-  FutureOr<UsersList> build(Misskey misskey, String listId);
+  FutureOr<UserList> build(Misskey misskey, String listId);
   @$mustCallSuper
   @override
   void runBuild() {
-    final ref = this.ref as $Ref<AsyncValue<UsersList>, UsersList>;
+    final ref = this.ref as $Ref<AsyncValue<UserList>, UserList>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<UsersList>, UsersList>,
-              AsyncValue<UsersList>,
+              AnyNotifier<AsyncValue<UserList>, UserList>,
+              AsyncValue<UserList>,
               Object?,
               Object?
             >;
@@ -141,7 +141,7 @@ final class _UsersListUsersProvider
   }
 }
 
-String _$_usersListUsersHash() => r'ca1a1f0b844b97f34536d7b13b6ddd93da5998fd';
+String _$_usersListUsersHash() => r'97c4dea86b54000db08f87b3301ca9e87152585f';
 
 final class _UsersListUsersFamily extends $Family
     with

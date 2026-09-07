@@ -12,6 +12,7 @@ extension ReactionAcceptanceExtension on ReactionAcceptance {
       ReactionAcceptance.nonSensitiveOnlyForLocalLikeOnlyForRemote =>
         S.of(context).favoriteNonSensitiveOnlyAndLikeOnlyForRemote,
       ReactionAcceptance.likeOnly => S.of(context).favoriteLikeOnly,
+      ReactionAcceptance.unknown => "",
     };
   }
 }

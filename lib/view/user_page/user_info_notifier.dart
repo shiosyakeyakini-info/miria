@@ -84,9 +84,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
       final remoteResponse = await ref
           .read(misskeyWithoutAccountProvider(remoteHost))
           .users
-          .showByName(
-            UsersShowByUserNameRequest(userName: localResponse.username),
-          );
+          .show(UsersShowRequest(username: localResponse.username));
 
       await ref
           .read(emojiRepositoryProvider(Account.demoAccount(remoteHost, meta)))
@@ -296,7 +294,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
     }
 
     return await _dialog.guard(() async {
-      await _postMisskey.blocking.create(BlockCreateRequest(userId: userId));
+      await _postMisskey.blocking.create(BlockingCreateRequest(userId: userId));
 
       final before = await future;
       final response = before.response;
@@ -314,7 +312,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
   /// ブロックを解除する
   Future<AsyncValue<void>> deleteBlocking() async {
     return await _dialog.guard(() async {
-      await _postMisskey.blocking.delete(BlockDeleteRequest(userId: userId));
+      await _postMisskey.blocking.delete(BlockingDeleteRequest(userId: userId));
 
       final before = await future;
       final response = before.response;

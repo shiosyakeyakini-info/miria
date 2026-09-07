@@ -328,7 +328,7 @@ System.out.println("@ai uneune");
       when(mockMisskeyNotes.reactions).thenReturn(mockMisskeyNotesReactions);
       when(mockMisskeyNotesReactions.reactions(any)).thenAnswer(
         (_) async => [
-          NotesReactionsResponse(
+          NoteReaction(
             id: "reaction1",
             createdAt: DateTime.now(),
             user: UserLite.fromJson(TestData.detailedUser2.toJson()),

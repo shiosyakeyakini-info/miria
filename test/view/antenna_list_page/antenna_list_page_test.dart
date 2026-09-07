@@ -11,7 +11,7 @@ import "../../test_util/test_datas.dart";
 void main() {
   group("アンテナ一覧", () {
     testWidgets("アンテナ一覧が表示されること", (tester) async {
-      final antennas = MockMisskeyAntenna();
+      final antennas = MockMisskeyAntennas();
       final misskey = MockMisskey();
       when(misskey.antennas).thenReturn(antennas);
       when(antennas.list()).thenAnswer((_) async => [TestData.antenna]);

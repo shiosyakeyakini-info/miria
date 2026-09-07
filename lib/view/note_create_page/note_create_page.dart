@@ -374,7 +374,7 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
     final notifier = ref.read(noteCreateProvider.notifier);
     final draftRepository = ref.read(noteDraftRepositoryProvider.notifier);
 
-    NotesCreatePollRequest? poll;
+    NotesCreatePoll? poll;
     if (state.isVote &&
         state.voteContent.any((content) => content.trim().isNotEmpty)) {
       DateTime? expiresAt;
@@ -399,7 +399,7 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
           break;
       }
 
-      poll = NotesCreatePollRequest(
+      poll = NotesCreatePoll(
         choices: state.voteContent
             .where((content) => content.trim().isNotEmpty)
             .toList(),

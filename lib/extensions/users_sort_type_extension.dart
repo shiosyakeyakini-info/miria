@@ -13,6 +13,7 @@ extension UsersSortTypeExtension on UsersSortType {
       UsersSortType.updateAtAscendant => S.of(context).updatedAtAscendingOrder,
       UsersSortType.updateAtDescendant =>
         S.of(context).updatedAtDescendingOrder,
+      UsersSortType.unknown => "",
     };
   }
 }

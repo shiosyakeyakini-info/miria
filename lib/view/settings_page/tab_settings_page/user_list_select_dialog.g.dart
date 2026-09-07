@@ -15,11 +15,11 @@ final _usersListProvider = _UsersListProvider._();
 final class _UsersListProvider
     extends
         $FunctionalProvider<
-          AsyncValue<List<UsersList>>,
-          List<UsersList>,
-          FutureOr<List<UsersList>>
+          AsyncValue<List<UserList>>,
+          List<UserList>,
+          FutureOr<List<UserList>>
         >
-    with $FutureModifier<List<UsersList>>, $FutureProvider<List<UsersList>> {
+    with $FutureModifier<List<UserList>>, $FutureProvider<List<UserList>> {
   _UsersListProvider._()
     : super(
         from: null,
@@ -43,14 +43,14 @@ final class _UsersListProvider
 
   @$internal
   @override
-  $FutureProviderElement<List<UsersList>> $createElement(
+  $FutureProviderElement<List<UserList>> $createElement(
     $ProviderPointer pointer,
   ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<List<UsersList>> create(Ref ref) {
+  FutureOr<List<UserList>> create(Ref ref) {
     return _usersList(ref);
   }
 }
 
-String _$_usersListHash() => r'd7fab580bf6bc18fc282743de3d482f5d1d62a49';
+String _$_usersListHash() => r'f522f46249c0dd3d131d35ad92e867de78d1fb57';

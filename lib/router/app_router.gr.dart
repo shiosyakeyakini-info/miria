@@ -1765,7 +1765,7 @@ class ExploreRouteArgs {
 /// [ExploreRoleUsersPage]
 class ExploreRoleUsersRoute extends PageRouteInfo<ExploreRoleUsersRouteArgs> {
   ExploreRoleUsersRoute({
-    required RolesListResponse item,
+    required Role item,
     required AccountContext accountContext,
     Key? key,
     List<PageRouteInfo>? children,
@@ -1803,7 +1803,7 @@ class ExploreRoleUsersRouteArgs {
     this.key,
   });
 
-  final RolesListResponse item;
+  final Role item;
 
   final AccountContext accountContext;
 
@@ -4690,7 +4690,7 @@ class UsersListSettingsRouteArgs {
 class UsersListTimelineRoute extends PageRouteInfo<UsersListTimelineRouteArgs> {
   UsersListTimelineRoute({
     required AccountContext accountContext,
-    required UsersList list,
+    required UserList list,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
@@ -4729,7 +4729,7 @@ class UsersListTimelineRouteArgs {
 
   final AccountContext accountContext;
 
-  final UsersList list;
+  final UserList list;
 
   final Key? key;
 

@@ -78,7 +78,7 @@ class _NotesAfterRenotePageState extends ConsumerState<NotesAfterRenotePage> {
     String? untilId,
   }) async {
     final renotesAndQuotes = await misskey.notes.renotes(
-      NotesRenoteRequest(noteId: widget.note.id, untilId: untilId),
+      NotesRenotesRequest(noteId: widget.note.id, untilId: untilId),
     );
     if (renotesAndQuotes.isEmpty) {
       return (List<Note>.empty(), untilId);

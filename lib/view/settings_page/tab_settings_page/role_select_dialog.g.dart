@@ -15,13 +15,11 @@ final _rolesProvider = _RolesProvider._();
 final class _RolesProvider
     extends
         $FunctionalProvider<
-          AsyncValue<List<RolesListResponse>>,
-          List<RolesListResponse>,
-          FutureOr<List<RolesListResponse>>
+          AsyncValue<List<Role>>,
+          List<Role>,
+          FutureOr<List<Role>>
         >
-    with
-        $FutureModifier<List<RolesListResponse>>,
-        $FutureProvider<List<RolesListResponse>> {
+    with $FutureModifier<List<Role>>, $FutureProvider<List<Role>> {
   _RolesProvider._()
     : super(
         from: null,
@@ -45,14 +43,13 @@ final class _RolesProvider
 
   @$internal
   @override
-  $FutureProviderElement<List<RolesListResponse>> $createElement(
-    $ProviderPointer pointer,
-  ) => $FutureProviderElement(pointer);
+  $FutureProviderElement<List<Role>> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
-  FutureOr<List<RolesListResponse>> create(Ref ref) {
+  FutureOr<List<Role>> create(Ref ref) {
     return _roles(ref);
   }
 }
 
-String _$_rolesHash() => r'c10d381c1a9041d45d7197d476ce56705dd16100';
+String _$_rolesHash() => r'8013fca87190c36dd6360fb864fc1c7b94a15942';

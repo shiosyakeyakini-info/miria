@@ -13,7 +13,7 @@ void main() {
         tabType: TabType.antenna,
         antennaId: "abcdefg",
       );
-      final mockMisskeyAntenna = MockMisskeyAntenna();
+      final mockMisskeyAntenna = MockMisskeyAntennas();
       when(
         mockMisskeyAntenna.notes(any),
       ).thenAnswer((_) async => [TestData.note1]);

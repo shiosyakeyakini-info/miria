@@ -23,7 +23,7 @@ void main() {
         timelineTester.mockMisskeyNotes.userListTimeline(
           argThat(
             equals(
-              const UserListTimelineRequest(
+              const NotesUserListTimelineRequest(
                 listId: "abcdefg",
                 withRenotes: false,
                 withFiles: false,

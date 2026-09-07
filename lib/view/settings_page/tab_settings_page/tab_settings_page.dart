@@ -5,7 +5,6 @@ import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:miria/extensions/users_lists_show_response_extension.dart";
 import "package:miria/hooks/use_async.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
@@ -62,9 +61,9 @@ class TabSettingsPage extends HookConsumerWidget {
                 : TabType.homeTimeline),
     );
 
-    final selectedRole = useState<RolesListResponse?>(null);
+    final selectedRole = useState<Role?>(null);
     final selectedChannel = useState<CommunityChannel?>(null);
-    final selectedUserList = useState<UsersList?>(null);
+    final selectedUserList = useState<UserList?>(null);
     final selectedAntenna = useState<Antenna?>(null);
 
     final customChannelController = useTextEditingController(
@@ -119,13 +118,11 @@ class TabSettingsPage extends HookConsumerWidget {
             .show(ChannelsShowRequest(channelId: channelId));
       }
       if (listId != null) {
-        selectedUserList.value =
-            (await ref
-                    .read(misskeyProvider(selectedAccount.value!))
-                    .users
-                    .list
-                    .show(UsersListsShowRequest(listId: listId)))
-                .toUsersList();
+        selectedUserList.value = await ref
+            .read(misskeyProvider(selectedAccount.value!))
+            .users
+            .list
+            .show(UsersListsShowRequest(listId: listId));
       }
       if (antennaId != null) {
         selectedAntenna.value = await ref
@@ -224,10 +221,9 @@ class TabSettingsPage extends HookConsumerWidget {
                             final selected = selectedAccount.value;
                             if (selected == null) return;
 
-                            selectedRole.value = await context
-                                .pushRoute<RolesListResponse>(
-                                  RoleSelectRoute(account: selected),
-                                );
+                            selectedRole.value = await context.pushRoute<Role>(
+                              RoleSelectRoute(account: selected),
+                            );
                             nameController.text =
                                 selectedRole.value?.name ?? nameController.text;
                           },

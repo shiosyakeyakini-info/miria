@@ -11,7 +11,7 @@ import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
 class ExploreRoleUsersPage extends ConsumerWidget implements AutoRouteWrapper {
-  final RolesListResponse item;
+  final Role item;
   final AccountContext accountContext;
 
   const ExploreRoleUsersPage({

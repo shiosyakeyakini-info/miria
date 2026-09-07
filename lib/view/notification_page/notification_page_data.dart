@@ -1,4 +1,5 @@
-import "package:flutter/material.dart";
+// Flutter にも Notification があるので隠す
+import "package:flutter/material.dart" hide Notification;
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/achievement.dart";
 import "package:misskey_dart/misskey_dart.dart";
@@ -147,7 +148,7 @@ class ScheduledNoteNotification extends NotificationData {
 }
 
 class RoleNotification extends NotificationData {
-  final RolesListResponse? role;
+  final Role? role;
   RoleNotification({
     required this.role,
     required super.createdAt,
@@ -175,7 +176,7 @@ class AppNotificationData extends NotificationData {
 }
 
 class InvitedChatRoomNotification extends NotificationData {
-  final ChatJoining invitation;
+  final ChatRoomInvitation invitation;
   InvitedChatRoomNotification({
     required this.invitation,
     required super.createdAt,
@@ -183,7 +184,27 @@ class InvitedChatRoomNotification extends NotificationData {
   });
 }
 
-extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
+/// 通知の種類にかかわらずノートを取り出す。
+///
+/// misskey_dart の [Notification] は sealed class になったので、
+/// 素朴に `.note` とは書けない。
+extension NotificationNoteExtension on Notification {
+  Note? get note => switch (this) {
+    NotificationNote(:final note) => note,
+    NotificationMention(:final note) => note,
+    NotificationReply(:final note) => note,
+    NotificationRenote(:final note) => note,
+    NotificationQuote(:final note) => note,
+    NotificationReaction(:final note) => note,
+    NotificationPollEnded(:final note) => note,
+    NotificationScheduledNotePosted(:final note) => note,
+    NotificationReactionGrouped(:final note) => note,
+    NotificationRenoteGrouped(:final note) => note,
+    _ => null,
+  };
+}
+
+extension NotificationExtension on Iterable<Notification> {
   List<NotificationData> toNotificationData(
     S localize,
     Achievements achievements,
@@ -191,265 +212,316 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
     final resultList = <NotificationData>[];
 
     for (final element in this) {
-      switch (element.type) {
-        case NotificationType.reaction:
+      switch (element) {
+        case NotificationReaction(
+          :final id,
+          :final createdAt,
+          :final user,
+          :final note,
+          :final reaction,
+        ):
           var isSummarize = false;
           resultList
               .whereType<RenoteReactionNotificationData>()
-              .where((e) => element.note?.id == e.note?.id)
+              .where((e) => note.id == e.note?.id)
               .forEach((e) {
                 isSummarize = true;
-                if (element.user != null) {
-                  e.reactionUsers.add((element.reaction!, element.user!));
-                }
+                e.reactionUsers.add((reaction, user));
               });
 
           if (!isSummarize) {
             resultList.add(
               RenoteReactionNotificationData(
-                note: element.note,
-                reactionUsers: [(element.reaction, element.user)],
+                note: note,
+                reactionUsers: [(reaction, user)],
                 renoteUsers: [],
-                createdAt: element.createdAt,
-                id: element.id,
+                createdAt: createdAt,
+                id: id,
               ),
             );
           }
 
-        case NotificationType.renote:
+        case NotificationRenote(
+          :final id,
+          :final createdAt,
+          :final user,
+          :final note,
+        ):
           var isSummarize = false;
           resultList
               .whereType<RenoteReactionNotificationData>()
-              .where((e) => element.note?.renote?.id == e.note?.id)
+              .where((e) => note.renote?.id == e.note?.id)
               .forEach((e) {
                 isSummarize = true;
-                e.renoteUsers.add(element.user);
+                e.renoteUsers.add(user);
               });
 
           if (!isSummarize) {
             resultList.add(
               RenoteReactionNotificationData(
-                note: element.note?.renote,
+                note: note.renote,
                 reactionUsers: [],
-                renoteUsers: [element.user],
-                createdAt: element.createdAt,
-                id: element.id,
+                renoteUsers: [user],
+                createdAt: createdAt,
+                id: id,
               ),
             );
           }
 
-        case NotificationType.quote:
+        case NotificationRenoteGrouped(
+          :final id,
+          :final createdAt,
+          :final note,
+          :final users,
+        ):
+          resultList.add(
+            RenoteReactionNotificationData(
+              note: note,
+              reactionUsers: [],
+              renoteUsers: users.toList(),
+              createdAt: createdAt,
+              id: id,
+            ),
+          );
+
+        case NotificationReactionGrouped(
+          :final id,
+          :final createdAt,
+          :final note,
+          :final reactions,
+        ):
+          resultList.add(
+            RenoteReactionNotificationData(
+              note: note,
+              reactionUsers: [for (final e in reactions) (e.reaction, e.user)],
+              renoteUsers: [],
+              createdAt: createdAt,
+              id: id,
+            ),
+          );
+
+        case NotificationQuote(
+          :final id,
+          :final createdAt,
+          :final user,
+          :final note,
+        ):
           resultList.add(
             MentionQuoteNotificationData(
-              createdAt: element.createdAt,
-              note: element.note,
-              user: element.user,
+              createdAt: createdAt,
+              note: note,
+              user: user,
               type: MentionQuoteNotificationDataType.quote,
-              id: element.id,
+              id: id,
             ),
           );
 
-        case NotificationType.mention:
+        case NotificationMention(
+          :final id,
+          :final createdAt,
+          :final user,
+          :final note,
+        ):
           resultList.add(
             MentionQuoteNotificationData(
-              createdAt: element.createdAt,
-              note: element.note,
-              user: element.user,
+              createdAt: createdAt,
+              note: note,
+              user: user,
               type: MentionQuoteNotificationDataType.mention,
-              id: element.id,
+              id: id,
             ),
           );
 
-        case NotificationType.reply:
+        case NotificationReply(
+          :final id,
+          :final createdAt,
+          :final user,
+          :final note,
+        ):
           resultList.add(
             MentionQuoteNotificationData(
-              createdAt: element.createdAt,
-              note: element.note,
-              user: element.user,
+              createdAt: createdAt,
+              note: note,
+              user: user,
               type: MentionQuoteNotificationDataType.reply,
-              id: element.id,
+              id: id,
             ),
           );
 
-        case NotificationType.follow:
+        case NotificationFollow(:final id, :final createdAt, :final user):
           resultList.add(
             FollowNotificationData(
-              user: element.user,
-              createdAt: element.createdAt,
+              user: user,
+              createdAt: createdAt,
               type: FollowNotificationDataType.follow,
-              id: element.id,
+              id: id,
             ),
           );
 
-        case NotificationType.followRequestAccepted:
+        case NotificationFollowRequestAccepted(
+          :final id,
+          :final createdAt,
+          :final user,
+          :final message,
+        ):
           resultList.add(
             FollowNotificationData(
-              user: element.user,
-              createdAt: element.createdAt,
+              user: user,
+              createdAt: createdAt,
               type: FollowNotificationDataType.followRequestAccepted(
-                element.message,
-                element.user,
+                message,
+                user,
               ),
-              id: element.id,
-            ),
-          );
-        case NotificationType.receiveFollowRequest:
-          resultList.add(
-            FollowNotificationData(
-              user: element.user,
-              createdAt: element.createdAt,
-              type: FollowNotificationDataType.receiveFollowRequest,
-              id: element.id,
+              id: id,
             ),
           );
 
-        case NotificationType.achievementEarned:
-          final achievement = element.achievement ?? "";
+        case NotificationReceiveFollowRequest(
+          :final id,
+          :final createdAt,
+          :final user,
+        ):
+          resultList.add(
+            FollowNotificationData(
+              user: user,
+              createdAt: createdAt,
+              type: FollowNotificationDataType.receiveFollowRequest,
+              id: id,
+            ),
+          );
+
+        case NotificationAchievementEarned(
+          :final id,
+          :final createdAt,
+          :final achievement,
+        ):
+          final name = achievement?.toString() ?? "";
           resultList.add(
             SimpleNotificationData(
               text:
                   "${localize.achievementEarnedNotification}"
-                  "[${achievements[achievement]?.title ?? achievement}]",
-              createdAt: element.createdAt,
-              id: element.id,
+                  "[${achievements[name]?.title ?? name}]",
+              createdAt: createdAt,
+              id: id,
             ),
           );
 
-        case NotificationType.pollVote:
+        case NotificationScheduledNotePosted(
+          :final id,
+          :final createdAt,
+          :final note,
+        ):
           resultList.add(
-            PollNotification(
-              note: element.note,
-              createdAt: element.createdAt,
-              id: element.id,
-            ),
+            ScheduledNoteNotification(note: note, createdAt: createdAt, id: id),
           );
-        case NotificationType.pollEnded:
-          resultList.add(
-            PollNotification(
-              note: element.note,
-              createdAt: element.createdAt,
-              id: element.id,
-            ),
-          );
-        case NotificationType.scheduledNotePosted:
-          resultList.add(
-            ScheduledNoteNotification(
-              note: element.note,
-              createdAt: element.createdAt,
-              id: element.id,
-            ),
-          );
-        case NotificationType.scheduledNotePostFailed:
+
+        case NotificationScheduledNotePostFailed(:final id, :final createdAt):
           resultList.add(
             SimpleNotificationData(
               text: localize.scheduledNotePostFailedNotification,
-              createdAt: element.createdAt,
-              id: element.id,
+              createdAt: createdAt,
+              id: id,
             ),
           );
-        case NotificationType.test:
+
+        case NotificationPollEnded(:final id, :final createdAt, :final note):
+          resultList.add(
+            PollNotification(note: note, createdAt: createdAt, id: id),
+          );
+
+        case NotificationTest(:final id, :final createdAt):
           resultList.add(
             SimpleNotificationData(
               text: localize.testNotification,
-              createdAt: element.createdAt,
-              id: element.id,
+              createdAt: createdAt,
+              id: id,
             ),
           );
 
-        case NotificationType.note:
+        case NotificationNote(:final id, :final createdAt, :final note):
           resultList.add(
-            NoteNotification(
-              note: element.note,
-              createdAt: element.createdAt,
-              id: element.id,
-            ),
+            NoteNotification(note: note, createdAt: createdAt, id: id),
           );
 
-        case NotificationType.roleAssigned:
+        case NotificationRoleAssigned(:final id, :final createdAt, :final role):
           resultList.add(
-            RoleNotification(
-              role: element.role,
-              createdAt: element.createdAt,
-              id: element.id,
-            ),
+            RoleNotification(role: role, createdAt: createdAt, id: id),
           );
-        case NotificationType.app:
-          final body = element.body;
-          if (body == null || body.isEmpty) {
+
+        case NotificationApp(
+          :final id,
+          :final createdAt,
+          :final body,
+          :final header,
+          :final icon,
+        ):
+          if (body.isEmpty) {
             // 本文がなければ従来どおり「アプリからの通知」とだけ伝える
             resultList.add(
               SimpleNotificationData(
                 text: localize.appNotification,
-                createdAt: element.createdAt,
-                id: element.id,
+                createdAt: createdAt,
+                id: id,
               ),
             );
           } else {
             resultList.add(
               AppNotificationData(
                 body: body,
-                header: element.header,
-                icon: element.icon,
-                createdAt: element.createdAt,
-                id: element.id,
+                header: header,
+                icon: icon == null ? null : Uri.tryParse(icon),
+                createdAt: createdAt,
+                id: id,
               ),
             );
           }
 
-        case NotificationType.groupInvited:
-        case NotificationType.reactionGrouped:
-        case NotificationType.renoteGrouped:
-          break;
-        case NotificationType.exportCompleted:
+        case NotificationExportCompleted(:final id, :final createdAt):
           resultList.add(
             SimpleNotificationData(
               text: localize.exportCompleted,
-              createdAt: element.createdAt,
-              id: element.id,
+              createdAt: createdAt,
+              id: id,
             ),
           );
-        case NotificationType.login:
+
+        case NotificationLogin(:final id, :final createdAt):
           resultList.add(
             SimpleNotificationData(
               text: localize.someoneLogined,
-              createdAt: element.createdAt,
-              id: element.id,
+              createdAt: createdAt,
+              id: id,
             ),
           );
-        case NotificationType.createToken:
+
+        case NotificationCreateToken(:final id, :final createdAt):
           resultList.add(
             SimpleNotificationData(
               text: localize.createTokenNotification,
-              createdAt: element.createdAt,
-              id: element.id,
+              createdAt: createdAt,
+              id: id,
             ),
           );
-        case NotificationType.chatRoomInvitationReceived:
-          if (element.invitation != null) {
-            resultList.add(
-              InvitedChatRoomNotification(
-                invitation: element.invitation!,
-                createdAt: element.createdAt,
-                id: element.id,
-              ),
-            );
-          } else {
-            resultList.add(
-              SimpleNotificationData(
-                text: localize.chatRoomInvitationReceivedNotification,
-                createdAt: element.createdAt,
-                id: element.id,
-              ),
-            );
-          }
 
-        // case NotificationType.unknown:
-        default:
+        case NotificationChatRoomInvitationReceived(
+          :final id,
+          :final createdAt,
+          :final invitation,
+        ):
+          resultList.add(
+            InvitedChatRoomNotification(
+              invitation: invitation,
+              createdAt: createdAt,
+              id: id,
+            ),
+          );
+
+        case NotificationUnknown(:final id, :final createdAt):
           resultList.add(
             SimpleNotificationData(
               text: localize.unknownNotification,
-              createdAt: element.createdAt,
-              id: element.id,
+              createdAt: createdAt ?? DateTime.now(),
+              id: id ?? "",
             ),
           );
       }

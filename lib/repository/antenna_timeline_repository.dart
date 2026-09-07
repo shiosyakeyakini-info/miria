@@ -17,7 +17,7 @@ class AntennaTimelineRepository extends SocketTimelineRepository {
   Future<Iterable<Note>> requestNotes({String? untilId}) async {
     return await misskey.antennas.notes(
       AntennasNotesRequest(
-        antennaId: tabSetting.antennaId!,
+        antennaId: tabSetting.antennaId,
         limit: 30,
         untilId: untilId,
       ),

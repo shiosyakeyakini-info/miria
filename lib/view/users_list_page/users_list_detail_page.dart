@@ -1,7 +1,6 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:miria/extensions/users_lists_show_response_extension.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/users_list_settings.dart";
 import "package:miria/providers.dart";
@@ -19,11 +18,11 @@ part "users_list_detail_page.g.dart";
 @riverpod
 class _UsersListNotifier extends _$UsersListNotifier {
   @override
-  Future<UsersList> build(Misskey misskey, String listId) async {
+  Future<UserList> build(Misskey misskey, String listId) async {
     final response = await misskey.users.list.show(
       UsersListsShowRequest(listId: listId),
     );
-    return response.toUsersList();
+    return response;
   }
 
   Future<void> updateList(
@@ -53,7 +52,7 @@ class _UsersListUsers extends _$UsersListUsers {
   Future<List<User>> build(Misskey misskey, String listId) async {
     final list = await ref.watch(_usersListProvider(misskey, listId).future);
     final response = await misskey.users.showByIds(
-      UsersShowByIdsRequest(userIds: list.userIds),
+      UsersShowRequest(userIds: list.userIds),
     );
     return response.toList();
   }

@@ -79,14 +79,16 @@ const _$NoteVisibilityEnumMap = {
   NoteVisibility.home: 'home',
   NoteVisibility.followers: 'followers',
   NoteVisibility.specified: 'specified',
+  NoteVisibility.unknown: 'unknown',
 };
 
 const _$ReactionAcceptanceEnumMap = {
+  ReactionAcceptance.likeOnly: 'likeOnly',
   ReactionAcceptance.likeOnlyForRemote: 'likeOnlyForRemote',
   ReactionAcceptance.nonSensitiveOnly: 'nonSensitiveOnly',
   ReactionAcceptance.nonSensitiveOnlyForLocalLikeOnlyForRemote:
       'nonSensitiveOnlyForLocalLikeOnlyForRemote',
-  ReactionAcceptance.likeOnly: 'likeOnly',
+  ReactionAcceptance.unknown: 'unknown',
 };
 
 const _$CacheStrategyEnumMap = {

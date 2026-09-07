@@ -123,7 +123,7 @@ void main() {
         mockChannel.followed(any),
       ).thenAnswer((_) async => [TestData.channel1]);
       when(
-        mockChannel.myFavorite(any),
+        mockChannel.myFavorite(),
       ).thenAnswer((_) async => [TestData.channel2]);
 
       await tester.pumpWidget(

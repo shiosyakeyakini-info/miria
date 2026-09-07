@@ -12,8 +12,13 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 part "user_list_select_dialog.g.dart";
 
 @Riverpod(dependencies: [misskeyGetContext])
-Future<List<UsersList>> _usersList(Ref ref) async =>
-    (await ref.read(misskeyGetContextProvider).users.list.list()).toList();
+Future<List<UserList>> _usersList(Ref ref) async =>
+    (await ref
+            .read(misskeyGetContextProvider)
+            .users
+            .list
+            .list(const UsersListsListRequest()))
+        .toList();
 
 @RoutePage()
 class UserListSelectDialog extends ConsumerWidget implements AutoRouteWrapper {

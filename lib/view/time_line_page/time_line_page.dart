@@ -143,7 +143,6 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
           notesCount: 0,
           isFollowing: false,
           isFavorited: false,
-          hasUnreadNote: false,
           pinnedNotes: [],
         );
       }

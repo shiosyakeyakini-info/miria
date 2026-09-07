@@ -19,6 +19,8 @@ IconData resolveVisibilityIcon(NoteVisibility visibility) {
       return Icons.lock_outline;
     case NoteVisibility.specified:
       return Icons.mail;
+    case NoteVisibility.unknown:
+      return Icons.help_outline;
   }
 }
 
@@ -46,6 +48,7 @@ class AcceptanceIcon extends StatelessWidget {
       ReactionAcceptance.nonSensitiveOnly => const Icon(Icons.shield_outlined),
       ReactionAcceptance.nonSensitiveOnlyForLocalLikeOnlyForRemote =>
         const Icon(Icons.add_moderator_outlined),
+      ReactionAcceptance.unknown => const Icon(Icons.help_outline),
     };
   }
 }

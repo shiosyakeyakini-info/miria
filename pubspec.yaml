@@ -17,7 +17,7 @@ dependencies:
   misskey_dart:
     git:
       url: https://github.com/shiosyakeyakini-info/misskey_dart.git
-      ref: master
+      ref: claude/misskey-admin-control-panel-0cjbla
   mfm: ^1.0.11
   tuple: ^2.0.1
   path_provider: ^2.1.6

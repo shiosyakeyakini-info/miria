@@ -13,7 +13,7 @@ part of 'users_lists_notifier.dart';
 final usersListsProvider = UsersListsNotifierProvider._();
 
 final class UsersListsNotifierProvider
-    extends $AsyncNotifierProvider<UsersListsNotifier, List<UsersList>> {
+    extends $AsyncNotifierProvider<UsersListsNotifier, List<UserList>> {
   UsersListsNotifierProvider._()
     : super(
         from: null,
@@ -41,19 +41,19 @@ final class UsersListsNotifierProvider
 }
 
 String _$usersListsNotifierHash() =>
-    r'b91fce466402982f81c4c6c22727bae1ed3c7d28';
+    r'306a929e892431e5e8f3020063a98b8fa1876379';
 
-abstract class _$UsersListsNotifier extends $AsyncNotifier<List<UsersList>> {
-  FutureOr<List<UsersList>> build();
+abstract class _$UsersListsNotifier extends $AsyncNotifier<List<UserList>> {
+  FutureOr<List<UserList>> build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final ref = this.ref as $Ref<AsyncValue<List<UsersList>>, List<UsersList>>;
+    final ref = this.ref as $Ref<AsyncValue<List<UserList>>, List<UserList>>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<List<UsersList>>, List<UsersList>>,
-              AsyncValue<List<UsersList>>,
+              AnyNotifier<AsyncValue<List<UserList>>, List<UserList>>,
+              AsyncValue<List<UserList>>,
               Object?,
               Object?
             >;

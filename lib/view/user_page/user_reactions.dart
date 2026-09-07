@@ -41,7 +41,7 @@ class UserReactions extends ConsumerWidget {
 }
 
 class UserReaction extends ConsumerWidget {
-  final UsersReactionsResponse response;
+  final NoteReactionWithNote response;
 
   const UserReaction({required this.response, super.key});
 

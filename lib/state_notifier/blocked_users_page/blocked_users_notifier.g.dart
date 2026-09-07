@@ -41,7 +41,7 @@ final class BlockedUsersNotifierProvider
 }
 
 String _$blockedUsersNotifierHash() =>
-    r'3cc48c4d047bf2dca018e24e923cde2bcacb11a7';
+    r'72402214132a96c9be2427d59d9d493d2d638e64';
 
 abstract class _$BlockedUsersNotifier extends $AsyncNotifier<List<Blocking>> {
   FutureOr<List<Blocking>> build();

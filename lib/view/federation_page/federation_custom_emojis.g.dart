@@ -15,13 +15,13 @@ final fetchEmojiProvider = FetchEmojiFamily._();
 final class FetchEmojiProvider
     extends
         $FunctionalProvider<
-          AsyncValue<Map<String, List<Emoji>>>,
-          Map<String, List<Emoji>>,
-          FutureOr<Map<String, List<Emoji>>>
+          AsyncValue<Map<String, List<EmojiSimple>>>,
+          Map<String, List<EmojiSimple>>,
+          FutureOr<Map<String, List<EmojiSimple>>>
         >
     with
-        $FutureModifier<Map<String, List<Emoji>>>,
-        $FutureProvider<Map<String, List<Emoji>>> {
+        $FutureModifier<Map<String, List<EmojiSimple>>>,
+        $FutureProvider<Map<String, List<EmojiSimple>>> {
   FetchEmojiProvider._({
     required FetchEmojiFamily super.from,
     required (String, MetaResponse) super.argument,
@@ -49,12 +49,12 @@ final class FetchEmojiProvider
 
   @$internal
   @override
-  $FutureProviderElement<Map<String, List<Emoji>>> $createElement(
+  $FutureProviderElement<Map<String, List<EmojiSimple>>> $createElement(
     $ProviderPointer pointer,
   ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<Map<String, List<Emoji>>> create(Ref ref) {
+  FutureOr<Map<String, List<EmojiSimple>>> create(Ref ref) {
     final argument = this.argument as (String, MetaResponse);
     return fetchEmoji(ref, argument.$1, argument.$2);
   }
@@ -70,12 +70,12 @@ final class FetchEmojiProvider
   }
 }
 
-String _$fetchEmojiHash() => r'6a0537c48cf48be2dd1c1823cd69d72ebaa8906b';
+String _$fetchEmojiHash() => r'ff757f9d55617dd91a6e5c80e82cc2c7ee9e694a';
 
 final class FetchEmojiFamily extends $Family
     with
         $FunctionalFamilyOverride<
-          FutureOr<Map<String, List<Emoji>>>,
+          FutureOr<Map<String, List<EmojiSimple>>>,
           (String, MetaResponse)
         > {
   FetchEmojiFamily._()

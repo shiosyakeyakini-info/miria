@@ -26,7 +26,7 @@ class NoteDraftRepository extends _$NoteDraftRepository {
     String? replyId,
     String? renoteId,
     String? channelId,
-    NotesCreatePollRequest? poll,
+    NotesCreatePoll? poll,
   }) async {
     final request = NotesDraftsCreateRequest(
       text: text,
@@ -83,7 +83,7 @@ class NoteDraftRepository extends _$NoteDraftRepository {
     String? replyId,
     String? renoteId,
     String? channelId,
-    NotesCreatePollRequest? poll,
+    NotesCreatePoll? poll,
   }) async {
     final request = NotesDraftsUpdateRequest(
       draftId: draftId,

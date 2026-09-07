@@ -17,7 +17,7 @@ class ExploreRole extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
-      child: FutureListView<RolesListResponse>(
+      child: FutureListView<Role>(
         future: Future(() async {
           final response = await ref
               .read(misskeyGetContextProvider)
@@ -35,7 +35,7 @@ class ExploreRole extends ConsumerWidget {
 }
 
 class RoleListItem extends ConsumerWidget {
-  final RolesListResponse item;
+  final Role item;
 
   const RoleListItem({required this.item, super.key});
 

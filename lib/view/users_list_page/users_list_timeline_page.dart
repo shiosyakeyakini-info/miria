@@ -12,7 +12,7 @@ import "package:misskey_dart/misskey_dart.dart";
 @RoutePage()
 class UsersListTimelinePage extends ConsumerWidget implements AutoRouteWrapper {
   final AccountContext accountContext;
-  final UsersList list;
+  final UserList list;
 
   const UsersListTimelinePage(this.accountContext, this.list, {super.key});
 

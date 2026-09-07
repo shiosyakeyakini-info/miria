@@ -8,6 +8,7 @@ extension OriginExtension on Origin {
       Origin.local => S.of(context).local,
       Origin.remote => S.of(context).remote,
       Origin.combined => S.of(context).originCombined,
+      Origin.unknown => "",
     };
   }
 }

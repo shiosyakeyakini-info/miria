@@ -13,7 +13,7 @@ import "../../test_util/widget_tester_extension.dart";
 void main() {
   group("アンテナノート一覧", () {
     testWidgets("アンテナのノート一覧が表示されること", (tester) async {
-      final antennas = MockMisskeyAntenna();
+      final antennas = MockMisskeyAntennas();
       final misskey = MockMisskey();
       when(misskey.antennas).thenReturn(antennas);
       when(antennas.notes(any)).thenAnswer((_) async => [TestData.note1]);

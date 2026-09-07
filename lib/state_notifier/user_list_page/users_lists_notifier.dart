@@ -12,8 +12,10 @@ class UsersListsNotifier extends _$UsersListsNotifier {
   late final _misskey = ref.read(misskeyPostContextProvider);
 
   @override
-  Future<List<UsersList>> build() async {
-    final response = await _misskey.users.list.list();
+  Future<List<UserList>> build() async {
+    final response = await _misskey.users.list.list(
+      const UsersListsListRequest(),
+    );
     return response.toList();
   }
 

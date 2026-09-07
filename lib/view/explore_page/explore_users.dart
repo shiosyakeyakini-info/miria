@@ -136,7 +136,7 @@ class ExploreUsers extends HookConsumerWidget {
                       .read(misskeyGetContextProvider)
                       .users
                       .users(
-                        UsersUsersRequest(
+                        UsersRequest(
                           sort: sortType.value,
                           state: UsersState.alive,
                           origin:
@@ -152,7 +152,7 @@ class ExploreUsers extends HookConsumerWidget {
                       .read(misskeyGetContextProvider)
                       .users
                       .users(
-                        UsersUsersRequest(
+                        UsersRequest(
                           sort: sortType.value,
                           state: UsersState.alive,
                           offset: index,

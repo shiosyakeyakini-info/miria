@@ -4,7 +4,6 @@ import "dart:typed_data";
 import "package:collection/collection.dart";
 import "package:file/memory.dart";
 import "package:file_picker/file_picker.dart";
-import "package:file_picker/src/platform/file_picker_platform_interface.dart";
 import "package:flutter/material.dart";
 import "package:flutter_svg/svg.dart";
 import "package:flutter_test/flutter_test.dart";
@@ -1910,7 +1909,7 @@ void main() {
           when(mockMisskey.hashtags).thenReturn(mockHashtags);
           when(mockHashtags.trend()).thenAnswer(
             (_) async => [
-              const HashtagsTrendResponse(tag: "abc", chart: [], usersCount: 0),
+              const HashtagsTrendItem(tag: "abc", chart: [], usersCount: 0),
             ],
           );
           when(mockHashtags.search(any)).thenAnswer((_) async => ["def"]);
@@ -2576,7 +2575,7 @@ void main() {
         when(mockMisskey.notes).thenReturn(mockNote);
         when(mockMisskey.users).thenReturn(mockUser);
         when(
-          mockUser.showByName(any),
+          mockUser.show(any),
         ).thenAnswer((_) async => TestData.usersShowResponse2);
 
         await tester.pumpWidget(
@@ -3210,7 +3209,7 @@ void main() {
                 predicate<NotesCreateRequest>(
                   (arg) =>
                       arg.poll ==
-                      const NotesCreatePollRequest(
+                      const NotesCreatePoll(
                         choices: ["純金製ぬいぐるみ", "動くゼロ幅スペース"],
                         multiple: false,
                         expiresAt: null,
@@ -3260,7 +3259,7 @@ void main() {
                 predicate<NotesCreateRequest>(
                   (arg) =>
                       arg.poll ==
-                      const NotesCreatePollRequest(
+                      const NotesCreatePoll(
                         choices: [
                           "投票0",
                           "投票1",
@@ -3358,7 +3357,7 @@ void main() {
                 predicate<NotesCreateRequest>(
                   (arg) =>
                       arg.poll ==
-                      const NotesCreatePollRequest(
+                      const NotesCreatePoll(
                         choices: ["投票1", "投票3"],
                         multiple: false,
                         expiresAt: null,
@@ -3420,7 +3419,7 @@ void main() {
                 predicate<NotesCreateRequest>(
                   (arg) =>
                       arg.poll ==
-                      const NotesCreatePollRequest(
+                      const NotesCreatePoll(
                         choices: [":ai_yay:", ":ai_yay_superfast:"],
                         multiple: false,
                         expiresAt: null,
@@ -3473,7 +3472,7 @@ void main() {
                 predicate<NotesCreateRequest>(
                   (arg) =>
                       arg.poll ==
-                      const NotesCreatePollRequest(
+                      const NotesCreatePoll(
                         choices: [":ai_yay:", ":ai_yay_superfast:"],
                         multiple: false,
                         expiresAt: null,
@@ -3556,7 +3555,7 @@ void main() {
                 predicate<NotesCreateRequest>(
                   (arg) =>
                       arg.poll ==
-                      NotesCreatePollRequest(
+                      NotesCreatePoll(
                         choices: [":ai_yay:", ":ai_yay_superfast:"],
                         multiple: false,
                         expiresAt: DateTime(2099, 12, 31, 3, 34, 0, 0),
@@ -3646,7 +3645,7 @@ void main() {
                 predicate<NotesCreateRequest>(
                   (arg) =>
                       arg.poll ==
-                      NotesCreatePollRequest(
+                      NotesCreatePoll(
                         choices: [":ai_yay:", ":ai_yay_superfast:"],
                         multiple: false,
                         expiresAt: DateTime(2099, 12, 31, 3, 34, 0, 0),
@@ -3703,7 +3702,7 @@ void main() {
                 predicate<NotesCreateRequest>(
                   (arg) =>
                       arg.poll ==
-                      const NotesCreatePollRequest(
+                      const NotesCreatePoll(
                         choices: [":ai_yay:", ":ai_yay_superfast:"],
                         multiple: false,
                         expiresAt: null,
@@ -3766,7 +3765,7 @@ void main() {
                 predicate<NotesCreateRequest>(
                   (arg) =>
                       arg.poll ==
-                      const NotesCreatePollRequest(
+                      const NotesCreatePoll(
                         choices: [":ai_yay:", ":ai_yay_superfast:"],
                         multiple: false,
                         expiresAt: null,
@@ -3829,7 +3828,7 @@ void main() {
                 predicate<NotesCreateRequest>(
                   (arg) =>
                       arg.poll ==
-                      const NotesCreatePollRequest(
+                      const NotesCreatePoll(
                         choices: [":ai_yay:", ":ai_yay_superfast:"],
                         multiple: false,
                         expiresAt: null,
@@ -3892,7 +3891,7 @@ void main() {
                 predicate<NotesCreateRequest>(
                   (arg) =>
                       arg.poll ==
-                      const NotesCreatePollRequest(
+                      const NotesCreatePoll(
                         choices: [":ai_yay:", ":ai_yay_superfast:"],
                         multiple: false,
                         expiresAt: null,
@@ -3961,7 +3960,7 @@ void main() {
                 predicate<NotesCreateRequest>(
                   (arg) =>
                       arg.poll ==
-                      const NotesCreatePollRequest(
+                      const NotesCreatePoll(
                         choices: [":ai_yay:", ":ai_yay_superfast:"],
                         multiple: false,
                         expiresAt: null,

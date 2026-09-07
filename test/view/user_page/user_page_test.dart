@@ -47,11 +47,17 @@ void main() {
         final mockMisskey = MockMisskey();
         final mockUser = MockMisskeyUsers();
         when(mockMisskey.users).thenReturn(mockUser);
+        // users/show は自分のサーバーへの問い合わせと、リモート側への
+        // 問い合わせの両方に使われるので、リクエストの中身で振り分ける
         when(
-          mockUser.show(any),
+          mockUser.show(
+            argThat(predicate<UsersShowRequest>((r) => r.userId != null)),
+          ),
         ).thenAnswer((_) async => TestData.usersShowResponse3AsRemoteUser);
         when(
-          mockUser.showByName(any),
+          mockUser.show(
+            argThat(predicate<UsersShowRequest>((r) => r.username != null)),
+          ),
         ).thenAnswer((_) async => TestData.usersShowResponse3AsLocalUser);
 
         final emojiRepository = MockEmojiRepository();
@@ -601,7 +607,7 @@ void main() {
         );
         await tester.pumpAndSettle();
 
-        expect(find.text(TestData.clip.name!), findsOneWidget);
+        expect(find.text(TestData.clip.name), findsOneWidget);
         await tester.pageNation();
         verify(
           mockUser.clips(

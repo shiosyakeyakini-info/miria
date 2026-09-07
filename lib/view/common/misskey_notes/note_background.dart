@@ -36,6 +36,8 @@ class NoteBackground extends ConsumerWidget {
         color = isDark
             ? settings.darkNoteBackgroundDirect
             : settings.lightNoteBackgroundDirect;
+      case NoteVisibility.unknown:
+        color = null;
     }
 
     if (color == null || color.a == 0) {

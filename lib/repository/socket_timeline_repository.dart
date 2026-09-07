@@ -331,6 +331,14 @@ abstract class SocketTimelineRepository extends TimelineRepository {
           case DeletedChannelEvent():
           case PollVotedChannelEvent():
           case UpdatedChannelEvent():
+          case ReversiInvitedChannelEvent():
+          case ReversiMatchedChannelEvent():
+          case ReversiStartedChannelEvent():
+          case ReversiEndedChannelEvent():
+          case ReversiLogChannelEvent():
+          case ReversiChangeReadyStatesChannelEvent():
+          case ReversiUpdateSettingsChannelEvent():
+          case ReversiCanceledChannelEvent():
             break;
           case ChatMessageChannelEvent():
           case ChatDeletedChannelEvent():
@@ -392,6 +400,14 @@ abstract class SocketTimelineRepository extends TimelineRepository {
           case ReadAntennaChannelEvent():
           case ReceiveFollowRequestChannelEvent():
           case FallbackChannelEvent():
+          case ReversiInvitedChannelEvent():
+          case ReversiMatchedChannelEvent():
+          case ReversiStartedChannelEvent():
+          case ReversiEndedChannelEvent():
+          case ReversiLogChannelEvent():
+          case ReversiChangeReadyStatesChannelEvent():
+          case ReversiUpdateSettingsChannelEvent():
+          case ReversiCanceledChannelEvent():
             break;
           case NewChatMessageEvent():
           case ChatMessageChannelEvent():
