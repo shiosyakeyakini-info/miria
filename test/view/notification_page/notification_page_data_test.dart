@@ -101,6 +101,13 @@ void main() {
         Notification.scheduledNotePostFailed(
           id: "notification1",
           createdAt: createdAt,
+          noteDraft: NoteDraft(
+            id: "draft1",
+            createdAt: createdAt,
+            userId: TestData.note1.userId,
+            user: TestData.note1.user,
+            visibility: NoteVisibility.public,
+          ),
         ),
       ].toNotificationData(s, achievements);
 

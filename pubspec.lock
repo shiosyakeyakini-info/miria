@@ -1040,7 +1040,7 @@ packages:
     description:
       path: "."
       ref: "claude/misskey-admin-control-panel-0cjbla"
-      resolved-ref: "15f92836733e78244f4eb95019e7155a32659052"
+      resolved-ref: "46e90e131a1196de23947b00d34b6e002e23da56"
       url: "https://github.com/shiosyakeyakini-info/misskey_dart.git"
     source: git
     version: "1.0.0"
