@@ -17,6 +17,8 @@ void main() {
       final misskey = MockMisskey();
       when(misskey.clips).thenReturn(clip);
       when(clip.notes(any)).thenAnswer((_) async => [TestData.note1]);
+      when(clip.list(any)).thenAnswer((_) async => []);
+      when(clip.show(any)).thenAnswer((_) async => TestData.clip);
 
       await tester.pumpWidget(
         ProviderScope(
@@ -45,6 +47,82 @@ void main() {
           ),
         ),
       ).called(1);
+    });
+  });
+
+  group("クリップのタイトル", () {
+    testWidgets("自分のクリップ一覧になくてもクリップ名が表示されること", (tester) async {
+      final clip = MockMisskeyClips();
+      final misskey = MockMisskey();
+      when(misskey.clips).thenReturn(clip);
+      when(clip.notes(any)).thenAnswer((_) async => []);
+      when(clip.list(any)).thenAnswer((_) async => []);
+      when(clip.show(any)).thenAnswer((_) async => TestData.clip);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
+          child: DefaultRootWidget(
+            initialRoute: ClipDetailRoute(
+              id: TestData.clip.id,
+              accountContext: TestData.accountContext,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text(TestData.clip.name!), findsOneWidget);
+      verify(clip.show(any)).called(1);
+    });
+
+    testWidgets("自分のクリップ一覧の取得に失敗してもクリップ名が表示されること", (tester) async {
+      final clip = MockMisskeyClips();
+      final misskey = MockMisskey();
+      when(misskey.clips).thenReturn(clip);
+      when(clip.notes(any)).thenAnswer((_) async => []);
+      when(clip.list(any)).thenThrow(Exception("401 Unauthorized"));
+      when(clip.show(any)).thenAnswer((_) async => TestData.clip);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
+          child: DefaultRootWidget(
+            initialRoute: ClipDetailRoute(
+              id: TestData.clip.id,
+              accountContext: TestData.accountContext,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text(TestData.clip.name!), findsOneWidget);
+      verify(clip.show(any)).called(1);
+    });
+
+    testWidgets("自分のクリップ一覧にあれば clips/show を呼ばないこと", (tester) async {
+      final clip = MockMisskeyClips();
+      final misskey = MockMisskey();
+      when(misskey.clips).thenReturn(clip);
+      when(clip.notes(any)).thenAnswer((_) async => []);
+      when(clip.list(any)).thenAnswer((_) async => [TestData.clip]);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
+          child: DefaultRootWidget(
+            initialRoute: ClipDetailRoute(
+              id: TestData.clip.id,
+              accountContext: TestData.accountContext,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text(TestData.clip.name!), findsOneWidget);
+      verifyNever(clip.show(any));
     });
   });
 }
