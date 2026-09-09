@@ -1015,10 +1015,10 @@ packages:
     dependency: "direct main"
     description:
       name: mfm
-      sha256: "10ed9e7ab347f89d7f93b98b2785b8f153128e2d04b6e0ba27a5eefd2a75fca7"
+      sha256: "3124c524d334a1b50d231ecb4cac239a1aef7aaa2d83974d33d77a2bc83d6ccc"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.11"
+    version: "1.0.11+2"
   mfm_parser:
     dependency: "direct main"
     description:
