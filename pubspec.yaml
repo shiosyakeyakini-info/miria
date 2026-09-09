@@ -18,7 +18,7 @@ dependencies:
     git:
       url: https://github.com/shiosyakeyakini-info/misskey_dart.git
       ref: master
-  mfm: ^1.0.11
+  mfm: ^1.0.11+2
   tuple: ^2.0.1
   path_provider: ^2.1.6
   dio: ^5.10.0
