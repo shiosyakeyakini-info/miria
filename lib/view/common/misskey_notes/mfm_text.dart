@@ -245,6 +245,7 @@ class SimpleMfmText extends ConsumerWidget {
   final String text;
   final TextStyle? style;
   final Map<String, String> emojis;
+  final String? host;
   final List<InlineSpan> suffixSpan;
   final List<InlineSpan> prefixSpan;
   final bool isNyaize;
@@ -256,6 +257,7 @@ class SimpleMfmText extends ConsumerWidget {
     super.key,
     this.style,
     this.emojis = const {},
+    this.host,
     this.suffixSpan = const [],
     this.prefixSpan = const [],
     this.isNyaize = false,
@@ -280,6 +282,7 @@ class SimpleMfmText extends ConsumerWidget {
               ),
             ),
             emojiInfo: emojis,
+            host: host,
           ),
           fontSizeRatio: 1,
           style: style,

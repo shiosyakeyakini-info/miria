@@ -141,6 +141,8 @@ class NoteVote extends HookConsumerWidget {
                       child: SimpleMfmText(
                         choice.element.text,
                         style: Theme.of(context).textTheme.bodyMedium,
+                        emojis: displayNote.emojis,
+                        host: displayNote.user.host,
                         prefixSpan: [
                           if (choice.element.isVoted)
                             WidgetSpan(
