@@ -2911,6 +2911,121 @@ class PhotoEditRouteArgs {
 }
 
 /// generated route for
+/// [PlayPage]
+class PlayRoute extends PageRouteInfo<PlayRouteArgs> {
+  PlayRoute({
+    required AccountContext accountContext,
+    required Flash flash,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         PlayRoute.name,
+         args: PlayRouteArgs(
+           accountContext: accountContext,
+           flash: flash,
+           key: key,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'PlayRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<PlayRouteArgs>();
+      return WrappedRoute(
+        child: PlayPage(
+          accountContext: args.accountContext,
+          flash: args.flash,
+          key: args.key,
+        ),
+      );
+    },
+  );
+}
+
+class PlayRouteArgs {
+  const PlayRouteArgs({
+    required this.accountContext,
+    required this.flash,
+    this.key,
+  });
+
+  final AccountContext accountContext;
+
+  final Flash flash;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'PlayRouteArgs{accountContext: $accountContext, flash: $flash, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PlayRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        flash == other.flash &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ flash.hashCode ^ key.hashCode;
+}
+
+/// generated route for
+/// [PluginPage]
+class PluginRoute extends PageRouteInfo<PluginRouteArgs> {
+  PluginRoute({
+    required AccountContext accountContext,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         PluginRoute.name,
+         args: PluginRouteArgs(accountContext: accountContext, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'PluginRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<PluginRouteArgs>();
+      return WrappedRoute(
+        child: PluginPage(accountContext: args.accountContext, key: args.key),
+      );
+    },
+  );
+}
+
+class PluginRouteArgs {
+  const PluginRouteArgs({required this.accountContext, this.key});
+
+  final AccountContext accountContext;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'PluginRouteArgs{accountContext: $accountContext, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PluginRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [ProfileEditPage]
 class ProfileEditRoute extends PageRouteInfo<ProfileEditRouteArgs> {
   ProfileEditRoute({
@@ -3434,6 +3549,58 @@ class RoomChatRouteArgs {
 
   @override
   int get hashCode => room.hashCode ^ accountContext.hashCode ^ key.hashCode;
+}
+
+/// generated route for
+/// [ScratchpadPage]
+class ScratchpadRoute extends PageRouteInfo<ScratchpadRouteArgs> {
+  ScratchpadRoute({
+    required AccountContext accountContext,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ScratchpadRoute.name,
+         args: ScratchpadRouteArgs(accountContext: accountContext, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'ScratchpadRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ScratchpadRouteArgs>();
+      return WrappedRoute(
+        child: ScratchpadPage(
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
+}
+
+class ScratchpadRouteArgs {
+  const ScratchpadRouteArgs({required this.accountContext, this.key});
+
+  final AccountContext accountContext;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ScratchpadRouteArgs{accountContext: $accountContext, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ScratchpadRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for

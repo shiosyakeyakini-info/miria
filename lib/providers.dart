@@ -8,8 +8,8 @@ import "package:freezed_annotation/freezed_annotation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:hooks_riverpod/legacy.dart";
 import "package:miria/model/account.dart";
-import "package:miria/model/achievement.dart";
 import "package:miria/model/acct.dart";
+import "package:miria/model/achievement.dart";
 import "package:miria/model/tab_setting.dart";
 import "package:miria/model/tab_type.dart";
 import "package:miria/repository/account_repository.dart";
@@ -33,6 +33,7 @@ import "package:miria/repository/tab_settings_repository.dart";
 import "package:miria/repository/time_line_repository.dart";
 import "package:miria/repository/user_list_time_line_repository.dart";
 import "package:miria/router/app_router.dart";
+import "package:miria/state_notifier/aiscript_plugin_notifier.dart";
 import "package:miria/util/file_system_io.dart" as fs;
 import "package:miria/util/window_listener.dart";
 import "package:misskey_dart/misskey_dart.dart";
@@ -122,9 +123,20 @@ final favoriteProvider =
       ),
     );
 
-final notesProvider = ChangeNotifierProvider.family<NoteRepository, Account>(
-  (ref, account) => NoteRepository(ref.read(misskeyProvider(account)), account),
-);
+final notesProvider = ChangeNotifierProvider.family<NoteRepository, Account>((
+  ref,
+  account,
+) {
+  final repository = NoteRepository(
+    ref.read(misskeyProvider(account)),
+    account,
+    // プラグインはノートより後に立ち上がることがあるので、押し込まれるのを
+    // 待たずに、ノートが来るたびに今の顔ぶれを引きに行く
+    noteViewInterruptors: () =>
+        ref.read(aiScriptPluginProvider(account)).noteViewInterruptors,
+  );
+  return repository;
+});
 
 @Riverpod(dependencies: [accountContext])
 Raw<NoteRepository> notesWith(Ref ref) {

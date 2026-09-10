@@ -1139,6 +1139,21 @@
     "poll": "アンケート",
     "continueEditing": "もうちょっと編集を続ける",
     "saveAndClose": "保存して閉じる", 
-    "discardAndReturn": "保存せずに戻る"
-
+    "discardAndReturn": "保存せずに戻る",
+    "scratchpad": "スクラッチパッド",
+    "scratchpadDescription": "AiScriptを書いて動かせるとこや。Misskeyと喋るコードを試すのに使うとええ。",
+    "runScript": "実行",
+    "scriptOutput": "出力",
+    "plugins": "プラグイン",
+    "installPlugin": "プラグインを入れる",
+    "pluginCode": "AiScriptのコードを貼り付けてや",
+    "noPluginsInstalled": "まだ何も入ってへん",
+    "pluginPermissions": "要求してる権限",
+    "pluginLogs": "ログ",
+    "pluginSettings": "設定",
+    "uninstallPlugin": "このプラグインを消す",
+    "confirmUninstallPlugin": "{name}を消してもええか？",
+    "@confirmUninstallPlugin": { "placeholders": { "name": { "type": "String" } } },
+    "pluginPermissionNotice": "miriaはまだプラグイン専用のトークンを作らへん。プラグインはあんたのアカウントの権限でそのまま動くから、入れるもんはよう選んでな。",
+    "ariaAcknowledgement": "miriaのAiScriptは[aria](https://github.com/poppingmoon/aria)を基にしとります。両プロジェクトのコントリビュータの皆さんに感謝します。"
 }

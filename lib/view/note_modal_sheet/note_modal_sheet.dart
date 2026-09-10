@@ -18,6 +18,7 @@ import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/copy_modal_sheet/copy_note_modal_sheet.dart";
 import "package:miria/view/note_create_page/note_create_page.dart";
+import "package:miria/view/plugin_page/plugin_action_tiles.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:path/path.dart";
 import "package:path_provider/path_provider.dart";
@@ -531,6 +532,11 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
               );
             },
           ),
+        // プラグインが生やした項目
+        PluginNoteActionTiles(
+          account: accountContext.postAccount,
+          note: targetNote,
+        ),
       ],
     );
   }

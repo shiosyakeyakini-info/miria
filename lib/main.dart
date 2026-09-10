@@ -14,6 +14,7 @@ import "package:miria/providers.dart";
 import "package:miria/view/common/dialog/dialog_scope.dart";
 import "package:miria/view/common/error_dialog_listener.dart";
 import "package:miria/view/common/sharing_intent_listener.dart";
+import "package:miria/view/plugin_page/plugin_launcher.dart";
 import "package:miria/view/themes/app_theme_scope.dart";
 import "package:stack_trace/stack_trace.dart" as stack_trace;
 import "package:window_manager/window_manager.dart";
@@ -127,7 +128,10 @@ class Miria extends HookConsumerWidget with WidgetsBindingObserver {
           child: DialogScope(
             child: SharingIntentListener(
               router: appRouter,
-              child: ErrorDialogListener(child: widget ?? Container()),
+              // 入れてあるプラグインをここで動かす
+              child: PluginLauncher(
+                child: ErrorDialogListener(child: widget ?? Container()),
+              ),
             ),
           ),
         );

@@ -62,3 +62,6 @@ miria-installer*.exe
 # FVM Version Cache
 .fvm/
 coverage/*
+
+# Rust (AiScript 処理系) のビルド生成物
+rust/target/

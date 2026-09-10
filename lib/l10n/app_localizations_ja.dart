@@ -2137,6 +2137,56 @@ class SJa extends S {
 
   @override
   String get discardAndReturn => '保存せずに戻る';
+
+  @override
+  String get scratchpad => 'スクラッチパッド';
+
+  @override
+  String get scratchpadDescription =>
+      'AiScriptを書いて動かせるとこや。Misskeyと喋るコードを試すのに使うとええ。';
+
+  @override
+  String get runScript => '実行';
+
+  @override
+  String get scriptOutput => '出力';
+
+  @override
+  String get plugins => 'プラグイン';
+
+  @override
+  String get installPlugin => 'プラグインを入れる';
+
+  @override
+  String get pluginCode => 'AiScriptのコードを貼り付けてや';
+
+  @override
+  String get noPluginsInstalled => 'まだ何も入ってへん';
+
+  @override
+  String get pluginPermissions => '要求してる権限';
+
+  @override
+  String get pluginLogs => 'ログ';
+
+  @override
+  String get pluginSettings => '設定';
+
+  @override
+  String get uninstallPlugin => 'このプラグインを消す';
+
+  @override
+  String confirmUninstallPlugin(String name) {
+    return '$nameを消してもええか？';
+  }
+
+  @override
+  String get pluginPermissionNotice =>
+      'miriaはまだプラグイン専用のトークンを作らへん。プラグインはあんたのアカウントの権限でそのまま動くから、入れるもんはよう選んでな。';
+
+  @override
+  String get ariaAcknowledgement =>
+      'miriaのAiScriptは[aria](https://github.com/poppingmoon/aria)を基にしとります。両プロジェクトのコントリビュータの皆さんに感謝します。';
 }
 
 /// The translations for Japanese (`ja_OJ`).
@@ -2584,4 +2634,54 @@ class SJaOj extends SJa {
 
   @override
   String get discardAndReturn => '保存せずに戻りますわ';
+
+  @override
+  String get scratchpad => 'スクラッチパッド';
+
+  @override
+  String get scratchpadDescription =>
+      'AiScriptを書いて動かせる場所ですわ。Misskeyと対話するコードをお試しになれますの。';
+
+  @override
+  String get runScript => '実行いたしますわ';
+
+  @override
+  String get scriptOutput => '出力';
+
+  @override
+  String get plugins => 'プラグイン';
+
+  @override
+  String get installPlugin => 'プラグインを導入いたしますわ';
+
+  @override
+  String get pluginCode => 'AiScriptのコードを貼り付けてくださいまし';
+
+  @override
+  String get noPluginsInstalled => 'まだ何も入っておりませんわ';
+
+  @override
+  String get pluginPermissions => '要求されている権限';
+
+  @override
+  String get pluginLogs => 'ログ';
+
+  @override
+  String get pluginSettings => '設定';
+
+  @override
+  String get uninstallPlugin => 'このプラグインを削除いたしますわ';
+
+  @override
+  String confirmUninstallPlugin(String name) {
+    return '$nameを削除してもよろしくて？';
+  }
+
+  @override
+  String get pluginPermissionNotice =>
+      'miriaはまだプラグイン専用のトークンを発行いたしませんの。プラグインはあなたのアカウントの権限でそのまま動きますので、導入するものはよくお選びくださいまし。';
+
+  @override
+  String get ariaAcknowledgement =>
+      'miriaのAiScriptは[aria](https://github.com/poppingmoon/aria)を基にしておりますの。両プロジェクトのコントリビュータの皆様に感謝いたしますわ。';
 }

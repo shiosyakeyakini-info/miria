@@ -43,6 +43,8 @@ ${S.of(context).developer}: @shiosyakeyakini@misskey.io
 [${S.of(context).officialWebSite}](https://shiosyakeyakini.info/miria_web/index.html)
 [GitHub](https://github.com/shiosyakeyakini-info/miria)
 
+${S.of(context).ariaAcknowledgement}
+
 \$[x2 **${S.of(context).openSourceLicense}**]
 ''',
                 ),

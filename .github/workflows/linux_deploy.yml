@@ -99,7 +99,8 @@ jobs:
           run: |
             docker exec debian bash -c '
                 apt update
-                apt install -y clang \
+                apt install -y build-essential \
+                               clang \
                                cmake \
                                curl \
                                git \
@@ -124,11 +125,27 @@ jobs:
                 export PATH="/root/fvm/bin:$PATH"
                 fvm install --setup
             '
+
+        # AiScript 処理系は rust/ の cargo ビルドとして入る。コンテナには
+        # Rust が入っていないので導入し、native assets を有効化しておく
+        - name: Install Rust
+          run: |
+            docker exec debian bash -c '
+                curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs \
+                  | sh -s -- -y --default-toolchain none
+            '
+
+        - name: Enable native assets
+          run: |
+            docker exec debian bash -c '
+                export PATH="/root/fvm/bin:$PATH"
+                fvm flutter config --enable-native-assets
+            '
         
         - name: Build
           run: |
             docker exec debian bash -c '
-                export PATH="/root/fvm/bin:$PATH"
+                export PATH="/root/.cargo/bin:/root/fvm/bin:$PATH"
                 fvm flutter pub get
                 fvm flutter build linux --release
             '

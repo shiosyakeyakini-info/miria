@@ -61,6 +61,14 @@ jobs:
         - name: Flutter pub get
           run: flutter pub get
 
+        # AiScript 処理系は rust/ の cargo ビルドとして入る。native assets は
+        # 既定で無効なので有効化しておかないと、共有ライブラリが同梱されない
+        - name: Update Rust
+          run: rustup update
+
+        - name: Enable native assets
+          run: flutter config --enable-native-assets
+
         - name: Initialize git config
           run: |
             git config --local user.name $GIT_USER_NAME

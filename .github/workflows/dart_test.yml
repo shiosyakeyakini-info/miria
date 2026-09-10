@@ -39,6 +39,22 @@ jobs:
 
       - name: Run flutter pub get
         run: flutter pub get
+
+      # flutter test は native assets を FFI に解決しないため、
+      # flutter_rust_bridge のフォールバック先 rust/target/release/ に
+      # AiScript 処理系の共有ライブラリを用意しておく
+      - name: Cache Rust build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            rust/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('rust/Cargo.toml', 'rust/rust-toolchain.toml') }}
+          restore-keys: ${{ runner.os }}-cargo-
+
+      - name: Build Rust library
+        run: cargo build --release --manifest-path rust/Cargo.toml
       
       # ゆくゆくは
       # - run: flutter analyze --fatal-infos

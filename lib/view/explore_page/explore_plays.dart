@@ -1,10 +1,11 @@
+import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/view/common/futable_list_builder.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:misskey_dart/misskey_dart.dart";
-import "package:url_launcher/url_launcher.dart";
 
 class ExplorePlay extends ConsumerWidget {
   const ExplorePlay({super.key});
@@ -23,16 +24,12 @@ class ExplorePlay extends ConsumerWidget {
         }),
         builder: (context, item) {
           return ListTile(
-            onTap: () async {
-              await launchUrl(
-                Uri(
-                  scheme: "https",
-                  host: ref.read(accountContextProvider).getAccount.host,
-                  pathSegments: ["play", item.id],
-                ),
-                mode: LaunchMode.externalApplication,
-              );
-            },
+            onTap: () async => context.pushRoute(
+              PlayRoute(
+                accountContext: ref.read(accountContextProvider),
+                flash: item,
+              ),
+            ),
             title: MfmText(
               mfmText: item.title,
               style: Theme.of(

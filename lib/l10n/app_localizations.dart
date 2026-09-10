@@ -3749,6 +3749,96 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'保存せずに戻る'**
   String get discardAndReturn;
+
+  /// No description provided for @scratchpad.
+  ///
+  /// In ja, this message translates to:
+  /// **'スクラッチパッド'**
+  String get scratchpad;
+
+  /// No description provided for @scratchpadDescription.
+  ///
+  /// In ja, this message translates to:
+  /// **'AiScriptを書いて動かせるとこや。Misskeyと喋るコードを試すのに使うとええ。'**
+  String get scratchpadDescription;
+
+  /// No description provided for @runScript.
+  ///
+  /// In ja, this message translates to:
+  /// **'実行'**
+  String get runScript;
+
+  /// No description provided for @scriptOutput.
+  ///
+  /// In ja, this message translates to:
+  /// **'出力'**
+  String get scriptOutput;
+
+  /// No description provided for @plugins.
+  ///
+  /// In ja, this message translates to:
+  /// **'プラグイン'**
+  String get plugins;
+
+  /// No description provided for @installPlugin.
+  ///
+  /// In ja, this message translates to:
+  /// **'プラグインを入れる'**
+  String get installPlugin;
+
+  /// No description provided for @pluginCode.
+  ///
+  /// In ja, this message translates to:
+  /// **'AiScriptのコードを貼り付けてや'**
+  String get pluginCode;
+
+  /// No description provided for @noPluginsInstalled.
+  ///
+  /// In ja, this message translates to:
+  /// **'まだ何も入ってへん'**
+  String get noPluginsInstalled;
+
+  /// No description provided for @pluginPermissions.
+  ///
+  /// In ja, this message translates to:
+  /// **'要求してる権限'**
+  String get pluginPermissions;
+
+  /// No description provided for @pluginLogs.
+  ///
+  /// In ja, this message translates to:
+  /// **'ログ'**
+  String get pluginLogs;
+
+  /// No description provided for @pluginSettings.
+  ///
+  /// In ja, this message translates to:
+  /// **'設定'**
+  String get pluginSettings;
+
+  /// No description provided for @uninstallPlugin.
+  ///
+  /// In ja, this message translates to:
+  /// **'このプラグインを消す'**
+  String get uninstallPlugin;
+
+  /// No description provided for @confirmUninstallPlugin.
+  ///
+  /// In ja, this message translates to:
+  /// **'{name}を消してもええか？'**
+  String confirmUninstallPlugin(String name);
+
+  /// No description provided for @pluginPermissionNotice.
+  ///
+  /// In ja, this message translates to:
+  /// **'miriaはまだプラグイン専用のトークンを作らへん。プラグインはあんたのアカウントの権限でそのまま動くから、入れるもんはよう選んでな。'**
+  String get pluginPermissionNotice;
+
+  /// No description provided for @ariaAcknowledgement.
+  ///
+  /// In ja, this message translates to:
+  /// **'miriaのAiScriptは[aria](https://github.com/poppingmoon/aria)を基にしとります。両プロジェクトのコントリビュータの皆さんに感謝します。'**
+  String get ariaAcknowledgement;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

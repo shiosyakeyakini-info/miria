@@ -14,6 +14,7 @@ import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/plugin_page/plugin_action_tiles.dart";
 import "package:miria/view/user_page/user_info_notifier.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:url_launcher/url_launcher.dart";
@@ -249,6 +250,8 @@ class UserControlDialog extends HookConsumerWidget implements AutoRouteWrapper {
             onTap: () async =>
                 await context.pushRoute(ProfileEditRoute(account: account)),
           ),
+        // プラグインが生やした項目
+        PluginUserActionTiles(account: account, user: user),
       ],
     );
   }
