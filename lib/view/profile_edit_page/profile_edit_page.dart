@@ -2,7 +2,6 @@ import "dart:typed_data";
 
 import "package:auto_route/auto_route.dart";
 import "package:file_picker/file_picker.dart";
-import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
@@ -12,6 +11,7 @@ import "package:miria/model/account.dart";
 import "package:miria/model/image_file.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
+import "package:miria/util/dart_image_editor.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/avatar_icon.dart";
 import "package:miria/view/note_create_page/drive_modal_sheet.dart";
@@ -139,10 +139,7 @@ class _ProfileEditForm extends HookConsumerWidget {
                             final f = pickedFile.files.first;
                             if (f.bytes case final bytes?) {
                               if (!context.mounted) return;
-                              if (defaultTargetPlatform
-                                  case TargetPlatform.android ||
-                                      TargetPlatform.iOS ||
-                                      TargetPlatform.macOS) {
+                              if (isImageEditorAvailable) {
                                 final editedBytes = await context
                                     .pushRoute<Uint8List>(
                                       PhotoEditRoute(

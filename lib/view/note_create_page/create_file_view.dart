@@ -6,6 +6,7 @@ import "package:miria/model/image_file.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
+import "package:miria/util/dart_image_editor.dart";
 import "package:miria/view/note_create_page/file_settings_dialog.dart";
 
 class CreateFileView extends ConsumerWidget {
@@ -15,9 +16,7 @@ class CreateFileView extends ConsumerWidget {
   const CreateFileView({required this.file, required this.index, super.key});
 
   Future<void> onTap(BuildContext context, WidgetRef ref) async {
-    if (defaultTargetPlatform == TargetPlatform.iOS ||
-        defaultTargetPlatform == TargetPlatform.macOS ||
-        defaultTargetPlatform == TargetPlatform.android) {
+    if (isImageEditorAvailable) {
       await context.pushRoute<Uint8List?>(
         PhotoEditRoute(
           accountContext: ref.read(accountContextProvider),
