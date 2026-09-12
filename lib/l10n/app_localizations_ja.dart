@@ -1187,6 +1187,12 @@ class SJa extends S {
   }
 
   @override
+  String get invalidThemeFormat => 'テーマの形式が間違っています';
+
+  @override
+  String get alreadyInstalledTheme => 'このテーマは既にインストールされています';
+
+  @override
   String get importFromThisFolder => 'このフォルダーからインポートする';
 
   @override
@@ -1376,6 +1382,9 @@ class SJa extends S {
   String get selectLightOrDarkMode => 'ライトモード・ダークモードのつかいわけ';
 
   @override
+  String get manageThemes => 'テーマの管理';
+
+  @override
   String get reaction => 'リアクション';
 
   @override
@@ -1408,6 +1417,24 @@ class SJa extends S {
 
   @override
   String get systemFont => 'システム標準';
+
+  @override
+  String get installTheme => 'テーマのインストール';
+
+  @override
+  String get themeCode => 'テーマコード';
+
+  @override
+  String get install => 'インストール';
+
+  @override
+  String get installedThemes => 'インストールされたテーマ';
+
+  @override
+  String get noInstalledThemes => 'インストールされたテーマがありません';
+
+  @override
+  String get confirmDeleteTheme => 'このテーマを削除しますか？';
 
   @override
   String get cache => 'キャッシュ';

@@ -2122,6 +2122,38 @@ class ImportExportRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [InstallThemeDialog]
+class InstallThemeRoute extends PageRouteInfo<void> {
+  const InstallThemeRoute({List<PageRouteInfo>? children})
+    : super(InstallThemeRoute.name, initialChildren: children);
+
+  static const String name = 'InstallThemeRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const InstallThemeDialog();
+    },
+  );
+}
+
+/// generated route for
+/// [InstalledThemesPage]
+class InstalledThemesRoute extends PageRouteInfo<void> {
+  const InstalledThemesRoute({List<PageRouteInfo>? children})
+    : super(InstalledThemesRoute.name, initialChildren: children);
+
+  static const String name = 'InstalledThemesRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const InstalledThemesPage();
+    },
+  );
+}
+
+/// generated route for
 /// [InstanceMutePage]
 class InstanceMuteRoute extends PageRouteInfo<InstanceMuteRouteArgs> {
   InstanceMuteRoute({
