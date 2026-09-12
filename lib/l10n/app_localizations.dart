@@ -933,6 +933,18 @@ abstract class S {
   /// **'ノートを共有'**
   String get shareNotes;
 
+  /// No description provided for @translateNote.
+  ///
+  /// In ja, this message translates to:
+  /// **'ノートを翻訳'**
+  String get translateNote;
+
+  /// No description provided for @translatedFrom.
+  ///
+  /// In ja, this message translates to:
+  /// **'{lang}から翻訳'**
+  String translatedFrom(String lang);
+
   /// No description provided for @deleteFavorite.
   ///
   /// In ja, this message translates to:
