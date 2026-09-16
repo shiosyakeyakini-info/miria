@@ -16,6 +16,11 @@ enum ImageType {
   other,
 }
 
+/// SVGかどうかを拡張子で推定する
+///
+/// `endsWith` だけだとクエリ付きのURLで外れるので、パス部分だけを見る。
+bool _looksLikeSvg(String url) => (Uri.tryParse(url)?.path ?? url).endsWith(".svg");
+
 class NetworkImageView extends ConsumerWidget {
   final String url;
   final ImageType type;
@@ -38,7 +43,7 @@ class NetworkImageView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (url.endsWith(".svg")) {
+    if (_looksLikeSvg(url)) {
       return SvgPicture.network(
         url,
         width: width,

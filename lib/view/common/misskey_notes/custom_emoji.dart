@@ -43,15 +43,16 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
     }
   }
 
-  /// カスタム絵文字のURLを解決する
+  /// カスタム絵文字のフォールバック用に、メディアプロキシのURLを組み立てる
+  ///
+  /// Misskeyのメディアプロキシは `url` に任意のリモートURLを取れるので、
+  /// リモートの絵文字であっても配信元ではなく常に自分のサーバーへ投げる。
+  /// 配信元がMisskeyとは限らず（Pleroma等）、その場合
+  /// `/proxy/image.webp` は存在しないため、配信元に投げると必ず外れる。
   Uri resolveFallbackCustomEmojiUrl(CustomEmojiData emojiData) {
     return Uri(
       scheme: "https",
-      host: emojiData.isCurrentServer
-          ? ref.read(accountContextProvider).getAccount.host
-          : emojiData.hostedName
-                .replaceAll(RegExp(r"^\:(.+?)@"), "")
-                .replaceAll(":", ""),
+      host: ref.read(accountContextProvider).getAccount.host,
       pathSegments: ["proxy", "image.webp"],
       queryParameters: {
         "url": Uri.encodeFull(emojiData.url.toString()),
