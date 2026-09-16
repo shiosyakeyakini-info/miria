@@ -19,6 +19,8 @@ void main() {
       "sample.tiff",
       "sample.pbm",
       "sample_ascii.pbm",
+      "sample.v",
+      "sample.mng",
     ]) {
       test("$name をPNGに焼き直せる", () {
         final png = decodeFallbackImageSync(read(name));
@@ -74,4 +76,61 @@ void main() {
       );
     });
   });
+
+  group("decodeVips", () {
+    test("vipsが書いた.vを読める", () {
+      final image = decodeVips(read("sample.v"));
+      expect(image, isNotNull);
+      expect(image!.width, 8);
+      expect(image.height, 8);
+      // 地は白、対角線上だけ黒く塗ってある
+      expect(image.getPixel(5, 2).r, greaterThan(200));
+      expect(image.getPixel(4, 4).r, lessThan(100));
+    });
+
+    test("vipsでないものはnullを返す", () {
+      expect(decodeVips(read("sample.png")), isNull);
+    });
+
+    test("バイト順を取り違えたヘッダはnullを返す", () {
+      final bytes = Uint8List.fromList(read("sample.v"));
+      bytes.setRange(0, 4, const [0x08, 0xf2, 0xa6, 0xb6]); // SPARC側の並び
+      // マジックは通るが、以降のフィールドがビッグエンディアンとして
+      // 読まれるので、寸法の検査で弾かれる
+      expect(decodeVips(bytes), isNull);
+    });
+  });
+
+  group("decodeMngFirstFrame", () {
+    test("MNGの最初のフレームを取り出せる", () {
+      final image = decodeMngFirstFrame(read("sample.mng"));
+      expect(image, isNotNull);
+      expect(image!.width, 8);
+      expect(image.height, 8);
+    });
+
+    test("MNGでないものはnullを返す", () {
+      expect(decodeMngFirstFrame(read("sample.png")), isNull);
+    });
+
+    test("MHDRだけで中身のないMNGはnullを返す", () {
+      final bytes = read("sample.mng");
+      final ihdr = _indexOfChunk(bytes, "IHDR");
+      expect(ihdr, isNot(-1));
+      expect(decodeMngFirstFrame(bytes.sublist(0, ihdr)), isNull);
+    });
+  });
+}
+
+int _indexOfChunk(Uint8List bytes, String type) {
+  final needle = type.codeUnits;
+  for (var i = 8; i + 4 <= bytes.length; i++) {
+    if (bytes[i] == needle[0] &&
+        bytes[i + 1] == needle[1] &&
+        bytes[i + 2] == needle[2] &&
+        bytes[i + 3] == needle[3]) {
+      return i - 4;
+    }
+  }
+  return -1;
 }
