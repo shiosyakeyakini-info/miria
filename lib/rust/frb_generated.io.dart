@@ -8,6 +8,7 @@ import 'api/aiscript/api.dart';
 import 'api/aiscript/play.dart';
 import 'api/aiscript/plugin.dart';
 import 'api/aiscript/ui.dart';
+import 'api/image_codec.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi' as ffi;
@@ -537,12 +538,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   bool dco_decode_box_autoadd_bool(dynamic raw);
 
   @protected
+  DecodedImage dco_decode_box_autoadd_decoded_image(dynamic raw);
+
+  @protected
   double dco_decode_box_autoadd_f_64(dynamic raw);
 
   @protected
   PostFormPropsForAsUi dco_decode_box_autoadd_post_form_props_for_as_ui(
     dynamic raw,
   );
+
+  @protected
+  DecodedImage dco_decode_decoded_image(dynamic raw);
 
   @protected
   double dco_decode_f_64(dynamic raw);
@@ -558,6 +565,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<AsUiButton> dco_decode_list_as_ui_button(dynamic raw);
+
+  @protected
+  List<int> dco_decode_list_prim_u_8_loose(dynamic raw);
 
   @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
@@ -635,6 +645,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   bool? dco_decode_opt_box_autoadd_bool(dynamic raw);
 
   @protected
+  DecodedImage? dco_decode_opt_box_autoadd_decoded_image(dynamic raw);
+
+  @protected
   double? dco_decode_opt_box_autoadd_f_64(dynamic raw);
 
   @protected
@@ -659,6 +672,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   (String, String) dco_decode_record_string_string(dynamic raw);
+
+  @protected
+  int dco_decode_u_32(dynamic raw);
 
   @protected
   int dco_decode_u_8(dynamic raw);
@@ -1088,12 +1104,20 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   bool sse_decode_box_autoadd_bool(SseDeserializer deserializer);
 
   @protected
+  DecodedImage sse_decode_box_autoadd_decoded_image(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   double sse_decode_box_autoadd_f_64(SseDeserializer deserializer);
 
   @protected
   PostFormPropsForAsUi sse_decode_box_autoadd_post_form_props_for_as_ui(
     SseDeserializer deserializer,
   );
+
+  @protected
+  DecodedImage sse_decode_decoded_image(SseDeserializer deserializer);
 
   @protected
   double sse_decode_f_64(SseDeserializer deserializer);
@@ -1109,6 +1133,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<AsUiButton> sse_decode_list_as_ui_button(SseDeserializer deserializer);
+
+  @protected
+  List<int> sse_decode_list_prim_u_8_loose(SseDeserializer deserializer);
 
   @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
@@ -1190,6 +1217,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   bool? sse_decode_opt_box_autoadd_bool(SseDeserializer deserializer);
 
   @protected
+  DecodedImage? sse_decode_opt_box_autoadd_decoded_image(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   double? sse_decode_opt_box_autoadd_f_64(SseDeserializer deserializer);
 
   @protected
@@ -1224,6 +1256,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   (String, String) sse_decode_record_string_string(
     SseDeserializer deserializer,
   );
+
+  @protected
+  int sse_decode_u_32(SseDeserializer deserializer);
 
   @protected
   int sse_decode_u_8(SseDeserializer deserializer);
@@ -1810,6 +1845,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_box_autoadd_bool(bool self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_decoded_image(
+    DecodedImage self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_box_autoadd_f_64(double self, SseSerializer serializer);
 
   @protected
@@ -1817,6 +1858,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
     PostFormPropsForAsUi self,
     SseSerializer serializer,
   );
+
+  @protected
+  void sse_encode_decoded_image(DecodedImage self, SseSerializer serializer);
 
   @protected
   void sse_encode_f_64(double self, SseSerializer serializer);
@@ -1835,6 +1879,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
     List<AsUiButton> self,
     SseSerializer serializer,
   );
+
+  @protected
+  void sse_encode_list_prim_u_8_loose(List<int> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_prim_u_8_strict(
@@ -1931,6 +1978,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_opt_box_autoadd_bool(bool? self, SseSerializer serializer);
 
   @protected
+  void sse_encode_opt_box_autoadd_decoded_image(
+    DecodedImage? self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_opt_box_autoadd_f_64(double? self, SseSerializer serializer);
 
   @protected
@@ -1971,6 +2024,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
     (String, String) self,
     SseSerializer serializer,
   );
+
+  @protected
+  void sse_encode_u_32(int self, SseSerializer serializer);
 
   @protected
   void sse_encode_u_8(int self, SseSerializer serializer);

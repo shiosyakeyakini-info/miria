@@ -93,8 +93,9 @@ void main() {
     });
 
     test("バイト順を取り違えたヘッダはnullを返す", () {
-      final bytes = Uint8List.fromList(read("sample.v"));
-      bytes.setRange(0, 4, const [0x08, 0xf2, 0xa6, 0xb6]); // SPARC側の並び
+      // SPARC側の並びに書き換える
+      final bytes = Uint8List.fromList(read("sample.v"))
+        ..setRange(0, 4, const [0x08, 0xf2, 0xa6, 0xb6]);
       // マジックは通るが、以降のフィールドがビッグエンディアンとして
       // 読まれるので、寸法の検査で弾かれる
       expect(decodeVips(bytes), isNull);
@@ -118,6 +119,24 @@ void main() {
       final ihdr = _indexOfChunk(bytes, "IHDR");
       expect(ihdr, isNot(-1));
       expect(decodeMngFirstFrame(bytes.sublist(0, ihdr)), isNull);
+    });
+  });
+
+  group("decodeFallbackImage", () {
+    test("JPEG XL は Rust 側で読める", () async {
+      final png = await decodeFallbackImage(read("sample.jxl"));
+      expect(png, isNotNull);
+      final decoded = img.decodePng(png!);
+      expect(decoded, isNotNull);
+      expect(decoded!.width, 8);
+      expect(decoded.height, 8);
+      // 地は白、対角線上だけ黒く塗ってある
+      expect(decoded.getPixel(5, 2).r, greaterThan(200));
+      expect(decoded.getPixel(4, 4).r, lessThan(100));
+    });
+
+    test("JPEG XL は Dart 側だけでは読めない", () {
+      expect(decodeFallbackImageSync(read("sample.jxl")), isNull);
     });
   });
 }

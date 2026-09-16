@@ -2,6 +2,8 @@ import "dart:isolate";
 import "dart:typed_data";
 
 import "package:image/image.dart" as img;
+import "package:miria/rust/api/image_codec.dart" as rust;
+import "package:miria/util/rust_initialization.dart";
 
 /// Skiaが読めなかった画像をDart側で読み直してPNGに焼き直す
 ///
@@ -12,10 +14,15 @@ import "package:image/image.dart" as img;
 /// ここではその差を package:image で埋める。
 ///
 /// 読めなければ null を返す。
-Future<Uint8List?> decodeFallbackImage(Uint8List bytes) =>
-    Isolate.run(() => decodeFallbackImageSync(bytes));
+Future<Uint8List?> decodeFallbackImage(Uint8List bytes) async {
+  final byDart = await Isolate.run(() => decodeFallbackImageSync(bytes));
+  if (byDart != null) return byDart;
+  return _decodeWithRust(bytes);
+}
 
-/// [decodeFallbackImage] の同期版（テスト用）
+/// Dartだけで読める分を読む
+///
+/// Rust側は非同期にしか呼べないのでここには含まれない。
 Uint8List? decodeFallbackImageSync(Uint8List bytes) {
   final image = _decode(bytes);
   if (image == null) return null;
@@ -248,4 +255,35 @@ img.Image? decodeMngFirstFrame(Uint8List bytes) {
 
   if (!started) return null;
   return img.PngDecoder().decode(Uint8List.fromList(png));
+}
+
+/// Rust側のデコーダに回す
+///
+/// いまのところ JPEG XL だけ。frb の呼び出しは専用のワーカースレッドで
+/// 走るので、ここをアイソレートに逃がす必要はない。
+/// PNGへの焼き直しだけは重いので逃がす。
+Future<Uint8List?> _decodeWithRust(Uint8List bytes) async {
+  try {
+    await ensureRustInitialized();
+    final decoded = await rust.decodeJpegXl(bytes: bytes);
+    if (decoded == null) return null;
+    return await Isolate.run(() => _encodePng(decoded));
+  } catch (_) {
+    return null;
+  }
+}
+
+Uint8List? _encodePng(rust.DecodedImage decoded) {
+  try {
+    return img.encodePng(
+      img.Image.fromBytes(
+        width: decoded.width,
+        height: decoded.height,
+        bytes: decoded.rgba.buffer,
+        numChannels: 4,
+      ),
+    );
+  } catch (_) {
+    return null;
+  }
 }

@@ -9,25 +9,16 @@ import "package:miria/rust/api/aiscript/api.dart";
 import "package:miria/rust/api/aiscript/play.dart";
 import "package:miria/rust/api/aiscript/plugin.dart";
 import "package:miria/rust/api/aiscript/ui.dart";
-import "package:miria/rust/frb_generated.dart";
 import "package:miria/util/nyaize.dart";
+import "package:miria/util/rust_initialization.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-/// Rust 側の初期化が済んでいるか。
-///
-/// 済んだかどうかを [Future] ではなく真偽値で覚えるのが要点。Future を
-/// 使い回すと、それを作ったゾーンの外から待ったときに永久に返らない
-/// (ウィジェットテストは1件ごとに別ゾーンで走るため、2件目以降が固まる)。
-bool _isRustInitialized = false;
-Future<void>? _rustInitialization;
-
 /// AiScript を使う前に呼ぶ。二度目以降は何もしない。
-Future<void> ensureAiScriptInitialized() async {
-  if (_isRustInitialized) return;
-  await (_rustInitialization ??= RustLib.init());
-  _isRustInitialized = true;
-}
+///
+/// 初期化そのものは画像のデコードとも共有するので
+/// [ensureRustInitialized] に置いてある。
+Future<void> ensureAiScriptInitialized() => ensureRustInitialized();
 
 /// アカウントの繋ぎ先。`SERVER_URL` と `Mk:url` に渡す。
 Uri serverUriOf(Account account) => Uri(
