@@ -50,9 +50,12 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
   /// 配信元がMisskeyとは限らず（Pleroma等）、その場合
   /// `/proxy/image.webp` は存在しないため、配信元に投げると必ず外れる。
   Uri resolveFallbackCustomEmojiUrl(CustomEmojiData emojiData) {
+    final account = ref.read(accountContextProvider).getAccount;
     return Uri(
-      scheme: "https",
-      host: ref.read(accountContextProvider).getAccount.host,
+      // 手元に立てたサーバーは http でポートも既定ではないことがある
+      scheme: account.scheme ?? "https",
+      host: account.host,
+      port: account.port,
       pathSegments: ["proxy", "image.webp"],
       queryParameters: {
         "url": Uri.encodeFull(emojiData.url.toString()),
