@@ -259,15 +259,18 @@ img.Image? decodeMngFirstFrame(Uint8List bytes) {
 
 /// Rust側のデコーダに回す
 ///
-/// いまのところ JPEG XL だけ。frb の呼び出しは専用のワーカースレッドで
-/// 走るので、ここをアイソレートに逃がす必要はない。
-/// PNGへの焼き直しだけは重いので逃がす。
+/// frb の呼び出しは専用のワーカースレッドで走るので、ここをアイソレートに
+/// 逃がす必要はない。PNGへの焼き直しだけは重いので逃がす。
 Future<Uint8List?> _decodeWithRust(Uint8List bytes) async {
   try {
     await ensureRustInitialized();
-    final decoded = await rust.decodeJpegXl(bytes: bytes);
-    if (decoded == null) return null;
-    return await Isolate.run(() => _encodePng(decoded));
+    for (final decode in [rust.decodeJpegXl, rust.decodeJpegXr]) {
+      final decoded = await decode(bytes: bytes);
+      if (decoded != null) {
+        return await Isolate.run(() => _encodePng(decoded));
+      }
+    }
+    return null;
   } catch (_) {
     return null;
   }

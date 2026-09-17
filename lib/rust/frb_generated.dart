@@ -69,7 +69,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.13.0-beta.6';
 
   @override
-  int get rustContentHash => 681358454;
+  int get rustContentHash => 1011016217;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -185,6 +185,10 @@ abstract class RustLibApi extends BaseApi {
   });
 
   Future<DecodedImage?> crateApiImageCodecDecodeJpegXl({
+    required List<int> bytes,
+  });
+
+  Future<DecodedImage?> crateApiImageCodecDecodeJpegXr({
     required List<int> bytes,
   });
 
@@ -1094,6 +1098,36 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       const TaskConstMeta(debugName: "decode_jpeg_xl", argNames: ["bytes"]);
 
   @override
+  Future<DecodedImage?> crateApiImageCodecDecodeJpegXr({
+    required List<int> bytes,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_list_prim_u_8_loose(bytes, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 19,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_opt_box_autoadd_decoded_image,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiImageCodecDecodeJpegXrConstMeta,
+        argValues: [bytes],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiImageCodecDecodeJpegXrConstMeta =>
+      const TaskConstMeta(debugName: "decode_jpeg_xr", argNames: ["bytes"]);
+
+  @override
   Future<String> crateApiAiscriptPluginParsePluginMeta({
     required String input,
   }) {
@@ -1105,7 +1139,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 19,
+            funcId: 20,
             port: port_,
           );
         },

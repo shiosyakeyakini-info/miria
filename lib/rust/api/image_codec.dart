@@ -14,6 +14,15 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 Future<DecodedImage?> decodeJpegXl({required List<int> bytes}) =>
     RustLib.instance.api.crateApiImageCodecDecodeJpegXl(bytes: bytes);
 
+/// JPEG XR を読む。読めなければ `None`。
+///
+/// jxrlib (Microsoft が公開した参照実装) に任せる。素の `Copy` は 8bit の
+/// 形式で必ず失敗するので、フォーマットコンバータを噛ませたうえで、
+/// その前にデコーダのアルファモードを立てておく。この2つが揃わないと
+/// 8bit は読めない (imagecodecs の Python バインディングと同じ手順)。
+Future<DecodedImage?> decodeJpegXr({required List<int> bytes}) =>
+    RustLib.instance.api.crateApiImageCodecDecodeJpegXr(bytes: bytes);
+
 /// デコード結果。`rgba` には RGBA8 が width * height * 4 バイト並ぶ。
 class DecodedImage {
   final int width;
