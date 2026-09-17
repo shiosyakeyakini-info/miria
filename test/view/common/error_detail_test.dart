@@ -11,9 +11,12 @@ const _html = """
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>かつてねむすぎーだったもの</title>
+  <style>body { margin: 0; }</style>
+  <script>console.log("ねむい");</script>
  </head>
  <body>
   <h1>このサーバーはもうない</h1>
+  <p>移転先は&lt;とくにない&gt;。あきらめてほしい。</p>
  </body>
 </html>
 """;
@@ -70,9 +73,18 @@ void main() {
       await tester.pump();
 
       expect(tester.takeException(), isNull);
-      // HTMLの中身をそのまま並べない
+      // タグはそのまま並べない
       expect(find.textContaining("<!doctype html"), findsNothing);
+      expect(find.textContaining("<h1>"), findsNothing);
       expect(find.textContaining("410"), findsOneWidget);
+      // サーバーが書いている文言は拾う
+      expect(find.textContaining("このサーバーはもうない"), findsOneWidget);
+      expect(find.textContaining("かつてねむすぎーだったもの"), findsOneWidget);
+      // 実体参照はほどく
+      expect(find.textContaining("移転先は<とくにない>。"), findsOneWidget);
+      // scriptとstyleの中身は本文ではない
+      expect(find.textContaining("margin: 0"), findsNothing);
+      expect(find.textContaining("console.log"), findsNothing);
     });
 
     testWidgets("Content-Typeがなくても本文がHTMLなら中身を並べないこと", (tester) async {
@@ -83,6 +95,7 @@ void main() {
 
       expect(tester.takeException(), isNull);
       expect(find.textContaining("<!doctype html"), findsNothing);
+      expect(find.textContaining("このサーバーはもうない"), findsOneWidget);
     });
 
     testWidgets("HTMLでない長い本文も高さが抑えられること", (tester) async {

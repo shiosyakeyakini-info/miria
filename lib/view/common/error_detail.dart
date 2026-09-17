@@ -45,9 +45,12 @@ class ErrorDetail extends StatelessWidget {
         );
       } else if (response != null) {
         if (_isHtmlResponse(response)) {
-          // 本文はMisskeyのAPIの応答ではないので、出しても読む値打ちがない
-          return Text(
-            "[${response.statusCode}] ${S.of(context).thrownHtmlResponse}",
+          // タグだらけのまま並べても読めないので、本文らしきところだけ拾う
+          final notice = _extractTextFromHtml(response.data);
+          final head =
+              "[${response.statusCode}] ${S.of(context).thrownHtmlResponse}";
+          return _BoundedErrorBody(
+            text: notice.isEmpty ? head : "$head\n\n${_truncate(notice)}",
           );
         }
         return _BoundedErrorBody(
@@ -82,6 +85,57 @@ bool _isHtmlResponse(Response<dynamic> response) {
   if (data is! String) return false;
   final head = data.trimLeft().toLowerCase();
   return head.startsWith("<!doctype html") || head.startsWith("<html");
+}
+
+/// HTMLからそれらしい本文を拾う。
+///
+/// 正規表現でHTMLを解くのは行儀がよくないが、ここでやりたいのは
+/// 「サーバーがなにか言っているなら見せる」程度のことなので、これで足りる。
+String _extractTextFromHtml(Object? data) {
+  final html = data is String ? data : data?.toString() ?? "";
+  final stripped = html
+      .replaceAll(
+        RegExp(
+          r"<(script|style)\b[^>]*>.*?</\1\s*>",
+          caseSensitive: false,
+          dotAll: true,
+        ),
+        " ",
+      )
+      .replaceAll(RegExp("<!--.*?-->", dotAll: true), " ")
+      .replaceAll(RegExp(r"<br\s*/?>", caseSensitive: false), "\n")
+      .replaceAll(
+        RegExp(
+          r"</(p|div|h[1-6]|li|tr|section|article|title)\s*>",
+          caseSensitive: false,
+        ),
+        "\n",
+      )
+      .replaceAll(RegExp("<[^>]*>"), " ");
+  return _decodeEntities(stripped)
+      .replaceAll(RegExp(r"[ \t]+"), " ")
+      .replaceAll(RegExp(r" *\n *"), "\n")
+      .replaceAll(RegExp(r"\n{3,}"), "\n\n")
+      .trim();
+}
+
+/// よく出てくるものだけ。&amp; は二重に開かないよう最後に置く。
+const _htmlEntities = {
+  "&nbsp;": " ",
+  "&lt;": "<",
+  "&gt;": ">",
+  "&quot;": "\"",
+  "&#39;": "'",
+  "&apos;": "'",
+  "&amp;": "&",
+};
+
+String _decodeEntities(String text) {
+  var decoded = text;
+  for (final entity in _htmlEntities.entries) {
+    decoded = decoded.replaceAll(entity.key, entity.value);
+  }
+  return decoded;
 }
 
 String _truncate(Object? data) {
