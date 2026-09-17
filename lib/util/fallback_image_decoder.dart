@@ -4,6 +4,7 @@ import "dart:typed_data";
 import "package:image/image.dart" as img;
 import "package:miria/rust/api/image_codec.dart" as rust;
 import "package:miria/util/rust_initialization.dart";
+import "package:pdfrx_engine/pdfrx_engine.dart";
 
 /// Skiaが読めなかった画像をDart側で読み直してPNGに焼き直す
 ///
@@ -17,7 +18,9 @@ import "package:miria/util/rust_initialization.dart";
 Future<Uint8List?> decodeFallbackImage(Uint8List bytes) async {
   final byDart = await Isolate.run(() => decodeFallbackImageSync(bytes));
   if (byDart != null) return byDart;
-  return _decodeWithRust(bytes);
+  final byRust = await _decodeWithRust(bytes);
+  if (byRust != null) return byRust;
+  return _decodePdf(bytes);
 }
 
 /// Dartだけで読める分を読む
@@ -275,6 +278,47 @@ Future<Uint8List?> _decodeWithRust(Uint8List bytes) async {
       }
     }
     return null;
+  } catch (_) {
+    return null;
+  }
+}
+
+bool _isPdfrxInitialized = false;
+
+/// PDFの1ページ目をラスタライズする
+///
+/// 画像ではないので、他が全部駄目だったときだけ試す。
+/// pdfium を抱えている分だけ重いので、先頭が `%PDF` でなければ触らない。
+Future<Uint8List?> _decodePdf(Uint8List bytes) async {
+  const signature = [0x25, 0x50, 0x44, 0x46]; // %PDF
+  if (bytes.length < signature.length) return null;
+  for (var i = 0; i < signature.length; i++) {
+    if (bytes[i] != signature[i]) return null;
+  }
+
+  try {
+    if (!_isPdfrxInitialized) {
+      await pdfrxInitialize();
+      _isPdfrxInitialized = true;
+    }
+    final document = await PdfDocument.openData(bytes);
+    try {
+      final page = document.pages.first;
+      // 絵文字やサムネイルに使うので、長辺 256px で足りる
+      final scale = 256 / (page.width > page.height ? page.width : page.height);
+      final rendered = await page.render(
+        width: (page.width * scale).round(),
+        height: (page.height * scale).round(),
+      );
+      if (rendered == null) return null;
+      try {
+        return Uint8List.fromList(img.encodePng(rendered.createImageNF()));
+      } finally {
+        rendered.dispose();
+      }
+    } finally {
+      await document.dispose();
+    }
   } catch (_) {
     return null;
   }

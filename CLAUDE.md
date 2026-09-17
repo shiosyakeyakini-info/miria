@@ -133,6 +133,14 @@ fvm flutter config --enable-native-assets
 cargo build --release --manifest-path rust/Cargo.toml
 ```
 
+PDFのラスタライズに使う `pdfrx_engine` も同じ事情で、テストからは pdfium の
+場所を教える必要がある。`PDFIUM_PATH` が無ければPDFのテストは飛ぶ。
+バイナリは [pdfium-binaries](https://github.com/bblanchon/pdfium-binaries) から。
+
+```bash
+PDFIUM_PATH=/path/to/libpdfium.so fvm flutter test
+```
+
 この方針は先行実装である [aria](https://github.com/poppingmoon/aria) に倣った。
 aria は miria の git フォークではないが、どちらも AGPL-3.0 である。
 

@@ -159,6 +159,23 @@ void main() {
       expect(decoded.getPixel(4, 4).r, lessThan(100));
     });
 
+    test(
+      "PDF は1ページ目がラスタライズされる",
+      () async {
+        final png = await decodeFallbackImage(read("sample.pdf"));
+        expect(png, isNotNull);
+        final decoded = img.decodePng(png!);
+        expect(decoded, isNotNull);
+        expect(decoded!.width, greaterThan(0));
+        expect(decoded.height, greaterThan(0));
+      },
+      // flutter test は native assets を解決しないので、pdfium の場所を
+      // 教えてもらえないと動かない
+      skip: Platform.environment["PDFIUM_PATH"] == null
+          ? "PDFIUM_PATH が要る"
+          : null,
+    );
+
     test("JPEG XR は Dart 側だけでは読めない", () {
       expect(decodeFallbackImageSync(read("sample.jxr")), isNull);
     });
