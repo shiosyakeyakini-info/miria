@@ -538,6 +538,7 @@
     "thrownWebSocketException": "通信に失敗しました。",
     "thrownTimeoutException": "サーバーが応答してくれませんでした。",
     "thrownUnknownError": "不明なエラー",
+    "thrownHtmlResponse": "サーバーがAPIやなくてHTMLを返してきました。サーバーのURLか、サーバー側の設定がおかしいかもしれません。",
     "thrownError": "エラーが起きたみたいや",
     "unsupportedServer": "非対応のサーバーです",
 

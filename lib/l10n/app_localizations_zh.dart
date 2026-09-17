@@ -951,6 +951,9 @@ class SZh extends S {
   String get thrownUnknownError => '未知错误';
 
   @override
+  String get thrownHtmlResponse => '服务器返回了 HTML 而非 API 响应。可能是服务器地址或服务器的设置有问题。';
+
+  @override
   String get thrownError => '似乎发生了错误';
 
   @override
@@ -3062,6 +3065,9 @@ class SZhCn extends SZh {
 
   @override
   String get thrownUnknownError => '未知错误';
+
+  @override
+  String get thrownHtmlResponse => '服务器返回了 HTML 而非 API 响应。可能是服务器地址或服务器的设置有问题。';
 
   @override
   String get thrownError => '似乎发生了错误';

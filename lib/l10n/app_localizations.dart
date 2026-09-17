@@ -1734,6 +1734,12 @@ abstract class S {
   /// **'不明なエラー'**
   String get thrownUnknownError;
 
+  /// No description provided for @thrownHtmlResponse.
+  ///
+  /// In ja, this message translates to:
+  /// **'サーバーがAPIやなくてHTMLを返してきました。サーバーのURLか、サーバー側の設定がおかしいかもしれません。'**
+  String get thrownHtmlResponse;
+
   /// No description provided for @thrownError.
   ///
   /// In ja, this message translates to:

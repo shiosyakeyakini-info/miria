@@ -954,6 +954,10 @@ class SJa extends S {
   String get thrownUnknownError => '不明なエラー';
 
   @override
+  String get thrownHtmlResponse =>
+      'サーバーがAPIやなくてHTMLを返してきました。サーバーのURLか、サーバー側の設定がおかしいかもしれません。';
+
+  @override
   String get thrownError => 'エラーが起きたみたいや';
 
   @override

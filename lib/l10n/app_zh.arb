@@ -495,6 +495,7 @@
     "thrownWebSocketException": "连接通讯失败（WebSocketException）。",
     "thrownTimeoutException": "服务器没有响应。",
     "thrownUnknownError": "未知错误",
+    "thrownHtmlResponse": "服务器返回了 HTML 而非 API 响应。可能是服务器地址或服务器的设置有问题。",
     "thrownError": "似乎发生了错误",
     "unsupportedServer": "这是不受支持的服务器",
     "future": "未来",
