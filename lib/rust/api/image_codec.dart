@@ -23,6 +23,16 @@ Future<DecodedImage?> decodeJpegXl({required List<int> bytes}) =>
 Future<DecodedImage?> decodeJpegXr({required List<int> bytes}) =>
     RustLib.instance.api.crateApiImageCodecDecodeJpegXr(bytes: bytes);
 
+/// JPEG 2000 を読む。読めなければ `None`。
+///
+/// `jpeg2k` の純Rust実装 (openjp2) に任せる。C の openjpeg も選べるが、
+/// ビルドに C のツールチェインが要るので使わない。
+///
+/// 扱うのは 8bit のグレー・RGB・RGBA だけ。16bit のものは絵文字や
+/// アイコンには出てこない。
+Future<DecodedImage?> decodeJpeg2000({required List<int> bytes}) =>
+    RustLib.instance.api.crateApiImageCodecDecodeJpeg2000(bytes: bytes);
+
 /// デコード結果。`rgba` には RGBA8 が width * height * 4 バイト並ぶ。
 class DecodedImage {
   final int width;

@@ -264,7 +264,11 @@ img.Image? decodeMngFirstFrame(Uint8List bytes) {
 Future<Uint8List?> _decodeWithRust(Uint8List bytes) async {
   try {
     await ensureRustInitialized();
-    for (final decode in [rust.decodeJpegXl, rust.decodeJpegXr]) {
+    for (final decode in [
+      rust.decodeJpegXl,
+      rust.decodeJpegXr,
+      rust.decodeJpeg2000,
+    ]) {
       final decoded = await decode(bytes: bytes);
       if (decoded != null) {
         return await Isolate.run(() => _encodePng(decoded));

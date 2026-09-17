@@ -69,7 +69,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.13.0-beta.6';
 
   @override
-  int get rustContentHash => 1011016217;
+  int get rustContentHash => 1542339983;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -182,6 +182,10 @@ abstract class RustLibApi extends BaseApi {
   Future<String> crateApiAiscriptPluginPluginPostFormActionCallbackCall({
     required PluginPostFormActionCallback that,
     required String form,
+  });
+
+  Future<DecodedImage?> crateApiImageCodecDecodeJpeg2000({
+    required List<int> bytes,
   });
 
   Future<DecodedImage?> crateApiImageCodecDecodeJpegXl({
@@ -1068,7 +1072,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<DecodedImage?> crateApiImageCodecDecodeJpegXl({
+  Future<DecodedImage?> crateApiImageCodecDecodeJpeg2000({
     required List<int> bytes,
   }) {
     return handler.executeNormal(
@@ -1080,6 +1084,36 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             generalizedFrbRustBinding,
             serializer,
             funcId: 18,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_opt_box_autoadd_decoded_image,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiImageCodecDecodeJpeg2000ConstMeta,
+        argValues: [bytes],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiImageCodecDecodeJpeg2000ConstMeta =>
+      const TaskConstMeta(debugName: "decode_jpeg_2000", argNames: ["bytes"]);
+
+  @override
+  Future<DecodedImage?> crateApiImageCodecDecodeJpegXl({
+    required List<int> bytes,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_list_prim_u_8_loose(bytes, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 19,
             port: port_,
           );
         },
@@ -1109,7 +1143,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 19,
+            funcId: 20,
             port: port_,
           );
         },
@@ -1139,7 +1173,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 20,
+            funcId: 21,
             port: port_,
           );
         },

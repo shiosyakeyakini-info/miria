@@ -147,6 +147,18 @@ void main() {
       expect(decoded.getPixel(4, 4).r, lessThan(100));
     });
 
+    test("JPEG 2000 は Rust 側で読める", () async {
+      final png = await decodeFallbackImage(read("sample.jp2"));
+      expect(png, isNotNull);
+      final decoded = img.decodePng(png!);
+      expect(decoded, isNotNull);
+      expect(decoded!.width, 8);
+      expect(decoded.height, 8);
+      // 地は白、対角線上だけ黒く塗ってある
+      expect(decoded.getPixel(5, 2).r, greaterThan(200));
+      expect(decoded.getPixel(4, 4).r, lessThan(100));
+    });
+
     test("JPEG XR は Dart 側だけでは読めない", () {
       expect(decodeFallbackImageSync(read("sample.jxr")), isNull);
     });

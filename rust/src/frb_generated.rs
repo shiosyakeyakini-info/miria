@@ -29,8 +29,8 @@
 
 use crate::api::aiscript::*;
 use crate::api::aiscript::ui::*;
-use crate::api::aiscript::plugin::*;
-use crate::api::aiscript::api::*;use flutter_rust_bridge::{Handler, IntoIntoDart};
+use crate::api::aiscript::api::*;
+use crate::api::aiscript::plugin::*;use flutter_rust_bridge::{Handler, IntoIntoDart};
 use flutter_rust_bridge::for_generated::{Lockable, transform_result_dco, Lifetimeable};
 use flutter_rust_bridge::for_generated::byteorder::{NativeEndian, WriteBytesExt, ReadBytesExt};
 
@@ -42,7 +42,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
                     default_rust_auto_opaque = RustAutoOpaqueMoi,
                 );
                 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.13.0-beta.6";
-                pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1011016217;
+                pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1542339983;
             
 
 // Section: executor
@@ -343,6 +343,15 @@ let decode_indices_ = flutter_rust_bridge::for_generated::lockable_compute_decod
         let api_that_guard = api_that_guard.unwrap();
  let output_ok = crate::api::aiscript::plugin::PluginPostFormActionCallback::call(&*api_that_guard, api_form).await?;   std::result::Result::Ok(output_ok)
                     })().await)
+                } })
+            }fn wire__crate__api__image_codec__decode_jpeg_2000_impl(port_: flutter_rust_bridge::for_generated::MessagePort,ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,rust_vec_len_: i32,data_len_: i32)  {
+                FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec,_,_>(flutter_rust_bridge::for_generated::TaskInfo{ debug_name: "decode_jpeg_2000", port: Some(port_), mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal }, move || {
+            let message = unsafe { flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(ptr_, rust_vec_len_, data_len_) };
+            let mut deserializer = flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_bytes = <Vec<u8>>::sse_decode(&mut deserializer);deserializer.end(); move |context|  {
+                    transform_result_sse::<_, ()>((move ||  {
+                         let output_ok = Ok::<_, ()>(crate::api::image_codec::decode_jpeg_2000(api_bytes))?;   std::result::Result::Ok(output_ok)
+                    })())
                 } })
             }fn wire__crate__api__image_codec__decode_jpeg_xl_impl(port_: flutter_rust_bridge::for_generated::MessagePort,ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,rust_vec_len_: i32,data_len_: i32)  {
                 FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec,_,_>(flutter_rust_bridge::for_generated::TaskInfo{ debug_name: "decode_jpeg_xl", port: Some(port_), mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal }, move || {
@@ -1301,9 +1310,10 @@ return (var_field0, var_field1);}
 15 => wire__crate__api__aiscript__plugin__PluginActionCallback_call_impl(port, ptr, rust_vec_len, data_len),
 16 => wire__crate__api__aiscript__plugin__PluginInterruptorCallback_call_impl(port, ptr, rust_vec_len, data_len),
 17 => wire__crate__api__aiscript__plugin__PluginPostFormActionCallback_call_impl(port, ptr, rust_vec_len, data_len),
-18 => wire__crate__api__image_codec__decode_jpeg_xl_impl(port, ptr, rust_vec_len, data_len),
-19 => wire__crate__api__image_codec__decode_jpeg_xr_impl(port, ptr, rust_vec_len, data_len),
-20 => wire__crate__api__aiscript__plugin__parse_plugin_meta_impl(port, ptr, rust_vec_len, data_len),
+18 => wire__crate__api__image_codec__decode_jpeg_2000_impl(port, ptr, rust_vec_len, data_len),
+19 => wire__crate__api__image_codec__decode_jpeg_xl_impl(port, ptr, rust_vec_len, data_len),
+20 => wire__crate__api__image_codec__decode_jpeg_xr_impl(port, ptr, rust_vec_len, data_len),
+21 => wire__crate__api__aiscript__plugin__parse_plugin_meta_impl(port, ptr, rust_vec_len, data_len),
                         _ => unreachable!(),
                     }
                 }
@@ -2466,8 +2476,8 @@ crate::api::aiscript::ui::AsUiComponent::PostForm(field0) => { <i32>::sse_encode
 
 use crate::api::aiscript::*;
 use crate::api::aiscript::ui::*;
-use crate::api::aiscript::plugin::*;
-use crate::api::aiscript::api::*;use flutter_rust_bridge::{Handler, IntoIntoDart};
+use crate::api::aiscript::api::*;
+use crate::api::aiscript::plugin::*;use flutter_rust_bridge::{Handler, IntoIntoDart};
 use flutter_rust_bridge::for_generated::{Lockable, transform_result_dco, Lifetimeable};
 use flutter_rust_bridge::for_generated::byteorder::{NativeEndian, WriteBytesExt, ReadBytesExt};use super::*;
 
@@ -2660,8 +2670,8 @@ flutter_rust_bridge::frb_generated_boilerplate_io!();
 
 use crate::api::aiscript::*;
 use crate::api::aiscript::ui::*;
-use crate::api::aiscript::plugin::*;
-use crate::api::aiscript::api::*;use flutter_rust_bridge::{Handler, IntoIntoDart};
+use crate::api::aiscript::api::*;
+use crate::api::aiscript::plugin::*;use flutter_rust_bridge::{Handler, IntoIntoDart};
 use flutter_rust_bridge::for_generated::{Lockable, transform_result_dco, Lifetimeable};
 use flutter_rust_bridge::for_generated::byteorder::{NativeEndian, WriteBytesExt, ReadBytesExt};use super::*;
                 use flutter_rust_bridge::for_generated::wasm_bindgen;

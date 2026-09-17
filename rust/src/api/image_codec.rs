@@ -5,6 +5,7 @@
 
 use std::io::Cursor;
 
+use jpeg2k::{Image as Jpeg2000Image, ImagePixelData};
 use jpegxr::{ImageDecode, PixelFormat};
 use jxl_oxide::JxlImage;
 
@@ -106,6 +107,47 @@ pub fn decode_jpeg_xr(bytes: Vec<u8>) -> Option<DecodedImage> {
     })
 }
 
+/// JPEG 2000 を読む。読めなければ `None`。
+///
+/// `jpeg2k` の純Rust実装 (openjp2) に任せる。C の openjpeg も選べるが、
+/// ビルドに C のツールチェインが要るので使わない。
+///
+/// 扱うのは 8bit のグレー・RGB・RGBA だけ。16bit のものは絵文字や
+/// アイコンには出てこない。
+pub fn decode_jpeg_2000(bytes: Vec<u8>) -> Option<DecodedImage> {
+    let image = Jpeg2000Image::from_bytes(&bytes).ok()?;
+    let pixels = image.get_pixels(Some(255)).ok()?;
+    let (width, height) = (pixels.width, pixels.height);
+    if width == 0 || height == 0 {
+        return None;
+    }
+
+    let rgba: Vec<u8> = match pixels.data {
+        ImagePixelData::L8(data) => {
+            data.iter().flat_map(|&g| [g, g, g, 255]).collect()
+        }
+        ImagePixelData::La8(data) => data
+            .chunks_exact(2)
+            .flat_map(|p| [p[0], p[0], p[0], p[1]])
+            .collect(),
+        ImagePixelData::Rgb8(data) => data
+            .chunks_exact(3)
+            .flat_map(|p| [p[0], p[1], p[2], 255])
+            .collect(),
+        ImagePixelData::Rgba8(data) => data,
+        _ => return None,
+    };
+    if rgba.len() != width as usize * height as usize * 4 {
+        return None;
+    }
+
+    Some(DecodedImage {
+        width,
+        height,
+        rgba,
+    })
+}
+
 fn to_u8(value: f32) -> u8 {
     (value.clamp(0.0, 1.0) * 255.0).round() as u8
 }
@@ -156,10 +198,25 @@ mod tests {
     }
 
     #[test]
+    fn reads_jpeg_2000() {
+        let image = decode_jpeg_2000(fixture("sample.jp2")).expect("読めなかった");
+        assert_eq!((image.width, image.height), (8, 8));
+        assert_eq!(image.rgba.len(), 8 * 8 * 4);
+
+        let (r, _, _, a) = pixel(&image, 5, 2);
+        assert!(r > 200, "(5,2) が白くない: {r}");
+        assert_eq!(a, 255);
+        let (r, _, _, _) = pixel(&image, 4, 4);
+        assert!(r < 100, "(4,4) が黒くない: {r}");
+    }
+
+    #[test]
     fn rejects_other_formats() {
         assert!(decode_jpeg_xl(fixture("sample.png")).is_none());
         assert!(decode_jpeg_xl(vec![]).is_none());
         assert!(decode_jpeg_xr(fixture("sample.png")).is_none());
         assert!(decode_jpeg_xr(vec![]).is_none());
+        assert!(decode_jpeg_2000(fixture("sample.png")).is_none());
+        assert!(decode_jpeg_2000(vec![]).is_none());
     }
 }
