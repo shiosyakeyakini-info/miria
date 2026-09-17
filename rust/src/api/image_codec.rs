@@ -3,6 +3,9 @@
 // SPDX-FileCopyrightText: miria contributors
 // SPDX-License-Identifier: AGPL-3.0-only
 
+use std::io::Cursor;
+
+use jpegxr::{ImageDecode, PixelFormat};
 use jxl_oxide::JxlImage;
 
 /// デコード結果。`rgba` には RGBA8 が width * height * 4 バイト並ぶ。
@@ -36,6 +39,64 @@ pub fn decode_jpeg_xl(bytes: Vec<u8>) -> Option<DecodedImage> {
             _ => (pixel[0], pixel[1], pixel[2], pixel[3]),
         };
         rgba.extend_from_slice(&[to_u8(r), to_u8(g), to_u8(b), to_u8(a)]);
+    }
+
+    Some(DecodedImage {
+        width: width as u32,
+        height: height as u32,
+        rgba,
+    })
+}
+
+/// JPEG XR を読む。読めなければ `None`。
+///
+/// jxrlib (Microsoft が公開した参照実装) に任せる。素の `Copy` は 8bit の
+/// 形式で必ず失敗するので、フォーマットコンバータを噛ませたうえで、
+/// その前にデコーダのアルファモードを立てておく。この2つが揃わないと
+/// 8bit は読めない (imagecodecs の Python バインディングと同じ手順)。
+pub fn decode_jpeg_xr(bytes: Vec<u8>) -> Option<DecodedImage> {
+    let mut decoder = ImageDecode::with_reader(Cursor::new(bytes)).ok()?;
+    let (width, height) = decoder.get_size().ok()?;
+    if width <= 0 || height <= 0 {
+        return None;
+    }
+    let (width, height) = (width as usize, height as usize);
+
+    let format = decoder.get_pixel_format().ok()?;
+    let (channels, alpha_mode) = match format {
+        PixelFormat::PixelFormat32bppRGBA
+        | PixelFormat::PixelFormat32bppBGRA
+        | PixelFormat::PixelFormat32bppPRGBA
+        | PixelFormat::PixelFormat32bppPBGRA => (4usize, 2u8),
+        PixelFormat::PixelFormat24bppRGB | PixelFormat::PixelFormat24bppBGR => (3, 0),
+        PixelFormat::PixelFormat8bppGray => (1, 0),
+        // HDR 用の 16bit や float は絵文字やアイコンには出てこない
+        _ => return None,
+    };
+    let bgr = matches!(
+        format,
+        PixelFormat::PixelFormat32bppBGRA
+            | PixelFormat::PixelFormat32bppPBGRA
+            | PixelFormat::PixelFormat24bppBGR
+    );
+
+    let stride = width * channels;
+    let mut raw = vec![0u8; stride * height];
+    decoder
+        .copy_all_converted(&mut raw, stride, format, alpha_mode)
+        .ok()?;
+
+    let mut rgba = Vec::with_capacity(width * height * 4);
+    for row in raw.chunks_exact(stride) {
+        for pixel in row.chunks_exact(channels) {
+            let (r, g, b) = match channels {
+                1 => (pixel[0], pixel[0], pixel[0]),
+                _ if bgr => (pixel[2], pixel[1], pixel[0]),
+                _ => (pixel[0], pixel[1], pixel[2]),
+            };
+            let a = if channels == 4 { pixel[3] } else { 255 };
+            rgba.extend_from_slice(&[r, g, b, a]);
+        }
     }
 
     Some(DecodedImage {
@@ -82,8 +143,23 @@ mod tests {
     }
 
     #[test]
+    fn reads_jpeg_xr() {
+        let image = decode_jpeg_xr(fixture("sample.jxr")).expect("読めなかった");
+        assert_eq!((image.width, image.height), (8, 8));
+        assert_eq!(image.rgba.len(), 8 * 8 * 4);
+
+        let (r, _, _, a) = pixel(&image, 5, 2);
+        assert!(r > 200, "(5,2) が白くない: {r}");
+        assert_eq!(a, 255);
+        let (r, _, _, _) = pixel(&image, 4, 4);
+        assert!(r < 100, "(4,4) が黒くない: {r}");
+    }
+
+    #[test]
     fn rejects_other_formats() {
         assert!(decode_jpeg_xl(fixture("sample.png")).is_none());
         assert!(decode_jpeg_xl(vec![]).is_none());
+        assert!(decode_jpeg_xr(fixture("sample.png")).is_none());
+        assert!(decode_jpeg_xr(vec![]).is_none());
     }
 }
