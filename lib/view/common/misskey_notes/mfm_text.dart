@@ -10,6 +10,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mfm/mfm.dart";
 import "package:mfm_parser/mfm_parser.dart";
 import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/extensions/list_mfm_node_extension.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
@@ -94,11 +95,27 @@ class MfmText extends ConsumerWidget {
     await launchUrl(uri);
   }
 
+  /// 連合で挟まったゼロ幅スペースを落としたノード。
+  ///
+  /// 落とすものがなければ null を返し、[Mfm] にこれまでどおり文字列を
+  /// 渡してパースさせる。ゼロ幅スペースを含まないノートで余計な
+  /// パースを増やさないため。
+  List<MfmNode>? get _sanitizedNode {
+    final node = mfmNode;
+    if (node != null) return node.withoutEmojiPadding();
+
+    final text = mfmText;
+    if (text == null || !text.contains(zeroWidthSpace)) return null;
+    return const MfmParser().parse(text).withoutEmojiPadding();
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final node = _sanitizedNode;
+
     return Mfm(
-      mfmText: mfmText,
-      mfmNode: mfmNode,
+      mfmText: node == null ? mfmText : null,
+      mfmNode: node,
       emojiBuilder: (builderContext, emojiName, style) {
         final account = ref.read(accountContextProvider).getAccount;
         final emojiData = MisskeyEmojiData.fromEmojiName(
