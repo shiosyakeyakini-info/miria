@@ -24,7 +24,7 @@ class FavoritedNotePage extends ConsumerWidget implements AutoRouteWrapper {
       appBar: AppBar(title: Text(S.of(context).favorite)),
       body: Padding(
         padding: const EdgeInsets.only(right: 10),
-        child: PushableListView(
+        child: PushableListView<IFavoritesResponse>(
           initializeFuture: () async {
             final response = await ref
                 .read(misskeyPostContextProvider)
@@ -33,7 +33,7 @@ class FavoritedNotePage extends ConsumerWidget implements AutoRouteWrapper {
             ref
                 .read(notesWithProvider)
                 .registerAll(response.map((e) => e.note));
-            return response.map((e) => e.note).toList();
+            return response.toList();
           },
           nextFuture: (lastItem, _) async {
             final response = await ref
@@ -43,9 +43,9 @@ class FavoritedNotePage extends ConsumerWidget implements AutoRouteWrapper {
             ref
                 .read(notesWithProvider)
                 .registerAll(response.map((e) => e.note));
-            return response.map((e) => e.note).toList();
+            return response.toList();
           },
-          itemBuilder: (context, item) => MisskeyNote(note: item),
+          itemBuilder: (context, item) => MisskeyNote(note: item.note),
         ),
       ),
     );
