@@ -12,7 +12,9 @@ class ReplyArea extends ConsumerWidget {
 
     if (reply != null) {
       return MediaQuery(
-        data: const MediaQueryData(textScaler: TextScaler.linear(0.8)),
+        data: MediaQuery.of(
+          context,
+        ).copyWith(textScaler: const TextScaler.linear(0.8)),
         child: MisskeyNote(note: reply),
       );
     }
