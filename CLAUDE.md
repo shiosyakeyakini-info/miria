@@ -185,7 +185,7 @@ fvm flutter pub run build_runner build
 
 ## プロジェクト固有事項
 
-- **FVM使用**: Flutter 3.47.1で固定（`.fvmrc`）。CIも`.fvmrc`を`jq`で読むので、
+- **FVM使用**: Flutter 3.47.8で固定（`.fvmrc`）。CIも`.fvmrc`を`jq`で読むので、
   更新はこのファイル1箇所でよい
 - **国際化対応**: `l10n.yaml`設定、現在は日本語（規定は関西弁、ja_OJはお嬢様口調）・中国語をサポート
 - **マルチプラットフォーム**: モバイル・デスクトップの両方をサポート
