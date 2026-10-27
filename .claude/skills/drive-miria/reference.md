@@ -3,7 +3,8 @@
 Read `SKILL.md` first; this is the "why" behind it. Everything here was
 observed against a real build — marionette_flutter 0.6.0 on Windows with
 Flutter 3.44.6, and the Linux sections on a headless container (Xvfb, no
-window manager) with Flutter 3.47.8 against a local Misskey 2024.2.0.
+window manager) with Flutter 3.47.8 against a local Misskey 2026.10.1
+(misskey-dev/misskey `develop`).
 Anything not marked Linux was seen on Windows and is assumed, not checked,
 to hold on Linux.
 
@@ -124,16 +125,19 @@ submodule. miria only talks to the API, so the backend is enough.
 - Postgres and Redis: `pg_ctlcluster 16 main start`, `redis-server
   --daemonize yes`, a superuser role and database matching
   `.config/default.yml` (copy `example.yml`).
-- Use the Node in `.node-version`. A newer one fails to compile native
-  modules (`re2` against `nan`) during install.
-- `CYPRESS_INSTALL_BINARY=0 pnpm install`. If GitHub tarballs
-  (`codeload.github.com`) are blocked, the `github:` dependencies fail the
-  whole install even with `--filter`. In 2024.2 they are frontend-only
-  (`aiscript-vscode`, `storybook-addon-misskey-theme`): drop them from
-  `packages/frontend/package.json` locally and install with
-  `--no-frozen-lockfile`. Do not commit that.
-- `pnpm build-pre && pnpm --filter "backend..." build && pnpm migrate`, then
-  `NODE_ENV=production node packages/backend/built/boot/entry.js`.
+- Use the Node in `.node-version` (26.x on develop) and the pnpm named by
+  `packageManager` in `package.json`. Node 25+ ships without corepack, and
+  an older corepack left on `PATH` cannot launch pnpm 12 (`Cannot find
+  module .../pnpm.cjs`); `npm i -g pnpm@<that version>` works.
+- If GitHub tarballs (`codeload.github.com`) are blocked, the `github:`
+  dependencies fail the whole install even with `--filter`. They are
+  frontend-only (`aiscript-vscode`, `storybook-addon-misskey-theme`): drop
+  them from `packages/frontend/package.json` locally and `pnpm install
+  --no-frozen-lockfile`. Do not commit that.
+- `pnpm build-pre && pnpm --filter "backend..." build && pnpm compile-config
+  && pnpm migrate`, then `NODE_ENV=production node
+  packages/backend/built/entry.js`. Detach it (`setsid ... &`) if an agent
+  harness would otherwise kill its background job on a time limit.
 - `POST /api/meta` answering is the readiness check. The web UI will not load;
   that is the frontend you did not build.
 

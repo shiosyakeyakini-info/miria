@@ -178,10 +178,14 @@ curl -X POST http://localhost:3000/api/signin-flow \
   -d '{"username":"miria","password":"..."}'   # -> {"i": "<token>"}
 ```
 
-Older servers (2024.2 for one) have no `signin-flow`; the same body to
-`/api/signin` returns the same `{"i": ...}`. On a server with no users yet,
-`/api/admin/accounts/create` takes the same body without auth and makes the
-first admin.
+On a server with no users yet, `/api/admin/accounts/create` takes the same
+body without auth (while `setupPassword` is unset in `.config/default.yml`)
+and makes the first admin.
+
+Wait until `elements` lists `APIキーでログイン` before tapping it. Right after
+launch the tab is not there yet, the tap fails, and the next taps land on the
+MiAuth form instead — its 認証をする opens an external browser that never
+appears.
 
 ```bash
 m tap  --text "APIキーでログイン"
