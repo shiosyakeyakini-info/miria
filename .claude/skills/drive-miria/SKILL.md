@@ -14,15 +14,23 @@ there.
 ## Connect
 
 The app may already be running. Check before rebuilding: a debug build takes
-minutes, and login survives restarts (secure storage), so an existing process
-is usually already signed in.
+minutes, and on Windows login survives restarts (secure storage), so an
+existing process is usually already signed in. On Linux it does not — see
+`reference.md`.
 
 ```bash
 fvm flutter run -d windows --debug    # prints: A Dart VM Service ... at: <URI>
+fvm flutter run -d linux --debug      # same, but needs a display and a keyring
 ```
 
-That URI is the handle for everything, and changes on every launch. Windows
-builds need a pinned MSVC toolset — see `reference.md` if the build fails.
+That URI is the handle for everything, and changes on every launch. On Linux,
+running the already-built `build/linux/x64/debug/bundle/miria` directly
+skips the rebuild and prints `The Dart VM service is listening on <URI>`
+instead.
+
+Each desktop has its own setup cost, in `reference.md`: Windows builds need a
+pinned MSVC toolset; Linux without a desktop (CI, a container) needs Xvfb, a
+D-Bus session and an unlocked keyring before the app can even log in.
 
 Drive it with `scripts/marionette.py` (plain HTTP, no MCP server needed):
 
@@ -91,19 +99,26 @@ empty; the icon glyph is deliberately kept out of the label.
 
 ## The screen
 
-Coordinates below are for the default 384×661 window. Tabs are user
-configurable, so trust the title text under the bar rather than the icon.
+The window opens at 400×700 (`lib/main.dart`). On Windows the client area
+measured 384×661 — presumably the frame's share; under Xvfb there is no window manager,
+so Linux gets the full 400×700 and everything right of centre or below it
+sits a little further out. Tabs are user configurable, so trust the title
+text under the bar rather than the icon.
 
-- **Top bar** `y≈28` — hamburger `x=28`, then the timeline tabs (`76` home,
-  `116` local, `156` …), notifications `x=364`
-- **Second row** `y≈76` — current timeline name, then per-tab actions and
-  reload `x=364`
-- **Bottom** `y≈641` — composer field `x≈152`, send `x=324`, full compose
-  page `x=364`
-- **Note action row** — reply `x=118`, renote `x=192`, react `x=264`, menu
-  `x=338`. The note body is not a tap target; open detail via menu → 詳細
-- **Drawer** (hamburger) — 通知 / お気に入り / リスト / アンテナ / クリップ /
-  チャンネル / チャット / 検索 / みつける / Misskey Games / 設定, account at top
+| | Windows 384×661 | Linux (Xvfb) 400×700 |
+|---|---|---|
+| **Top bar** | `y≈28` — hamburger `x=28`, tabs `76` home / `116` local / `156` …, notifications `x=364` | `y≈28` — same `x` for hamburger and tabs, notifications `x=380` |
+| **Second row** — timeline name, per-tab actions, reload | `y≈76`, reload `x=364` | `y≈76`, reload `x=380` |
+| **Bottom** — composer, send, full compose page | `y≈641`, `x≈152` / `324` / `364` | `y≈680`, `x≈160` / `340` / `380` |
+| **Note action row** — reply, renote, react, menu | `x=118` / `192` / `264` / `338` | `x=120` / `198` / `274` / `352` |
+
+The note body is not a tap target; open detail via menu → 詳細. The
+**drawer** (hamburger) holds 通知 / お気に入り / リスト / アンテナ / クリップ /
+チャンネル / チャット / 検索 / みつける / Misskey Games / 設定, account at top —
+tap those by `--text`, which works the same everywhere.
+
+Recipes below use the Windows numbers. Anything not in the table has not
+been measured on Linux; re-read `elements` rather than scaling by hand.
 
 ## Recipes
 
@@ -153,8 +168,9 @@ m swipe --start 190 450 --end 190 150
 
 ### Log in (API key)
 
-Only needed on a fresh profile. MiAuth opens an external browser and cannot be
-driven; API key is the only automatable sign-in.
+Only needed on a fresh profile — which on Linux is every launch. MiAuth opens
+an external browser and cannot be driven; API key is the only automatable
+sign-in.
 
 ```bash
 curl -X POST http://localhost:3000/api/signin-flow \
@@ -162,16 +178,22 @@ curl -X POST http://localhost:3000/api/signin-flow \
   -d '{"username":"miria","password":"..."}'   # -> {"i": "<token>"}
 ```
 
+Older servers (2024.2 for one) have no `signin-flow`; the same body to
+`/api/signin` returns the same `{"i": ...}`. On a server with no users yet,
+`/api/admin/accounts/create` takes the same body without auth and makes the
+first admin.
+
 ```bash
 m tap  --text "APIキーでログイン"
-m tap  --x 200 --y 328                 # サーバー field
+m tap  --x 200 --y 328                 # サーバー field   (Linux: --x 236 --y 348)
 m text --input "http://localhost:3000"  # the scheme is required
-m tap  --x 200 --y 378                 # APIキー field
+m tap  --x 200 --y 378                 # APIキー field    (Linux: --x 236 --y 398)
 m text --input "<token>"
 m tap  --type ElevatedButton
 ```
 
-Success looks like the ホームタイムライン screen.
+Success looks like the ホームタイムライン screen. On Linux, a dialog quoting
+`Libsecret error` instead means the keyring is not set up — `reference.md`.
 
 ### Inspect state
 
@@ -189,6 +211,8 @@ snapshot anywhere public.
 ## When it looks like nothing happened
 
 In order: re-read `elements`; take a screenshot; check whether a **native
-dialog** is up (`Get-Process | ? { $_.MainWindowTitle }` — file pickers and
-browsers are invisible to marionette); ask the server. `reference.md` has the
+dialog** is up (Windows: `Get-Process | ? { $_.MainWindowTitle }` — file
+pickers and browsers are invisible to marionette); on Linux, read the
+`flutter run` console, where a missing desktop service shows up as an
+`Unhandled Exception` and nowhere else; ask the server. `reference.md` has the
 full list of what is out of reach and why.

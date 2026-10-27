@@ -132,7 +132,7 @@ Provider は Riverpod の遅延生成の仕様上スナップショットに現�
 で掘るのが効率的。詳細はプラグインの README を参照。
 
 実際に操作する手順（ログイン、ノート投稿、要素の探し方、Windows ビルドの
-ツールセット固定など）は `.claude/skills/drive-miria/` にスキルとしてまとめて
+ツールセット固定、Linux のヘッドレス起動など）は `.claude/skills/drive-miria/` にスキルとしてまとめて
 ある。MCP サーバーを立てずに済ませたい場合の
 `scripts/marionette.py` も同梱している。
 
