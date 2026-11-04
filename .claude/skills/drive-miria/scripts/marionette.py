@@ -13,7 +13,9 @@ when you want a scripted, repeatable sequence.
     python marionette.py snapshot --filter account
 
 The URI is printed by `flutter run` as
-"A Dart VM Service on Windows is available at: ...". Pass it with --uri or set
+"A Dart VM Service on Windows is available at: ..." (or "on Linux"; a bundle
+launched directly prints "The Dart VM service is listening on ..."). Pass it
+with --uri or set
 MARIONETTE_VM_URI; it is cached in .marionette_uri next to this script so
 subsequent calls can omit it.
 """
