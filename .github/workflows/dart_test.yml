@@ -32,13 +32,15 @@ jobs:
           flutter-version: ${{ env.FLUTTER_FVM_VERSION }}
           cache: true
 
-      - run: dart format --output=none --set-exit-if-changed .
-
       - name: Run flutter version
         run: flutter --version
 
       - name: Run flutter pub get
         run: flutter pub get
+
+      # pub get より前だと package_config が無く、pubspec の言語バージョンではなく
+      # SDK 最新の言語バージョンの書式で整形されてしまう
+      - run: dart format --output=none --set-exit-if-changed .
       
       # ゆくゆくは
       # - run: flutter analyze --fatal-infos
