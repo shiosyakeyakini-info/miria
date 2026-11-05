@@ -42,6 +42,8 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>ノートに埋め込まれたWebページがカメラを使うときに、カメラへの権限を許可してください。</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>画像をアップロードするために、アルバムへの権限を許可してください。</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
