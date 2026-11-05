@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
+import "package:miria/view/common/misskey_notes/fallback_image_view.dart";
 
 enum ImageType {
   avatarIcon,
@@ -15,6 +16,12 @@ enum ImageType {
   ad,
   other,
 }
+
+/// SVGかどうかを拡張子で推定する
+///
+/// `endsWith` だけだとクエリ付きのURLで外れるので、パス部分だけを見る。
+bool _looksLikeSvg(String url) =>
+    (Uri.tryParse(url)?.path ?? url).endsWith(".svg");
 
 class NetworkImageView extends ConsumerWidget {
   final String url;
@@ -38,7 +45,7 @@ class NetworkImageView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (url.endsWith(".svg")) {
+    if (_looksLikeSvg(url)) {
       return SvgPicture.network(
         url,
         width: width,
@@ -59,28 +66,15 @@ class NetworkImageView extends ConsumerWidget {
       return CachedNetworkImage(
         imageUrl: url,
         fit: fit,
-        errorWidget: (context, url, error) =>
-            errorBuilder?.call(context, error, StackTrace.current) ??
-            Container(
-              alignment: Alignment.center,
-              decoration: type == ImageType.avatarDecoration
-                  ? null
-                  : BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: const Color.fromARGB(255, 224, 224, 224),
-                    ),
-              child: type == ImageType.avatarDecoration
-                  ? null
-                  : SvgPicture.asset(
-                      "assets/images/miria_error.svg",
-                      colorFilter: const ColorFilter.mode(
-                        Color.fromARGB(255, 117, 117, 117),
-                        BlendMode.srcIn,
-                      ),
-                      width: 48,
-                      height: 48,
-                    ),
-            ),
+        errorWidget: (context, url, error) => FallbackImageView(
+          url: url,
+          width: width,
+          height: height,
+          fit: fit,
+          errorBuilder: (context) =>
+              errorBuilder?.call(context, error, StackTrace.current) ??
+              _defaultErrorWidget(context),
+        ),
         cacheManager: ref.read(cacheManagerProvider),
         width: width,
         height: height,
@@ -94,10 +88,40 @@ class NetworkImageView extends ConsumerWidget {
         url,
         fit: fit,
         loadingBuilder: loadingBuilder,
-        errorBuilder: errorBuilder,
+        errorBuilder: (context, error, stackTrace) => FallbackImageView(
+          url: url,
+          width: width,
+          height: height,
+          fit: fit,
+          errorBuilder: (context) =>
+              errorBuilder?.call(context, error, stackTrace) ??
+              const SizedBox.shrink(),
+        ),
         width: width,
         height: height,
       );
     }
   }
+
+  /// 読み込みにも読み直しにも失敗したときの既定の見た目
+  Widget _defaultErrorWidget(BuildContext context) => Container(
+    alignment: Alignment.center,
+    decoration: type == ImageType.avatarDecoration
+        ? null
+        : BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: const Color.fromARGB(255, 224, 224, 224),
+          ),
+    child: type == ImageType.avatarDecoration
+        ? null
+        : SvgPicture.asset(
+            "assets/images/miria_error.svg",
+            colorFilter: const ColorFilter.mode(
+              Color.fromARGB(255, 117, 117, 117),
+              BlendMode.srcIn,
+            ),
+            width: 48,
+            height: 48,
+          ),
+  );
 }
