@@ -3,10 +3,12 @@ import "package:flutter_highlighting/flutter_highlighting.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/general_settings.dart";
+import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/note_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/custom_emoji.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:miria/view/common/misskey_notes/reaction_button.dart";
@@ -243,6 +245,40 @@ System.out.println("@ai uneune");
           expect(find.textContaining(choice.text), findsOneWidget);
           expect(find.textContaining("${choice.votes}票"), findsOneWidget);
         }
+      });
+
+      testWidgets("リモートのノートの投票の選択肢のカスタム絵文字が表示されること", (tester) async {
+        final note = TestData.note4AsVote;
+        final poll = note.poll!;
+        await tester.pumpWidget(
+          buildTestWidget(
+            note: note.copyWith(
+              user: note.user.copyWith(host: "example.com"),
+              emojis: const {
+                "kirakira": "https://example.com/emojis/kirakira.webp",
+              },
+              poll: poll.copyWith(
+                choices: [
+                  poll.choices.first.copyWith(text: ":kirakira: ひかるやつ"),
+                  ...poll.choices.skip(1),
+                ],
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(find.textContaining(":kirakira:"), findsNothing);
+        expect(
+          find.byWidgetPredicate(
+            (widget) =>
+                widget is CustomEmoji &&
+                widget.emojiData is CustomEmojiData &&
+                (widget.emojiData as CustomEmojiData).hostedName ==
+                    ":kirakira@example.com:",
+          ),
+          findsOneWidget,
+        );
       });
     });
 
