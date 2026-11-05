@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
+import "package:miria/util/animated_image.dart";
 
 enum ImageType {
   avatarIcon,
@@ -56,11 +57,25 @@ class NetworkImageView extends ConsumerWidget {
         type == ImageType.imageThumbnail ||
         type == ImageType.serverIcon ||
         type == ImageType.role) {
-      return CachedNetworkImage(
-        imageUrl: url,
+      return Image(
+        // フレーム遅延が指定されていないアニメーション画像（カスタム絵文字の
+        // APNG / WebP に多い）がブラウザと同じ速さで動くように包む。
+        image: FrameDelayFallbackImage(
+          CachedNetworkImageProvider(
+            url,
+            cacheManager: ref.read(cacheManagerProvider),
+          ),
+        ),
         fit: fit,
-        errorWidget: (context, url, error) =>
-            errorBuilder?.call(context, error, StackTrace.current) ??
+        width: width,
+        height: height,
+        frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+          if (frame != null || wasSynchronouslyLoaded) return child;
+          return loadingBuilder?.call(context, child, null) ??
+              const SizedBox.shrink();
+        },
+        errorBuilder: (context, error, stackTrace) =>
+            errorBuilder?.call(context, error, stackTrace) ??
             Container(
               alignment: Alignment.center,
               decoration: type == ImageType.avatarDecoration
@@ -81,17 +96,10 @@ class NetworkImageView extends ConsumerWidget {
                       height: 48,
                     ),
             ),
-        cacheManager: ref.read(cacheManagerProvider),
-        width: width,
-        height: height,
-        placeholder: (context, url) =>
-            loadingBuilder?.call(context, Container(), null) ??
-            const SizedBox.shrink(),
-        fadeInDuration: Duration.zero,
       );
     } else {
-      return Image.network(
-        url,
+      return Image(
+        image: FrameDelayFallbackImage(NetworkImage(url)),
         fit: fit,
         loadingBuilder: loadingBuilder,
         errorBuilder: errorBuilder,
