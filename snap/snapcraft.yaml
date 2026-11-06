@@ -77,7 +77,7 @@ parts:
       flutter precache --linux
       flutter pub get
       set -eux
-      flutter build linux --release --verbose --target lib/main.dart
+      flutter build linux --no-tree-shake-icons --release --verbose --target lib/main.dart
       cp -r build/linux/*/release/bundle/* $CRAFT_PART_INSTALL/
       cp LICENSE $CRAFT_PART_INSTALL/
 

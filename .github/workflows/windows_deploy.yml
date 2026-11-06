@@ -36,7 +36,7 @@ jobs:
 
       - name: Build for Windows
         run: |
-          flutter build windows --release
+          flutter build windows --no-tree-shake-icons --release
 
       # main は開発版を指しており、6.5 で ChineseSimplified が公式言語に昇格した際に
       # Unofficial/ から消えて 404 になった。curl が 404 本文をそのまま .isl として

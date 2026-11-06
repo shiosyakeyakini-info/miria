@@ -130,7 +130,7 @@ jobs:
             docker exec debian bash -c '
                 export PATH="/root/fvm/bin:$PATH"
                 fvm flutter pub get
-                fvm flutter build linux --release
+                fvm flutter build linux --no-tree-shake-icons --release
             '
 
         - name: Prepare Package
