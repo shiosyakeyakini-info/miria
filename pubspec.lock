@@ -1213,14 +1213,13 @@ packages:
     source: hosted
     version: "4.3.0"
   permission_handler_windows:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: permission_handler_windows
-      ref: "32ffba1b3b62a881b2208297fd20bfb2776000bd"
-      resolved-ref: "32ffba1b3b62a881b2208297fd20bfb2776000bd"
-      url: "https://github.com/MSOB7YY/flutter-permission-handler"
-    source: git
-    version: "0.2.1"
+      name: permission_handler_windows
+      sha256: "210031f00c32d61038fb4175d82dd874a426bfbae2c2af774bd4e5abb5cac755"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.4"
   petitparser:
     dependency: transitive
     description:
