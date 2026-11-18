@@ -3912,6 +3912,73 @@ class TimelinePresetRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [TranslateNoteModalSheet]
+class TranslateNoteModalRoute
+    extends PageRouteInfo<TranslateNoteModalRouteArgs> {
+  TranslateNoteModalRoute({
+    required AccountContext accountContext,
+    required Note note,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         TranslateNoteModalRoute.name,
+         args: TranslateNoteModalRouteArgs(
+           accountContext: accountContext,
+           note: note,
+           key: key,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'TranslateNoteModalRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<TranslateNoteModalRouteArgs>();
+      return WrappedRoute(
+        child: TranslateNoteModalSheet(
+          accountContext: args.accountContext,
+          note: args.note,
+          key: args.key,
+        ),
+      );
+    },
+  );
+}
+
+class TranslateNoteModalRouteArgs {
+  const TranslateNoteModalRouteArgs({
+    required this.accountContext,
+    required this.note,
+    this.key,
+  });
+
+  final AccountContext accountContext;
+
+  final Note note;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'TranslateNoteModalRouteArgs{accountContext: $accountContext, note: $note, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! TranslateNoteModalRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        note == other.note &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ note.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [UpdateMemoDialog]
 class UpdateMemoRoute extends PageRouteInfo<UpdateMemoRouteArgs> {
   UpdateMemoRoute({

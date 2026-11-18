@@ -464,6 +464,14 @@ class SJa extends S {
   String get shareNotes => 'ノートを共有';
 
   @override
+  String get translateNote => 'ノートを翻訳';
+
+  @override
+  String translatedFrom(String lang) {
+    return '$langから翻訳';
+  }
+
+  @override
   String get deleteFavorite => 'お気に入り解除';
 
   @override
