@@ -11,6 +11,7 @@ import "package:miria/model/general_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/common/cache_size_notifier.dart";
+import "package:miria/state_notifier/installed_themes_page/misskey_theme_codes_notifier.dart";
 import "package:miria/view/themes/built_in_color_themes.dart";
 
 @RoutePage()
@@ -139,6 +140,11 @@ class GeneralSettingsPage extends HookConsumerWidget {
     }, dependencies);
 
     useMemoized(() => unawaited(save()), dependencies);
+
+    final colorThemes = [
+      ...builtInColorThemes,
+      ...ref.watch(installedColorThemesProvider),
+    ];
 
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).generalSettings)),
@@ -282,8 +288,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                         const Padding(padding: EdgeInsets.only(top: 10)),
                         Text(S.of(context).themeForLightMode),
                         DropdownButton<String>(
+                          isExpanded: true,
                           items: [
-                            for (final element in builtInColorThemes.where(
+                            for (final element in colorThemes.where(
                               (element) => !element.isDarkTheme,
                             ))
                               DropdownMenuItem(
@@ -300,8 +307,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                         const Padding(padding: EdgeInsets.only(top: 10)),
                         Text(S.of(context).themeForDarkMode),
                         DropdownButton<String>(
+                          isExpanded: true,
                           items: [
-                            for (final element in builtInColorThemes.where(
+                            for (final element in colorThemes.where(
                               (element) => element.isDarkTheme,
                             ))
                               DropdownMenuItem(
@@ -318,6 +326,7 @@ class GeneralSettingsPage extends HookConsumerWidget {
                         const Padding(padding: EdgeInsets.only(top: 10)),
                         Text(S.of(context).selectLightOrDarkMode),
                         DropdownButton<ThemeColorSystem>(
+                          isExpanded: true,
                           items: [
                             for (final colorSystem in ThemeColorSystem.values)
                               DropdownMenuItem(
@@ -328,6 +337,15 @@ class GeneralSettingsPage extends HookConsumerWidget {
                           value: colorSystem.value,
                           onChanged: (value) => colorSystem.value =
                               value ?? ThemeColorSystem.system,
+                        ),
+                        ListTile(
+                          title: Text(S.of(context).manageThemes),
+                          trailing: const Icon(Icons.keyboard_arrow_right),
+                          onTap: () async {
+                            await context.pushRoute(
+                              const InstalledThemesRoute(),
+                            );
+                          },
                         ),
                       ],
                     ),
