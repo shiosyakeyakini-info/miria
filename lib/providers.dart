@@ -19,7 +19,6 @@ import "package:miria/repository/channel_time_line_repository.dart";
 import "package:miria/repository/custom_timeline_repository.dart";
 import "package:miria/repository/desktop_settings_repository.dart";
 import "package:miria/repository/emoji_repository.dart";
-import "package:miria/repository/favorite_repository.dart";
 import "package:miria/repository/general_settings_repository.dart";
 import "package:miria/repository/global_time_line_repository.dart";
 import "package:miria/repository/home_time_line_repository.dart";
@@ -113,14 +112,6 @@ Misskey misskeyWithoutAccount(Ref ref, String hostOrUrl) {
     socketConnectionTimeout: const Duration(seconds: 20),
   );
 }
-
-final favoriteProvider =
-    ChangeNotifierProvider.family<FavoriteRepository, Account>(
-      (ref, account) => FavoriteRepository(
-        ref.read(misskeyProvider(account)),
-        ref.read(notesProvider(account)),
-      ),
-    );
 
 final notesProvider = ChangeNotifierProvider.family<NoteRepository, Account>(
   (ref, account) => NoteRepository(ref.read(misskeyProvider(account)), account),
