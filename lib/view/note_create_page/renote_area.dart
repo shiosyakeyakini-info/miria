@@ -23,7 +23,9 @@ class RenoteArea extends ConsumerWidget {
             ),
             padding: const EdgeInsets.all(5),
             child: MediaQuery(
-              data: const MediaQueryData(textScaler: TextScaler.linear(0.8)),
+              data: MediaQuery.of(
+                context,
+              ).copyWith(textScaler: const TextScaler.linear(0.8)),
               child: MisskeyNote(note: renote),
             ),
           ),
